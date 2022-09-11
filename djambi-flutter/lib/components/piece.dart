@@ -7,6 +7,9 @@ class Piece extends PositionComponent with TapCallbacks {
   @override
   bool get debugMode => true;
 
+  late Color color;
+  var image = "";
+
   static final Sprite sprite = Sprite(
       Flame.images.fromCache('test.png'));
 
