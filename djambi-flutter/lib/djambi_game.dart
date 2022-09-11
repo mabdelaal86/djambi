@@ -16,9 +16,10 @@ class DjambiGame extends FlameGame with HasTappableComponents {
     final board = Board()
       ..size = Board.sideSize.toVector2()
       ..position = Vector2(500, 300);
-    final pieces = List.generate(3, (index) => Piece()
-        ..size = Vector2(500.0, 500.0)
-        ..position = Vector2(200.0, 500 + index * 550.0)
+    final pieces = List.generate(4, (index) => Piece()
+        ..size = Board.cellSize.toVector2()
+        ..position = Vector2(1000, 300 + 500 + index * 2000)
+        ..isDead = index % 2 == 0
         ..color = Colors.red
     );
 

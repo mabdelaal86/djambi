@@ -14,10 +14,10 @@ class Board extends PositionComponent with TapCallbacks {
   static final Size boardSize = cellSize * sideCount.toDouble();
   static final Size sideSize = boardSize + margin;
 
-  Color cellColor = Colors.grey;
-  Color mazeColor = Colors.black;
-  Color lineColor = Colors.black;
-  Color marginColor = Colors.white;
+  static const Color cellColor = Colors.grey;
+  static const Color mazeColor = Colors.black;
+  static const Color lineColor = Colors.black;
+  static const Color marginColor = Colors.white;
 
   @override
   void render(Canvas canvas) {
