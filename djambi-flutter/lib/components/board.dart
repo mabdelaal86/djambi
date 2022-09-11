@@ -3,17 +3,17 @@ import 'package:flame/experimental.dart';
 import 'package:flutter/material.dart';
 
 class Board extends PositionComponent with TapCallbacks {
+  @override
+  bool get debugMode => true;
+
   static const sideCount = 9;
   static const mazeIndex = 4; // int(9 / 2)
   static const double cellSize = 1000;
   static const double sideSize = cellSize * sideCount;
 
-  static final bgPaint = Paint()..color = Colors.white70;
-  static final mazePaint = Paint()..color = Colors.black;
-  static final linePaint = Paint()..color = Colors.black;
-
-  @override
-  bool get debugMode => true;
+  var cellColor = Colors.white70;
+  var mazeColor = Colors.black;
+  var lineColor = Colors.black;
 
   @override
   void render(Canvas canvas) {
@@ -22,9 +22,12 @@ class Board extends PositionComponent with TapCallbacks {
   }
 
   void drawBackground(Canvas canvas) {
-    // draw white background
+    // draw background
+    final cellPaint = Paint()..color = cellColor;
     canvas.drawRect(
-        Rect.fromLTWH(position.x, position.y, sideSize, sideSize), bgPaint);
+        Rect.fromLTWH(position.x, position.y, sideSize, sideSize), cellPaint);
+    // draw maze cell
+    final mazePaint = Paint()..color = mazeColor;
     canvas.drawRect(
         Rect.fromLTWH(
             position.x + mazeIndex * cellSize,
@@ -33,16 +36,17 @@ class Board extends PositionComponent with TapCallbacks {
   }
 
   void drawLines(Canvas canvas) {
+    final linePaint = Paint()..color = lineColor;
     final baseOffset = Offset(position.x, position.y);
-    // draw horizontal lines with board width
-    for (var r = 0; r < sideCount; r++) {
+    // draw 10 horizontal lines with board width
+    for (var r = 0; r <= sideCount; r++) {
       canvas.drawLine(
           baseOffset + Offset(0, r * cellSize),
           baseOffset + Offset(sideSize, r * cellSize),
           linePaint);
     }
-    // draw vertical lines with board height
-    for (var c = 0; c < sideCount; c++) {
+    // draw 10 vertical lines with board height
+    for (var c = 0; c <= sideCount; c++) {
       canvas.drawLine(
           baseOffset + Offset(c * cellSize, 0),
           baseOffset + Offset(c * cellSize, sideSize),
@@ -52,6 +56,6 @@ class Board extends PositionComponent with TapCallbacks {
 
   @override
   void onTapUp(TapUpEvent event) {
-    print("A click");
+    print("Board clicked");
   }
 }

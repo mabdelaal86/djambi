@@ -17,6 +17,6 @@ class Piece extends PositionComponent with TapCallbacks {
 
   @override
   void onTapUp(TapUpEvent event) {
-    print("A click");
+    print("Piece clicked");
   }
 }
