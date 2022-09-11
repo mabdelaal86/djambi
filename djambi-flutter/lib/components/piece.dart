@@ -1,8 +1,9 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/painting.dart';
 
-class Piece extends PositionComponent {
+class Piece extends PositionComponent with TapCallbacks {
   @override
   bool get debugMode => true;
 
@@ -12,5 +13,10 @@ class Piece extends PositionComponent {
   @override
   void render(Canvas canvas) {
     sprite.render(canvas);
+  }
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    print("A click");
   }
 }
