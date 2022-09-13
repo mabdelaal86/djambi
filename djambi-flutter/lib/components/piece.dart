@@ -1,32 +1,35 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 
 import '../configs/common.dart';
 import '../configs/theme.dart';
 
-class Piece extends PositionComponent with TapCallbacks {
+abstract class Piece extends PositionComponent with TapCallbacks {
   @override
   bool get debugMode => true;
 
   late GameTheme theme;
-  String image = "";
-  bool isDead = false;
   late Player player;
+  late String symbol;
 
-  static final Sprite sprite = Sprite(
-      Flame.images.fromCache('test.png'));
+  bool _isDead = false;
+  bool get isDead => _isDead;
+  void die() { _isDead = true; }
 
-  Piece(this.player, this.theme) : super(size: Vector2.all(Constants.cellSide));
+  Piece(this.player, this.theme, {required this.symbol}) :
+        super(size: Vector2.all(Constants.cellSide));
 
   @override
   void render(Canvas canvas) {
     canvas.save();
     canvas.translate(size.x / 2, size.y / 2);
     _drawBackground(canvas);
-    sprite.render(canvas, anchor: Anchor.center);
+    if (!isDead) {
+      drawIcon(canvas);
+    }
     canvas.restore();
   }
 
@@ -34,6 +37,16 @@ class Piece extends PositionComponent with TapCallbacks {
     final color = isDead ? theme.deadColor : theme.playerColors[player]!;
     final paint = Paint()..color = color;
     canvas.drawCircle(Offset.zero, Constants.pieceRadius, paint);
+  }
+
+  void drawIcon(Canvas canvas) {
+    final style = TextStyle(
+        color: theme.lineColor, fontSize: 500, fontWeight: FontWeight.bold);
+    final textPainter = TextPainter(textDirection: TextDirection.ltr);
+
+    textPainter.text = TextSpan(style: style, text: symbol);
+    textPainter.layout();
+    textPainter.paint(canvas, textPainter.size.toOffset() / -2);
   }
 
   @override
