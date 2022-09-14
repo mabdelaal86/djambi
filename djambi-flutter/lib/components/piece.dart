@@ -40,8 +40,7 @@ abstract class Piece extends PositionComponent with TapCallbacks {
   }
 
   void drawIcon(Canvas canvas) {
-    final style = TextStyle(
-        color: theme.lineColor, fontSize: 500, fontWeight: FontWeight.bold);
+    final style = TextStyle(color: theme.lineColor, fontSize: 500, fontWeight: FontWeight.bold);
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
     textPainter.text = TextSpan(style: style, text: symbol);

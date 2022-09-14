@@ -1,23 +1,24 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/painting.dart';
 
 import '../configs/common.dart';
 import '../configs/theme.dart';
+import 'grid.dart';
 
-class Board extends PositionComponent with TapCallbacks {
+class Board extends PositionComponent {
   @override
   bool get debugMode => true;
 
-  static const Offset margin = Offset(500, 500);
-  static const Size cellSize = Size.square(Constants.cellSide);
-  static final Size boardSize = cellSize * Constants.boardCells.toDouble();
-  static final Size allSize = boardSize + margin;
+  static final Vector2 margin = Vector2(500, 500);
 
   late GameTheme theme;
+  late final Grid grid;
 
-  Board(this.theme, {super.position}) : super(size: allSize.toVector2());
+  Board(this.theme, {super.position}) : super(size: Constants.gridSize + margin) {
+    // create grid
+    grid = Grid(position: margin)..addToParent(this);
+  }
 
   @override
   void render(Canvas canvas) {
@@ -30,32 +31,32 @@ class Board extends PositionComponent with TapCallbacks {
   void _drawBackground(Canvas canvas) {
     var paint = Paint();
     // draw margin background
-    canvas.drawRect(Offset.zero & allSize, paint..color = theme.marginColor);
-    // draw board background
-    canvas.drawRect(margin & boardSize, paint..color = theme.cellColor);
+    canvas.drawRect(size.toRect(), paint..color = theme.marginColor);
+    // draw grid background
+    canvas.drawRect(grid.toRect(), paint..color = theme.cellColor);
   }
 
   void _drawMaze(Canvas canvas) {
     // draw maze cell
     final mazePaint = Paint()..color = theme.mazeColor;
-    final mazeOffset = cellSize.toOffset() * Constants.mazeIndex.toDouble();
-    canvas.drawRect(margin + mazeOffset & cellSize, mazePaint);
+    final mazePosition = margin + Constants.cellSize * Constants.mazeIndex.toDouble();
+    canvas.drawRect(mazePosition.toOffset() & Constants.cellSize.toSize(), mazePaint);
   }
 
   void _drawLines(Canvas canvas) {
     final linePaint = Paint()..color = theme.lineColor;
     // margins
-    canvas.drawLine(Offset.zero, Offset(allSize.width, 0), linePaint);
-    canvas.drawLine(Offset.zero, Offset(0, allSize.height), linePaint);
+    canvas.drawLine(Offset.zero, Offset(size.x, 0), linePaint);
+    canvas.drawLine(Offset.zero, Offset(0, size.y), linePaint);
     // draw 10 horizontal lines with board width
     for (var r = 0; r <= Constants.boardCells; r++) {
-      final y = margin.dy + r * Constants.cellSide;
-      canvas.drawLine(Offset(0, y), Offset(allSize.width, y), linePaint);
+      final y = margin.y + r * Constants.cellSide;
+      canvas.drawLine(Offset(0, y), Offset(size.x, y), linePaint);
     }
     // draw 10 vertical lines with board height
     for (var c = 0; c <= Constants.boardCells; c++) {
-      final x = margin.dx + c * Constants.cellSide;
-      canvas.drawLine(Offset(x, 0), Offset(x, allSize.height), linePaint);
+      final x = margin.x + c * Constants.cellSide;
+      canvas.drawLine(Offset(x, 0), Offset(x, size.y), linePaint);
     }
   }
 
@@ -65,12 +66,12 @@ class Board extends PositionComponent with TapCallbacks {
 
     textPainter.text = TextSpan(style: style, text: "#");
     textPainter.layout();
-    textPainter.paint(canvas, (margin - textPainter.size.toOffset()) / 2);
+    textPainter.paint(canvas, (margin.toOffset() - textPainter.size.toOffset()) / 2);
 
     const cols = "ABCDEFGHI";
-    final colCell = Offset(Constants.cellSide, margin.dy);
+    final colCell = Offset(Constants.cellSide, margin.y);
     for (var c = 0; c < Constants.boardCells; c++) {
-      final cellOffset = Offset(margin.dx + c * Constants.cellSide, 0);
+      final cellOffset = Offset(margin.x + c * Constants.cellSide, 0);
       textPainter.text = TextSpan(style: style, text: cols[c]);
       textPainter.layout();
       final cellCenter = (colCell - textPainter.size.toOffset()) / 2;
@@ -78,18 +79,13 @@ class Board extends PositionComponent with TapCallbacks {
     }
 
     const rows = "123456789";
-    final rowCell = Offset(margin.dx, Constants.cellSide);
+    final rowCell = Offset(margin.x, Constants.cellSide);
     for (var r = 0; r < Constants.boardCells; r++) {
-      final cellOffset = Offset(0, margin.dy + r * Constants.cellSide);
+      final cellOffset = Offset(0, margin.y + r * Constants.cellSide);
       textPainter.text = TextSpan(style: style, text: rows[r]);
       textPainter.layout();
       final cellCenter = (rowCell - textPainter.size.toOffset()) / 2;
       textPainter.paint(canvas, cellOffset + cellCenter);
     }
-  }
-
-  @override
-  void onTapUp(TapUpEvent event) {
-    print("Board clicked");
   }
 }
