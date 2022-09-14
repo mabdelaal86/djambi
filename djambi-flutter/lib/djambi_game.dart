@@ -14,24 +14,24 @@ import 'components/reporter.dart';
 import 'configs/common.dart';
 import 'configs/theme.dart';
 
-class DjambiGame extends FlameGame with HasTappableComponents {
+class DjambiGame extends FlameGame
+    with HasTappableComponents, HasDraggableComponents {
   @override
   Future<void> onLoad() async {
     await Flame.images.load('test.png');
     final theme = GameTheme();
 
-    final board = Board(theme)
-      ..position = Vector2(500, 300);
+    final board = Board(theme, position: Vector2(500, 300));
     final pieces = [
-      Chief(Player.yellow, theme)..position = Vector2(1000, 300 + 500 + 0),
-      Assassin(Player.red, theme)..position = Vector2(1000, 300 + 500 + 1000),
-      Reporter(Player.green, theme)..position = Vector2(2000, 300 + 500 + 0),
-      Diplomat(Player.blue, theme)..position = Vector2(2000, 300 + 500 + 1000),
-      Necromobile(Player.red, theme)..position = Vector2(3000, 300 + 500 + 0),
-      Militant(Player.red, theme)..position = Vector2(3000, 300 + 500 + 1000),
-      Militant(Player.blue, theme)..position = Vector2(1000, 300 + 500 + 2000),
-      Militant(Player.green, theme)..position = Vector2(2000, 300 + 500 + 2000),
-      Militant(Player.red, theme)..position = Vector2(3000, 300 + 500 + 2000),
+      Chief(Player.yellow, theme, position: Vector2(1000, 300 + 500 + 0)),
+      Assassin(Player.red, theme, position: Vector2(1000, 300 + 500 + 1000)),
+      Reporter(Player.green, theme, position: Vector2(2000, 300 + 500 + 0)),
+      Diplomat(Player.blue, theme, position: Vector2(2000, 300 + 500 + 1000)),
+      Necromobile(Player.red, theme, position: Vector2(3000, 300 + 500 + 0)),
+      Militant(Player.red, theme, position: Vector2(3000, 300 + 500 + 1000)),
+      Militant(Player.blue, theme, position: Vector2(1000, 300 + 500 + 2000)),
+      Militant(Player.green, theme, position: Vector2(2000, 300 + 500 + 2000)),
+      Militant(Player.red, theme, position: Vector2(3000, 300 + 500 + 2000)),
     ];
 
     pieces.last.die();

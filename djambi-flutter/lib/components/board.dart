@@ -17,7 +17,7 @@ class Board extends PositionComponent with TapCallbacks {
 
   late GameTheme theme;
 
-  Board(this.theme) : super(size: allSize.toVector2());
+  Board(this.theme, {super.position}) : super(size: allSize.toVector2());
 
   @override
   void render(Canvas canvas) {

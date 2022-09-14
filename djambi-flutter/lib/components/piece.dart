@@ -12,14 +12,14 @@ abstract class Piece extends PositionComponent with TapCallbacks {
   bool get debugMode => true;
 
   late GameTheme theme;
-  late Player player;
-  late String symbol;
+  late final Player player;
+  late final String symbol;
 
   bool _isDead = false;
   bool get isDead => _isDead;
-  void die() { _isDead = true; }
+  void die() => _isDead = true;
 
-  Piece(this.player, this.theme, {required this.symbol}) :
+  Piece(this.player, this.theme, {required this.symbol, super.position}) :
         super(size: Vector2.all(Constants.cellSide));
 
   @override

@@ -1,5 +1,5 @@
 import 'piece.dart';
 
 class Militant extends Piece {
-  Militant(super.player, super.theme) : super(symbol: "M");
+  Militant(super.player, super.theme, {super.position}) : super(symbol: "M");
 }
