@@ -28,7 +28,7 @@ abstract class Piece extends PositionComponent with TapCallbacks {
     canvas.translate(size.x / 2, size.y / 2);
     _drawBackground(canvas);
     if (!isDead) {
-      drawIcon(canvas);
+      _drawIcon(canvas);
     }
     canvas.restore();
   }
@@ -39,7 +39,7 @@ abstract class Piece extends PositionComponent with TapCallbacks {
     canvas.drawCircle(Offset.zero, Constants.pieceRadius, paint);
   }
 
-  void drawIcon(Canvas canvas) {
+  void _drawIcon(Canvas canvas) {
     final style = TextStyle(color: theme.lineColor, fontSize: 500, fontWeight: FontWeight.bold);
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
 

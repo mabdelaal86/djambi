@@ -64,28 +64,27 @@ class Board extends PositionComponent {
     final style = TextStyle(color: theme.lineColor, fontSize: 300);
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
-    textPainter.text = TextSpan(style: style, text: "#");
-    textPainter.layout();
-    textPainter.paint(canvas, (margin.toOffset() - textPainter.size.toOffset()) / 2);
+    void paintText(String text, Offset cellOffset, Vector2 cellSize) {
+      textPainter.text = TextSpan(style: style, text: text);
+      textPainter.layout();
+      final cellCenter = (cellSize - textPainter.size.toVector2()) / 2;
+      textPainter.paint(canvas, cellOffset + cellCenter.toOffset());
+    }
+
+    paintText("#", Offset.zero, margin);
 
     const cols = "ABCDEFGHI";
-    final colCell = Offset(Constants.cellSide, margin.y);
+    final colCell = Vector2(Constants.cellSide, margin.y);
     for (var c = 0; c < Constants.boardCells; c++) {
       final cellOffset = Offset(margin.x + c * Constants.cellSide, 0);
-      textPainter.text = TextSpan(style: style, text: cols[c]);
-      textPainter.layout();
-      final cellCenter = (colCell - textPainter.size.toOffset()) / 2;
-      textPainter.paint(canvas, cellOffset + cellCenter);
+      paintText(cols[c], cellOffset, colCell);
     }
 
     const rows = "123456789";
-    final rowCell = Offset(margin.x, Constants.cellSide);
+    final rowCell = Vector2(margin.x, Constants.cellSide);
     for (var r = 0; r < Constants.boardCells; r++) {
       final cellOffset = Offset(0, margin.y + r * Constants.cellSide);
-      textPainter.text = TextSpan(style: style, text: rows[r]);
-      textPainter.layout();
-      final cellCenter = (rowCell - textPainter.size.toOffset()) / 2;
-      textPainter.paint(canvas, cellOffset + cellCenter);
+      paintText(rows[r], cellOffset, rowCell);
     }
   }
 }
