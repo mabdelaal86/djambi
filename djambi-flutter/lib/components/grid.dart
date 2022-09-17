@@ -1,14 +1,21 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 
-import '../configs/common.dart';
+import '../models/piece.dart';
+import '../models/tourney.dart';
+import 'dimensions.dart';
 
 class Grid extends PositionComponent with TapCallbacks {
-  @override
-  bool get debugMode => true;
+  // @override
+  // bool get debugMode => true;
 
-  Grid({super.position}) : super(size: Constants.gridSize);
+  late final Tourney tourney;
+
+  Grid(this.tourney) : super(position: Dimensions.gridOffset, size: Dimensions.gridSize);
 
   @override
   void render(Canvas canvas) {
@@ -17,6 +24,14 @@ class Grid extends PositionComponent with TapCallbacks {
 
   @override
   void onTapUp(TapUpEvent event) {
-    print("Grid clicked");
+    final Point<int> cell = event.localPosition.toPoint() ~/ 1000;
+    final Piece? piece = tourney.allPieces().firstWhereOrNull((p) => p.cell == cell);
+
+    if (piece != null) {
+      print("Piece clicked: ${piece.symbol}");
+    }
+    else {
+      print("Grid clicked");
+    }
   }
 }
