@@ -1,4 +1,4 @@
-import 'game.dart';
+import 'common.dart';
 import 'piece.dart';
 
 class Reporter extends Piece {

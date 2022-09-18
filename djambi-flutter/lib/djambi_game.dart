@@ -3,10 +3,10 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 
-import 'models/tourney.dart';
 import 'components/board.dart';
 import 'components/grid.dart';
 import 'components/theme.dart';
+import 'models/tourney.dart';
 
 class DjambiGame extends FlameGame with HasTappableComponents {
   @override

@@ -2,11 +2,11 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/painting.dart';
 
-import '../models/game.dart';
+import '../models/common.dart';
 import '../models/piece.dart';
 import '../models/tourney.dart';
-import 'theme.dart';
 import 'dimensions.dart';
+import 'theme.dart';
 
 class Board extends PositionComponent {
   // @override
@@ -37,7 +37,7 @@ class Board extends PositionComponent {
   void _paintMaze(Canvas canvas) {
     // paint maze cell
     final mazePaint = Paint()..color = theme.mazeColor;
-    canvas.drawRect(Dimensions.mazeOffset.toOffset() & Dimensions.cellSize.toSize(), mazePaint);
+    canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, mazePaint);
   }
 
   void _drawLines(Canvas canvas) {

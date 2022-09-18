@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/game.dart';
+import '../models/common.dart';
 
 class GameTheme {
   Color get marginColor   => Colors.grey.shade300;

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'game.dart';
+import 'common.dart';
 
 abstract class Piece {
   late PlayerId playerId;

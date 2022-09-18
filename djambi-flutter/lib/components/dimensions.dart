@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flame/extensions.dart';
 
-import '../models/game.dart';
+import '../models/common.dart';
 
 extension PointExtension on Point {
   Vector2 toVector2() => Vector2(x.toDouble(), y.toDouble());

@@ -1,29 +1,30 @@
 import 'dart:math';
 
-import 'piece.dart';
-import 'chief.dart';
 import 'assassin.dart';
-import 'reporter.dart';
+import 'chief.dart';
+import 'common.dart';
 import 'diplomat.dart';
-import 'necromobile.dart';
 import 'militant.dart';
-import 'game.dart';
+import 'necromobile.dart';
+import 'piece.dart';
+import 'reporter.dart';
 
 class Player {
   late final PlayerId id;
-  List<Piece> pieces = [
-    Chief(PlayerId.yellow)..cell = const Point(0, 0),
-    Assassin(PlayerId.red)..cell = const Point(0, 1),
-    Reporter(PlayerId.green)..cell = const Point(1, 0),
-    Diplomat(PlayerId.blue)..cell = const Point(1, 1),
-    Necromobile(PlayerId.red)..cell = const Point(2, 0),
-    Militant(PlayerId.red)..cell = const Point(2, 1),
-    Militant(PlayerId.blue)..cell = const Point(0, 2),
-    Militant(PlayerId.green)..cell = const Point(1, 2),
-    Militant(PlayerId.red)..cell = const Point(2, 2),
-  ];
+  late List<Piece> pieces;
 
   Player(this.id) {
-    pieces.last.die();
+    // create pieces and place them around (0,0) point, so it is easier to rotate or flip
+    pieces = [
+      Chief(id)        ..cell = const Point(-1, -1),
+      Assassin(id)     ..cell = const Point( 0, -1),
+      Reporter(id)     ..cell = const Point(-1,  0),
+      Diplomat(id)     ..cell = const Point( 0,  0),
+      Necromobile(id)  ..cell = const Point( 1,  1),
+      Militant(id)     ..cell = const Point(-1,  1),
+      Militant(id)     ..cell = const Point( 0,  1),
+      Militant(id)     ..cell = const Point( 1,  0),
+      Militant(id)     ..cell = const Point( 1, -1),
+    ];
   }
 }
