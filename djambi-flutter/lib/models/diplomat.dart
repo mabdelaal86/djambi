@@ -1,8 +1,6 @@
+import 'game.dart';
 import 'piece.dart';
 
 class Diplomat extends Piece {
-  Diplomat(super.player);
-
-  @override
-  String get symbol => "D";
+  Diplomat(PlayerId playerId) : super(PieceType.diplomat, playerId);
 }

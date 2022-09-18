@@ -98,7 +98,7 @@ class Board extends PositionComponent {
     final style = TextStyle(color: theme.lineColor, fontSize: 500, fontWeight: FontWeight.bold);
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
-    textPainter.text = TextSpan(style: style, text: piece.symbol);
+    textPainter.text = TextSpan(style: style, text: piece.type.name[0].toUpperCase());
     textPainter.layout();
     textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
   }

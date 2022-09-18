@@ -1,8 +1,6 @@
+import 'game.dart';
 import 'piece.dart';
 
 class Necromobile extends Piece {
-  Necromobile(super.player);
-
-  @override
-  String get symbol => "N";
+  Necromobile(PlayerId playerId) : super(PieceType.necromobile, playerId);
 }

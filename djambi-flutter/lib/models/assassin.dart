@@ -1,8 +1,6 @@
+import 'game.dart';
 import 'piece.dart';
 
 class Assassin extends Piece {
-  Assassin(super.player);
-
-  @override
-  String get symbol => "A";
+  Assassin(PlayerId playerId) : super(PieceType.assassin, playerId);
 }

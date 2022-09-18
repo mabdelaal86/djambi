@@ -1,8 +1,6 @@
+import 'game.dart';
 import 'piece.dart';
 
 class Militant extends Piece {
-  Militant(super.player);
-
-  @override
-  String get symbol => "M";
+  Militant(PlayerId playerId) : super(PieceType.militant, playerId);
 }

@@ -28,7 +28,7 @@ class Grid extends PositionComponent with TapCallbacks {
     final Piece? piece = tourney.allPieces().firstWhereOrNull((p) => p.cell == cell);
 
     if (piece != null) {
-      print("Piece clicked: ${piece.symbol}");
+      print("Piece clicked: ${piece.type}");
     }
     else {
       print("Grid clicked");

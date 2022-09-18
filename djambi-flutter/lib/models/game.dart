@@ -12,3 +12,12 @@ enum PlayerId {
 
   PlayerId get next => PlayerId.values[(index + 1) % 4];
 }
+
+enum PieceType {
+  chief,
+  assassin,
+  reporter,
+  diplomat,
+  necromobile,
+  militant,
+}
