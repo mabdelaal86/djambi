@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 
 import '../models/common.dart';
 import '../models/piece.dart';
@@ -21,44 +21,40 @@ class Board extends PositionComponent {
   void render(Canvas canvas) {
     _paintBackground(canvas);
     _paintMaze(canvas);
+    _markAvailableMoves(canvas);
     _drawLines(canvas);
     _writeIndexes(canvas);
     _drawPieces(canvas);
   }
 
   void _paintBackground(Canvas canvas) {
-    var paint = Paint();
     // paint margin background
-    canvas.drawRect(size.toRect(), paint..color = theme.marginColor);
+    canvas.drawRect(size.toRect(), theme.marginPaint);
     // paint grid background
-    canvas.drawRect(Dimensions.gridOffset & Dimensions.gridSize, paint..color = theme.cellColor);
+    canvas.drawRect(Dimensions.gridOffset & Dimensions.gridSize, theme.cellBgPaint);
   }
 
   void _paintMaze(Canvas canvas) {
-    // paint maze cell
-    final mazePaint = Paint()..color = theme.mazeColor;
-    canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, mazePaint);
+    canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, theme.mazePaint);
   }
 
   void _drawLines(Canvas canvas) {
-    final linePaint = Paint()..color = theme.lineColor;
     // margins
-    canvas.drawLine(Offset.zero, Offset(size.x, 0), linePaint);
-    canvas.drawLine(Offset.zero, Offset(0, size.y), linePaint);
+    canvas.drawLine(Offset.zero, Offset(size.x, 0), theme.linePaint);
+    canvas.drawLine(Offset.zero, Offset(0, size.y), theme.linePaint);
     // draw 10 vertical/horizontal lines with board height/width
     for (var i = 0; i <= Configs.boardCells; i++) {
       final d = Dimensions.margin + i * Dimensions.cellSide;
-      canvas.drawLine(Offset(d, 0), Offset(d, size.y), linePaint);
-      canvas.drawLine(Offset(0, d), Offset(size.x, d), linePaint);
+      canvas.drawLine(Offset(d, 0), Offset(d, size.y), theme.linePaint);
+      canvas.drawLine(Offset(0, d), Offset(size.x, d), theme.linePaint);
     }
   }
 
   void _writeIndexes(Canvas canvas) {
-    final style = TextStyle(color: theme.lineColor, fontSize: 300);
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
     void writeText(String text, Offset cellOffset, Vector2 cellSize) {
-      textPainter.text = TextSpan(style: style, text: text);
+      textPainter.text = TextSpan(style: theme.marginTextStyle, text: text);
       textPainter.layout();
       final cellCenter = (cellSize - textPainter.size.toVector2()) / 2;
       textPainter.paint(canvas, cellOffset + cellCenter.toOffset());
@@ -89,17 +85,20 @@ class Board extends PositionComponent {
   }
 
   void _paintPieceBackground(Canvas canvas, Piece piece, Offset offset) {
-    final color = piece.isDead ? theme.deadColor : theme.playerColors[piece.playerId]!;
-    final paint = Paint()..color = color;
+    final paint = piece.isDead ? theme.deadPaint : theme.getPlayerPaint(piece.playerId);
     canvas.drawCircle(offset, Dimensions.pieceRadius, paint);
   }
 
   void _drawPieceSymbol(Canvas canvas, Piece piece, Offset offset) {
-    final style = TextStyle(color: theme.lineColor, fontSize: 500, fontWeight: FontWeight.bold);
-    final textPainter = TextPainter(textDirection: TextDirection.ltr);
-
-    textPainter.text = TextSpan(style: style, text: piece.type.name[0].toUpperCase());
+    final textPainter = TextPainter(textDirection: TextDirection.ltr)
+      ..text = TextSpan(style: theme.pieceSymbolStyle, text: piece.type.name[0].toUpperCase());
     textPainter.layout();
     textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
+  }
+
+  void _markAvailableMoves(Canvas canvas) {
+    for (final cell in tourney.selectableCells()) {
+      canvas.drawRect(Dimensions.cellOffset(cell) & Dimensions.cellSize, theme.cellMarkPaint);
+    }
   }
 }

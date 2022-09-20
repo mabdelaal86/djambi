@@ -12,7 +12,7 @@ class DjambiGame extends FlameGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
     await Flame.images.load('test.png');
-    final theme = GameTheme();
+    final theme = DefaultTheme();
 
     final tourney = Tourney();
     final grid = Grid(tourney);

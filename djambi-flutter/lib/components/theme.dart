@@ -2,17 +2,57 @@ import 'package:flutter/material.dart';
 
 import '../models/common.dart';
 
-class GameTheme {
-  Color get marginColor   => Colors.grey.shade300;
-  Color get cellColor     => Colors.white;
-  Color get mazeColor     => Colors.black;
-  Color get deadColor     => Colors.grey.shade600;
-  Color get lineColor     => Colors.black;
+abstract class GameTheme {
+  Paint get marginPaint;
+  Paint get cellBgPaint;
+  Paint get mazePaint;
+  Paint get deadPaint;
+  Paint get linePaint;
+  Paint get cellMarkPaint;
 
-  Map<PlayerId, Color> get playerColors => {
-    PlayerId.green:   Colors.green,
-    PlayerId.yellow:  Colors.yellow,
-    PlayerId.blue:    Colors.blue,
-    PlayerId.red:     Colors.red,
-  };
+  TextStyle get marginTextStyle;
+  TextStyle get pieceSymbolStyle;
+
+  Paint getPlayerPaint(PlayerId playerId);
+}
+
+class DefaultTheme extends GameTheme {
+  @override
+  Paint get marginPaint => Paint()..color = Colors.grey.shade300;
+
+  @override
+  Paint get cellBgPaint => Paint()..color = Colors.white;
+
+  @override
+  Paint get mazePaint => Paint()..color = Colors.black;
+
+  @override
+  Paint get deadPaint => Paint()..color = Colors.grey.shade600;
+
+  @override
+  Paint get linePaint => Paint()..color = Colors.black;
+
+  @override
+  Paint get cellMarkPaint => Paint()
+    ..color = Colors.purpleAccent.shade100
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 75;
+
+  @override
+  TextStyle get marginTextStyle => const TextStyle(color: Colors.black, fontSize: 300);
+
+  @override
+  TextStyle get pieceSymbolStyle => const TextStyle(color: Colors.black, fontSize: 500, fontWeight: FontWeight.bold);
+
+  @override
+  Paint getPlayerPaint(PlayerId playerId) {
+    const playerColors = [
+      Colors.red,           // PlayerId.red
+      Colors.indigoAccent,  // PlayerId.blue
+      Colors.orange,        // PlayerId.yellow
+      Colors.green,         // PlayerId.green
+    ];
+
+    return Paint()..color = playerColors[playerId.index];
+  }
 }

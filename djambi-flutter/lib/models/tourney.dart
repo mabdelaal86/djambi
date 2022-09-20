@@ -44,4 +44,8 @@ class Tourney {
     getPlayer(PlayerId.green).pieces
       .forEach((piece) { piece.cell += const Point(1, 1); });
   }
+
+  List<Point<int>> selectableCells() {
+    return currentPlayer.pieces.map((p) => p.cell).toList();
+  }
 }
