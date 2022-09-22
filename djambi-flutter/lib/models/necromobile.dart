@@ -1,6 +1,6 @@
 import 'common.dart';
-import 'piece.dart';
+import 'member.dart';
 
-class Necromobile extends Piece {
-  Necromobile(PlayerId playerId) : super(PieceType.necromobile, playerId);
+class Necromobile extends Member {
+  Necromobile(Ideology ideology) : super(Role.necromobile, ideology);
 }

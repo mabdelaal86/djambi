@@ -6,7 +6,7 @@ import 'package:flame/widgets.dart';
 import 'components/board.dart';
 import 'components/grid.dart';
 import 'components/theme.dart';
-import 'models/tourney.dart';
+import 'models/parliament.dart';
 
 class DjambiGame extends FlameGame with HasTappableComponents {
   @override
@@ -14,7 +14,7 @@ class DjambiGame extends FlameGame with HasTappableComponents {
     await Flame.images.load('test.png');
     final theme = DefaultTheme();
 
-    final tourney = Tourney();
+    final tourney = Parliament();
     final grid = Grid(tourney);
     final board = Board(tourney, theme, position: Vector2(500, 300));
     board.add(grid);

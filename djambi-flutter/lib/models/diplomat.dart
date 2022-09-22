@@ -1,6 +1,6 @@
 import 'common.dart';
-import 'piece.dart';
+import 'member.dart';
 
-class Diplomat extends Piece {
-  Diplomat(PlayerId playerId) : super(PieceType.diplomat, playerId);
+class Diplomat extends Member {
+  Diplomat(Ideology ideology) : super(Role.diplomat, ideology);
 }
