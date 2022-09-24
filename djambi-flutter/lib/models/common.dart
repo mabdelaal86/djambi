@@ -8,15 +8,10 @@ class Cell extends Point<int> {
   Vector2 toVector2() => Vector2(x.toDouble(), y.toDouble());
   Cell scaled(int fx, int fy) => Cell(x * fx, y * fy);
   Cell movedBy(int dx, int dy) => Cell(x + dx, y + dy);
-  Cell operator ~/(int scale) => Cell(x ~/ scale, y ~/ scale);
 
   factory Cell.all(int xy) => Cell(xy, xy);
   factory Cell.zero() => const Cell(0, 0);
-}
-
-extension Vector2Extension on Vector2 {
-  Vector2 expanded(Cell cell) => Vector2(x * cell.x, y * cell.y);
-  Cell toCell(double factor) => Cell(x ~/ factor, y ~/ factor);
+  factory Cell.fromVector2(Vector2 vector, {double factor = 1.0}) => Cell(vector.x ~/ factor, vector.y ~/ factor);
 }
 
 // order is important

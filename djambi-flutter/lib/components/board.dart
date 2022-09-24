@@ -11,10 +11,10 @@ class Board extends PositionComponent {
   // @override
   // bool get debugMode => true;
 
-  late final Parliament tourney;
+  late final Parliament parliament;
   late GameTheme theme;
 
-  Board(this.tourney, this.theme, {super.position}) : super(size: Dimensions.boardSize);
+  Board(this.parliament, this.theme, {super.position}) : super(size: Dimensions.boardSize);
 
   @override
   void render(Canvas canvas) {
@@ -23,7 +23,7 @@ class Board extends PositionComponent {
     _markAvailableMoves(canvas);
     _drawLines(canvas);
     _writeIndexes(canvas);
-    _drawPieces(canvas);
+    _drawMembers(canvas);
   }
 
   void _paintBackground(Canvas canvas) {
@@ -69,34 +69,34 @@ class Board extends PositionComponent {
     }
   }
 
-  void _drawPieces(Canvas canvas) {
-    for (final piece in tourney.allMembers()) {
-      _drawPiece(canvas, piece);
+  void _drawMembers(Canvas canvas) {
+    for (final member in parliament.allMembers()) {
+      _drawMember(canvas, member);
     }
   }
 
-  void _drawPiece(Canvas canvas, Member piece) {
-    final Offset centerOffset = Dimensions.cellCenterOffset(piece.cell).toOffset();
-    _paintPieceBackground(canvas, piece, centerOffset);
-    if (!piece.isDead) {
-      _drawPieceSymbol(canvas, piece, centerOffset);
+  void _drawMember(Canvas canvas, Member member) {
+    final Offset centerOffset = Dimensions.cellCenterOffset(member.cell).toOffset();
+    _paintMemberBackground(canvas, member, centerOffset);
+    if (!member.isDead) {
+      _drawMemberSymbol(canvas, member, centerOffset);
     }
   }
 
-  void _paintPieceBackground(Canvas canvas, Member piece, Offset offset) {
-    final paint = piece.isDead ? theme.deadPaint : theme.getPlayerPaint(piece.ideology);
+  void _paintMemberBackground(Canvas canvas, Member member, Offset offset) {
+    final paint = member.isDead ? theme.deadPaint : theme.getPartyPaint(member.ideology);
     canvas.drawCircle(offset, Dimensions.pieceRadius, paint);
   }
 
-  void _drawPieceSymbol(Canvas canvas, Member piece, Offset offset) {
+  void _drawMemberSymbol(Canvas canvas, Member member, Offset offset) {
     final textPainter = TextPainter(textDirection: TextDirection.ltr)
-      ..text = TextSpan(style: theme.pieceSymbolStyle, text: piece.role.name[0].toUpperCase());
+      ..text = TextSpan(style: theme.pieceSymbolStyle, text: member.role.name[0].toUpperCase());
     textPainter.layout();
     textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
   }
 
   void _markAvailableMoves(Canvas canvas) {
-    for (final cell in tourney.selectableCells()) {
+    for (final cell in parliament.selectableCells()) {
       canvas.drawRect(Dimensions.cellOffset(cell) & Dimensions.cellSize, theme.cellMarkPaint);
     }
   }

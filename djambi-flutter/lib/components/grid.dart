@@ -12,9 +12,9 @@ class Grid extends PositionComponent with TapCallbacks {
   // @override
   // bool get debugMode => true;
 
-  late final Parliament tourney;
+  late final Parliament parliament;
 
-  Grid(this.tourney) : super(position: Dimensions.gridOffset, size: Dimensions.gridSize);
+  Grid(this.parliament) : super(position: Dimensions.gridOffset, size: Dimensions.gridSize);
 
   @override
   void render(Canvas canvas) {
@@ -23,11 +23,16 @@ class Grid extends PositionComponent with TapCallbacks {
 
   @override
   void onTapUp(TapUpEvent event) {
-    final Cell cell = event.localPosition.toCell(Dimensions.cellSide);
-    final Member? piece = tourney.allMembers().firstWhereOrNull((p) => p.cell == cell);
+    final Cell cell = Cell.fromVector2(event.localPosition, factor: Dimensions.cellSide);
+    final Member? member = parliament.allMembers().firstWhereOrNull((p) => p.cell == cell);
 
-    if (piece != null) {
-      print("Piece clicked: ${piece.role}");
+    if (member != null) {
+      print("Member clicked: ${member.role}");
+      final x = parliament.nextPlayer();
+      print(x);
+      parliament.nextTurn();
+      final y = parliament.nextPlayer();
+      print(y);
     }
     else {
       print("Grid clicked");

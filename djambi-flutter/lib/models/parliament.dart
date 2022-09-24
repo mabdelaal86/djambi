@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 
-import 'chief.dart';
 import 'common.dart';
 import 'member.dart';
 import 'party.dart';
@@ -32,14 +31,38 @@ class Parliament {
   }
 
   Member? memberAt(Cell cell) => allMembers().firstWhereOrNull((m) => m.cell == cell);
-  Chief? chiefInPower() => memberAt(mazeCell) as Chief?;
+  Party? partyInPower() => parties.firstWhereOrNull(
+          (p) => p.chief.cell == mazeCell && !p.chief.isDead);
 
   Parliament() {
     _setInitialPositions();
   }
 
+  Ideology nextPlayer() {
+    final inPower = partyInPower();
+    var ideology = _currentPartyIdeology;
+    if (inPower == null) {
+      // no party is in power, so just return the next player in turn
+      do {
+        ideology = ideology.next;
+      } while(parties[ideology.index].lost); // skip lost/dead parties
+      return ideology;
+    }
+    else {
+      // check if current is not the in power party
+      if (ideology != inPower.ideology) {
+        return inPower.ideology;
+      }
+      // current is the in power party, so return the next player in turn
+      do {
+        ideology = ideology.next;
+      } while(parties[ideology.index].lost || ideology == inPower.ideology);
+      return ideology;
+    }
+  }
+
   void nextTurn() {
-    _currentPartyIdeology = _currentPartyIdeology.next;
+    _currentPartyIdeology = nextPlayer();
   }
 
   void _setInitialPositions() {

@@ -13,7 +13,7 @@ abstract class GameTheme {
   TextStyle get marginTextStyle;
   TextStyle get pieceSymbolStyle;
 
-  Paint getPlayerPaint(Ideology playerId);
+  Paint getPartyPaint(Ideology ideology);
 }
 
 class DefaultTheme extends GameTheme {
@@ -45,14 +45,14 @@ class DefaultTheme extends GameTheme {
   TextStyle get pieceSymbolStyle => const TextStyle(color: Colors.black, fontSize: 500, fontWeight: FontWeight.bold);
 
   @override
-  Paint getPlayerPaint(Ideology playerId) {
-    const playerColors = [
-      Colors.red,           // PlayerId.red
-      Colors.indigoAccent,  // PlayerId.blue
-      Colors.orange,        // PlayerId.yellow
-      Colors.green,         // PlayerId.green
+  Paint getPartyPaint(Ideology ideology) {
+    const partyColors = [
+      Colors.red,           // Ideology.red
+      Colors.indigoAccent,  // Ideology.blue
+      Colors.orange,        // Ideology.yellow
+      Colors.green,         // Ideology.green
     ];
 
-    return Paint()..color = playerColors[playerId.index];
+    return Paint()..color = partyColors[ideology.index];
   }
 }

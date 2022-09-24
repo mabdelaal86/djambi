@@ -28,4 +28,6 @@ class Party {
 
   // chief will always be at index 0 and will never be moved to another party
   Member get chief => members[Role.chief.index];
+
+  bool get lost => chief.isDead;
 }
