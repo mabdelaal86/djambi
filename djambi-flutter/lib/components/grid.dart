@@ -28,14 +28,10 @@ class Grid extends PositionComponent with TapCallbacks {
 
     if (member != null) {
       print("Member clicked: ${member.role}");
-      final x = parliament.nextPlayer();
-      print(x);
-      parliament.nextTurn();
-      final y = parliament.nextPlayer();
-      print(y);
     }
     else {
       print("Grid clicked");
+      parliament.nextTurn();
     }
   }
 }
