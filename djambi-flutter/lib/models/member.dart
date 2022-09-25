@@ -3,8 +3,8 @@ import 'package:stack/stack.dart';
 import 'common.dart';
 
 abstract class Member {
-  late Ideology ideology;
-  late final Role role;
+  final Role role;
+  Ideology ideology;
 
   Member(this.role, this.ideology) {
     origins.push(ideology);

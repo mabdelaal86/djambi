@@ -70,7 +70,7 @@ class Board extends PositionComponent {
   }
 
   void _drawMembers(Canvas canvas) {
-    for (final member in parliament.allMembers()) {
+    for (final member in parliament.members) {
       _drawMember(canvas, member);
     }
   }

@@ -22,7 +22,7 @@ enum Ideology {
   green,
   ;
 
-  static Ideology get first => Ideology.values[0];
+  static const Ideology first = red;
   Ideology get next => Ideology.values[(index + 1) % 4];
   Ideology get previous => Ideology.values[(index + 3) % 4];
 }

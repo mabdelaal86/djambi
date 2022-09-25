@@ -9,36 +9,41 @@ class Parliament {
   static const int maze = size ~/ 2;
   static final Cell mazeCell = Cell.all(maze);
 
-  final List<Party> parties = [
-    Party(Ideology.red),
-    Party(Ideology.blue),
-    Party(Ideology.yellow),
-    Party(Ideology.green),
+  late final List<Party> _parties = [
+    Party(this, Ideology.red),
+    Party(this, Ideology.blue),
+    Party(this, Ideology.yellow),
+    Party(this, Ideology.green),
   ];
 
-  late Ideology _currentIdeology;
-  late Party _currentParty;
+  Party getParty(Ideology ideology) => _parties[ideology.index];
+
+  late final List<Member> members = [];
+  Member? memberAt(Cell cell) => members.firstWhereOrNull((m) => m.cell == cell);
+  Iterable<Member> getPartyMembers(Ideology ideology) => members.where((m) => m.ideology == ideology);
+
+  late Ideology _currentIdeology = Ideology.first;
+  late Party _currentParty = getParty(_currentIdeology);
   Party get currentParty => _currentParty;
 
-  Party getParty(Ideology ideology) => parties[ideology.index];
-
-  Iterable<Member> allMembers() sync* {
-    for (final party in parties) {
-      for (final member in party.members) {
-        yield member;
-      }
-    }
-  }
-
-  Member? memberAt(Cell cell) => allMembers().firstWhereOrNull((m) => m.cell == cell);
-  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.cell == mazeCell && !p.lost);
-  int countActiveParties() => parties.where((p) => !p.lost).length;
-
   Parliament() {
+    _createMembers();
     _setInitialPositions();
-    _currentIdeology = Ideology.first;
-    _currentParty = getParty(_currentIdeology);
   }
+
+  void _createMembers() {
+    for (final party in _parties) { members.addAll(party.createMembers()); }
+  }
+
+  void _setInitialPositions() {
+    getPartyMembers(Ideology.red)     .forEach((m) { m.cell = m.cell.scaled( 1, -1).movedBy(1, 7); });
+    getPartyMembers(Ideology.blue)    .forEach((m) { m.cell = m.cell.scaled(-1, -1).movedBy(7, 7); });
+    getPartyMembers(Ideology.yellow)  .forEach((m) { m.cell = m.cell.scaled(-1,  1).movedBy(7, 1); });
+    getPartyMembers(Ideology.green)   .forEach((m) { m.cell = m.cell.movedBy(1, 1); });
+  }
+
+  Party? getPartyInPower() => _parties.firstWhereOrNull((p) => p.chief.cell == mazeCell && !p.lost);
+  int countActiveParties() => _parties.where((p) => !p.lost).length;
 
   Party _nextParty() {
     final partyInPower = getPartyInPower();
@@ -72,18 +77,7 @@ class Parliament {
     _currentParty = _nextParty();
   }
 
-  void _setInitialPositions() {
-    getParty(Ideology.red).members
-      .forEach((member) { member.cell = member.cell.scaled( 1, -1).movedBy(1, 7); });
-    getParty(Ideology.blue).members
-      .forEach((member) { member.cell = member.cell.scaled(-1, -1).movedBy(7, 7); });
-    getParty(Ideology.yellow).members
-      .forEach((member) { member.cell = member.cell.scaled(-1,  1).movedBy(7, 1); });
-    getParty(Ideology.green).members
-      .forEach((member) { member.cell = member.cell.movedBy(1, 1); });
-  }
-
   Iterable<Cell> selectableCells() {
-    return _currentParty.members.map((p) => p.cell);
+    return _currentParty.getMembers().map((p) => p.cell);
   }
 }

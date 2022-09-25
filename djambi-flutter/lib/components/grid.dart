@@ -24,7 +24,7 @@ class Grid extends PositionComponent with TapCallbacks {
   @override
   void onTapUp(TapUpEvent event) {
     final Cell cell = Cell.fromVector2(event.localPosition, factor: Dimensions.cellSide);
-    final Member? member = parliament.allMembers().firstWhereOrNull((p) => p.cell == cell);
+    final Member? member = parliament.members.firstWhereOrNull((p) => p.cell == cell);
 
     if (member != null) {
       print("Member clicked: ${member.role}");
