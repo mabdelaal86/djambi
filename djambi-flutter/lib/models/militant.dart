@@ -2,5 +2,8 @@ import 'common.dart';
 import 'member.dart';
 
 class Militant extends Member {
-  Militant(Ideology ideology) : super(Role.militant, ideology);
+  Militant(super.parliament, super.ideology);
+
+  @override
+  Role get role => Role.militant;
 }

@@ -1,17 +1,38 @@
-import 'dart:math';
-
 import 'package:flame/extensions.dart';
 
-class Cell extends Point<int> {
-  const Cell(super.x, super.y);
+abstract class Constants {
+  static const int boardSize = 9;
+  static const int mazeIndex = boardSize ~/ 2;
+  static final Cell mazeCell = Cell.all(mazeIndex);
+}
 
-  Vector2 toVector2() => Vector2(x.toDouble(), y.toDouble());
-  Cell scaled(int fx, int fy) => Cell(x * fx, y * fy);
-  Cell movedBy(int dx, int dy) => Cell(x + dx, y + dy);
+class Cell {
+  final int x, y;
+
+  const Cell(this.x, this.y);
 
   factory Cell.all(int xy) => Cell(xy, xy);
   factory Cell.zero() => const Cell(0, 0);
-  factory Cell.fromVector2(Vector2 vector, {double factor = 1.0}) => Cell(vector.x ~/ factor, vector.y ~/ factor);
+
+  @override
+  String toString() => "Cell($x, $y)";
+
+  @override
+  bool operator ==(Object other) => other is Cell && x == other.x && y == other.y;
+
+  @override
+  int get hashCode => Object.hash(x, y);
+
+  Cell operator +(Cell other) => Cell(x + other.x, y + other.y);
+  Cell operator -(Cell other) => Cell(x - other.x, y - other.y);
+  Cell operator *(Cell other) => Cell(x * other.x, y * other.y);
+
+  Vector2 toVector2() => Vector2(x.toDouble(), y.toDouble());
+  bool isValid() => (0 <= x && x < Constants.boardSize) &&
+                    (0 <= y && y < Constants.boardSize);
+  Cell abs() => Cell(x.abs(), y.abs());
+  int max() => x > y ? x : y;
+  int min() => x < y ? x : y;
 }
 
 // order is important

@@ -1,3 +1,4 @@
+import 'package:djambi/models/common.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class Board extends PositionComponent {
     canvas.drawLine(Offset.zero, Offset(size.x, 0), theme.linePaint);
     canvas.drawLine(Offset.zero, Offset(0, size.y), theme.linePaint);
     // draw 10 vertical/horizontal lines with board height/width
-    for (var i = 0; i <= Parliament.size; i++) {
+    for (var i = 0; i <= Constants.boardSize; i++) {
       final d = Dimensions.margin + i * Dimensions.cellSide;
       canvas.drawLine(Offset(d, 0), Offset(d, size.y), theme.linePaint);
       canvas.drawLine(Offset(0, d), Offset(size.x, d), theme.linePaint);
@@ -62,7 +63,7 @@ class Board extends PositionComponent {
     writeText("#", Offset.zero, Dimensions.gridOffset);
 
     const cols = "ABCDEFGHI", rows = "123456789";
-    for (var i = 0; i < Parliament.size; i++) {
+    for (var i = 0; i < Constants.boardSize; i++) {
       final d = Dimensions.margin + i * Dimensions.cellSide;
       writeText(cols[i], Offset(d, 0), Dimensions.marginColCell);
       writeText(rows[i], Offset(0, d), Dimensions.marginRowCell);
@@ -96,7 +97,7 @@ class Board extends PositionComponent {
   }
 
   void _markAvailableMoves(Canvas canvas) {
-    for (final cell in parliament.selectableCells()) {
+    for (final cell in parliament.currentManoeuvre.selectableCells()) {
       canvas.drawRect(Dimensions.cellOffset(cell) & Dimensions.cellSize, theme.cellMarkPaint);
     }
   }

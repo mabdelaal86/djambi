@@ -16,7 +16,7 @@ class DjambiGame extends FlameGame with HasTappableComponents {
 
     final tourney = Parliament();
     final grid = Grid(tourney);
-    final board = Board(tourney, theme, position: Vector2(500, 300));
+    final board = Board(tourney, theme, position: Vector2(0, 1500));
     board.add(grid);
 
     final world = World();
@@ -24,7 +24,7 @@ class DjambiGame extends FlameGame with HasTappableComponents {
     add(world);
 
     final camera = CameraComponent(world: world)
-      ..viewfinder.visibleGameSize = board.size + Vector2.all(500)
+      ..viewfinder.visibleGameSize = board.size + board.position * 2
       ..viewfinder.anchor = Anchor.topLeft;
     add(camera);
   }

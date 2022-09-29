@@ -2,5 +2,8 @@ import 'common.dart';
 import 'member.dart';
 
 class Reporter extends Member {
-  Reporter(Ideology ideology) : super(Role.reporter, ideology);
+  Reporter(super.parliament, super.ideology);
+
+  @override
+  Role get role => Role.reporter;
 }
