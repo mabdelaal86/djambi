@@ -23,6 +23,8 @@ class Cell {
   @override
   int get hashCode => Object.hash(x, y);
 
+  bool get isMaze => this == Constants.mazeCell;
+
   Cell operator +(Cell other) => Cell(x + other.x, y + other.y);
   Cell operator -(Cell other) => Cell(x - other.x, y - other.y);
   Cell operator *(Cell other) => Cell(x * other.x, y * other.y);

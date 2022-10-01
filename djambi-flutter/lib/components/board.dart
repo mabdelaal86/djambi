@@ -79,7 +79,7 @@ class Board extends PositionComponent {
   void _drawMember(Canvas canvas, Member member) {
     final Offset centerOffset = Dimensions.cellCenterOffset(member.cell).toOffset();
     _paintMemberBackground(canvas, member, centerOffset);
-    if (!member.isDead) {
+    if (member.isAlive) {
       _drawMemberSymbol(canvas, member, centerOffset);
     }
   }

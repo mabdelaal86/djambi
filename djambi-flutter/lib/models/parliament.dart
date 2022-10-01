@@ -42,8 +42,8 @@ class Parliament {
     getPartyMembers(Ideology.green)   .forEach((m) { m.cell = m.cell                      + const Cell(1, 1); });
   }
 
-  Party? getPartyInPower() => _parties.firstWhereOrNull((p) => p.chief.cell == Constants.mazeCell && !p.lost);
-  Iterable<Party> get activeParties => _parties.where((p) => !p.lost);
+  Party? getPartyInPower() => _parties.firstWhereOrNull((p) => p.chief.cell.isMaze && p.chief.isAlive);
+  Iterable<Party> get activeParties => _parties.where((p) => p.isActive);
 
   Party _nextParty() {
     final partyInPower = getPartyInPower();
@@ -55,7 +55,7 @@ class Parliament {
       do {
         _currentIdeology = _currentIdeology.next;
         party = getParty(_currentIdeology);
-      } while(party.lost);
+      } while(party.isLost);
       return party;
     }
     // else: there is a party in power
@@ -69,7 +69,7 @@ class Parliament {
     do {
       _currentIdeology = _currentIdeology.next;
       party = getParty(_currentIdeology);
-    } while(party.lost || (activeParties.length > 2 && _currentIdeology == partyInPower.ideology));
+    } while(party.isLost || (activeParties.length > 2 && _currentIdeology == partyInPower.ideology));
     return party;
   }
 

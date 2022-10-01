@@ -11,7 +11,7 @@ class Manoeuvre {
 
   Iterable<Cell> selectableCells() {
     if (selectedMember != null) {
-      return selectedMember!.canMoveTo();
+      return selectedMember!.movements();
     }
     return party.members.map((p) => p.cell);
   }

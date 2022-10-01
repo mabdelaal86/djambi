@@ -19,29 +19,30 @@ abstract class Member {
   Cell cell = Cell.zero();
 
   bool _isDead = false;
-  bool get isDead => _isDead;
   void die() => _isDead = true;
+  bool get isDead => _isDead;
+  bool get isAlive => !_isDead;
 
   final Stack<Ideology> origins = Stack();
 
-  Iterable<Cell> canMoveTo() sync* {
+  Iterable<Cell> movements() sync* {
     const List<Cell> directions = [
       Cell(-1, -1), Cell(0, -1), Cell(1, -1),
       Cell(-1,  0),              Cell(1,  0),
       Cell(-1,  1), Cell(0,  1), Cell(1,  1),
     ];
 
-    directionsLoop:
-    for (final direction in directions) {
-      for (var cur = cell + direction; cur.isValid(); cur += direction) {
-        final member = parliament.getMemberAt(cur);
+    for (final dir in directions) {
+      for (var cell = this.cell + dir; cell.isValid(); cell += dir) {
+        // check if cell is occupied
+        final member = parliament.getMemberAt(cell);
         if (member != null) {
           if (member.isDead || member.ideology != ideology) {
-            yield cur;
+            yield cell;
           }
-          continue directionsLoop; // skip this direction
+          break; // stop this direction after first occupied cell
         }
-        yield cur;
+        yield cell;
       }
     }
   }

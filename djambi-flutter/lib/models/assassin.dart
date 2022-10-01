@@ -6,4 +6,11 @@ class Assassin extends Member {
 
   @override
   Role get role => Role.assassin;
+
+  @override
+  Iterable<Cell> movements() => super.movements().where((cell) {
+        final member = parliament.getMemberAt(cell);
+        // empty cell & not maze or alive enemy member
+        return (member == null && !cell.isMaze) || (member != null && member.isAlive);
+      });
 }

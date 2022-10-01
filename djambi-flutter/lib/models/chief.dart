@@ -6,4 +6,11 @@ class Chief extends Member {
 
   @override
   Role get role => Role.chief;
+
+  @override
+  Iterable<Cell> movements() => super.movements().where((cell) {
+        final member = parliament.getMemberAt(cell);
+        // empty cell or alive enemy member
+        return member == null || member.isAlive;
+      });
 }
