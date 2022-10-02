@@ -10,7 +10,7 @@ class Diplomat extends Member {
   @override
   Iterable<Cell> movements() => super.movements().where((cell) {
         final member = parliament.getMemberAt(cell);
-        // empty cell & not maze or alive enemy member
+        // empty non maze cell or alive enemy member
         return (member == null && !cell.isMaze) || (member != null && member.isAlive);
       });
 }

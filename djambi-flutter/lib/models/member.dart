@@ -25,6 +25,10 @@ abstract class Member {
 
   final Stack<Ideology> origins = Stack();
 
+  /// Returns cells that a member can move to.
+  ///
+  /// The default implementation returns empty cells and cells occupied
+  /// by an enemy member or a dead member in all 8 directions.
   Iterable<Cell> movements() sync* {
     const List<Cell> directions = [
       Cell(-1, -1), Cell(0, -1), Cell(1, -1),

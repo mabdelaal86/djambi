@@ -1,12 +1,19 @@
-import 'package:djambi/models/common.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
+import '../models/common.dart';
+import '../models/manoeuvre.dart';
 import '../models/member.dart';
 import '../models/parliament.dart';
 import 'dimensions.dart';
 import 'theme.dart';
+
+extension PaintExtension on Paint {
+  Paint stroke() => this
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = Dimensions.stroke * 2;
+}
 
 class Board extends PositionComponent {
   // @override
@@ -87,6 +94,7 @@ class Board extends PositionComponent {
   void _paintMemberBackground(Canvas canvas, Member member, Offset offset) {
     final paint = member.isDead ? theme.deadPaint : theme.getPartyPaint(member.ideology);
     canvas.drawCircle(offset, Dimensions.pieceRadius, paint);
+    canvas.drawCircle(offset, Dimensions.pieceRadius, theme.linePaint);
   }
 
   void _drawMemberSymbol(Canvas canvas, Member member, Offset offset) {
@@ -97,8 +105,24 @@ class Board extends PositionComponent {
   }
 
   void _markAvailableMoves(Canvas canvas) {
-    for (final cell in parliament.currentManoeuvre.selectableCells()) {
-      canvas.drawRect(Dimensions.cellOffset(cell) & Dimensions.cellSize, theme.cellMarkPaint);
+    final manoeuvre = parliament.currentManoeuvre;
+    if (manoeuvre.canDeselect) {
+      for (final cell in manoeuvre.party.members.map((m) => m.cell)) {
+        final offset = Dimensions.cellCenterOffset(cell).toOffset();
+        const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
+        canvas.drawRect(Rect.fromCircle(center: offset, radius: radius), theme.cellMarkPaint..stroke());
+      }
+    }
+    if (manoeuvre.stage == Stage.move1) {
+      for (final cell in manoeuvre.selectedMember!.movements()) {
+        final offset = Dimensions.cellCenterOffset(cell).toOffset();
+        const radius = Dimensions.pieceRadius + Dimensions.stroke;
+        canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());
+      }
+    }
+    if (manoeuvre.selectedMember != null) {
+      final offset = Dimensions.cellOffset(manoeuvre.selectedMember!.cell);
+      canvas.drawRect(offset & Dimensions.cellSize, theme.cellMarkPaint);
     }
   }
 }

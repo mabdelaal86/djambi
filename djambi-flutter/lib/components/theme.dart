@@ -9,6 +9,7 @@ abstract class GameTheme {
   Paint get deadPaint;
   Paint get linePaint;
   Paint get cellMarkPaint;
+  Paint get moveMarkPaint;
 
   TextStyle get marginTextStyle;
   TextStyle get pieceSymbolStyle;
@@ -30,13 +31,15 @@ class DefaultTheme extends GameTheme {
   Paint get deadPaint => Paint()..color = Colors.grey.shade600;
 
   @override
-  Paint get linePaint => Paint()..color = Colors.black;
+  Paint get linePaint => Paint()
+    ..color = Colors.black
+    ..style = PaintingStyle.stroke;
 
   @override
-  Paint get cellMarkPaint => Paint()
-    ..color = Colors.purpleAccent.shade100
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 75;
+  Paint get cellMarkPaint => Paint()..color = Colors.purpleAccent.shade100;
+
+  @override
+  Paint get moveMarkPaint => Paint()..color = Colors.grey.shade500;
 
   @override
   TextStyle get marginTextStyle => const TextStyle(color: Colors.black, fontSize: 300);
@@ -47,10 +50,10 @@ class DefaultTheme extends GameTheme {
   @override
   Paint getPartyPaint(Ideology ideology) {
     const partyColors = [
-      Colors.red,           // Ideology.red
-      Colors.indigoAccent,  // Ideology.blue
-      Colors.orange,        // Ideology.yellow
-      Colors.green,         // Ideology.green
+      Colors.red,       // Ideology.red
+      Colors.blue,      // Ideology.blue
+      Colors.orange,    // Ideology.yellow
+      Colors.green,     // Ideology.green
     ];
 
     return Paint()..color = partyColors[ideology.index];

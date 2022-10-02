@@ -4,6 +4,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 
 import '../models/common.dart';
+import '../models/manoeuvre.dart';
 import '../models/member.dart';
 import '../models/parliament.dart';
 import 'dimensions.dart';
@@ -26,13 +27,22 @@ class Grid extends PositionComponent with TapCallbacks {
     final Cell cell = Dimensions.vector2cell(event.localPosition);
     final Member? member = parliament.members.firstWhereOrNull((p) => p.cell == cell);
 
+    final manoeuvre = parliament.currentManoeuvre;
     if (member != null) {
-      print("Member clicked: $member");
-      parliament.currentManoeuvre.selectedMember = member;
+      if (manoeuvre.stage == Stage.move1) {
+        manoeuvre.deselect();
+      }
+      if (manoeuvre.stage == Stage.select) {
+        manoeuvre.select(member);
+      }
     }
     else {
-      print("Grid clicked");
-      parliament.nextTurn();
+      if (cell.isMaze) {
+        parliament.nextTurn();
+      }
+      else if (manoeuvre.stage == Stage.move1) {
+        manoeuvre.move(cell);
+      }
     }
   }
 }
