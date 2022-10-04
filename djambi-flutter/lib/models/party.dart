@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import 'common.dart';
 import 'member.dart';
 import 'parliament.dart';
@@ -29,8 +31,8 @@ class Party {
       case Role.diplomat:     return Diplomat(parliament, ideology);
       case Role.necromobile:  return Necromobile(parliament, ideology);
       case Role.militant:     return Militant(parliament, ideology);
-      default: // not allowed to create another chief
-        throw ArgumentError.value(role);
+      // not allowed to create another chief
+      case Role.chief:        throw ArgumentError.value(role);
     }
   }
 
@@ -48,4 +50,7 @@ class Party {
       }
     }
   }
+
+  Member? get actor => members.firstWhereOrNull((m) => m.manoeuvre != Manoeuvre.select);
+  bool get isActing => actor?.isActing ?? false;
 }

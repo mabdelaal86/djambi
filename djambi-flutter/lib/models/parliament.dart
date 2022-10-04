@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 
 import 'common.dart';
-import 'manoeuvre.dart';
 import 'member.dart';
 import 'party.dart';
 
@@ -22,9 +21,6 @@ class Parliament {
   late Ideology _currentIdeology = Ideology.first;
   late Party _currentParty = getParty(_currentIdeology);
   Party get currentParty => _currentParty;
-
-  late Manoeuvre _currentManoeuvre = Manoeuvre(_currentParty);
-  Manoeuvre get currentManoeuvre => _currentManoeuvre;
 
   Parliament() {
     _createMembers();
@@ -60,7 +56,7 @@ class Parliament {
     }
     // else: there is a party in power
     // check if current is not the party in power
-    if (_currentParty != partyInPower) {
+    if (currentParty != partyInPower) {
       return partyInPower;
     }
     // else: current ideology is in power, so
@@ -73,8 +69,19 @@ class Parliament {
     return party;
   }
 
-  void nextTurn() {
+  void _nextTurn() {
     _currentParty = _nextParty();
-    _currentManoeuvre = Manoeuvre(_currentParty);
+    // _currentManoeuvre = Manoeuvre(_currentParty);
+  }
+
+  void act(Cell cell) {
+    for (final member in currentParty.members) {
+      member.act(cell);
+    }
+    final member = currentParty.actor;
+    if (member != null && member.isActing) {
+      member.manoeuvre = Manoeuvre.select;
+      _nextTurn();
+    }
   }
 }

@@ -8,7 +8,7 @@ class Necromobile extends Member {
   Role get role => Role.necromobile;
 
   @override
-  Iterable<Cell> movements() => super.movements().where((cell) {
+  Iterable<Cell> canMoveTo() => super.canMoveTo().where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell or dead member
         return (member == null && !cell.isMaze) || (member != null && member.isDead);

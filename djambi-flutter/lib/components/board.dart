@@ -3,7 +3,6 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../models/common.dart';
-import '../models/manoeuvre.dart';
 import '../models/member.dart';
 import '../models/parliament.dart';
 import 'dimensions.dart';
@@ -105,24 +104,25 @@ class Board extends PositionComponent {
   }
 
   void _markAvailableMoves(Canvas canvas) {
-    final manoeuvre = parliament.currentManoeuvre;
-    if (manoeuvre.canDeselect) {
-      for (final cell in manoeuvre.party.members.map((m) => m.cell)) {
+    final member = parliament.currentParty.actor;
+    if (member == null || !member.isActing) {
+      for (final cell in parliament.currentParty.members.map((m) => m.cell)) {
         final offset = Dimensions.cellCenterOffset(cell).toOffset();
         const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
         canvas.drawRect(Rect.fromCircle(center: offset, radius: radius), theme.cellMarkPaint..stroke());
       }
     }
-    if (manoeuvre.stage == Stage.move1) {
-      for (final cell in manoeuvre.selectedMember!.movements()) {
-        final offset = Dimensions.cellCenterOffset(cell).toOffset();
-        const radius = Dimensions.pieceRadius + Dimensions.stroke;
-        canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());
-      }
-    }
-    if (manoeuvre.selectedMember != null) {
-      final offset = Dimensions.cellOffset(manoeuvre.selectedMember!.cell);
+    if (member != null) {
+      final offset = Dimensions.cellOffset(parliament.currentParty.actor!.cell);
       canvas.drawRect(offset & Dimensions.cellSize, theme.cellMarkPaint);
+
+      if (member.manoeuvre == Manoeuvre.move1) {
+        for (final cell in member.canMoveTo()) {
+          final offset = Dimensions.cellCenterOffset(cell).toOffset();
+          const radius = Dimensions.pieceRadius + Dimensions.stroke;
+          canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());
+        }
+      }
     }
   }
 }

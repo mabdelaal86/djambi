@@ -8,7 +8,7 @@ class Reporter extends Member {
   Role get role => Role.reporter;
 
   @override
-  Iterable<Cell> movements() => super.movements().where((cell) {
+  Iterable<Cell> canMoveTo() => super.canMoveTo().where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell
         return member == null && !cell.isMaze;

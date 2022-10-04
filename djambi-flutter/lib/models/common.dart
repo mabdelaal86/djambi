@@ -30,11 +30,12 @@ class Cell {
   Cell operator *(Cell other) => Cell(x * other.x, y * other.y);
 
   Vector2 toVector2() => Vector2(x.toDouble(), y.toDouble());
-  bool isValid() => (0 <= x && x < Constants.boardSize) &&
-                    (0 <= y && y < Constants.boardSize);
   Cell abs() => Cell(x.abs(), y.abs());
   int max() => x > y ? x : y;
   int min() => x < y ? x : y;
+  bool isValid() =>
+      (0 <= x && x < Constants.boardSize) &&
+      (0 <= y && y < Constants.boardSize);
 }
 
 // order is important
@@ -58,4 +59,14 @@ enum Role {
   diplomat,
   necromobile,
   militant,
+}
+
+// order is important
+enum Manoeuvre {
+  select,
+  move1,
+  kill,
+  move2,
+  bury,
+  end,
 }
