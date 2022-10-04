@@ -4,7 +4,8 @@ import '../models/common.dart';
 
 abstract class GameTheme {
   Paint get marginPaint;
-  Paint get cellBgPaint;
+  Paint get lightCellPaint;
+  Paint get darkCellPaint;
   Paint get mazePaint;
   Paint get deadPaint;
   Paint get linePaint;
@@ -19,10 +20,13 @@ abstract class GameTheme {
 
 class DefaultTheme extends GameTheme {
   @override
-  Paint get marginPaint => Paint()..color = Colors.grey.shade300;
+  Paint get marginPaint => Paint()..color = Colors.grey.shade600;
 
   @override
-  Paint get cellBgPaint => Paint()..color = Colors.white;
+  Paint get lightCellPaint => Paint()..color = Colors.white;
+
+  @override
+  Paint get darkCellPaint => Paint()..color = Colors.grey.shade300;
 
   @override
   Paint get mazePaint => Paint()..color = Colors.black;
@@ -39,7 +43,7 @@ class DefaultTheme extends GameTheme {
   Paint get cellMarkPaint => Paint()..color = Colors.purpleAccent.shade100;
 
   @override
-  Paint get moveMarkPaint => Paint()..color = Colors.grey.shade500;
+  Paint get moveMarkPaint => Paint()..color = Colors.grey.shade600;
 
   @override
   TextStyle get marginTextStyle => const TextStyle(color: Colors.black, fontSize: 300);

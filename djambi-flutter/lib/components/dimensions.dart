@@ -5,7 +5,7 @@ import '../models/common.dart';
 abstract class Dimensions {
   static const double cellSide = 1000;
   static const double pieceRadius = 400;
-  static const double margin = 500;
+  static const double margin = 350;
   static const double stroke = 30;
   static final Vector2 cellSize = Vector2.all(cellSide);
   static final Vector2 gridSize = cellSize * Constants.boardSize.toDouble();

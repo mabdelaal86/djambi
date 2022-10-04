@@ -26,7 +26,6 @@ class Board extends PositionComponent {
   @override
   void render(Canvas canvas) {
     _paintBackground(canvas);
-    _paintMaze(canvas);
     _markAvailableMoves(canvas);
     _drawLines(canvas);
     _writeIndexes(canvas);
@@ -37,10 +36,16 @@ class Board extends PositionComponent {
     // paint margin background
     canvas.drawRect(size.toRect(), theme.marginPaint);
     // paint grid background
-    canvas.drawRect(Dimensions.gridOffset & Dimensions.gridSize, theme.cellBgPaint);
-  }
-
-  void _paintMaze(Canvas canvas) {
+    canvas.drawRect(Dimensions.gridOffset & Dimensions.gridSize, theme.lightCellPaint);
+    // paint dark cells background
+    for (var x = 0; x < Constants.boardSize; x++) {
+      for (var y = 0; y < Constants.boardSize; y++) {
+        if (x.isEven == y.isEven) {
+          canvas.drawRect(Dimensions.cellOffset(Cell(x, y)) & Dimensions.cellSize, theme.darkCellPaint);
+        }
+      }
+    }
+    // paint maze
     canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, theme.mazePaint);
   }
 
