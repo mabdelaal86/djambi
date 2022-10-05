@@ -38,11 +38,9 @@ class Board extends PositionComponent {
     // paint grid background
     canvas.drawRect(Dimensions.gridOffset & Dimensions.gridSize, theme.lightCellPaint);
     // paint dark cells background
-    for (var x = 0; x < Constants.boardSize; x++) {
-      for (var y = 0; y < Constants.boardSize; y++) {
-        if (x.isEven == y.isEven) {
-          canvas.drawRect(Dimensions.cellOffset(Cell(x, y)) & Dimensions.cellSize, theme.darkCellPaint);
-        }
+    for (final cell in Cell.allCells()) {
+      if (cell.x.isEven == cell.y.isEven) {
+        canvas.drawRect(Dimensions.cellOffset(cell) & Dimensions.cellSize, theme.darkCellPaint);
       }
     }
     // paint maze
@@ -123,6 +121,13 @@ class Board extends PositionComponent {
 
       if (member.manoeuvre == Manoeuvre.move1) {
         for (final cell in member.canMoveTo()) {
+          final offset = Dimensions.cellCenterOffset(cell).toOffset();
+          const radius = Dimensions.pieceRadius + Dimensions.stroke;
+          canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());
+        }
+      }
+      else if (member.manoeuvre == Manoeuvre.bury) {
+        for (final cell in parliament.emptyCells()) {
           final offset = Dimensions.cellCenterOffset(cell).toOffset();
           const radius = Dimensions.pieceRadius + Dimensions.stroke;
           canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());

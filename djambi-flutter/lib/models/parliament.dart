@@ -5,17 +5,21 @@ import 'member.dart';
 import 'party.dart';
 
 class Parliament {
-  late final List<Party> _parties = [
+  late final List<Party> parties = [
     Party(this, Ideology.red),
     Party(this, Ideology.blue),
     Party(this, Ideology.yellow),
     Party(this, Ideology.green),
   ];
 
-  Party getParty(Ideology ideology) => _parties[ideology.index];
+  Party getParty(Ideology ideology) => parties[ideology.index];
+  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.cell.isMaze && p.chief.isAlive);
+  Iterable<Party> get activeParties => parties.where((p) => p.isActive);
 
   late final List<Member> members = [];
   Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.cell == cell);
+  bool isEmpty(Cell cell) => !members.any((m) => m.cell == cell);
+  Iterable<Cell> emptyCells() => Cell.normalCells().where(isEmpty);
   Iterable<Member> getPartyMembers(Ideology ideology) => members.where((m) => m.ideology == ideology);
 
   late Ideology _currentIdeology = Ideology.first;
@@ -28,7 +32,7 @@ class Parliament {
   }
 
   void _createMembers() {
-    for (final party in _parties) { members.addAll(party.recruitAll()); }
+    for (final party in parties) { members.addAll(party.recruitAll()); }
   }
 
   void _setInitialPositions() {
@@ -37,9 +41,6 @@ class Parliament {
     getPartyMembers(Ideology.yellow)  .forEach((m) { m.cell = m.cell * const Cell(-1,  1) + const Cell(7, 1); });
     getPartyMembers(Ideology.green)   .forEach((m) { m.cell = m.cell                      + const Cell(1, 1); });
   }
-
-  Party? getPartyInPower() => _parties.firstWhereOrNull((p) => p.chief.cell.isMaze && p.chief.isAlive);
-  Iterable<Party> get activeParties => _parties.where((p) => p.isActive);
 
   Party _nextParty() {
     final partyInPower = getPartyInPower();
@@ -79,7 +80,7 @@ class Parliament {
       member.act(cell);
     }
     final member = currentParty.actor;
-    if (member != null && member.isActing) {
+    if (member != null && member.finished) {
       member.manoeuvre = Manoeuvre.select;
       _nextTurn();
     }

@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import 'common.dart';
 import 'parliament.dart';
 
@@ -47,19 +49,24 @@ abstract class Member {
 
   Iterable<Cell> canKill() => [];
 
+  Member? body;
+  Cell? cellFrom;
   Manoeuvre manoeuvre = Manoeuvre.select;
   bool get isActing => manoeuvre.index > Manoeuvre.move1.index;
+  bool get finished => manoeuvre == Manoeuvre.end;
+
+  @protected
+  void endManoeuvre() {
+    body = null;
+    cellFrom = null;
+    manoeuvre = Manoeuvre.end;
+  }
 
   void act(Cell cell) {
-    if (isDead) return;
-
-    switch (manoeuvre) {
-      case Manoeuvre.select:  _actOnSelect(cell); break;
-      case Manoeuvre.move1:   _actOnMove1(cell);  break;
-      // Unhandled case!
-      default:
-        print("Unhandled member act stage!");
-        break;
+    if (manoeuvre == Manoeuvre.select) {
+      _actOnSelect(cell);
+    } else if (manoeuvre == Manoeuvre.move1) {
+      _actOnMove1(cell);
     }
   }
 
@@ -71,6 +78,7 @@ abstract class Member {
 
   void _actOnMove1(Cell cell) {
     if (canMoveTo().contains(cell)) {
+      cellFrom = this.cell;
       this.cell = cell;
       manoeuvre = Manoeuvre.kill;
     }

@@ -23,7 +23,7 @@ class Cell {
   @override
   int get hashCode => Object.hash(x, y);
 
-  bool get isMaze => this == Constants.mazeCell;
+  bool get isMaze => x == Constants.mazeIndex && y == Constants.mazeIndex;
 
   Cell operator +(Cell other) => Cell(x + other.x, y + other.y);
   Cell operator -(Cell other) => Cell(x - other.x, y - other.y);
@@ -36,6 +36,16 @@ class Cell {
   bool isValid() =>
       (0 <= x && x < Constants.boardSize) &&
       (0 <= y && y < Constants.boardSize);
+
+  static Iterable<Cell> allCells() sync* {
+    for (var x = 0; x < Constants.boardSize; x++) {
+      for (var y = 0; y < Constants.boardSize; y++) {
+        yield Cell(x, y);
+      }
+    }
+  }
+
+  static Iterable<Cell> normalCells() => allCells().where((c) => !c.isMaze);
 }
 
 // order is important
