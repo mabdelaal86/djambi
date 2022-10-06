@@ -13,12 +13,12 @@ class Parliament {
   ];
 
   Party getParty(Ideology ideology) => parties[ideology.index];
-  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.cell.isMaze && p.chief.isAlive);
+  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isAlive);
   Iterable<Party> get activeParties => parties.where((p) => p.isActive);
 
   late final List<Member> members = [];
-  Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.cell == cell);
-  bool isEmpty(Cell cell) => !members.any((m) => m.cell == cell);
+  Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
+  bool isEmpty(Cell cell) => !members.any((m) => m.location == cell);
   Iterable<Cell> emptyCells() => Cell.normalCells().where(isEmpty);
   Iterable<Member> getPartyMembers(Ideology ideology) => members.where((m) => m.ideology == ideology);
 
@@ -36,10 +36,10 @@ class Parliament {
   }
 
   void _setInitialPositions() {
-    getPartyMembers(Ideology.red)     .forEach((m) { m.cell = m.cell * const Cell( 1, -1) + const Cell(1, 7); });
-    getPartyMembers(Ideology.blue)    .forEach((m) { m.cell = m.cell * const Cell(-1, -1) + const Cell(7, 7); });
-    getPartyMembers(Ideology.yellow)  .forEach((m) { m.cell = m.cell * const Cell(-1,  1) + const Cell(7, 1); });
-    getPartyMembers(Ideology.green)   .forEach((m) { m.cell = m.cell                      + const Cell(1, 1); });
+    getPartyMembers(Ideology.red)   .forEach((m) { m.location = m.location * const Cell( 1, -1) + const Cell(1, 7); });
+    getPartyMembers(Ideology.blue)  .forEach((m) { m.location = m.location * const Cell(-1, -1) + const Cell(7, 7); });
+    getPartyMembers(Ideology.yellow).forEach((m) { m.location = m.location * const Cell(-1,  1) + const Cell(7, 1); });
+    getPartyMembers(Ideology.green) .forEach((m) { m.location = m.location                      + const Cell(1, 1); });
   }
 
   Party _nextParty() {
@@ -72,7 +72,6 @@ class Parliament {
 
   void _nextTurn() {
     _currentParty = _nextParty();
-    // _currentManoeuvre = Manoeuvre(_currentParty);
   }
 
   void act(Cell cell) {
@@ -80,7 +79,7 @@ class Parliament {
       member.act(cell);
     }
     final member = currentParty.actor;
-    if (member != null && member.finished) {
+    if (member != null && member.manoeuvre.isFinished) {
       member.manoeuvre = Manoeuvre.select;
       _nextTurn();
     }

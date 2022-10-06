@@ -19,7 +19,7 @@ class Chief extends Member {
     final enemy = parliament.getMemberAt(cell);
 
     super.act(cell);
-    if (!isActing) return;
+    if (manoeuvre.isWaiting) return;
 
     if (manoeuvre == Manoeuvre.kill) {
       _actOnKill(enemy);
@@ -33,17 +33,17 @@ class Chief extends Member {
   void _actOnKill(Member? enemy) {
     if (enemy == null) {
       endManoeuvre();
+      return;
     }
-    else {
-      enemy.die();
-      body = enemy;
-      manoeuvre = Manoeuvre.bury;
-    }
+
+    enemy.die();
+    body = enemy;
+    manoeuvre = Manoeuvre.bury;
   }
 
   void _actOnBury(Cell cell) {
     if (parliament.isEmpty(cell) && !cell.isMaze) {
-      body!.cell = cell;
+      body!.location = cell;
       endManoeuvre();
     }
   }

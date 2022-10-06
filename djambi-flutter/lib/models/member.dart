@@ -14,7 +14,7 @@ abstract class Member {
 
   Role get role;
 
-  Cell cell = Cell.zero();
+  Cell location = Cell.zero();
 
   bool _isDead = false;
   void die() => _isDead = true;
@@ -33,11 +33,11 @@ abstract class Member {
     ];
 
     for (final dir in directions) {
-      for (var cell = this.cell + dir; cell.isValid(); cell += dir) {
+      for (var cell = location + dir; cell.isValid(); cell += dir) {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {
-          if (member.isDead || member.ideology != ideology) {
+          if (manoeuvre == Manoeuvre.move1 && (member.isDead || member.ideology != ideology)) {
             yield cell;
           }
           break; // stop this direction after first occupied cell
@@ -52,8 +52,6 @@ abstract class Member {
   Member? body;
   Cell? cellFrom;
   Manoeuvre manoeuvre = Manoeuvre.select;
-  bool get isActing => manoeuvre.index > Manoeuvre.move1.index;
-  bool get finished => manoeuvre == Manoeuvre.end;
 
   @protected
   void endManoeuvre() {
@@ -71,18 +69,18 @@ abstract class Member {
   }
 
   void _actOnSelect(Cell cell) {
-    if (cell == this.cell) {
+    if (cell == location) {
       manoeuvre = Manoeuvre.move1;
     }
   }
 
   void _actOnMove1(Cell cell) {
     if (canMoveTo().contains(cell)) {
-      cellFrom = this.cell;
-      this.cell = cell;
+      cellFrom = location;
+      location = cell;
       manoeuvre = Manoeuvre.kill;
     }
-    else if (cell != this.cell) {
+    else if (cell != location) {
       manoeuvre = Manoeuvre.select;
     }
   }

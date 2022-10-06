@@ -79,4 +79,9 @@ enum Manoeuvre {
   move2,
   bury,
   end,
+  ;
+
+  bool get isWaiting => index <= move1.index;
+  bool get isStarted => index > move1.index;
+  bool get isFinished => this == end;
 }

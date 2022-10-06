@@ -86,7 +86,7 @@ class Board extends PositionComponent {
   }
 
   void _drawMember(Canvas canvas, Member member) {
-    final Offset centerOffset = Dimensions.cellCenterOffset(member.cell).toOffset();
+    final Offset centerOffset = Dimensions.cellCenterOffset(member.location).toOffset();
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
       _drawMemberSymbol(canvas, member, centerOffset);
@@ -108,31 +108,34 @@ class Board extends PositionComponent {
 
   void _markAvailableMoves(Canvas canvas) {
     final member = parliament.currentParty.actor;
-    if (member == null || !member.isActing) {
-      for (final cell in parliament.currentParty.members.map((m) => m.cell)) {
-        final offset = Dimensions.cellCenterOffset(cell).toOffset();
-        const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
-        canvas.drawRect(Rect.fromCircle(center: offset, radius: radius), theme.cellMarkPaint..stroke());
-      }
+    if (member == null || member.manoeuvre.isWaiting) {
+      _markSelections(canvas, parliament.currentParty.members.map((m) => m.location));
     }
     if (member != null) {
-      final offset = Dimensions.cellOffset(parliament.currentParty.actor!.cell);
+      final offset = Dimensions.cellOffset(parliament.currentParty.actor!.location);
       canvas.drawRect(offset & Dimensions.cellSize, theme.cellMarkPaint);
 
-      if (member.manoeuvre == Manoeuvre.move1) {
-        for (final cell in member.canMoveTo()) {
-          final offset = Dimensions.cellCenterOffset(cell).toOffset();
-          const radius = Dimensions.pieceRadius + Dimensions.stroke;
-          canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());
-        }
+      if (member.manoeuvre == Manoeuvre.move1 || member.manoeuvre == Manoeuvre.move2) {
+        _markMovements(canvas, member.canMoveTo());
+      } else if (member.manoeuvre == Manoeuvre.bury) {
+        _markMovements(canvas, parliament.emptyCells());
       }
-      else if (member.manoeuvre == Manoeuvre.bury) {
-        for (final cell in parliament.emptyCells()) {
-          final offset = Dimensions.cellCenterOffset(cell).toOffset();
-          const radius = Dimensions.pieceRadius + Dimensions.stroke;
-          canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());
-        }
-      }
+    }
+  }
+
+  void _markSelections(Canvas canvas, Iterable<Cell> cells) {
+    for (final cell in cells) {
+      final offset = Dimensions.cellCenterOffset(cell).toOffset();
+      const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
+      canvas.drawRect(Rect.fromCircle(center: offset, radius: radius), theme.cellMarkPaint..stroke());
+    }
+  }
+
+  void _markMovements(Canvas canvas, Iterable<Cell> cells) {
+    for (final cell in cells) {
+      final offset = Dimensions.cellCenterOffset(cell).toOffset();
+      const radius = Dimensions.pieceRadius + Dimensions.stroke;
+      canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());
     }
   }
 }

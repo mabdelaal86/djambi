@@ -46,11 +46,11 @@ class Party {
 
     for (int r = 0; r < 3; r++) {
       for (int c = 0; c < 3; c++) {
-        yield members[r][c]..cell = Cell(c - 1, r - 1);
+        yield members[r][c]..location = Cell(c - 1, r - 1);
       }
     }
   }
 
   Member? get actor => members.firstWhereOrNull((m) => m.manoeuvre != Manoeuvre.select);
-  bool get isActing => actor?.isActing ?? false;
+  bool get isActing => actor?.manoeuvre.isStarted ?? false;
 }
