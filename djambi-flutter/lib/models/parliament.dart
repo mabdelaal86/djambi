@@ -19,7 +19,6 @@ class Parliament {
   late final List<Member> members = [];
   Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
   bool isEmpty(Cell cell) => !members.any((m) => m.location == cell);
-  Iterable<Cell> emptyCells() => Cell.normalCells().where(isEmpty);
   Iterable<Member> getPartyMembers(Ideology ideology) => members.where((m) => m.ideology == ideology);
 
   late Ideology _currentIdeology = Ideology.first;

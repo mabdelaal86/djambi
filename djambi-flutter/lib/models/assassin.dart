@@ -16,14 +16,9 @@ class Assassin extends Member {
       });
 
   @override
-  void act(Cell cell) {
-    final enemy = parliament.getMemberAt(cell);
-
-    super.act(cell);
-    if (manoeuvre.isWaiting) return;
-
+  void proceed(Cell cell) {
     if (manoeuvre == Manoeuvre.kill) {
-      _actOnKill(enemy);
+      _actOnKill();
     } else if (manoeuvre == Manoeuvre.move2) {
       _actOnMove2(cell);
     } else {
@@ -31,20 +26,19 @@ class Assassin extends Member {
     }
   }
 
-  void _actOnKill(Member? enemy) {
-    if (enemy == null) {
+  void _actOnKill() {
+    if (body == null) {
       endManoeuvre();
       return;
     }
 
-    enemy.die();
+    body!.die();
 
-    if (enemy.location.isMaze) {
-      body = enemy;
+    if (body!.location.isMaze) {
       manoeuvre = Manoeuvre.move2;
     }
     else {
-      enemy.location = cellFrom!;
+      body!.location = cellFrom!;
       endManoeuvre();
     }
   }

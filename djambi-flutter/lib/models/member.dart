@@ -38,10 +38,12 @@ abstract class Member {
         final member = parliament.getMemberAt(cell);
         if (member != null) {
           if (manoeuvre == Manoeuvre.move1 && (member.isDead || member.ideology != ideology)) {
+            // occupied with dead or enemy member
             yield cell;
           }
           break; // stop this direction after first occupied cell
         }
+        // empty cell
         yield cell;
       }
     }
@@ -49,14 +51,20 @@ abstract class Member {
 
   Iterable<Cell> canKill() => [];
 
-  Member? body;
-  Cell? cellFrom;
+  Iterable<Cell> canBury() => Cell.normalCells().where(parliament.isEmpty);
+
+  Member? _body;
+  Member? get body => _body;
+
+  Cell? _cellFrom;
+  Cell? get cellFrom => _cellFrom;
+
   Manoeuvre manoeuvre = Manoeuvre.select;
 
   @protected
   void endManoeuvre() {
-    body = null;
-    cellFrom = null;
+    _body = null;
+    _cellFrom = null;
     manoeuvre = Manoeuvre.end;
   }
 
@@ -66,7 +74,14 @@ abstract class Member {
     } else if (manoeuvre == Manoeuvre.move1) {
       _actOnMove1(cell);
     }
+
+    if (manoeuvre.isActing) {
+      proceed(cell);
+    }
   }
+
+  @protected
+  void proceed(Cell cell);
 
   void _actOnSelect(Cell cell) {
     if (cell == location) {
@@ -76,11 +91,14 @@ abstract class Member {
 
   void _actOnMove1(Cell cell) {
     if (canMoveTo().contains(cell)) {
-      cellFrom = location;
+      _body = parliament.getMemberAt(cell);
+      _cellFrom = location;
       location = cell;
       manoeuvre = Manoeuvre.kill;
     }
     else if (cell != location) {
+      _body = null;
+      _cellFrom = null;
       manoeuvre = Manoeuvre.select;
     }
   }

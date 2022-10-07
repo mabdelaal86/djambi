@@ -15,14 +15,9 @@ class Chief extends Member {
       });
 
   @override
-  void act(Cell cell) {
-    final enemy = parliament.getMemberAt(cell);
-
-    super.act(cell);
-    if (manoeuvre.isWaiting) return;
-
+  void proceed(Cell cell) {
     if (manoeuvre == Manoeuvre.kill) {
-      _actOnKill(enemy);
+      _actOnKill();
     } else if (manoeuvre == Manoeuvre.bury) {
       _actOnBury(cell);
     } else {
@@ -30,14 +25,13 @@ class Chief extends Member {
     }
   }
 
-  void _actOnKill(Member? enemy) {
-    if (enemy == null) {
+  void _actOnKill() {
+    if (body == null) {
       endManoeuvre();
       return;
     }
 
-    enemy.die();
-    body = enemy;
+    body!.die();
     manoeuvre = Manoeuvre.bury;
   }
 

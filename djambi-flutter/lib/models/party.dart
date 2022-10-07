@@ -52,5 +52,4 @@ class Party {
   }
 
   Member? get actor => members.firstWhereOrNull((m) => m.manoeuvre != Manoeuvre.select);
-  bool get isActing => actor?.manoeuvre.isStarted ?? false;
 }

@@ -81,7 +81,7 @@ enum Manoeuvre {
   end,
   ;
 
-  bool get isWaiting => index <= move1.index;
-  bool get isStarted => index > move1.index;
+  bool get isWaiting => this == select || this == move1;
   bool get isFinished => this == end;
+  bool get isActing => !isWaiting && !isFinished;
 }

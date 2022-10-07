@@ -117,8 +117,10 @@ class Board extends PositionComponent {
 
       if (member.manoeuvre == Manoeuvre.move1 || member.manoeuvre == Manoeuvre.move2) {
         _markMovements(canvas, member.canMoveTo());
+      } else if (member.manoeuvre == Manoeuvre.kill) {
+        _markMovements(canvas, member.canKill());
       } else if (member.manoeuvre == Manoeuvre.bury) {
-        _markMovements(canvas, parliament.emptyCells());
+        _markMovements(canvas, member.canBury());
       }
     }
   }
