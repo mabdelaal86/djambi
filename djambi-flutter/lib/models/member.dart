@@ -24,14 +24,18 @@ abstract class Member {
   @protected
   void kill(Member member) {
     member._isDead = true;
-    // TODO: take over other members if it is chief
+    if (member.role == Role.chief) {
+      for (final other in parliament.getParty(member.ideology).members) {
+        other.ideology = ideology;
+      }
+    }
   }
 
   /// Returns cells that a member can move to.
   ///
   /// The default implementation returns empty cells and cells occupied
   /// by an enemy member or a dead member in all 8 directions.
-  Iterable<Cell> canMoveTo() sync* {
+  Iterable<Cell> cellsToMove() sync* {
     const List<Cell> directions = [
       Cell(-1, -1), Cell(0, -1), Cell(1, -1),
       Cell(-1,  0), /*location*/ Cell(1,  0),
@@ -55,9 +59,26 @@ abstract class Member {
     }
   }
 
-  Iterable<Cell> canKill() => [];
+  Iterable<Cell> cellsToAct() {
+    if (manoeuvre == Manoeuvre.move1 || manoeuvre == Manoeuvre.move2) {
+      return cellsToMove();
+    }
+    if (manoeuvre == Manoeuvre.kill) {
+      return Cell.allCells().where(canKillOn);
+    }
+    if (manoeuvre == Manoeuvre.bury) {
+      return Cell.allCells().where(canBuryOn);
+    }
+    return [];
+  }
 
-  Iterable<Cell> canBury() => Cell.normalCells().where(parliament.isEmpty);
+  bool canKillOn(Cell cell) => cell == location;
+  bool canBuryOn(Cell cell) => parliament.isEmpty(cell) && !cell.isMaze;
+
+  bool occupiedByEnemy(Cell cell) {
+    final other = parliament.getMemberAt(cell);
+    return other != null && other.isAlive && other.ideology != ideology;
+  }
 
   Member? _body;
   Member? get body => _body;
@@ -96,7 +117,7 @@ abstract class Member {
   }
 
   void _actOnMove1(Cell cell) {
-    if (canMoveTo().contains(cell)) {
+    if (cellsToMove().contains(cell)) {
       _body = parliament.getMemberAt(cell);
       _cellFrom = location;
       location = cell;

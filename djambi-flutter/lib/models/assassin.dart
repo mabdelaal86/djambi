@@ -9,12 +9,15 @@ class Assassin extends Member {
   Role get role => Role.assassin;
 
   @override
-  Iterable<Cell> canMoveTo() => super.canMoveTo().where((cell) {
+  Iterable<Cell> cellsToMove() => super.cellsToMove().where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell or alive enemy member
         // also not the cell that assassin started to move from (in case of move2)
         return (member == null && !cell.isMaze && cell != cellFrom) || (member != null && member.isAlive);
       });
+
+  @override
+  bool canBuryOn(Cell cell) => cell == cellFrom;
 
   @override
   void proceed(Cell cell) {
@@ -44,7 +47,7 @@ class Assassin extends Member {
   }
 
   void _actOnMove2(Cell cell) {
-    if (canMoveTo().contains(cell)) {
+    if (cellsToMove().contains(cell)) {
       location = cell;
       body!.location = cellFrom!;
       endManoeuvre();

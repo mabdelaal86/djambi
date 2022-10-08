@@ -9,27 +9,14 @@ class Reporter extends Member {
   Role get role => Role.reporter;
 
   @override
-  Iterable<Cell> canMoveTo() => super.canMoveTo().where((cell) {
+  Iterable<Cell> cellsToMove() => super.cellsToMove().where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell
         return member == null && !cell.isMaze;
       });
 
   @override
-  Iterable<Cell> canKill() {
-    const List<Cell> directions = [
-                   Cell(0, -1),
-      Cell(-1, 0), /*location*/ Cell(1, 0),
-                   Cell(0,  1),
-    ];
-
-    bool occupiedByEnemy(Cell cell) {
-      final member = parliament.getMemberAt(cell);
-      return member != null && member.isAlive && member.ideology != ideology;
-    }
-
-    return directions.map((d) => location + d).where(occupiedByEnemy);
-  }
+  bool canKillOn(Cell cell) => location.isAdjacentTo(cell) && occupiedByEnemy(cell);
 
   @override
   void proceed(Cell cell) {
@@ -41,7 +28,7 @@ class Reporter extends Member {
   }
 
   void _actOnKill(Cell cell) {
-    final cells = canKill().toList();
+    final cells = location.adjacentCells().where(occupiedByEnemy).toList();
     if (cells.isEmpty) {
       endManoeuvre();
     } else if (cells.contains(cell)) {

@@ -9,7 +9,7 @@ class Chief extends Member {
   Role get role => Role.chief;
 
   @override
-  Iterable<Cell> canMoveTo() => super.canMoveTo().where((cell) {
+  Iterable<Cell> cellsToMove() => super.cellsToMove().where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty cell or alive enemy member
         return member == null || member.isAlive;
@@ -36,7 +36,7 @@ class Chief extends Member {
   }
 
   void _actOnBury(Cell cell) {
-    if (parliament.isEmpty(cell) && !cell.isMaze) {
+    if (canBuryOn(cell)) {
       body!.location = cell;
       endManoeuvre();
     }

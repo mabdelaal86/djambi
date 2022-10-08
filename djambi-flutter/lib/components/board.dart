@@ -109,23 +109,15 @@ class Board extends PositionComponent {
   void _markAvailableMoves(Canvas canvas) {
     final member = parliament.currentParty.actor;
     if (member == null || member.manoeuvre.isWaiting) {
-      _markSelections(canvas, parliament.currentParty.members.map((m) => m.location));
+      _markSelectable(canvas, parliament.currentParty.members.map((m) => m.location));
     }
     if (member != null) {
-      final offset = Dimensions.cellOffset(parliament.currentParty.actor!.location);
-      canvas.drawRect(offset & Dimensions.cellSize, theme.cellMarkPaint);
-
-      if (member.manoeuvre == Manoeuvre.move1 || member.manoeuvre == Manoeuvre.move2) {
-        _markMovements(canvas, member.canMoveTo());
-      } else if (member.manoeuvre == Manoeuvre.kill) {
-        _markMovements(canvas, member.canKill());
-      } else if (member.manoeuvre == Manoeuvre.bury) {
-        _markMovements(canvas, member.canBury());
-      }
+      _markSelected(canvas, member.location);
+      _markActions(canvas, member.cellsToAct());
     }
   }
 
-  void _markSelections(Canvas canvas, Iterable<Cell> cells) {
+  void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
       final offset = Dimensions.cellCenterOffset(cell).toOffset();
       const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
@@ -133,7 +125,12 @@ class Board extends PositionComponent {
     }
   }
 
-  void _markMovements(Canvas canvas, Iterable<Cell> cells) {
+  void _markSelected(Canvas canvas, Cell cell) {
+    final offset = Dimensions.cellOffset(cell);
+    canvas.drawRect(offset & Dimensions.cellSize, theme.cellMarkPaint);
+  }
+
+  void _markActions(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
       final offset = Dimensions.cellCenterOffset(cell).toOffset();
       const radius = Dimensions.pieceRadius + Dimensions.stroke;

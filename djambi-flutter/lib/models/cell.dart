@@ -32,6 +32,21 @@ class Cell {
   Vector2 toVector2() => Vector2(x.toDouble(), y.toDouble());
   Cell abs() => Cell(x.abs(), y.abs());
 
+  bool isAdjacentTo(Cell other) {
+    return (x == other.x && (y - other.y).abs() == 1) ||
+           (y == other.y && (x - other.x).abs() == 1);
+  }
+
+  Iterable<Cell> adjacentCells() {
+    const List<Cell> directions = [
+                   Cell(0, -1),
+      Cell(-1, 0), /*location*/ Cell(1, 0),
+                   Cell(0,  1),
+    ];
+
+    return directions.map((d) => this + d).where((c) => c.isValid);
+  }
+
   static Iterable<Cell> allCells() sync* {
     for (var x = 0; x < Constants.boardSize; x++) {
       for (var y = 0; y < Constants.boardSize; y++) {
