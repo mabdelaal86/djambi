@@ -75,6 +75,8 @@ class Parliament {
   }
 
   void act(Cell cell) {
+    if (activeParties.length == 1) return;
+
     for (final member in currentParty.members) {
       member.act(cell);
     }
