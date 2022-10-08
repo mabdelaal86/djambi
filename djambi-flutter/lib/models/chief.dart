@@ -1,3 +1,4 @@
+import 'cell.dart';
 import 'common.dart';
 import 'member.dart';
 
@@ -28,11 +29,10 @@ class Chief extends Member {
   void _actOnKill() {
     if (body == null) {
       endManoeuvre();
-      return;
+    } else {
+      body!.die();
+      manoeuvre = Manoeuvre.bury;
     }
-
-    body!.die();
-    manoeuvre = Manoeuvre.bury;
   }
 
   void _actOnBury(Cell cell) {

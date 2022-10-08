@@ -1,3 +1,4 @@
+import 'cell.dart';
 import 'common.dart';
 import 'member.dart';
 
@@ -17,9 +18,9 @@ class Reporter extends Member {
   @override
   Iterable<Cell> canKill() {
     const List<Cell> directions = [
-               Cell(0, -1),
-      Cell(-1, 0),     Cell(1, 0),
-               Cell(0, 1),
+                   Cell(0, -1),
+      Cell(-1, 0), /*location*/ Cell(1, 0),
+                   Cell(0,  1),
     ];
 
     bool occupiedByEnemy(Cell cell) {
@@ -40,11 +41,10 @@ class Reporter extends Member {
   }
 
   void _actOnKill(Cell cell) {
-    final kills = canKill().toList();
-    if (kills.isEmpty) {
+    final cells = canKill().toList();
+    if (cells.isEmpty) {
       endManoeuvre();
-    }
-    else if (kills.contains(cell)) {
+    } else if (cells.contains(cell)) {
       final member = parliament.getMemberAt(cell);
       member!.die();
       endManoeuvre();

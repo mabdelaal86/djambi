@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 
+import 'cell.dart';
 import 'common.dart';
 import 'member.dart';
 import 'parliament.dart';

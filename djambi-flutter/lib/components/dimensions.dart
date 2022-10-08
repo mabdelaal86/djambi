@@ -1,5 +1,6 @@
 import 'package:flame/extensions.dart';
 
+import '../models/cell.dart';
 import '../models/common.dart';
 
 abstract class Dimensions {

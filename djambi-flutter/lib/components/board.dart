@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
+import '../models/cell.dart';
 import '../models/common.dart';
 import '../models/member.dart';
 import '../models/parliament.dart';
@@ -35,13 +36,12 @@ class Board extends PositionComponent {
   void _paintBackground(Canvas canvas) {
     // paint margin background
     canvas.drawRect(size.toRect(), theme.marginPaint);
-    // paint grid background
-    canvas.drawRect(Dimensions.gridOffset & Dimensions.gridSize, theme.lightCellPaint);
-    // paint dark cells background
+    // paint cells background
     for (final cell in Cell.allCells()) {
-      if (cell.x.isEven == cell.y.isEven) {
-        canvas.drawRect(Dimensions.cellOffset(cell) & Dimensions.cellSize, theme.darkCellPaint);
-      }
+      canvas.drawRect(
+          Dimensions.cellOffset(cell) & Dimensions.cellSize,
+          cell.isDark ? theme.darkCellPaint : theme.lightCellPaint
+      );
     }
     // paint maze
     canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, theme.mazePaint);

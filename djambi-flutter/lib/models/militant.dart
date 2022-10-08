@@ -1,3 +1,4 @@
+import 'cell.dart';
 import 'common.dart';
 import 'member.dart';
 
@@ -15,7 +16,7 @@ class Militant extends Member {
             (member == null || member.isAlive); // empty cell or alive enemy member
       });
 
-  int _stepsTo(Cell cell) => (location - cell).abs().max();
+  int _stepsTo(Cell cell) => (location - cell).abs().max;
 
   @override
   void proceed(Cell cell) {
@@ -31,11 +32,10 @@ class Militant extends Member {
   void _actOnKill() {
     if (body == null) {
       endManoeuvre();
-      return;
+    } else {
+      body!.die();
+      manoeuvre = Manoeuvre.bury;
     }
-
-    body!.die();
-    manoeuvre = Manoeuvre.bury;
   }
 
   void _actOnBury(Cell cell) {

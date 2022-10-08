@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 
+import 'cell.dart';
 import 'common.dart';
 import 'member.dart';
 import 'party.dart';
@@ -78,7 +79,7 @@ class Parliament {
       member.act(cell);
     }
     final member = currentParty.actor;
-    if (member != null && member.manoeuvre.isFinished) {
+    if (member != null && member.manoeuvre.finished) {
       member.manoeuvre = Manoeuvre.select;
       _nextTurn();
     }

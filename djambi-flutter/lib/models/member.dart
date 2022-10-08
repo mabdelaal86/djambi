@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import 'cell.dart';
 import 'common.dart';
 import 'parliament.dart';
 
@@ -28,12 +29,12 @@ abstract class Member {
   Iterable<Cell> canMoveTo() sync* {
     const List<Cell> directions = [
       Cell(-1, -1), Cell(0, -1), Cell(1, -1),
-      Cell(-1,  0),              Cell(1,  0),
+      Cell(-1,  0), /*location*/ Cell(1,  0),
       Cell(-1,  1), Cell(0,  1), Cell(1,  1),
     ];
 
     for (final dir in directions) {
-      for (var cell = location + dir; cell.isValid(); cell += dir) {
+      for (var cell = location + dir; cell.isValid; cell += dir) {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {
@@ -95,8 +96,7 @@ abstract class Member {
       _cellFrom = location;
       location = cell;
       manoeuvre = Manoeuvre.kill;
-    }
-    else if (cell != location) {
+    } else if (cell != location) {
       _body = null;
       _cellFrom = null;
       manoeuvre = Manoeuvre.select;

@@ -1,3 +1,4 @@
+import 'cell.dart';
 import 'common.dart';
 import 'member.dart';
 
@@ -36,8 +37,7 @@ class Assassin extends Member {
 
     if (body!.location.isMaze) {
       manoeuvre = Manoeuvre.move2;
-    }
-    else {
+    } else {
       body!.location = cellFrom!;
       endManoeuvre();
     }
