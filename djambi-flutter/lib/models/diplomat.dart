@@ -15,6 +15,10 @@ class Diplomat extends Member {
         return (member == null && !cell.isMaze) || (member != null && member.isAlive);
       });
 
+  // TODO: check if diplomat can put chief in maze!
+  @override
+  Iterable<Cell> canBury() => Cell.normalCells().where(parliament.isEmpty);
+
   @override
   void proceed(Cell cell) {
     if (manoeuvre == Manoeuvre.kill) {

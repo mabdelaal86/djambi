@@ -33,7 +33,7 @@ class Assassin extends Member {
       return;
     }
 
-    body!.die();
+    kill(body!);
 
     if (body!.location.isMaze) {
       manoeuvre = Manoeuvre.move2;

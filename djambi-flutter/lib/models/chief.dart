@@ -30,7 +30,7 @@ class Chief extends Member {
     if (body == null) {
       endManoeuvre();
     } else {
-      body!.die();
+      kill(body!);
       manoeuvre = Manoeuvre.bury;
     }
   }

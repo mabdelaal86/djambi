@@ -46,7 +46,7 @@ class Reporter extends Member {
       endManoeuvre();
     } else if (cells.contains(cell)) {
       final member = parliament.getMemberAt(cell);
-      member!.die();
+      kill(member!);
       endManoeuvre();
     }
   }

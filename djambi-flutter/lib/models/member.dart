@@ -18,9 +18,14 @@ abstract class Member {
   Cell location = Cell.zero();
 
   bool _isDead = false;
-  void die() => _isDead = true;
   bool get isDead => _isDead;
   bool get isAlive => !_isDead;
+
+  @protected
+  void kill(Member member) {
+    member._isDead = true;
+    // TODO: take over other members if it is chief
+  }
 
   /// Returns cells that a member can move to.
   ///
