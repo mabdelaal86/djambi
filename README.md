@@ -1,6 +1,7 @@
 # Djambi
 
-[![license](https://img.shields.io/github/license/mabdelaal86/djambi?label=license&style=for-the-badge)](./LICENSE)
+[![License](https://img.shields.io/github/license/mabdelaal86/djambi)](./LICENSE)
+![Language](https://img.shields.io/github/languages/top/mabdelaal86/djambi)
 
 An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 
