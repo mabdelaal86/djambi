@@ -1,5 +1,7 @@
 # Djambi
 
+[![license](https://img.shields.io/github/license/mabdelaal86/djambi?label=license&style=for-the-badge)](./LICENSE)
+
 An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 
 More details about the rules: https://www.djambi.net/
