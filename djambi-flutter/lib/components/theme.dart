@@ -14,6 +14,7 @@ abstract class GameTheme {
 
   TextStyle get marginTextStyle;
   TextStyle get pieceSymbolStyle;
+  TextStyle get mazeSymbolStyle;
 
   Paint getPartyPaint(Ideology ideology);
 }
@@ -50,6 +51,9 @@ class DefaultTheme extends GameTheme {
 
   @override
   TextStyle get pieceSymbolStyle => const TextStyle(color: Colors.black, fontSize: 500, fontWeight: FontWeight.bold);
+
+  @override
+  TextStyle get mazeSymbolStyle => pieceSymbolStyle.copyWith(color: Colors.white);
 
   @override
   Paint getPartyPaint(Ideology ideology) {

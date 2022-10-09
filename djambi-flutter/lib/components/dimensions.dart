@@ -13,6 +13,7 @@ abstract class Dimensions {
   static final Vector2 gridOffset = Vector2.all(margin);
   static final Vector2 boardSize = gridOffset + gridSize;
   static final Vector2 mazeOffset = gridOffset + cellSize * Constants.mazeIndex.toDouble();
+  static final Vector2 mazeCentralOffset = mazeOffset + cellSize / 2;
   static final Vector2 marginColCell = Vector2(cellSide, margin);
   static final Vector2 marginRowCell = Vector2(margin, cellSide);
 

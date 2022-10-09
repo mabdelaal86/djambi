@@ -27,6 +27,7 @@ class Board extends PositionComponent {
   @override
   void render(Canvas canvas) {
     _paintBackground(canvas);
+    _drawMaze(canvas);
     _markAvailableMoves(canvas);
     _drawLines(canvas);
     _writeIndexes(canvas);
@@ -43,8 +44,11 @@ class Board extends PositionComponent {
           cell.isDark ? theme.darkCellPaint : theme.lightCellPaint
       );
     }
-    // paint maze
+  }
+
+  void _drawMaze(Canvas canvas) {
     canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, theme.mazePaint);
+    _drawRoleSymbol(canvas, Role.chief, Dimensions.mazeCentralOffset.toOffset(), theme.mazeSymbolStyle);
   }
 
   void _drawLines(Canvas canvas) {
@@ -86,10 +90,10 @@ class Board extends PositionComponent {
   }
 
   void _drawMember(Canvas canvas, Member member) {
-    final Offset centerOffset = Dimensions.cellCenterOffset(member.location).toOffset();
+    final centerOffset = Dimensions.cellCenterOffset(member.location).toOffset();
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
-      _drawMemberSymbol(canvas, member, centerOffset);
+      _drawRoleSymbol(canvas, member.role, centerOffset, theme.pieceSymbolStyle);
     }
   }
 
@@ -99,9 +103,9 @@ class Board extends PositionComponent {
     canvas.drawCircle(offset, Dimensions.pieceRadius, theme.linePaint);
   }
 
-  void _drawMemberSymbol(Canvas canvas, Member member, Offset offset) {
+  void _drawRoleSymbol(Canvas canvas, Role role, Offset offset, TextStyle style) {
     final textPainter = TextPainter(textDirection: TextDirection.ltr)
-      ..text = TextSpan(style: theme.pieceSymbolStyle, text: member.role.name[0].toUpperCase());
+      ..text = TextSpan(style: style, text: role.name[0].toUpperCase());
     textPainter.layout();
     textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
   }
