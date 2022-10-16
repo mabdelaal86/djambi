@@ -47,7 +47,7 @@ class DefaultTheme extends GameTheme {
   Paint get moveMarkPaint => Paint()..color = Colors.grey.shade600;
 
   @override
-  TextStyle get marginTextStyle => const TextStyle(color: Colors.black, fontSize: 300);
+  TextStyle get marginTextStyle => const TextStyle(color: Colors.white, fontSize: 300, fontWeight: FontWeight.bold);
 
   @override
   TextStyle get pieceSymbolStyle => const TextStyle(color: Colors.black, fontSize: 500, fontWeight: FontWeight.bold);

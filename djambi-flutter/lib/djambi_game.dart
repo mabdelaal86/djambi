@@ -11,8 +11,10 @@ class DjambiGame extends FlameGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
     final parliament = Parliament();
+    final board = Board(parliament, DefaultTheme());
+
     final grid = Grid(parliament);
-    final board = Board(parliament, DefaultTheme())..add(grid);
+    grid.addToParent(board);
 
     final world = World();
     world.add(board);

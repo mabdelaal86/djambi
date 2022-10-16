@@ -1,11 +1,13 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame_svg/svg.dart';
 import 'package:flutter/material.dart';
 
 import '../models/cell.dart';
 import '../models/common.dart';
 import '../models/member.dart';
 import '../models/parliament.dart';
+import '../models/settings.dart';
 import 'dimensions.dart';
 import 'theme.dart';
 
@@ -24,12 +26,25 @@ class Board extends PositionComponent {
 
   Board(this.parliament, this.theme, {super.position}) : super(size: Dimensions.boardSize);
 
+  final Map<Role, Svg> _memberImages = {};
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    for (final role in Role.values) {
+      _memberImages[role] = await Svg.load("classic/${role.name}.svg");
+    }
+  }
+
   @override
   void render(Canvas canvas) {
     _paintBackground(canvas);
     _drawMaze(canvas);
     _markAvailableMoves(canvas);
-    _drawLines(canvas);
+    if (Settings.instance.drawLines) {
+      _drawLines(canvas);
+    }
     _writeIndexes(canvas);
     _drawMembers(canvas);
   }
@@ -48,7 +63,12 @@ class Board extends PositionComponent {
 
   void _drawMaze(Canvas canvas) {
     canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, theme.mazePaint);
-    _drawRoleSymbol(canvas, Role.chief, Dimensions.mazeCentralOffset.toOffset(), theme.mazeSymbolStyle);
+    final mazeOffset =  Dimensions.mazeCentralOffset.toOffset();
+    if (Settings.instance.pieceTheme == PieceTheme.classic) {
+      // draw classic
+    } else {
+      _drawRoleSymbol(canvas, Role.chief, mazeOffset, theme.mazeSymbolStyle);
+    }
   }
 
   void _drawLines(Canvas canvas) {
@@ -73,8 +93,6 @@ class Board extends PositionComponent {
       textPainter.paint(canvas, cellOffset + cellCenter.toOffset());
     }
 
-    writeText("#", Offset.zero, Dimensions.gridOffset);
-
     const cols = "ABCDEFGHI", rows = "123456789";
     for (var i = 0; i < Constants.boardSize; i++) {
       final d = Dimensions.margin + i * Dimensions.cellSide;
@@ -93,7 +111,11 @@ class Board extends PositionComponent {
     final centerOffset = Dimensions.cellCenterOffset(member.location).toOffset();
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
-      _drawRoleSymbol(canvas, member.role, centerOffset, theme.pieceSymbolStyle);
+      if (Settings.instance.pieceTheme == PieceTheme.classic) {
+        _drawRoleClassicImage(canvas, member.role, centerOffset);
+      } else {
+        _drawRoleSymbol(canvas, member.role, centerOffset, theme.pieceSymbolStyle);
+      }
     }
   }
 
@@ -108,6 +130,12 @@ class Board extends PositionComponent {
       ..text = TextSpan(style: style, text: role.name[0].toUpperCase());
     textPainter.layout();
     textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
+  }
+
+  void _drawRoleClassicImage(Canvas canvas, Role role, Offset offset) {
+    final image = _memberImages[role];
+    final vector = offset.toVector2() - Vector2.all(Dimensions.pieceRadius);
+    image?.renderPosition(canvas, vector, Dimensions.pieceSize);
   }
 
   void _markAvailableMoves(Canvas canvas) {
