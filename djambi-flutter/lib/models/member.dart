@@ -47,7 +47,7 @@ abstract class Member {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {
-          if (manoeuvre == Manoeuvre.move1 && (member.isDead || member.ideology != ideology)) {
+          if (manoeuvre.isWaiting && (member.isDead || member.ideology != ideology)) {
             // occupied with dead or enemy member
             yield cell;
           }

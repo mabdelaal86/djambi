@@ -81,9 +81,15 @@ class Parliament {
       member.act(cell);
     }
     final member = currentParty.actor;
-    if (member != null && member.manoeuvre.finished) {
-      member.manoeuvre = Manoeuvre.select;
-      _nextTurn();
+    if (member != null) {
+      // move the member to the end of the list, so it get drawn on top
+      members.remove(member);
+      members.add(member);
+      // if current manoeuvre is finished, move to next turn/player
+      if (member.manoeuvre.finished) {
+        member.manoeuvre = Manoeuvre.select;
+        _nextTurn();
+      }
     }
   }
 }

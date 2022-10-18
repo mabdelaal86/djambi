@@ -7,6 +7,7 @@ abstract class GameTheme {
   Paint get lightCellPaint;
   Paint get darkCellPaint;
   Paint get mazePaint;
+  Color get mazeForeColor;
   Paint get deadPaint;
   Paint get linePaint;
   Paint get cellMarkPaint;
@@ -14,7 +15,6 @@ abstract class GameTheme {
 
   TextStyle get marginTextStyle;
   TextStyle get pieceSymbolStyle;
-  TextStyle get mazeSymbolStyle;
 
   Paint getPartyPaint(Ideology ideology);
 }
@@ -31,6 +31,9 @@ class DefaultTheme extends GameTheme {
 
   @override
   Paint get mazePaint => Paint()..color = Colors.black;
+
+  @override
+  Color get mazeForeColor => Colors.grey.shade300;
 
   @override
   Paint get deadPaint => Paint()..color = Colors.grey.shade600;
@@ -51,9 +54,6 @@ class DefaultTheme extends GameTheme {
 
   @override
   TextStyle get pieceSymbolStyle => const TextStyle(color: Colors.black, fontSize: 500, fontWeight: FontWeight.bold);
-
-  @override
-  TextStyle get mazeSymbolStyle => pieceSymbolStyle.copyWith(color: Colors.white);
 
   @override
   Paint getPartyPaint(Ideology ideology) {

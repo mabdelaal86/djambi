@@ -1,7 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart' show svg;
 
 import '../models/cell.dart';
 import '../models/common.dart';
@@ -9,13 +11,8 @@ import '../models/member.dart';
 import '../models/parliament.dart';
 import '../models/settings.dart';
 import 'dimensions.dart';
+import 'extensions.dart';
 import 'theme.dart';
-
-extension PaintExtension on Paint {
-  Paint stroke() => this
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = Dimensions.stroke * 2;
-}
 
 class Board extends PositionComponent {
   // @override
@@ -26,15 +23,15 @@ class Board extends PositionComponent {
 
   Board(this.parliament, this.theme, {super.position}) : super(size: Dimensions.boardSize);
 
-  final Map<Role, Svg> _memberImages = {};
+  late final Svg _mazeImage;
+  late final Map<Role, Svg> _memberImages;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    for (final role in Role.values) {
-      _memberImages[role] = await Svg.load("classic/${role.name}.svg");
-    }
+    _mazeImage = await _loadPieceSvg(Role.chief, color: theme.mazeForeColor);
+    _memberImages = { for (final r in Role.values) r: await _loadPieceSvg(r) };
   }
 
   @override
@@ -47,6 +44,15 @@ class Board extends PositionComponent {
     }
     _writeIndexes(canvas);
     _drawMembers(canvas);
+  }
+
+  Future<Svg> _loadPieceSvg(Role role, {Color color = Colors.black, String style = "classic"}) async {
+    String fileName = "$style/${role.name}.svg";
+    final fileContent = await Flame.assets.readFile(fileName);
+    final opacity = color.alpha.toDouble() / 0xff;
+    final svgString = fileContent.replaceFirst(
+        "fill:#000000;fill-opacity:1", "fill:${color.toHex()};fill-opacity:$opacity");
+    return Svg(await svg.fromSvgString(svgString, svgString));
   }
 
   void _paintBackground(Canvas canvas) {
@@ -65,9 +71,10 @@ class Board extends PositionComponent {
     canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, theme.mazePaint);
     final mazeOffset =  Dimensions.mazeCentralOffset.toOffset();
     if (Settings.instance.pieceTheme == PieceTheme.classic) {
-      // draw classic
+      _drawRoleClassicImage(canvas, _mazeImage, Dimensions.mazeCentralOffset.toOffset());
     } else {
-      _drawRoleSymbol(canvas, Role.chief, mazeOffset, theme.mazeSymbolStyle);
+      final symbolStyle = theme.pieceSymbolStyle.copyWith(color: theme.mazeForeColor);
+      _drawRoleSymbol(canvas, Role.chief, mazeOffset, symbolStyle);
     }
   }
 
@@ -112,7 +119,7 @@ class Board extends PositionComponent {
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
       if (Settings.instance.pieceTheme == PieceTheme.classic) {
-        _drawRoleClassicImage(canvas, member.role, centerOffset);
+        _drawRoleClassicImage(canvas, _memberImages[member.role]!, centerOffset);
       } else {
         _drawRoleSymbol(canvas, member.role, centerOffset, theme.pieceSymbolStyle);
       }
@@ -132,16 +139,16 @@ class Board extends PositionComponent {
     textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
   }
 
-  void _drawRoleClassicImage(Canvas canvas, Role role, Offset offset) {
-    final image = _memberImages[role];
+  void _drawRoleClassicImage(Canvas canvas, Svg image, Offset offset) {
     final vector = offset.toVector2() - Vector2.all(Dimensions.pieceRadius);
-    image?.renderPosition(canvas, vector, Dimensions.pieceSize);
+    image.renderPosition(canvas, vector, Dimensions.pieceSize);
   }
 
   void _markAvailableMoves(Canvas canvas) {
     final member = parliament.currentParty.actor;
     if (member == null || member.manoeuvre.isWaiting) {
-      _markSelectable(canvas, parliament.currentParty.members.map((m) => m.location));
+      final cells = parliament.currentParty.members.where((m) => m.cellsToMove().isNotEmpty).map((m) => m.location);
+      _markSelectable(canvas, cells);
     }
     if (member != null) {
       _markSelected(canvas, member.location);
@@ -151,9 +158,7 @@ class Board extends PositionComponent {
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      final offset = Dimensions.cellCenterOffset(cell).toOffset();
-      const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
-      canvas.drawRect(Rect.fromCircle(center: offset, radius: radius), theme.cellMarkPaint..stroke());
+      _markCircle(canvas, cell, theme.cellMarkPaint);
     }
   }
 
@@ -164,9 +169,19 @@ class Board extends PositionComponent {
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      final offset = Dimensions.cellCenterOffset(cell).toOffset();
-      const radius = Dimensions.pieceRadius + Dimensions.stroke;
-      canvas.drawCircle(offset, radius, theme.moveMarkPaint..stroke());
+      _markCircle(canvas, cell, theme.moveMarkPaint);
     }
+  }
+
+  void _markRect(Canvas canvas, Cell cell, Paint paint) {
+    final offset = Dimensions.cellCenterOffset(cell).toOffset();
+    const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
+    canvas.drawRect(Rect.fromCircle(center: offset, radius: radius), paint..stroke());
+  }
+
+  void _markCircle(Canvas canvas, Cell cell, Paint paint) {
+    final offset = Dimensions.cellCenterOffset(cell).toOffset();
+    const radius = Dimensions.pieceRadius + Dimensions.stroke;
+    canvas.drawCircle(offset, radius, paint..stroke());
   }
 }

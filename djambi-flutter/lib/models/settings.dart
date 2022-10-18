@@ -5,7 +5,7 @@ enum PieceTheme {
 
 class Settings {
   bool drawLines = false;
-  PieceTheme pieceTheme = PieceTheme.characters;
+  PieceTheme pieceTheme = PieceTheme.classic;
 
   Settings._();
   static final Settings instance = Settings._();
