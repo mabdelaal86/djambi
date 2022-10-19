@@ -9,7 +9,7 @@ import '../models/cell.dart';
 import '../models/common.dart';
 import '../models/member.dart';
 import '../models/parliament.dart';
-import '../models/settings.dart';
+import 'appearance_settings.dart';
 import 'dimensions.dart';
 import 'extensions.dart';
 import 'theme.dart';
@@ -19,9 +19,10 @@ class Board extends PositionComponent {
   // bool get debugMode => true;
 
   late final Parliament parliament;
-  late GameTheme theme;
+  GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
+  PieceTheme get _pieceTheme => AppearanceSettings.instance.pieceTheme;
 
-  Board(this.parliament, this.theme, {super.position}) : super(size: Dimensions.boardSize);
+  Board(this.parliament, {super.position}) : super(size: Dimensions.boardSize);
 
   late final Svg _mazeImage;
   late final Map<Role, Svg> _memberImages;
@@ -30,8 +31,8 @@ class Board extends PositionComponent {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    _mazeImage = await _loadPieceSvg(Role.chief, color: theme.mazeForeColor);
-    _memberImages = { for (final r in Role.values) r: await _loadPieceSvg(r) };
+    _mazeImage = await _loadPieceSvg(Role.chief, _gameTheme.mazeForeColor);
+    _memberImages = { for (final r in Role.values) r: await _loadPieceSvg(r, _gameTheme.pieceForeColor) };
   }
 
   @override
@@ -39,14 +40,14 @@ class Board extends PositionComponent {
     _paintBackground(canvas);
     _drawMaze(canvas);
     _markAvailableMoves(canvas);
-    if (Settings.instance.drawLines) {
+    if (AppearanceSettings.instance.drawLines) {
       _drawLines(canvas);
     }
     _writeIndexes(canvas);
     _drawMembers(canvas);
   }
 
-  Future<Svg> _loadPieceSvg(Role role, {Color color = Colors.black, String style = "classic"}) async {
+  Future<Svg> _loadPieceSvg(Role role, Color color, {String style = "classic"}) async {
     String fileName = "$style/${role.name}.svg";
     final fileContent = await Flame.assets.readFile(fileName);
     final opacity = color.alpha.toDouble() / 0xff;
@@ -57,36 +58,36 @@ class Board extends PositionComponent {
 
   void _paintBackground(Canvas canvas) {
     // paint margin background
-    canvas.drawRect(size.toRect(), theme.marginPaint);
+    canvas.drawRect(size.toRect(), _gameTheme.marginPaint);
     // paint cells background
     for (final cell in Cell.allCells()) {
       canvas.drawRect(
           Dimensions.cellOffset(cell) & Dimensions.cellSize,
-          cell.isDark ? theme.darkCellPaint : theme.lightCellPaint
+          cell.isDark ? _gameTheme.darkCellPaint : _gameTheme.lightCellPaint
       );
     }
   }
 
   void _drawMaze(Canvas canvas) {
-    canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, theme.mazePaint);
+    canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, _gameTheme.mazePaint);
     final mazeOffset =  Dimensions.mazeCentralOffset.toOffset();
-    if (Settings.instance.pieceTheme == PieceTheme.classic) {
+    if (_pieceTheme == PieceTheme.classic) {
       _drawRoleClassicImage(canvas, _mazeImage, Dimensions.mazeCentralOffset.toOffset());
     } else {
-      final symbolStyle = theme.pieceSymbolStyle.copyWith(color: theme.mazeForeColor);
+      final symbolStyle = _gameTheme.pieceSymbolStyle.copyWith(color: _gameTheme.mazeForeColor);
       _drawRoleSymbol(canvas, Role.chief, mazeOffset, symbolStyle);
     }
   }
 
   void _drawLines(Canvas canvas) {
     // margins
-    canvas.drawLine(Offset.zero, Offset(size.x, 0), theme.linePaint);
-    canvas.drawLine(Offset.zero, Offset(0, size.y), theme.linePaint);
+    canvas.drawLine(Offset.zero, Offset(size.x, 0), _gameTheme.linePaint);
+    canvas.drawLine(Offset.zero, Offset(0, size.y), _gameTheme.linePaint);
     // draw 10 vertical/horizontal lines with board height/width
     for (var i = 0; i <= Constants.boardSize; i++) {
       final d = Dimensions.margin + i * Dimensions.cellSide;
-      canvas.drawLine(Offset(d, 0), Offset(d, size.y), theme.linePaint);
-      canvas.drawLine(Offset(0, d), Offset(size.x, d), theme.linePaint);
+      canvas.drawLine(Offset(d, 0), Offset(d, size.y), _gameTheme.linePaint);
+      canvas.drawLine(Offset(0, d), Offset(size.x, d), _gameTheme.linePaint);
     }
   }
 
@@ -94,7 +95,7 @@ class Board extends PositionComponent {
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
     void writeText(String text, Offset cellOffset, Vector2 cellSize) {
-      textPainter.text = TextSpan(style: theme.marginTextStyle, text: text);
+      textPainter.text = TextSpan(style: _gameTheme.marginTextStyle, text: text);
       textPainter.layout();
       final cellCenter = (cellSize - textPainter.size.toVector2()) / 2;
       textPainter.paint(canvas, cellOffset + cellCenter.toOffset());
@@ -118,18 +119,18 @@ class Board extends PositionComponent {
     final centerOffset = Dimensions.cellCenterOffset(member.location).toOffset();
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
-      if (Settings.instance.pieceTheme == PieceTheme.classic) {
+      if (_pieceTheme == PieceTheme.classic) {
         _drawRoleClassicImage(canvas, _memberImages[member.role]!, centerOffset);
       } else {
-        _drawRoleSymbol(canvas, member.role, centerOffset, theme.pieceSymbolStyle);
+        _drawRoleSymbol(canvas, member.role, centerOffset, _gameTheme.pieceSymbolStyle);
       }
     }
   }
 
   void _paintMemberBackground(Canvas canvas, Member member, Offset offset) {
-    final paint = member.isDead ? theme.deadPaint : theme.getPartyPaint(member.ideology);
-    canvas.drawCircle(offset, Dimensions.pieceRadius, paint);
-    canvas.drawCircle(offset, Dimensions.pieceRadius, theme.linePaint);
+    final bgPaint = member.isDead ? _gameTheme.deadPaint : _gameTheme.getPartyPaint(member.ideology);
+    canvas.drawCircle(offset, Dimensions.pieceRadius, bgPaint);
+    canvas.drawCircle(offset, Dimensions.pieceRadius, _gameTheme.pieceEdgePaint);
   }
 
   void _drawRoleSymbol(Canvas canvas, Role role, Offset offset, TextStyle style) {
@@ -158,18 +159,18 @@ class Board extends PositionComponent {
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCircle(canvas, cell, theme.cellMarkPaint);
+      _markCircle(canvas, cell, _gameTheme.cellMarkPaint);
     }
   }
 
   void _markSelected(Canvas canvas, Cell cell) {
     final offset = Dimensions.cellOffset(cell);
-    canvas.drawRect(offset & Dimensions.cellSize, theme.cellMarkPaint);
+    canvas.drawRect(offset & Dimensions.cellSize, _gameTheme.cellMarkPaint);
   }
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCircle(canvas, cell, theme.moveMarkPaint);
+      _markCircle(canvas, cell, _gameTheme.moveMarkPaint);
     }
   }
 

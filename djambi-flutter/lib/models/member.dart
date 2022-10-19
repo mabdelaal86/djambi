@@ -47,6 +47,8 @@ abstract class Member {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {
+          // if member is waiting (select or move1), it can do action on other members
+          // otherwise, it can only move to empty cells
           if (manoeuvre.isWaiting && (member.isDead || member.ideology != ideology)) {
             // occupied with dead or enemy member
             yield cell;
