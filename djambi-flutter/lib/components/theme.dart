@@ -29,7 +29,8 @@ class DefaultTheme extends GameTheme {
   Paint get marginPaint => Paint()..color = Colors.grey.shade600;
 
   @override
-  TextStyle get marginTextStyle => const TextStyle(color: Colors.white, fontSize: 300, fontWeight: FontWeight.bold);
+  TextStyle get marginTextStyle => const TextStyle(
+      color: Colors.white, fontSize: 300, fontWeight: FontWeight.bold);
 
   @override
   Paint get lightCellPaint => Paint()..color = Colors.white;
@@ -40,8 +41,7 @@ class DefaultTheme extends GameTheme {
   @override
   Paint get linePaint => Paint()
     ..color = Colors.black
-    ..style = PaintingStyle.stroke
-  ;
+    ..style = PaintingStyle.stroke;
 
   @override
   Paint get mazePaint => Paint()..color = Colors.black;
@@ -56,11 +56,11 @@ class DefaultTheme extends GameTheme {
   Paint get pieceEdgePaint => Paint()
     ..color = pieceForeColor
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 22
-  ;
+    ..strokeWidth = 22;
 
   @override
-  TextStyle get pieceSymbolStyle => TextStyle(color: pieceForeColor, fontSize: 500, fontWeight: FontWeight.bold);
+  TextStyle get pieceSymbolStyle => TextStyle(
+      color: pieceForeColor, fontSize: 500, fontWeight: FontWeight.bold);
 
   @override
   Paint get deadPaint => Paint()..color = Colors.grey.shade600;

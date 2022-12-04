@@ -11,7 +11,8 @@ class Grid extends PositionComponent with TapCallbacks {
 
   late final Parliament parliament;
 
-  Grid(this.parliament) : super(position: Dimensions.gridOffset, size: Dimensions.gridSize);
+  Grid(this.parliament)
+      : super(position: Dimensions.gridOffset, size: Dimensions.gridSize);
 
   @override
   void render(Canvas canvas) {

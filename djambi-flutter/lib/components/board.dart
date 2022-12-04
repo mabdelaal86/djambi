@@ -22,7 +22,8 @@ class Board extends PositionComponent {
   GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
   PieceTheme get _pieceTheme => AppearanceSettings.instance.pieceTheme;
 
-  Board(this.parliament, {super.position}) : super(size: Dimensions.boardSize);
+  Board(this.parliament, {super.position})
+      : super(size: Dimensions.boardSize);
 
   late final Svg _mazeImage;
   late final Map<Role, Svg> _memberImages;
@@ -70,7 +71,7 @@ class Board extends PositionComponent {
 
   void _drawMaze(Canvas canvas) {
     canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, _gameTheme.mazePaint);
-    final mazeOffset =  Dimensions.mazeCentralOffset.toOffset();
+    final mazeOffset = Dimensions.mazeCentralOffset.toOffset();
     if (_pieceTheme == PieceTheme.classic) {
       _drawRoleClassicImage(canvas, _mazeImage, Dimensions.mazeCentralOffset.toOffset());
     } else {
@@ -128,7 +129,9 @@ class Board extends PositionComponent {
   }
 
   void _paintMemberBackground(Canvas canvas, Member member, Offset offset) {
-    final bgPaint = member.isDead ? _gameTheme.deadPaint : _gameTheme.getPartyPaint(member.ideology);
+    final bgPaint = member.isDead
+        ? _gameTheme.deadPaint
+        : _gameTheme.getPartyPaint(member.ideology);
     canvas.drawCircle(offset, Dimensions.pieceRadius, bgPaint);
     canvas.drawCircle(offset, Dimensions.pieceRadius, _gameTheme.pieceEdgePaint);
   }
@@ -148,7 +151,9 @@ class Board extends PositionComponent {
   void _markAvailableMoves(Canvas canvas) {
     final member = parliament.currentParty.actor;
     if (member == null || member.manoeuvre.isWaiting) {
-      final cells = parliament.currentParty.members.where((m) => m.cellsToMove().isNotEmpty).map((m) => m.location);
+      final cells = parliament.currentParty.members
+          .where((m) => m.cellsToMove().isNotEmpty)
+          .map((m) => m.location);
       _markSelectable(canvas, cells);
     }
     if (member != null) {
@@ -177,7 +182,8 @@ class Board extends PositionComponent {
   void _markRect(Canvas canvas, Cell cell, Paint paint) {
     final offset = Dimensions.cellCenterOffset(cell).toOffset();
     const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
-    canvas.drawRect(Rect.fromCircle(center: offset, radius: radius), paint..stroke());
+    canvas.drawRect(
+        Rect.fromCircle(center: offset, radius: radius), paint..stroke());
   }
 
   void _markCircle(Canvas canvas, Cell cell, Paint paint) {

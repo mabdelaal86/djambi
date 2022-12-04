@@ -32,7 +32,9 @@ class Parliament {
   }
 
   void _createMembers() {
-    for (final party in parties) { members.addAll(party.recruitAll()); }
+    for (final party in parties) {
+      members.addAll(party.recruitAll());
+    }
   }
 
   void _setInitialPositions() {
@@ -52,7 +54,7 @@ class Parliament {
       do {
         _currentIdeology = _currentIdeology.next;
         party = getParty(_currentIdeology);
-      } while(party.isLost);
+      } while (party.isLost);
       return party;
     }
     // else: there is a party in power
@@ -66,7 +68,7 @@ class Parliament {
     do {
       _currentIdeology = _currentIdeology.next;
       party = getParty(_currentIdeology);
-    } while(party.isLost || (activeParties.length > 2 && _currentIdeology == partyInPower.ideology));
+    } while (party.isLost || (activeParties.length > 2 && _currentIdeology == partyInPower.ideology));
     return party;
   }
 

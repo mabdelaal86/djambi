@@ -17,13 +17,15 @@ class Party {
   final Parliament parliament;
   final Member chief;
 
-  Party(this.parliament, Ideology ideology) : chief = Chief(parliament, ideology);
+  Party(this.parliament, Ideology ideology)
+      : chief = Chief(parliament, ideology);
 
   Ideology get ideology => chief.ideology;
   bool get isLost => chief.isDead;
   bool get isActive => chief.isAlive;
 
-  Iterable<Member> get members => parliament.members.where((m) => m.ideology == ideology && m.isAlive);
+  Iterable<Member> get members =>
+      parliament.members.where((m) => m.ideology == ideology && m.isAlive);
 
   Member _recruit(Role role) {
     switch (role) {

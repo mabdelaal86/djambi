@@ -14,14 +14,17 @@ class Cell {
   String toString() => "Cell($x, $y)";
 
   @override
-  bool operator ==(Object other) => other is Cell && x == other.x && y == other.y;
+  bool operator ==(Object other) =>
+      other is Cell && x == other.x && y == other.y;
 
   @override
   int get hashCode => Object.hash(x, y);
 
   bool get isMaze => x == Constants.mazeIndex && y == Constants.mazeIndex;
   bool get isDark => x.isEven == y.isEven;
-  bool get isValid => (0 <= x && x < Constants.boardSize) && (0 <= y && y < Constants.boardSize);
+  bool get isValid =>
+      (0 <= x && x < Constants.boardSize) &&
+      (0 <= y && y < Constants.boardSize);
   int get max => x > y ? x : y;
   int get min => x < y ? x : y;
 

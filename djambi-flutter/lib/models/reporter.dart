@@ -16,7 +16,8 @@ class Reporter extends Member {
       });
 
   @override
-  bool canKillOn(Cell cell) => location.isAdjacentTo(cell) && occupiedByEnemy(cell);
+  bool canKillOn(Cell cell) =>
+      location.isAdjacentTo(cell) && occupiedByEnemy(cell);
 
   @override
   void proceed(Cell cell) {

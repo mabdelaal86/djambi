@@ -12,7 +12,8 @@ class Necromobile extends Member {
   Iterable<Cell> cellsToMove() => super.cellsToMove().where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell or dead member
-        return (member == null && !cell.isMaze) || (member != null && member.isDead);
+        return (member == null && !cell.isMaze) ||
+               (member != null && member.isDead);
       });
 
   @override

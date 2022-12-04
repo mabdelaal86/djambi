@@ -12,11 +12,13 @@ class Diplomat extends Member {
   Iterable<Cell> cellsToMove() => super.cellsToMove().where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell or alive enemy member
-        return (member == null && !cell.isMaze) || (member != null && member.isAlive);
+        return (member == null && !cell.isMaze) ||
+               (member != null && member.isAlive);
       });
 
   @override
-  bool canBuryOn(Cell cell) => parliament.isEmpty(cell) && (!cell.isMaze || body!.role == Role.chief);
+  bool canBuryOn(Cell cell) =>
+      parliament.isEmpty(cell) && (!cell.isMaze || body!.role == Role.chief);
 
   @override
   void proceed(Cell cell) {

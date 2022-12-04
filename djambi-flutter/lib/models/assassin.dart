@@ -13,7 +13,8 @@ class Assassin extends Member {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell or alive enemy member
         // also not the cell that assassin started to move from (in case of move2)
-        return (member == null && !cell.isMaze && cell != cellFrom) || (member != null && member.isAlive);
+        return (member == null && !cell.isMaze && cell != cellFrom) ||
+               (member != null && member.isAlive);
       });
 
   @override
