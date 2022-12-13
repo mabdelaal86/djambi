@@ -17,8 +17,8 @@ class Party {
   final Parliament parliament;
   final Member chief;
 
-  Party(this.parliament, Ideology ideology)
-      : chief = Chief(parliament, ideology);
+  Party(this.parliament, Ideology ideology): chief = Chief(parliament, ideology);
+  Party.withChief(this.chief): parliament = chief.parliament;
 
   Ideology get ideology => chief.ideology;
   bool get isLost => chief.isDead;

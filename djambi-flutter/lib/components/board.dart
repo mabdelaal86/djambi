@@ -85,7 +85,7 @@ class Board extends PositionComponent {
     canvas.drawLine(Offset.zero, Offset(size.x, 0), _gameTheme.linePaint);
     canvas.drawLine(Offset.zero, Offset(0, size.y), _gameTheme.linePaint);
     // draw 10 vertical/horizontal lines with board height/width
-    for (var i = 0; i <= Constants.boardSize; i++) {
+    for (int i = 0; i <= Constants.boardSize; i++) {
       final d = Dimensions.margin + i * Dimensions.cellSide;
       canvas.drawLine(Offset(d, 0), Offset(d, size.y), _gameTheme.linePaint);
       canvas.drawLine(Offset(0, d), Offset(size.x, d), _gameTheme.linePaint);
@@ -103,7 +103,7 @@ class Board extends PositionComponent {
     }
 
     const cols = "ABCDEFGHI", rows = "123456789";
-    for (var i = 0; i < Constants.boardSize; i++) {
+    for (int i = 0; i < Constants.boardSize; i++) {
       final d = Dimensions.margin + i * Dimensions.cellSide;
       writeText(cols[i], Offset(d, 0), Dimensions.marginColCell);
       writeText(rows[i], Offset(0, d), Dimensions.marginRowCell);

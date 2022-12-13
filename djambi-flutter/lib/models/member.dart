@@ -4,18 +4,43 @@ import 'cell.dart';
 import 'common.dart';
 import 'parliament.dart';
 
+// member roles
+import 'assassin.dart';
+import 'chief.dart';
+import 'diplomat.dart';
+import 'militant.dart';
+import 'necromobile.dart';
+import 'reporter.dart';
+
 abstract class Member {
   final Parliament parliament;
   Ideology ideology;
 
   Member(this.parliament, this.ideology);
 
+  factory Member.copy(Parliament parliament, Member other) {
+    Member create() {
+      switch (other.role) {
+        case Role.chief:        return Chief(parliament, other.ideology);
+        case Role.assassin:     return Assassin(parliament, other.ideology);
+        case Role.reporter:     return Reporter(parliament, other.ideology);
+        case Role.diplomat:     return Diplomat(parliament, other.ideology);
+        case Role.necromobile:  return Necromobile(parliament, other.ideology);
+        case Role.militant:     return Militant(parliament, other.ideology);
+      }
+    }
+
+    return create()
+      ..location = other.location
+      .._isDead = other._isDead;
+  }
+
   @override
   String toString() => "${ideology.name}:${role.name}";
 
   Role get role;
 
-  Cell location = Cell.zero();
+  Cell location = const Cell.zero();
 
   bool _isDead = false;
   bool get isDead => _isDead;
@@ -43,7 +68,7 @@ abstract class Member {
     ];
 
     for (final dir in directions) {
-      for (var cell = location + dir; cell.isValid; cell += dir) {
+      for (Cell cell = location + dir; cell.isValid; cell += dir) {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {

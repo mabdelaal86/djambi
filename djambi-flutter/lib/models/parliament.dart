@@ -6,18 +6,13 @@ import 'member.dart';
 import 'party.dart';
 
 class Parliament {
-  late final List<Party> parties = [
-    Party(this, Ideology.red),
-    Party(this, Ideology.blue),
-    Party(this, Ideology.yellow),
-    Party(this, Ideology.green),
-  ];
-
+  final List<Party> parties = [];
   Party getParty(Ideology ideology) => parties[ideology.index];
   Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isAlive);
   Iterable<Party> get activeParties => parties.where((p) => p.isActive);
+  bool get isFinished => activeParties.length == 1;
 
-  late final List<Member> members = [];
+  final List<Member> members = [];
   Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
   bool isEmpty(Cell cell) => !members.any((m) => m.location == cell);
   Iterable<Member> getPartyMembers(Ideology ideology) => members.where((m) => m.ideology == ideology);
@@ -27,8 +22,26 @@ class Parliament {
   Party get currentParty => _currentParty;
 
   Parliament() {
+    _createParties();
     _createMembers();
     _setInitialPositions();
+  }
+  Parliament.copy(Parliament other) {
+    // Copy members
+    members.addAll(other.members.map((m) => Member.copy(this, m)));
+    assert(members.length == 9 * 4);
+    // Copy parties
+    parties.addAll(members.where((m) => m.role == Role.chief).map((m) => Party.withChief(m)));
+    assert(parties.length == 4);
+  }
+
+  void _createParties() {
+    parties.addAll([
+      Party(this, Ideology.red),
+      Party(this, Ideology.blue),
+      Party(this, Ideology.yellow),
+      Party(this, Ideology.green),
+    ]);
   }
 
   void _createMembers() {
@@ -41,10 +54,10 @@ class Parliament {
     getPartyMembers(Ideology.red)   .forEach((m) { m.location = m.location * const Cell( 1, -1) + const Cell(1, 7); });
     getPartyMembers(Ideology.blue)  .forEach((m) { m.location = m.location * const Cell(-1, -1) + const Cell(7, 7); });
     getPartyMembers(Ideology.yellow).forEach((m) { m.location = m.location * const Cell(-1,  1) + const Cell(7, 1); });
-    getPartyMembers(Ideology.green) .forEach((m) { m.location = m.location                      + const Cell(1, 1); });
+    getPartyMembers(Ideology.green) .forEach((m) { m.location = m.location * const Cell( 1,  1) + const Cell(1, 1); });
   }
 
-  Party _nextParty() {
+  Party _getNextParty() {
     final partyInPower = getPartyInPower();
     Party? party;
     // check if there is a party in power
@@ -73,7 +86,7 @@ class Parliament {
   }
 
   void _nextTurn() {
-    _currentParty = _nextParty();
+    _currentParty = _getNextParty();
   }
 
   void act(Cell cell) {

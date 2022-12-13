@@ -6,9 +6,8 @@ class Cell {
   final int x, y;
 
   const Cell(this.x, this.y);
-
-  factory Cell.all(int xy) => Cell(xy, xy);
-  factory Cell.zero() => const Cell(0, 0);
+  const Cell.zero(): this(0, 0);
+  const Cell.all(int xy): this(xy, xy);
 
   @override
   String toString() => "Cell($x, $y)";
@@ -51,8 +50,8 @@ class Cell {
   }
 
   static Iterable<Cell> allCells() sync* {
-    for (var x = 0; x < Constants.boardSize; x++) {
-      for (var y = 0; y < Constants.boardSize; y++) {
+    for (int x = 0; x < Constants.boardSize; x++) {
+      for (int y = 0; y < Constants.boardSize; y++) {
         yield Cell(x, y);
       }
     }
