@@ -33,6 +33,9 @@ class Parliament {
     // Copy parties
     parties.addAll(members.where((m) => m.role == Role.chief).map((m) => Party.withChief(m)));
     assert(parties.length == 4);
+    // Other properties
+    _currentIdeology = other._currentIdeology;
+    _currentParty = parties.firstWhere((p) => p.ideology == other._currentParty.ideology);
   }
 
   void _createParties() {
@@ -90,7 +93,7 @@ class Parliament {
   }
 
   void act(Cell cell) {
-    if (activeParties.length == 1) return;
+    if (isFinished) return;
 
     for (final member in currentParty.members) {
       member.act(cell);
