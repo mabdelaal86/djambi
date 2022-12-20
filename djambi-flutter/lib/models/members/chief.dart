@@ -1,6 +1,6 @@
-import 'cell.dart';
-import 'common.dart';
-import 'member.dart';
+import '../cell.dart';
+import '../common.dart';
+import '../member.dart';
 
 class Chief extends Member {
   Chief(super.parliament, super.ideology);

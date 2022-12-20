@@ -5,12 +5,12 @@ import 'common.dart';
 import 'parliament.dart';
 
 // member roles
-import 'assassin.dart';
-import 'chief.dart';
-import 'diplomat.dart';
-import 'militant.dart';
-import 'necromobile.dart';
-import 'reporter.dart';
+import 'members/assassin.dart';
+import 'members/chief.dart';
+import 'members/diplomat.dart';
+import 'members/militant.dart';
+import 'members/necromobile.dart';
+import 'members/reporter.dart';
 
 abstract class Member {
   final Parliament parliament;

@@ -1,6 +1,6 @@
-import 'cell.dart';
-import 'common.dart';
-import 'member.dart';
+import '../cell.dart';
+import '../common.dart';
+import '../member.dart';
 
 class Reporter extends Member {
   Reporter(super.parliament, super.ideology);

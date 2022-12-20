@@ -1,6 +1,6 @@
-import 'cell.dart';
-import 'common.dart';
-import 'member.dart';
+import '../cell.dart';
+import '../common.dart';
+import '../member.dart';
 
 class Militant extends Member {
   Militant(super.parliament, super.ideology);

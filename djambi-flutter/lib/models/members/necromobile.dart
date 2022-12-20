@@ -1,24 +1,20 @@
-import 'cell.dart';
-import 'common.dart';
-import 'member.dart';
+import '../cell.dart';
+import '../common.dart';
+import '../member.dart';
 
-class Diplomat extends Member {
-  Diplomat(super.parliament, super.ideology);
+class Necromobile extends Member {
+  Necromobile(super.parliament, super.ideology);
 
   @override
-  Role get role => Role.diplomat;
+  Role get role => Role.necromobile;
 
   @override
   Iterable<Cell> cellsToMove() => super.cellsToMove().where((cell) {
         final member = parliament.getMemberAt(cell);
-        // empty non maze cell or alive enemy member
+        // empty non maze cell or dead member
         return (member == null && !cell.isMaze) ||
-               (member != null && member.isAlive);
+               (member != null && member.isDead);
       });
-
-  @override
-  bool canBuryOn(Cell cell) =>
-      parliament.isEmpty(cell) && (!cell.isMaze || body!.role == Role.chief);
 
   @override
   void proceed(Cell cell) {
