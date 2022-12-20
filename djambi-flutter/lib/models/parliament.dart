@@ -22,42 +22,41 @@ class Parliament {
   Party get currentParty => _currentParty;
 
   Parliament() {
-    // Create members
+    // create members
     members = Ideology.values.map((id) => _recruitMembers(id)).flattened.toList();
     assert(members.length == 9 * 4);
     _setInitialPositions();
     // create parties
     parties = members.where((m) => m.role == Role.chief).map((m) => Party(m)).toList();
     assert(parties.length == 4);
-    // Other properties
+    // other properties
     _currentIdeology = Ideology.first;
     _currentParty = getParty(_currentIdeology);
   }
   Parliament.copy(Parliament other) {
-    // Copy members
+    // copy members
     members = other.members.map((m) => Member.copy(this, m)).toList();
     assert(members.length == 9 * 4);
-    // Copy parties
+    // copy parties
     parties = members.where((m) => m.role == Role.chief).map((m) => Party(m)).toList();
     assert(parties.length == 4);
-    // Other properties
+    // other properties
     _currentIdeology = other._currentIdeology;
     _currentParty = getParty(other._currentParty.ideology);
   }
 
   Iterable<Member> _recruitMembers(Ideology ideology) sync* {
-    Member recruit(Role role) => Member.create(this, role, ideology);
-
-    // create members and place them around (0,0) point, so it is easier to rotate or flip
-    final members = [
-      [ recruit(Role.chief),    recruit(Role.assassin), recruit(Role.militant) ],
-      [ recruit(Role.reporter), recruit(Role.diplomat), recruit(Role.militant) ],
-      [ recruit(Role.militant), recruit(Role.militant), recruit(Role.necromobile) ],
+    final roles = [
+      [ Role.chief,    Role.assassin, Role.militant ],
+      [ Role.reporter, Role.diplomat, Role.militant ],
+      [ Role.militant, Role.militant, Role.necromobile ],
     ];
 
+    // create members and place them around (0,0) point, so it is easier to rotate or flip
     for (int r = 0; r < 3; r++) {
       for (int c = 0; c < 3; c++) {
-        yield members[r][c]..location = Cell(c - 1, r - 1);
+        yield Member.create(this, roles[r][c], ideology)
+          ..location = Cell(c - 1, r - 1);
       }
     }
   }

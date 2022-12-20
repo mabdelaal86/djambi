@@ -60,13 +60,7 @@ abstract class Member {
   /// The default implementation returns empty cells and cells occupied
   /// by an enemy member or a dead member in all 8 directions.
   Iterable<Cell> cellsToMove() sync* {
-    const List<Cell> directions = [
-      Cell(-1, -1), Cell(0, -1), Cell(1, -1),
-      Cell(-1,  0), /*location*/ Cell(1,  0),
-      Cell(-1,  1), Cell(0,  1), Cell(1,  1),
-    ];
-
-    for (final dir in directions) {
+    for (final dir in Cell.allDirections) {
       for (Cell cell = location + dir; cell.isValid; cell += dir) {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
