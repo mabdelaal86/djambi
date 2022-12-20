@@ -6,58 +6,70 @@ import 'member.dart';
 import 'party.dart';
 
 class Parliament {
-  final List<Party> parties = [];
-  Party getParty(Ideology ideology) => parties[ideology.index];
-  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isAlive);
-  Iterable<Party> get activeParties => parties.where((p) => p.isActive);
-  bool get isFinished => activeParties.length == 1;
-
-  final List<Member> members = [];
+  late final List<Member> members;
   Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
   bool isEmpty(Cell cell) => !members.any((m) => m.location == cell);
   Iterable<Member> getPartyMembers(Ideology ideology) => members.where((m) => m.ideology == ideology);
 
-  late Ideology _currentIdeology = Ideology.first;
-  late Party _currentParty = getParty(_currentIdeology);
+  late final List<Party> parties;
+  Party getParty(Ideology ideology) => parties.firstWhere((p) => p.ideology == ideology);
+  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isAlive);
+  Iterable<Party> get activeParties => parties.where((p) => p.isActive);
+  bool get isFinished => activeParties.length == 1;
+
+  late Ideology _currentIdeology;
+  late Party _currentParty;
   Party get currentParty => _currentParty;
 
   Parliament() {
-    _createParties();
-    _createMembers();
+    // Create members
+    members = Ideology.values.map((id) => _recruitMembers(id)).flattened.toList();
+    assert(members.length == 9 * 4);
     _setInitialPositions();
+    // create parties
+    parties = members.where((m) => m.role == Role.chief).map((m) => Party(m)).toList();
+    assert(parties.length == 4);
+    // Other properties
+    _currentIdeology = Ideology.first;
+    _currentParty = getParty(_currentIdeology);
   }
   Parliament.copy(Parliament other) {
     // Copy members
-    members.addAll(other.members.map((m) => Member.copy(this, m)));
+    members = other.members.map((m) => Member.copy(this, m)).toList();
     assert(members.length == 9 * 4);
     // Copy parties
-    parties.addAll(members.where((m) => m.role == Role.chief).map((m) => Party.withChief(m)));
+    parties = members.where((m) => m.role == Role.chief).map((m) => Party(m)).toList();
     assert(parties.length == 4);
     // Other properties
     _currentIdeology = other._currentIdeology;
-    _currentParty = parties.firstWhere((p) => p.ideology == other._currentParty.ideology);
+    _currentParty = getParty(other._currentParty.ideology);
   }
 
-  void _createParties() {
-    parties.addAll([
-      Party(this, Ideology.red),
-      Party(this, Ideology.blue),
-      Party(this, Ideology.yellow),
-      Party(this, Ideology.green),
-    ]);
-  }
+  Iterable<Member> _recruitMembers(Ideology ideology) sync* {
+    Member recruit(Role role) => Member.create(this, role, ideology);
 
-  void _createMembers() {
-    for (final party in parties) {
-      members.addAll(party.recruitAll());
+    // create members and place them around (0,0) point, so it is easier to rotate or flip
+    final members = [
+      [ recruit(Role.chief),    recruit(Role.assassin), recruit(Role.militant) ],
+      [ recruit(Role.reporter), recruit(Role.diplomat), recruit(Role.militant) ],
+      [ recruit(Role.militant), recruit(Role.militant), recruit(Role.necromobile) ],
+    ];
+
+    for (int r = 0; r < 3; r++) {
+      for (int c = 0; c < 3; c++) {
+        yield members[r][c]..location = Cell(c - 1, r - 1);
+      }
     }
   }
 
   void _setInitialPositions() {
-    getPartyMembers(Ideology.red)   .forEach((m) { m.location = m.location * const Cell( 1, -1) + const Cell(1, 7); });
-    getPartyMembers(Ideology.blue)  .forEach((m) { m.location = m.location * const Cell(-1, -1) + const Cell(7, 7); });
-    getPartyMembers(Ideology.yellow).forEach((m) { m.location = m.location * const Cell(-1,  1) + const Cell(7, 1); });
-    getPartyMembers(Ideology.green) .forEach((m) { m.location = m.location * const Cell( 1,  1) + const Cell(1, 1); });
+    void setInitPosition(Ideology ideology, Cell scale, Cell translation) {
+      for (final m in getPartyMembers(ideology)) { m.location = m.location * scale + translation; }
+    }
+    setInitPosition(Ideology.red,    const Cell( 1, -1), const Cell(1, 7));
+    setInitPosition(Ideology.blue,   const Cell(-1, -1), const Cell(7, 7));
+    setInitPosition(Ideology.yellow, const Cell(-1,  1), const Cell(7, 1));
+    setInitPosition(Ideology.green,  const Cell( 1,  1), const Cell(1, 1));
   }
 
   Party _getNextParty() {

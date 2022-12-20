@@ -18,22 +18,21 @@ abstract class Member {
 
   Member(this.parliament, this.ideology);
 
-  factory Member.copy(Parliament parliament, Member other) {
-    Member create() {
-      switch (other.role) {
-        case Role.chief:        return Chief(parliament, other.ideology);
-        case Role.assassin:     return Assassin(parliament, other.ideology);
-        case Role.reporter:     return Reporter(parliament, other.ideology);
-        case Role.diplomat:     return Diplomat(parliament, other.ideology);
-        case Role.necromobile:  return Necromobile(parliament, other.ideology);
-        case Role.militant:     return Militant(parliament, other.ideology);
-      }
+  factory Member.create(Parliament parliament, Role role, Ideology ideology) {
+    switch (role) {
+      case Role.chief:        return Chief(parliament, ideology);
+      case Role.assassin:     return Assassin(parliament, ideology);
+      case Role.reporter:     return Reporter(parliament, ideology);
+      case Role.diplomat:     return Diplomat(parliament, ideology);
+      case Role.necromobile:  return Necromobile(parliament, ideology);
+      case Role.militant:     return Militant(parliament, ideology);
     }
-
-    return create()
-      ..location = other.location
-      .._isDead = other._isDead;
   }
+
+  factory Member.copy(Parliament parliament, Member other) =>
+      Member.create(parliament, other.role, other.ideology)
+        ..location = other.location
+        .._isDead = other._isDead;
 
   @override
   String toString() => "${ideology.name}:${role.name}";
