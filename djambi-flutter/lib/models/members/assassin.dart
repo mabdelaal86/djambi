@@ -3,7 +3,7 @@ import '../common.dart';
 import '../member.dart';
 
 class Assassin extends Member {
-  Assassin(super.parliament, super.ideology);
+  Assassin(super.parliament, super.ideology, super.id);
 
   @override
   Role get role => Role.assassin;

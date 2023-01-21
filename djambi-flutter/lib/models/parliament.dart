@@ -7,6 +7,7 @@ import 'party.dart';
 
 class Parliament {
   late final List<Member> members;
+  Member getMember(String id) => members.firstWhere((m) => m.id == id);
   Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
   bool isEmpty(Cell cell) => !members.any((m) => m.location == cell);
   Iterable<Member> getPartyMembers(Ideology ideology) => members.where((m) => m.ideology == ideology);
@@ -15,7 +16,11 @@ class Parliament {
   Party getParty(Ideology ideology) => parties.firstWhere((p) => p.ideology == ideology);
   Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isAlive);
   Iterable<Party> get activeParties => parties.where((p) => p.isActive);
-  bool get isFinished => activeParties.length == 1;
+  bool get isGameFinished => activeParties.length == 1;
+
+  // make sure there is one actor or zero
+  Member? getActor() => members.cast<Member?>()
+      .singleWhere((m) => m!.manoeuvre != Manoeuvre.select, orElse: () => null);
 
   late Ideology _currentIdeology;
   late Party _currentParty;
@@ -47,15 +52,15 @@ class Parliament {
 
   Iterable<Member> _recruitMembers(Ideology ideology) sync* {
     final roles = [
-      [ Role.chief,    Role.assassin, Role.militant ],
-      [ Role.reporter, Role.diplomat, Role.militant ],
+      [ Role.chief,    Role.assassin, Role.militant    ],
+      [ Role.reporter, Role.diplomat, Role.militant    ],
       [ Role.militant, Role.militant, Role.necromobile ],
     ];
 
     // create members and place them around (0,0) point, so it is easier to rotate or flip
     for (int r = 0; r < 3; r++) {
       for (int c = 0; c < 3; c++) {
-        yield Member.create(this, roles[r][c], ideology)
+        yield Member.create(this, roles[r][c], ideology, "${ideology.name[0]}$r$c")
           ..location = Cell(c - 1, r - 1);
       }
     }
@@ -103,22 +108,26 @@ class Parliament {
     _currentParty = _getNextParty();
   }
 
+  /// act on user click on a cell
+  void uiAct(Cell cell) {
+    act(cell);
+  }
+
   void act(Cell cell) {
-    if (isFinished) return;
+    if (isGameFinished) return;
 
     for (final member in currentParty.members) {
       member.act(cell);
     }
-    final member = currentParty.actor;
-    if (member != null) {
-      // move the member to the end of the list, so it get drawn on top
-      members.remove(member);
-      members.add(member);
-      // if current manoeuvre is finished, move to next turn/player
-      if (member.manoeuvre.finished) {
-        member.manoeuvre = Manoeuvre.select;
-        _nextTurn();
-      }
+    final actor = getActor();
+    if (actor == null) return;
+    // move the member to the end of the list, so it get drawn on top
+    members.remove(actor);
+    members.add(actor);
+    // if current manoeuvre is finished, move to next turn/player
+    if (actor.manoeuvre.finished) {
+      actor.manoeuvre = Manoeuvre.select;
+      _nextTurn();
     }
   }
 }

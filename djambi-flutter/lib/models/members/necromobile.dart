@@ -3,7 +3,7 @@ import '../common.dart';
 import '../member.dart';
 
 class Necromobile extends Member {
-  Necromobile(super.parliament, super.ideology);
+  Necromobile(super.parliament, super.ideology, super.id);
 
   @override
   Role get role => Role.necromobile;

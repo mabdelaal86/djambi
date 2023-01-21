@@ -9,7 +9,7 @@ import '../models/cell.dart';
 import '../models/common.dart';
 import '../models/member.dart';
 import '../models/parliament.dart';
-import 'appearance_settings.dart';
+import 'settings.dart';
 import 'dimensions.dart';
 import 'extensions.dart';
 import 'theme.dart';
@@ -149,16 +149,16 @@ class Board extends PositionComponent {
   }
 
   void _markAvailableMoves(Canvas canvas) {
-    final member = parliament.currentParty.actor;
-    if (member == null || member.manoeuvre.isWaiting) {
+    final actor = parliament.getActor();
+    if (actor == null || actor.manoeuvre.isWaiting) {
       final cells = parliament.currentParty.members
           .where((m) => m.cellsToMove().isNotEmpty)
           .map((m) => m.location);
       _markSelectable(canvas, cells);
     }
-    if (member != null) {
-      _markSelected(canvas, member.location);
-      _markActions(canvas, member.cellsToAct());
+    if (actor != null) {
+      _markSelected(canvas, actor.location);
+      _markActions(canvas, actor.cellsToAct());
     }
   }
 

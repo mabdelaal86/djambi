@@ -22,6 +22,6 @@ class Grid extends PositionComponent with TapCallbacks {
   @override
   void onTapUp(TapUpEvent event) {
     final cell = Dimensions.vector2cell(event.localPosition);
-    parliament.act(cell);
+    parliament.uiAct(cell);
   }
 }

@@ -15,24 +15,26 @@ import 'members/reporter.dart';
 abstract class Member {
   final Parliament parliament;
   Ideology ideology;
+  final String id;
 
-  Member(this.parliament, this.ideology);
+  Member(this.parliament, this.ideology, this.id);
 
-  factory Member.create(Parliament parliament, Role role, Ideology ideology) {
+  factory Member.create(Parliament parliament, Role role, Ideology ideology, String id) {
     switch (role) {
-      case Role.chief:        return Chief(parliament, ideology);
-      case Role.assassin:     return Assassin(parliament, ideology);
-      case Role.reporter:     return Reporter(parliament, ideology);
-      case Role.diplomat:     return Diplomat(parliament, ideology);
-      case Role.necromobile:  return Necromobile(parliament, ideology);
-      case Role.militant:     return Militant(parliament, ideology);
+      case Role.chief:        return Chief(parliament, ideology, id);
+      case Role.assassin:     return Assassin(parliament, ideology, id);
+      case Role.reporter:     return Reporter(parliament, ideology, id);
+      case Role.diplomat:     return Diplomat(parliament, ideology, id);
+      case Role.necromobile:  return Necromobile(parliament, ideology, id);
+      case Role.militant:     return Militant(parliament, ideology, id);
     }
   }
 
   factory Member.copy(Parliament parliament, Member other) =>
-      Member.create(parliament, other.role, other.ideology)
+      Member.create(parliament, other.role, other.ideology, other.id)
         ..location = other.location
-        .._isDead = other._isDead;
+        .._isDead = other._isDead
+  ;
 
   @override
   String toString() => "${ideology.name}:${role.name}";
@@ -48,12 +50,15 @@ abstract class Member {
   @protected
   void kill(Member member) {
     member._isDead = true;
+    // take over other members if the killed member is a chief
     if (member.role == Role.chief) {
       for (final other in parliament.getParty(member.ideology).members) {
         other.ideology = ideology;
       }
     }
   }
+
+  Manoeuvre manoeuvre = Manoeuvre.select;
 
   /// Returns cells that a member can move to.
   ///
@@ -105,8 +110,6 @@ abstract class Member {
 
   Cell? _cellFrom;
   Cell? get cellFrom => _cellFrom;
-
-  Manoeuvre manoeuvre = Manoeuvre.select;
 
   @protected
   void endManoeuvre() {
