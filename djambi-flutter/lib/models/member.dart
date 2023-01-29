@@ -37,7 +37,7 @@ abstract class Member {
   ;
 
   @override
-  String toString() => "${ideology.name}:${role.name}";
+  String toString() => "${ideology.name}:${role.name}($id)";
 
   Role get role;
 
