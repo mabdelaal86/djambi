@@ -1,13 +1,13 @@
-import 'package:djambi/components/board_movements.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../models/parliament.dart';
-import 'board_background.dart';
-import 'board_pieces.dart';
 import 'dimensions.dart';
+import 'renderers/background.dart';
+import 'renderers/movements.dart';
+import 'renderers/pieces.dart';
 
 class Board extends PositionComponent with TapCallbacks {
   // @override
@@ -15,14 +15,14 @@ class Board extends PositionComponent with TapCallbacks {
 
   final Parliament parliament;
 
-  final BoardBackground _background;
-  final BoardMovements _movements;
-  final BoardPieces _pieces;
+  final BackgroundRenderer _background;
+  final MovementsRenderer _movements;
+  final PiecesRenderer _pieces;
 
   Board(this.parliament, {super.position}):
-        _background = BoardBackground(),
-        _movements = BoardMovements(parliament),
-        _pieces = BoardPieces(parliament),
+        _background = BackgroundRenderer(),
+        _movements = MovementsRenderer(parliament),
+        _pieces = PiecesRenderer(parliament),
         super(size: Dimensions.boardSize);
 
   @override

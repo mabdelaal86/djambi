@@ -1,18 +1,18 @@
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
-import '../models/cell.dart';
-import '../models/parliament.dart';
-import 'dimensions.dart';
-import 'extensions.dart';
-import 'settings.dart';
-import 'theme.dart';
+import '../../models/cell.dart';
+import '../../models/parliament.dart';
+import '../dimensions.dart';
+import '../extensions.dart';
+import '../settings.dart';
+import '../theme.dart';
 
-class BoardMovements {
+class MovementsRenderer {
   late final Parliament parliament;
   GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
 
-  BoardMovements(this.parliament);
+  MovementsRenderer(this.parliament);
 
   void render(Canvas canvas) {
     _markAvailableMoves(canvas);

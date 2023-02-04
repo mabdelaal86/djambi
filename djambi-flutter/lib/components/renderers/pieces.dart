@@ -2,20 +2,20 @@ import 'package:flame/extensions.dart';
 import 'package:flame_svg/svg.dart';
 import 'package:flutter/material.dart';
 
-import '../models/common.dart';
-import '../models/member.dart';
-import '../models/parliament.dart';
-import 'dimensions.dart';
-import 'extensions.dart';
-import 'settings.dart';
-import 'theme.dart';
+import '../../models/common.dart';
+import '../../models/member.dart';
+import '../../models/parliament.dart';
+import '../dimensions.dart';
+import '../extensions.dart';
+import '../settings.dart';
+import '../theme.dart';
 
-class BoardPieces {
+class PiecesRenderer {
   late final Parliament parliament;
   GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
   PieceTheme get _pieceTheme => AppearanceSettings.instance.pieceTheme;
 
-  BoardPieces(this.parliament);
+  PiecesRenderer(this.parliament);
 
   late final Map<Role, Svg> _memberImages;
 

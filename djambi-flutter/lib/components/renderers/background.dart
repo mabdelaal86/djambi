@@ -2,14 +2,14 @@ import 'package:flame/extensions.dart';
 import 'package:flame_svg/svg.dart';
 import 'package:flutter/material.dart';
 
-import '../models/cell.dart';
-import '../models/common.dart';
-import 'dimensions.dart';
-import 'extensions.dart';
-import 'settings.dart';
-import 'theme.dart';
+import '../../models/cell.dart';
+import '../../models/common.dart';
+import '../dimensions.dart';
+import '../extensions.dart';
+import '../settings.dart';
+import '../theme.dart';
 
-class BoardBackground {
+class BackgroundRenderer {
   GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
   PieceTheme get _pieceTheme => AppearanceSettings.instance.pieceTheme;
 
