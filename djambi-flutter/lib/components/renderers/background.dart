@@ -15,7 +15,7 @@ class BackgroundRenderer {
 
   late final Svg _mazeImage;
 
-  Future<void> init() async {
+  Future<void> onLoad() async {
     _mazeImage = await Utils.loadImage(Role.chief.name, _gameTheme.mazeForeColor);
   }
 

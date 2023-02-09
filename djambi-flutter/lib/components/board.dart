@@ -13,13 +13,11 @@ class Board extends PositionComponent with TapCallbacks {
   // @override
   // bool get debugMode => true;
 
-  final Parliament parliament;
-
   final BackgroundRenderer _background;
   final MovementsRenderer _movements;
   final PiecesRenderer _pieces;
 
-  Board(this.parliament, {super.position}):
+  Board(Parliament parliament, {super.position}):
         _background = BackgroundRenderer(),
         _movements = MovementsRenderer(parliament),
         _pieces = PiecesRenderer(parliament),
@@ -28,9 +26,8 @@ class Board extends PositionComponent with TapCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
-    await _background.init();
-    await _pieces.init();
+    await _background.onLoad();
+    await _pieces.onLoad();
   }
 
   @override
@@ -42,8 +39,6 @@ class Board extends PositionComponent with TapCallbacks {
 
   @override
   void onTapUp(TapUpEvent event) {
-    final position = event.localPosition - Dimensions.gridOffset;
-    final cell = Dimensions.vector2cell(position);
-    parliament.uiAct(cell);
+    _movements.onTapUp(event.localPosition);
   }
 }

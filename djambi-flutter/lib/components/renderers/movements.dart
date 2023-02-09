@@ -18,6 +18,11 @@ class MovementsRenderer {
     _markAvailableMoves(canvas);
   }
 
+  void onTapUp(Vector2 position) {
+    final cell = Dimensions.vector2cell(position - Dimensions.gridOffset);
+    parliament.uiAct(cell);
+  }
+
   void _markAvailableMoves(Canvas canvas) {
     final actor = parliament.getActor();
     if (actor == null || actor.manoeuvre.isWaiting) {

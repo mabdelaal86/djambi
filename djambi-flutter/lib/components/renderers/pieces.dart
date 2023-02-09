@@ -19,7 +19,7 @@ class PiecesRenderer {
 
   late final Map<Role, Svg> _memberImages;
 
-  Future<void> init() async {
+  Future<void> onLoad() async {
     _memberImages = {
       for (final r in Role.values)
         r: await Utils.loadImage(r.name, _gameTheme.pieceForeColor)
