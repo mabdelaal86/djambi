@@ -58,22 +58,20 @@ abstract class Member {
     }
   }
 
-  Manoeuvre manoeuvre = Manoeuvre.select;
+  Manoeuvre manoeuvre = Manoeuvre.start;
 
   /// Returns cells that a member can move to.
   ///
   /// The default implementation returns empty cells and cells occupied
   /// by an enemy member or a dead member in all 8 directions.
-  Iterable<Cell> cellsToMove() sync* {
+  Iterable<Cell> cellsToMove(bool canKill) sync* {
     for (final dir in Cell.allDirections) {
       for (Cell cell = location + dir; cell.isValid; cell += dir) {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {
-          // if member is waiting (select or move1), it can do action on other members
-          // otherwise, it can only move to empty cells
-          if (manoeuvre.isWaiting && (member.isDead || member.ideology != ideology)) {
-            // occupied with dead or enemy member
+          // if can kill, cell should be occupied by dead or enemy member
+          if (canKill && (member.isDead || member.ideology != ideology)) {
             yield cell;
           }
           break; // stop this direction after first occupied cell
@@ -85,16 +83,13 @@ abstract class Member {
   }
 
   Iterable<Cell> cellsToAct() {
-    if (manoeuvre == Manoeuvre.move1 || manoeuvre == Manoeuvre.move2) {
-      return cellsToMove();
+    switch (manoeuvre) {
+      case Manoeuvre.start:  return cellsToMove(true);
+      case Manoeuvre.kill:   return Cell.allCells().where(canKillOn);
+      case Manoeuvre.exit:   return cellsToMove(false);
+      case Manoeuvre.bury:   return Cell.allCells().where(canBuryOn);
+      case Manoeuvre.end:    return [];
     }
-    if (manoeuvre == Manoeuvre.kill) {
-      return Cell.allCells().where(canKillOn);
-    }
-    if (manoeuvre == Manoeuvre.bury) {
-      return Cell.allCells().where(canBuryOn);
-    }
-    return [];
   }
 
   bool canKillOn(Cell cell) => cell == location;
@@ -119,13 +114,12 @@ abstract class Member {
   }
 
   void act(Cell cell) {
-    if (manoeuvre == Manoeuvre.select) {
-      _actOnSelect(cell);
-    } else if (manoeuvre == Manoeuvre.move1) {
-      _actOnMove1(cell);
+    if (manoeuvre == Manoeuvre.start) {
+      _start(cell);
     }
 
-    if (manoeuvre.isActing) {
+    // is acting
+    if (manoeuvre != Manoeuvre.start && manoeuvre != Manoeuvre.end) {
       proceed(cell);
     }
   }
@@ -133,22 +127,13 @@ abstract class Member {
   @protected
   void proceed(Cell cell);
 
-  void _actOnSelect(Cell cell) {
-    if (cell == location) {
-      manoeuvre = Manoeuvre.move1;
+  void _start(Cell cell) {
+    if (!cellsToMove(true).contains(cell)) {
+      throw StateError("Can't do an action on the selected cell");
     }
-  }
-
-  void _actOnMove1(Cell cell) {
-    if (cellsToMove().contains(cell)) {
-      _body = parliament.getMemberAt(cell);
-      _cellFrom = location;
-      location = cell;
-      manoeuvre = Manoeuvre.kill;
-    } else if (cell != location) {
-      _body = null;
-      _cellFrom = null;
-      manoeuvre = Manoeuvre.select;
-    }
+    _body = parliament.getMemberAt(cell);
+    _cellFrom = location;
+    location = cell;
+    manoeuvre = Manoeuvre.kill;
   }
 }

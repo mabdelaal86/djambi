@@ -9,7 +9,7 @@ class Assassin extends Member {
   Role get role => Role.assassin;
 
   @override
-  Iterable<Cell> cellsToMove() => super.cellsToMove().where((cell) {
+  Iterable<Cell> cellsToMove(bool canKill) => super.cellsToMove(canKill).where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell or alive enemy member
         // also not the cell that assassin started to move from (in case of move2)
@@ -24,8 +24,8 @@ class Assassin extends Member {
   void proceed(Cell cell) {
     if (manoeuvre == Manoeuvre.kill) {
       _actOnKill();
-    } else if (manoeuvre == Manoeuvre.move2) {
-      _actOnMove2(cell);
+    } else if (manoeuvre == Manoeuvre.exit) {
+      _actOnExit(cell);
     } else {
       throw StateError("Unhandled state!");
     }
@@ -40,15 +40,15 @@ class Assassin extends Member {
     kill(body!);
 
     if (body!.location.isMaze) {
-      manoeuvre = Manoeuvre.move2;
+      manoeuvre = Manoeuvre.exit;
     } else {
       body!.location = cellFrom!;
       endManoeuvre();
     }
   }
 
-  void _actOnMove2(Cell cell) {
-    if (cellsToMove().contains(cell)) {
+  void _actOnExit(Cell cell) {
+    if (cellsToMove(false).contains(cell)) {
       location = cell;
       body!.location = cellFrom!;
       endManoeuvre();

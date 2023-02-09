@@ -10,7 +10,6 @@ class Parliament {
   Member getMember(String id) => members.firstWhere((m) => m.id == id);
   Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
   bool isEmpty(Cell cell) => !members.any((m) => m.location == cell);
-  Iterable<Member> getPartyMembers(Ideology ideology) => members.where((m) => m.ideology == ideology);
 
   late final List<Party> parties;
   Party getParty(Ideology ideology) => parties.firstWhere((p) => p.ideology == ideology);
@@ -20,7 +19,7 @@ class Parliament {
 
   // make sure there is one actor or zero
   Member? getActor() => members.cast<Member?>()
-      .singleWhere((m) => m!.manoeuvre != Manoeuvre.select, orElse: () => null);
+      .singleWhere((m) => m!.manoeuvre != Manoeuvre.start, orElse: () => null);
 
   late Ideology _currentIdeology;
   late Party _currentParty;
@@ -68,7 +67,9 @@ class Parliament {
 
   void _setInitialPositions() {
     void setInitPosition(Ideology ideology, Cell scale, Cell translation) {
-      for (final m in getPartyMembers(ideology)) { m.location = m.location * scale + translation; }
+      for (final m in members.where((m) => m.ideology == ideology)) {
+        m.location = m.location * scale + translation;
+      }
     }
     setInitPosition(Ideology.red,    const Cell( 1, -1), const Cell(1, 7));
     setInitPosition(Ideology.blue,   const Cell(-1, -1), const Cell(7, 7));
@@ -108,25 +109,22 @@ class Parliament {
     _currentParty = _getNextParty();
   }
 
-  /// act on user click on a cell
-  void uiAct(Cell cell) {
-    act(cell);
-  }
-
-  void act(Cell cell) {
-    if (isGameFinished) return;
-
-    for (final member in currentParty.members) {
-      member.act(cell);
+  void act(Member member, Cell cell) {
+    if (isGameFinished) {
+      return;
     }
-    final actor = getActor();
-    if (actor == null) return;
+    final actor = getActor() ?? member;
+    if (actor != member) {
+      throw StateError("Current actor is not the selected member");
+    }
     // move the member to the end of the list, so it get drawn on top
     members.remove(actor);
     members.add(actor);
+    // do an action
+    actor.act(cell);
     // if current manoeuvre is finished, move to next turn/player
-    if (actor.manoeuvre.finished) {
-      actor.manoeuvre = Manoeuvre.select;
+    if (actor.manoeuvre == Manoeuvre.end) {
+      actor.manoeuvre = Manoeuvre.start;
       _nextTurn();
     }
   }

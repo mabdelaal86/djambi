@@ -9,7 +9,7 @@ class Militant extends Member {
   Role get role => Role.militant;
 
   @override
-  Iterable<Cell> cellsToMove() => super.cellsToMove().where((cell) {
+  Iterable<Cell> cellsToMove(bool canKill) => super.cellsToMove(canKill).where((cell) {
         final member = parliament.getMemberAt(cell);
         return !cell.isMaze && // can't target maze even if a chief is there
             _stepsTo(cell) <= 2 && // move only 2 steps

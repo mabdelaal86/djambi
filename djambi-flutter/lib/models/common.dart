@@ -26,15 +26,9 @@ enum Role {
 }
 
 enum Manoeuvre {
-  select,
-  move1,
+  start,
   kill,
-  move2,
+  exit,
   bury,
   end,
-  ;
-
-  bool get isWaiting => this == select || this == move1;
-  bool get finished => this == end;
-  bool get isActing => !isWaiting && !finished;
 }

@@ -1,3 +1,6 @@
+import 'package:collection/collection.dart';
+
+import 'cell.dart';
 import 'common.dart';
 import 'member.dart';
 import 'parliament.dart';
@@ -13,4 +16,6 @@ class Party {
 
   Iterable<Member> get members =>
       parliament.members.where((m) => m.ideology == ideology && m.isAlive);
+
+  Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
 }
