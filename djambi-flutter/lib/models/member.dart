@@ -32,8 +32,13 @@ abstract class Member {
 
   factory Member.copy(Parliament parliament, Member other) =>
       Member.create(parliament, other.role, other.ideology, other.id)
+        // not constant properties
         ..location = other.location
         .._isDead = other._isDead
+        // manoeuvre properties
+        ..manoeuvre = other.manoeuvre
+        .._cellFrom = other._cellFrom
+        .._bodyId = other._bodyId
   ;
 
   @override
@@ -100,15 +105,15 @@ abstract class Member {
     return other != null && other.isAlive && other.ideology != ideology;
   }
 
-  Member? _body;
-  Member? get body => _body;
+  String? _bodyId;
+  Member? get body => _bodyId == null ? null : parliament.getMember(_bodyId!);
 
   Cell? _cellFrom;
   Cell? get cellFrom => _cellFrom;
 
   @protected
   void endManoeuvre() {
-    _body = null;
+    _bodyId = null;
     _cellFrom = null;
     manoeuvre = Manoeuvre.end;
   }
@@ -131,7 +136,7 @@ abstract class Member {
     if (!cellsToMove(true).contains(cell)) {
       throw StateError("Can't do an action on the selected cell");
     }
-    _body = parliament.getMemberAt(cell);
+    _bodyId = parliament.getMemberAt(cell)?.id;
     _cellFrom = location;
     location = cell;
     manoeuvre = Manoeuvre.kill;
