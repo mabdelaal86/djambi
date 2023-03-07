@@ -16,6 +16,8 @@ class GameState {
   }
 
   void undo() {
-    parliament = _stack.pop();
+    if (_stack.isNotEmpty) {
+      parliament = _stack.pop();
+    }
   }
 }

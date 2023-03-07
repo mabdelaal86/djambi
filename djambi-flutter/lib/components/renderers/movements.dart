@@ -6,8 +6,8 @@ import '../../models/member.dart';
 import '../../models/parliament.dart';
 import '../dimensions.dart';
 import '../extensions.dart';
-import '../game_state.dart';
 import '../settings.dart';
+import '../state.dart';
 import '../theme.dart';
 
 class MovementsRenderer {

@@ -2,13 +2,14 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 
-import 'components/board.dart';
-import 'components/game_state.dart';
+import 'board.dart';
+import 'state.dart';
 
 class DjambiGame extends FlameGame with HasTappableComponents {
+  final state = GameState();
+
   @override
   Future<void> onLoad() async {
-    final state = GameState();
     final board = Board(state);
 
     final world = World();
