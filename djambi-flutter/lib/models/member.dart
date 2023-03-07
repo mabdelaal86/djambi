@@ -15,11 +15,11 @@ import 'members/reporter.dart';
 abstract class Member {
   final Parliament parliament;
   Ideology ideology;
-  final String id;
+  final int id;
 
   Member(this.parliament, this.ideology, this.id);
 
-  factory Member.create(Parliament parliament, Role role, Ideology ideology, String id) {
+  factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) {
     switch (role) {
       case Role.chief:        return Chief(parliament, ideology, id);
       case Role.assassin:     return Assassin(parliament, ideology, id);
@@ -105,8 +105,8 @@ abstract class Member {
     return other != null && other.isAlive && other.ideology != ideology;
   }
 
-  String? _bodyId;
-  Member? get body => _bodyId == null ? null : parliament.getMember(_bodyId!);
+  int? _bodyId;
+  Member? get body => _bodyId == null ? null : parliament.members[_bodyId!];
 
   Cell? _cellFrom;
   Cell? get cellFrom => _cellFrom;

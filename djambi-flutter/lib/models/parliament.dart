@@ -7,7 +7,6 @@ import 'party.dart';
 
 class Parliament {
   late final List<Member> members;
-  Member getMember(String id) => members.firstWhere((m) => m.id == id);
   Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
   bool isEmpty(Cell cell) => !members.any((m) => m.location == cell);
 
@@ -59,7 +58,8 @@ class Parliament {
     // create members and place them around (0,0) point, so it is easier to rotate or flip
     for (int r = 0; r < 3; r++) {
       for (int c = 0; c < 3; c++) {
-        yield Member.create(this, roles[r][c], ideology, "${ideology.name[0]}$r$c")
+        final int id = (ideology.index * Constants.boardSize) + (r * 3) + c;
+        yield Member.create(this, roles[r][c], ideology, id)
           ..location = Cell(c - 1, r - 1);
       }
     }
@@ -117,9 +117,6 @@ class Parliament {
     if (actor != member) {
       throw StateError("Current actor is not the selected member");
     }
-    // move the member to the end of the list, so it get drawn on top
-    members.remove(actor);
-    members.add(actor);
     // do an action
     actor.act(cell);
     // if current manoeuvre is finished, move to next turn/player

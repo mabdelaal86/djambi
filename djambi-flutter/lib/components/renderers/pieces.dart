@@ -28,11 +28,20 @@ class PiecesRenderer {
 
   void render(Canvas canvas) {
     _drawMembers(canvas);
+    // draw actor again to make sure it is shown on top of other members
+    _drawActor(canvas);
   }
 
   void _drawMembers(Canvas canvas) {
     for (final member in parliament.members) {
       _drawMember(canvas, member);
+    }
+  }
+
+  void _drawActor(Canvas canvas) {
+    final actor = parliament.getActor();
+    if (actor != null) {
+      _drawMember(canvas, actor);
     }
   }
 
