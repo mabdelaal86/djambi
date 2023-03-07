@@ -16,7 +16,7 @@ More details about the rules: https://www.djambi.net/
 ## Roadmap
 
 - [ ] Play against AI.
-- [ ] Undo last play is missing.
+- [x] Undo last play is missing.
 - [ ] Save game state.
 - [ ] Complete GUI with Home page and Settings page.
 
