@@ -7,15 +7,17 @@ import '../../models/member.dart';
 import '../../models/parliament.dart';
 import '../dimensions.dart';
 import '../extensions.dart';
+import '../game_state.dart';
 import '../settings.dart';
 import '../theme.dart';
 
 class PiecesRenderer {
-  late final Parliament parliament;
+  final GameState gameState;
+  Parliament get parliament => gameState.parliament;
   GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
   PieceTheme get _pieceTheme => AppearanceSettings.instance.pieceTheme;
 
-  PiecesRenderer(this.parliament);
+  PiecesRenderer(this.gameState);
 
   late final Map<Role, Svg> _memberImages;
 

@@ -6,15 +6,17 @@ import '../../models/member.dart';
 import '../../models/parliament.dart';
 import '../dimensions.dart';
 import '../extensions.dart';
+import '../game_state.dart';
 import '../settings.dart';
 import '../theme.dart';
 
 class MovementsRenderer {
-  late final Parliament parliament;
+  final GameState gameState;
+  Parliament get parliament => gameState.parliament;
   Member? _selectedMember;
   GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
 
-  MovementsRenderer(this.parliament);
+  MovementsRenderer(this.gameState);
 
   void render(Canvas canvas) {
     _markAvailableMoves(canvas);
@@ -60,7 +62,7 @@ class MovementsRenderer {
     final actor = parliament.getActor();
     if (actor != null) {
       _selectedMember = null; // just to make sure
-      parliament.act(actor, cell);
+      gameState.doAction(actor, cell);
       return;
     }
     // ---------------
@@ -98,7 +100,7 @@ class MovementsRenderer {
     // check if selected member can act on the selected cell
     if (_selectedMember!.cellsToAct().contains(cell)) {
       // call act with selectedMember and cell
-      parliament.act(_selectedMember!, cell);
+      gameState.doAction(_selectedMember!, cell);
     }
     _selectedMember = null;
   }

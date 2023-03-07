@@ -3,8 +3,8 @@ import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
-import '../models/parliament.dart';
 import 'dimensions.dart';
+import 'game_state.dart';
 import 'renderers/background.dart';
 import 'renderers/movements.dart';
 import 'renderers/pieces.dart';
@@ -17,10 +17,10 @@ class Board extends PositionComponent with TapCallbacks {
   final MovementsRenderer _movements;
   final PiecesRenderer _pieces;
 
-  Board(Parliament parliament, {super.position}):
+  Board(GameState gameState, {super.position}):
         _background = BackgroundRenderer(),
-        _movements = MovementsRenderer(parliament),
-        _pieces = PiecesRenderer(parliament),
+        _movements = MovementsRenderer(gameState),
+        _pieces = PiecesRenderer(gameState),
         super(size: Dimensions.boardSize);
 
   @override
