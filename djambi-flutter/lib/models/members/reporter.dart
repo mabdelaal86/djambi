@@ -16,26 +16,31 @@ class Reporter extends Member {
       });
 
   @override
-  bool canKillOn(Cell cell) =>
+  bool canReportOn(Cell cell) =>
       location.isAdjacentTo(cell) && occupiedByEnemy(cell);
 
+  bool occupiedByEnemy(Cell cell) {
+    final other = parliament.getMemberAt(cell);
+    return other != null && other.isAlive && other.ideology != ideology;
+  }
+
   @override
-  void proceed(Cell cell) {
-    if (manoeuvre == Manoeuvre.kill) {
-      _actOnKill(cell);
-    } else {
-      throw StateError("Unhandled state!");
+  void onKill() {
+    if (!location.adjacentCells().any(occupiedByEnemy)) {
+      endManoeuvre();
     }
   }
 
-  void _actOnKill(Cell cell) {
-    final cells = location.adjacentCells().where(occupiedByEnemy).toList();
-    if (cells.isEmpty) {
-      endManoeuvre();
-    } else if (cells.contains(cell)) {
-      final member = parliament.getMemberAt(cell);
-      kill(member!);
-      endManoeuvre();
+  @override
+  void onReport(Cell cell) {
+    if (!canReportOn(cell)) {
+      throw StateError("Can't do an action on the selected cell");
     }
+    final member = parliament.getMemberAt(cell);
+    kill(member!);
+    endManoeuvre();
   }
+
+  @override
+  void onBury(Cell cell) => throw StateError("Unhandled state!");
 }

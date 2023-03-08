@@ -17,7 +17,23 @@ abstract class Member {
   Ideology ideology;
   final int id;
 
+  Role get role;
+
+  Cell location = const Cell.zero();
+
+  bool _isDead = false;
+  bool get isDead => _isDead;
+  bool get isAlive => !_isDead;
+
+  Manoeuvre manoeuvre = Manoeuvre.start;
+
+  int? _bodyId;
+  Member? get body => _bodyId == null ? null : parliament.members[_bodyId!];
+
   Member(this.parliament, this.ideology, this.id);
+
+  @override
+  String toString() => "${ideology.name}:${role.name}($id)";
 
   factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) {
     switch (role) {
@@ -31,26 +47,17 @@ abstract class Member {
   }
 
   factory Member.copy(Parliament parliament, Member other) =>
-      Member.create(parliament, other.role, other.ideology, other.id)
-        // not constant properties
-        ..location = other.location
-        .._isDead = other._isDead
-        // manoeuvre properties
-        ..manoeuvre = other.manoeuvre
-        .._cellFrom = other._cellFrom
-        .._bodyId = other._bodyId
-  ;
+      Member.create(parliament, other.role, other.ideology, other.id)..copy(other);
 
-  @override
-  String toString() => "${ideology.name}:${role.name}($id)";
-
-  Role get role;
-
-  Cell location = const Cell.zero();
-
-  bool _isDead = false;
-  bool get isDead => _isDead;
-  bool get isAlive => !_isDead;
+  @protected
+  void copy(Member other) {
+    // not constant properties
+    location = other.location;
+    _isDead = other._isDead;
+    // manoeuvre properties
+    manoeuvre = other.manoeuvre;
+    _bodyId = other._bodyId;
+  }
 
   @protected
   void kill(Member member) {
@@ -62,8 +69,6 @@ abstract class Member {
       }
     }
   }
-
-  Manoeuvre manoeuvre = Manoeuvre.start;
 
   /// Returns cells that a member can move to.
   ///
@@ -89,56 +94,60 @@ abstract class Member {
 
   Iterable<Cell> cellsToAct() {
     switch (manoeuvre) {
-      case Manoeuvre.start:  return cellsToMove(true);
-      case Manoeuvre.kill:   return Cell.allCells().where(canKillOn);
-      case Manoeuvre.exit:   return cellsToMove(false);
-      case Manoeuvre.bury:   return Cell.allCells().where(canBuryOn);
-      case Manoeuvre.end:    return [];
+      case Manoeuvre.move:    return cellsToMove(true);
+      case Manoeuvre.report:  return Cell.allCells().where(canReportOn);
+      case Manoeuvre.exit:    return cellsToMove(false);
+      case Manoeuvre.bury:    return Cell.allCells().where(canBuryOn);
+      default:
+        return [];
     }
   }
 
-  bool canKillOn(Cell cell) => cell == location;
+  bool canReportOn(Cell cell) => false;
   bool canBuryOn(Cell cell) => parliament.isEmpty(cell) && !cell.isMaze;
-
-  bool occupiedByEnemy(Cell cell) {
-    final other = parliament.getMemberAt(cell);
-    return other != null && other.isAlive && other.ideology != ideology;
-  }
-
-  int? _bodyId;
-  Member? get body => _bodyId == null ? null : parliament.members[_bodyId!];
-
-  Cell? _cellFrom;
-  Cell? get cellFrom => _cellFrom;
 
   @protected
   void endManoeuvre() {
-    _bodyId = null;
-    _cellFrom = null;
     manoeuvre = Manoeuvre.end;
+    _bodyId = null;
   }
 
   void act(Cell cell) {
-    if (manoeuvre == Manoeuvre.start) {
-      _start(cell);
-    }
-
-    // is acting
-    if (manoeuvre != Manoeuvre.start && manoeuvre != Manoeuvre.end) {
-      proceed(cell);
+    switch (manoeuvre) {
+      case Manoeuvre.move:    onMove(cell); onKill(); break;
+      case Manoeuvre.report:  onReport(cell); break;
+      case Manoeuvre.exit:    onExit(cell); break;
+      case Manoeuvre.bury:    onBury(cell); break;
+      default:
+        throw StateError("Unhandled state!");
     }
   }
 
   @protected
-  void proceed(Cell cell);
-
-  void _start(Cell cell) {
+  void onMove(Cell cell) {
     if (!cellsToMove(true).contains(cell)) {
       throw StateError("Can't do an action on the selected cell");
     }
     _bodyId = parliament.getMemberAt(cell)?.id;
-    _cellFrom = location;
     location = cell;
-    manoeuvre = Manoeuvre.kill;
+    manoeuvre = Manoeuvre.report;
+  }
+
+  @protected
+  void onKill() => throw StateError("Unhandled state!");
+
+  @protected
+  void onReport(Cell cell) => throw StateError("Unhandled state!");
+
+  @protected
+  void onExit(Cell cell) => throw StateError("Unhandled state!");
+
+  @protected
+  void onBury(Cell cell) {
+    if (!canBuryOn(cell)) {
+      throw StateError("Can't do an action on the selected cell");
+    }
+    body!.location = cell;
+    endManoeuvre();
   }
 }

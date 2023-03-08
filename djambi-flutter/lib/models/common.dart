@@ -26,9 +26,12 @@ enum Role {
 }
 
 enum Manoeuvre {
-  start,
-  kill,
+  move,
+  report,
   exit,
   bury,
   end,
+  ;
+
+  static const Manoeuvre start = move;
 }

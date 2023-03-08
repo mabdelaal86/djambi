@@ -8,30 +8,40 @@ class Assassin extends Member {
   @override
   Role get role => Role.assassin;
 
+  Cell? _cellFrom;
+
   @override
   Iterable<Cell> cellsToMove(bool canKill) => super.cellsToMove(canKill).where((cell) {
         final member = parliament.getMemberAt(cell);
         // empty non maze cell or alive enemy member
-        // also not the cell that assassin started to move from (in case of move2)
-        return (member == null && !cell.isMaze && cell != cellFrom) ||
+        // also not the cell that assassin started to move from (in case of exit)
+        return (member == null && !cell.isMaze && cell != _cellFrom) ||
                (member != null && member.isAlive);
       });
 
   @override
-  bool canBuryOn(Cell cell) => cell == cellFrom;
-
-  @override
-  void proceed(Cell cell) {
-    if (manoeuvre == Manoeuvre.kill) {
-      _actOnKill();
-    } else if (manoeuvre == Manoeuvre.exit) {
-      _actOnExit(cell);
-    } else {
-      throw StateError("Unhandled state!");
-    }
+  void copy(Member other) {
+    super.copy(other);
+    _cellFrom = (other as Assassin)._cellFrom;
   }
 
-  void _actOnKill() {
+  @override
+  void endManoeuvre() {
+    super.endManoeuvre();
+    _cellFrom = null;
+  }
+
+  @override
+  bool canBuryOn(Cell cell) => false;
+
+  @override
+  void onMove(Cell cell) {
+    _cellFrom = location;
+    super.onMove(cell);
+  }
+
+  @override
+  void onKill() {
     if (body == null) {
       endManoeuvre();
       return;
@@ -42,16 +52,21 @@ class Assassin extends Member {
     if (body!.location.isMaze) {
       manoeuvre = Manoeuvre.exit;
     } else {
-      body!.location = cellFrom!;
+      body!.location = _cellFrom!;
       endManoeuvre();
     }
   }
 
-  void _actOnExit(Cell cell) {
-    if (cellsToMove(false).contains(cell)) {
-      location = cell;
-      body!.location = cellFrom!;
-      endManoeuvre();
+  @override
+  void onExit(Cell cell) {
+    if (!cellsToMove(false).contains(cell)) {
+      throw StateError("Can't do an action on the selected cell");
     }
+    location = cell;
+    body!.location = _cellFrom!;
+    endManoeuvre();
   }
+
+  @override
+  void onBury(Cell cell) => throw StateError("Unhandled state!");
 }

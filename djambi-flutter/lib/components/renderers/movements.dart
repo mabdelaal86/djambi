@@ -62,7 +62,10 @@ class MovementsRenderer {
     final actor = parliament.getActor();
     if (actor != null) {
       _selectedMember = null; // just to make sure
-      gameState.doAction(actor, cell);
+      // check if actor can act on the selected cell
+      if (actor.cellsToAct().contains(cell)) {
+        gameState.doAction(actor, cell);
+      }
       return;
     }
     // ---------------
@@ -99,7 +102,6 @@ class MovementsRenderer {
     // empty cell or an enemy is clicked
     // check if selected member can act on the selected cell
     if (_selectedMember!.cellsToAct().contains(cell)) {
-      // call act with selectedMember and cell
       gameState.doAction(_selectedMember!, cell);
     }
     _selectedMember = null;

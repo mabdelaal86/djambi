@@ -21,19 +21,7 @@ class Diplomat extends Member {
       parliament.isEmpty(cell) && (!cell.isMaze || body!.role == Role.chief);
 
   @override
-  void proceed(Cell cell) {
-    if (manoeuvre == Manoeuvre.kill) {
-      _actOnKill();
-    } else if (manoeuvre == Manoeuvre.exit) {
-      _actOnExit(cell);
-    } else if (manoeuvre == Manoeuvre.bury) {
-      _actOnBury(cell);
-    } else {
-      throw StateError("Unhandled state!");
-    }
-  }
-
-  void _actOnKill() {
+  void onKill() {
     if (body == null) {
       endManoeuvre();
       return;
@@ -42,17 +30,12 @@ class Diplomat extends Member {
     manoeuvre = body!.location.isMaze ? Manoeuvre.exit : Manoeuvre.bury;
   }
 
-  void _actOnExit(Cell cell) {
-    if (cellsToMove(false).contains(cell)) {
-      location = cell;
-      manoeuvre = Manoeuvre.bury;
+  @override
+  void onExit(Cell cell) {
+    if (!cellsToMove(false).contains(cell)) {
+      throw StateError("Can't do an action on the selected cell");
     }
-  }
-
-  void _actOnBury(Cell cell) {
-    if (canBuryOn(cell)) {
-      body!.location = cell;
-      endManoeuvre();
-    }
+    location = cell;
+    manoeuvre = Manoeuvre.bury;
   }
 }

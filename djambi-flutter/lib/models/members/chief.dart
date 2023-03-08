@@ -16,29 +16,12 @@ class Chief extends Member {
       });
 
   @override
-  void proceed(Cell cell) {
-    if (manoeuvre == Manoeuvre.kill) {
-      _actOnKill();
-    } else if (manoeuvre == Manoeuvre.bury) {
-      _actOnBury(cell);
-    } else {
-      throw StateError("Unhandled state!");
-    }
-  }
-
-  void _actOnKill() {
+  void onKill() {
     if (body == null) {
       endManoeuvre();
     } else {
       kill(body!);
       manoeuvre = Manoeuvre.bury;
-    }
-  }
-
-  void _actOnBury(Cell cell) {
-    if (canBuryOn(cell)) {
-      body!.location = cell;
-      endManoeuvre();
     }
   }
 }

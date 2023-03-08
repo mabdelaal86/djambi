@@ -113,8 +113,18 @@ class Parliament {
     if (isGameFinished) {
       return;
     }
-    final actor = getActor() ?? member;
-    if (actor != member) {
+    // final actor = getActor() ?? member;
+    // if (actor != member) {
+    //   throw StateError("Current actor is not the selected member");
+    // }
+    var actor = getActor();
+    if (actor == null) {
+      if (member.ideology != currentParty.ideology) {
+        throw StateError("Selected member is not from current turn party");
+      }
+      actor = member;
+      actor.manoeuvre = Manoeuvre.move;
+    } else if (actor != member) {
       throw StateError("Current actor is not the selected member");
     }
     // do an action
