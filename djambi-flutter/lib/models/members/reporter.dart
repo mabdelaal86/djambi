@@ -42,5 +42,8 @@ class Reporter extends Member {
   }
 
   @override
+  void onExit(Cell cell) => throw StateError("Unhandled state!");
+
+  @override
   void onBury(Cell cell) => throw StateError("Unhandled state!");
 }

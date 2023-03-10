@@ -134,7 +134,13 @@ abstract class Member {
   void onKill(Cell cell) => throw StateError("Unhandled state!");
 
   @protected
-  void onExit(Cell cell) => throw StateError("Unhandled state!");
+  void onExit(Cell cell) {
+    if (!cellsToMove(false).contains(cell)) {
+      throw StateError("Can't do an action on the selected cell");
+    }
+    location = cell;
+    manoeuvre = Manoeuvre.exit;
+  }
 
   @protected
   void onBury(Cell cell) {

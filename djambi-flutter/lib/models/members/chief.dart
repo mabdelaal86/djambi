@@ -24,4 +24,7 @@ class Chief extends Member {
       manoeuvre = Manoeuvre.exit;
     }
   }
+
+  @override
+  void onExit(Cell cell) => throw StateError("Unhandled state!");
 }

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '../../models/cell.dart';
 import '../../models/member.dart';
 import '../../models/parliament.dart';
+import '../../models/state.dart';
 import '../dimensions.dart';
 import '../extensions.dart';
 import '../settings.dart';
-import '../state.dart';
 import '../theme.dart';
 
 class MovementsRenderer {

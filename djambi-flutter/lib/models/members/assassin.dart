@@ -53,12 +53,9 @@ class Assassin extends Member {
 
   @override
   void onExit(Cell cell) {
-    if (!cellsToMove(false).contains(cell)) {
-      throw StateError("Can't do an action on the selected cell");
-    }
-    location = cell;
-    manoeuvre = Manoeuvre.none;
+    super.onExit(cell);
     body!.location = _cellFrom!;
+    manoeuvre = Manoeuvre.none;
   }
 
   @override

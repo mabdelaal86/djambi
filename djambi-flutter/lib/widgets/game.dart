@@ -21,8 +21,9 @@ class _GamePageState extends State<GamePage> {
 
   void _onItemTapped(int index) {
     setState(() {
-      if (index == 2) {
-        _game.state.undo();
+      switch (index) {
+        case 2: _game.state.undo(); break;
+        case 3: _game.state.redo(); break;
       }
     });
   }
@@ -54,6 +55,10 @@ class _GamePageState extends State<GamePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.undo),
             label: 'Undo',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.redo),
+            label: 'Redo',
           ),
         ],
         onTap: _onItemTapped,

@@ -3,11 +3,11 @@ import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
+import '../models/state.dart';
 import 'dimensions.dart';
 import 'renderers/background.dart';
 import 'renderers/movements.dart';
 import 'renderers/pieces.dart';
-import 'state.dart';
 
 class Board extends PositionComponent with TapCallbacks {
   // @override

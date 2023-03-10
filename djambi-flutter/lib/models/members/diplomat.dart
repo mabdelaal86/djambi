@@ -29,13 +29,4 @@ class Diplomat extends Member {
 
     manoeuvre = body!.location.isMaze ? Manoeuvre.kill : Manoeuvre.exit;
   }
-
-  @override
-  void onExit(Cell cell) {
-    if (!cellsToMove(false).contains(cell)) {
-      throw StateError("Can't do an action on the selected cell");
-    }
-    location = cell;
-    manoeuvre = Manoeuvre.exit;
-  }
 }
