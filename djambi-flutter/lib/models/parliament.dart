@@ -18,7 +18,7 @@ class Parliament {
 
   // make sure there is one actor or zero
   Member? getActor() => members.cast<Member?>()
-      .singleWhere((m) => m!.manoeuvre != Manoeuvre.start, orElse: () => null);
+      .singleWhere((m) => m!.manoeuvre != Manoeuvre.none, orElse: () => null);
 
   late Ideology _currentIdeology;
   late Party _currentParty;
@@ -123,15 +123,13 @@ class Parliament {
         throw StateError("Selected member is not from current turn party");
       }
       actor = member;
-      actor.manoeuvre = Manoeuvre.move;
     } else if (actor != member) {
       throw StateError("Current actor is not the selected member");
     }
     // do an action
     actor.act(cell);
     // if current manoeuvre is finished, move to next turn/player
-    if (actor.manoeuvre == Manoeuvre.end) {
-      actor.manoeuvre = Manoeuvre.start;
+    if (actor.manoeuvre == Manoeuvre.none) {
       _nextTurn();
     }
   }

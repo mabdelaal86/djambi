@@ -19,12 +19,12 @@ class Militant extends Member {
   int _stepsTo(Cell cell) => (location - cell).abs().max;
 
   @override
-  void onKill() {
+  void postMove() {
     if (body == null) {
       endManoeuvre();
     } else {
       kill(body!);
-      manoeuvre = Manoeuvre.bury;
+      manoeuvre = Manoeuvre.exit;
     }
   }
 }

@@ -41,7 +41,7 @@ class Assassin extends Member {
   }
 
   @override
-  void onKill() {
+  void postMove() {
     if (body == null) {
       endManoeuvre();
       return;
@@ -50,7 +50,7 @@ class Assassin extends Member {
     kill(body!);
 
     if (body!.location.isMaze) {
-      manoeuvre = Manoeuvre.exit;
+      manoeuvre = Manoeuvre.kill;
     } else {
       body!.location = _cellFrom!;
       endManoeuvre();

@@ -25,7 +25,7 @@ abstract class Member {
   bool get isDead => _isDead;
   bool get isAlive => !_isDead;
 
-  Manoeuvre manoeuvre = Manoeuvre.start;
+  Manoeuvre manoeuvre = Manoeuvre.none;
 
   int? _bodyId;
   Member? get body => _bodyId == null ? null : parliament.members[_bodyId!];
@@ -94,10 +94,10 @@ abstract class Member {
 
   Iterable<Cell> cellsToAct() {
     switch (manoeuvre) {
-      case Manoeuvre.move:    return cellsToMove(true);
-      case Manoeuvre.report:  return Cell.allCells().where(canReportOn);
-      case Manoeuvre.exit:    return cellsToMove(false);
-      case Manoeuvre.bury:    return Cell.allCells().where(canBuryOn);
+      case Manoeuvre.none:  return cellsToMove(true);
+      case Manoeuvre.move:  return Cell.allCells().where(canReportOn);
+      case Manoeuvre.kill:  return cellsToMove(false);
+      case Manoeuvre.exit:  return Cell.allCells().where(canBuryOn);
       default:
         return [];
     }
@@ -106,18 +106,19 @@ abstract class Member {
   bool canReportOn(Cell cell) => false;
   bool canBuryOn(Cell cell) => parliament.isEmpty(cell) && !cell.isMaze;
 
+  // try to remove this function
   @protected
   void endManoeuvre() {
-    manoeuvre = Manoeuvre.end;
+    manoeuvre = Manoeuvre.none;
     _bodyId = null;
   }
 
   void act(Cell cell) {
     switch (manoeuvre) {
-      case Manoeuvre.move:    onMove(cell); onKill(); break;
-      case Manoeuvre.report:  onReport(cell); break;
-      case Manoeuvre.exit:    onExit(cell); break;
-      case Manoeuvre.bury:    onBury(cell); break;
+      case Manoeuvre.none:  onMove(cell); postMove(); break;
+      case Manoeuvre.move:  onKill(cell); break;
+      case Manoeuvre.kill:  onExit(cell); break;
+      case Manoeuvre.exit:  onBury(cell); break;
       default:
         throw StateError("Unhandled state!");
     }
@@ -130,14 +131,14 @@ abstract class Member {
     }
     _bodyId = parliament.getMemberAt(cell)?.id;
     location = cell;
-    manoeuvre = Manoeuvre.report;
+    manoeuvre = Manoeuvre.move;
   }
 
   @protected
-  void onKill() => throw StateError("Unhandled state!");
+  void postMove() => throw StateError("Unhandled state!");
 
   @protected
-  void onReport(Cell cell) => throw StateError("Unhandled state!");
+  void onKill(Cell cell) => throw StateError("Unhandled state!");
 
   @protected
   void onExit(Cell cell) => throw StateError("Unhandled state!");

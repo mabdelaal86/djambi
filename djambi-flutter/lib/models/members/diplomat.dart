@@ -21,13 +21,13 @@ class Diplomat extends Member {
       parliament.isEmpty(cell) && (!cell.isMaze || body!.role == Role.chief);
 
   @override
-  void onKill() {
+  void postMove() {
     if (body == null) {
       endManoeuvre();
       return;
     }
 
-    manoeuvre = body!.location.isMaze ? Manoeuvre.exit : Manoeuvre.bury;
+    manoeuvre = body!.location.isMaze ? Manoeuvre.kill : Manoeuvre.exit;
   }
 
   @override
@@ -36,6 +36,6 @@ class Diplomat extends Member {
       throw StateError("Can't do an action on the selected cell");
     }
     location = cell;
-    manoeuvre = Manoeuvre.bury;
+    manoeuvre = Manoeuvre.exit;
   }
 }

@@ -17,13 +17,13 @@ class Necromobile extends Member {
       });
 
   @override
-  void onKill() {
+  void postMove() {
     if (body == null) {
       endManoeuvre();
       return;
     }
 
-    manoeuvre = body!.location.isMaze ? Manoeuvre.exit : Manoeuvre.bury;
+    manoeuvre = body!.location.isMaze ? Manoeuvre.kill : Manoeuvre.exit;
   }
 
   @override
@@ -32,6 +32,6 @@ class Necromobile extends Member {
       throw StateError("Can't do an action on the selected cell");
     }
     location = cell;
-    manoeuvre = Manoeuvre.bury;
+    manoeuvre = Manoeuvre.exit;
   }
 }

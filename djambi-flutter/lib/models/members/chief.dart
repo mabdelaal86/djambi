@@ -16,12 +16,12 @@ class Chief extends Member {
       });
 
   @override
-  void onKill() {
+  void postMove() {
     if (body == null) {
       endManoeuvre();
     } else {
       kill(body!);
-      manoeuvre = Manoeuvre.bury;
+      manoeuvre = Manoeuvre.exit;
     }
   }
 }

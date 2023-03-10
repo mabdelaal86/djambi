@@ -25,14 +25,14 @@ class Reporter extends Member {
   }
 
   @override
-  void onKill() {
+  void postMove() {
     if (!location.adjacentCells().any(occupiedByEnemy)) {
       endManoeuvre();
     }
   }
 
   @override
-  void onReport(Cell cell) {
+  void onKill(Cell cell) {
     if (!canReportOn(cell)) {
       throw StateError("Can't do an action on the selected cell");
     }

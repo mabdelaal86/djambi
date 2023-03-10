@@ -25,13 +25,10 @@ enum Role {
   militant,
 }
 
+// represent which stage of the manoeuvre is finished
 enum Manoeuvre {
+  none,
   move,
-  report,
+  kill,
   exit,
-  bury,
-  end,
-  ;
-
-  static const Manoeuvre start = move;
 }
