@@ -61,18 +61,18 @@ packages:
     dependency: "direct main"
     description:
       name: flame
-      sha256: "7a7db4875d8285234e46fb66920ba31cc53fd61d207340bfd886c43122a4ae06"
+      sha256: "0c55f8d704f09536125c811a19d9aab7407dce245b2bfb507e84296c1c996202"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.6.0"
   flame_svg:
     dependency: "direct main"
     description:
       name: flame_svg
-      sha256: "604fd1cbdec150cff6ee08aae0ac1d6eaccbf7ca8b716151582bff6bf2babb18"
+      sha256: db11c6ea473723e4a58b03b74f2ee525853a33acba7992127c66832f1d1bcbac
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.0"
+    version: "1.7.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -90,10 +90,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: f2aa23d9d1721cd5c2c5097558368d2a1f85be35a85a6cf26a626e80c369a47c
+      sha256: "6ff9fa12892ae074092de2fa6a9938fb21dbabfdaa2ff57dc697ff912fc8d4b2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.6"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -111,10 +111,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "5cfd6509652ff5e7fe149b6df4859e687fca9048437857cb2e65c8d780f396e3"
+      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   matcher:
     dependency: transitive
     description:
@@ -175,10 +175,10 @@ packages:
     dependency: transitive
     description:
       name: petitparser
-      sha256: "2ebb289dc4764ec397f5cd3ca9881c6d17196130a7d646ed022a0dd9c2e25a71"
+      sha256: "49392a45ced973e8d94a85fdb21293fbb40ba805fc49f2965101ae748a3683b4"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.1.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -252,10 +252,10 @@ packages:
     dependency: transitive
     description:
       name: xml
-      sha256: ac0e3f4bf00ba2708c33fbabbbe766300e509f8c82dbd4ab6525039813f7e2fb
+      sha256: "979ee37d622dec6365e2efa4d906c37470995871fe9ae080d967e192d88286b5"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.2.2"
 sdks:
   dart: ">=2.18.0 <3.0.0"
   flutter: ">=3.3.0"

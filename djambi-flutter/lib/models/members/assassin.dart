@@ -57,8 +57,8 @@ class Assassin extends Member {
       throw StateError("Can't do an action on the selected cell");
     }
     location = cell;
-    body!.location = _cellFrom!;
     manoeuvre = Manoeuvre.none;
+    body!.location = _cellFrom!;
   }
 
   @override
