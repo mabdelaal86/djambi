@@ -18,7 +18,7 @@ class Chief extends Member {
   @override
   void postMove() {
     if (body == null) {
-      endManoeuvre();
+      manoeuvre = Manoeuvre.none;
     } else {
       kill(body!);
       manoeuvre = Manoeuvre.exit;

@@ -19,7 +19,7 @@ class Necromobile extends Member {
   @override
   void postMove() {
     if (body == null) {
-      endManoeuvre();
+      manoeuvre = Manoeuvre.none;
       return;
     }
 

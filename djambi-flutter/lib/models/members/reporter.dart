@@ -16,7 +16,7 @@ class Reporter extends Member {
       });
 
   @override
-  bool canReportOn(Cell cell) =>
+  bool canKillOn(Cell cell) =>
       location.isAdjacentTo(cell) && occupiedByEnemy(cell);
 
   bool occupiedByEnemy(Cell cell) {
@@ -27,18 +27,18 @@ class Reporter extends Member {
   @override
   void postMove() {
     if (!location.adjacentCells().any(occupiedByEnemy)) {
-      endManoeuvre();
+      manoeuvre = Manoeuvre.none;
     }
   }
 
   @override
   void onKill(Cell cell) {
-    if (!canReportOn(cell)) {
+    if (!canKillOn(cell)) {
       throw StateError("Can't do an action on the selected cell");
     }
     final member = parliament.getMemberAt(cell);
     kill(member!);
-    endManoeuvre();
+    manoeuvre = Manoeuvre.none;
   }
 
   @override

@@ -95,7 +95,7 @@ abstract class Member {
   Iterable<Cell> cellsToAct() {
     switch (manoeuvre) {
       case Manoeuvre.none:  return cellsToMove(true);
-      case Manoeuvre.move:  return Cell.allCells().where(canReportOn);
+      case Manoeuvre.move:  return Cell.allCells().where(canKillOn);
       case Manoeuvre.kill:  return cellsToMove(false);
       case Manoeuvre.exit:  return Cell.allCells().where(canBuryOn);
       default:
@@ -103,15 +103,8 @@ abstract class Member {
     }
   }
 
-  bool canReportOn(Cell cell) => false;
+  bool canKillOn(Cell cell) => false;
   bool canBuryOn(Cell cell) => parliament.isEmpty(cell) && !cell.isMaze;
-
-  // try to remove this function
-  @protected
-  void endManoeuvre() {
-    manoeuvre = Manoeuvre.none;
-    _bodyId = null;
-  }
 
   void act(Cell cell) {
     switch (manoeuvre) {
@@ -149,6 +142,6 @@ abstract class Member {
       throw StateError("Can't do an action on the selected cell");
     }
     body!.location = cell;
-    endManoeuvre();
+    manoeuvre = Manoeuvre.none;
   }
 }
