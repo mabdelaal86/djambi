@@ -37,7 +37,7 @@ class Assassin extends Member {
   @override
   void postMove() {
     if (body == null) {
-      manoeuvre = Manoeuvre.none;
+      manoeuvre = Manoeuvre.end;
       return;
     }
 
@@ -47,7 +47,7 @@ class Assassin extends Member {
       manoeuvre = Manoeuvre.kill;
     } else {
       body!.location = _cellFrom!;
-      manoeuvre = Manoeuvre.none;
+      manoeuvre = Manoeuvre.end;
     }
   }
 
@@ -55,7 +55,7 @@ class Assassin extends Member {
   void onExit(Cell cell) {
     super.onExit(cell);
     body!.location = _cellFrom!;
-    manoeuvre = Manoeuvre.none;
+    manoeuvre = Manoeuvre.end;
   }
 
   @override

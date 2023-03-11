@@ -27,7 +27,7 @@ class Reporter extends Member {
   @override
   void postMove() {
     if (!location.adjacentCells().any(occupiedByEnemy)) {
-      manoeuvre = Manoeuvre.none;
+      manoeuvre = Manoeuvre.end;
     }
   }
 
@@ -38,7 +38,7 @@ class Reporter extends Member {
     }
     final member = parliament.getMemberAt(cell);
     kill(member!);
-    manoeuvre = Manoeuvre.none;
+    manoeuvre = Manoeuvre.end;
   }
 
   @override

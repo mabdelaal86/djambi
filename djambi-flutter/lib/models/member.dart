@@ -148,6 +148,6 @@ abstract class Member {
       throw StateError("Can't do an action on the selected cell");
     }
     body!.location = cell;
-    manoeuvre = Manoeuvre.none;
+    manoeuvre = Manoeuvre.end;
   }
 }

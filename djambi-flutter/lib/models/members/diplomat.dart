@@ -23,7 +23,7 @@ class Diplomat extends Member {
   @override
   void postMove() {
     if (body == null) {
-      manoeuvre = Manoeuvre.none;
+      manoeuvre = Manoeuvre.end;
       return;
     }
 

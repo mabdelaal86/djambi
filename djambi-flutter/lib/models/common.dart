@@ -31,4 +31,5 @@ enum Manoeuvre {
   move,
   kill,
   exit,
+  end,
 }

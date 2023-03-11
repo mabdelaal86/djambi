@@ -129,7 +129,8 @@ class Parliament {
     // do an action
     actor.act(cell);
     // if current manoeuvre is finished, move to next turn/player
-    if (actor.manoeuvre == Manoeuvre.none) {
+    if (actor.manoeuvre == Manoeuvre.end) {
+      actor.manoeuvre = Manoeuvre.none;
       _nextTurn();
     }
   }
