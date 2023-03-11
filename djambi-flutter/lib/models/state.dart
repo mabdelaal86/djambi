@@ -4,7 +4,6 @@ import 'cell.dart';
 import 'member.dart';
 import 'parliament.dart';
 
-
 class GameState {
   final _undoStack = Stack<Parliament>();
   var _redoStack = Stack<Parliament>();

@@ -41,12 +41,11 @@ class _GamePageState extends State<GamePage> {
         child: GameWidget(game: _game),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blueGrey,
-        selectedItemColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+            backgroundColor: Colors.blueGrey,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
