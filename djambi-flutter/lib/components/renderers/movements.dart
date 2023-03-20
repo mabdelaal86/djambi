@@ -42,9 +42,7 @@ class MovementsRenderer {
     // ---------------
     // no actor, so selection logic apply
     // mark selectable members
-    final movableMembers = parliament.currentParty.members
-        .where((m) => m.cellsToAct().isNotEmpty);
-    _markSelectable(canvas, movableMembers.map((m) => m.location));
+    _markSelectable(canvas, parliament.currentParty.movableMembers.map((m) => m.location));
     // mark selected member if exists
     if (_selectedMember != null) {
       _markSelected(canvas, _selectedMember!.location);

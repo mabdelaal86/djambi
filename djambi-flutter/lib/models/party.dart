@@ -14,8 +14,10 @@ class Party {
   bool get isLost => chief.isDead;
   bool get isActive => chief.isAlive;
 
-  Iterable<Member> get members =>
+  Iterable<Member> get aliveMembers =>
       parliament.members.where((m) => m.ideology == ideology && m.isAlive);
 
-  Member? getMemberAt(Cell cell) => members.firstWhereOrNull((m) => m.location == cell);
+  Iterable<Member> get movableMembers => aliveMembers.where((m) => m.cellsToAct().isNotEmpty);
+
+  Member? getMemberAt(Cell cell) => aliveMembers.firstWhereOrNull((m) => m.location == cell);
 }

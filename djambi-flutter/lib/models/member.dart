@@ -64,7 +64,7 @@ abstract class Member {
     member._isDead = true;
     // take over other members if the killed member is a chief
     if (member.role == Role.chief) {
-      for (final other in parliament.getParty(member.ideology).members) {
+      for (final other in parliament.getParty(member.ideology).aliveMembers) {
         other.ideology = ideology;
       }
     }

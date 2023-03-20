@@ -48,6 +48,8 @@ class Parliament {
     _currentParty = getParty(other._currentParty.ideology);
   }
 
+  Parliament makeCopy() => Parliament.copy(this);
+
   Iterable<Member> _recruitMembers(Ideology ideology) sync* {
     final roles = [
       [ Role.chief,    Role.assassin, Role.militant    ],

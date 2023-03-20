@@ -14,7 +14,7 @@ class GameState {
 
   void doAction(Member member, Cell cell) {
     // copy to undo stack
-    final copy = Parliament.copy(parliament);
+    final copy = parliament.makeCopy();
     _undoStack.push(copy);
     // do the action
     parliament.act(member, cell);
