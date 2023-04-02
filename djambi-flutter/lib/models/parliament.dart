@@ -24,6 +24,8 @@ class Parliament {
   late Party _currentParty;
   Party get currentParty => _currentParty;
 
+  String get value => "${currentParty.ideology.name[0]}:${members.map((m) => m.value).join(":")}";
+
   Parliament() {
     // create members
     members = Ideology.values.map((id) => _recruitMembers(id)).flattened.toList();

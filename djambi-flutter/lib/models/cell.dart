@@ -12,6 +12,8 @@ class Cell {
   @override
   String toString() => "Cell($x, $y)";
 
+  String get value => "$x$y";
+
   @override
   bool operator ==(Object other) =>
       other is Cell && x == other.x && y == other.y;
