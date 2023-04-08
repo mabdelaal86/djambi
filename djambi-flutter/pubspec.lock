@@ -69,10 +69,10 @@ packages:
     dependency: "direct main"
     description:
       name: flame
-      sha256: "1665a151b97c632d06b3f2b94c5df46afefa3e169f0bd8f77b1d250fa1b4feb7"
+      sha256: "3bd6699af5afbe0ff680d26a3b5f10ae59aeced3b50c020b03821501dfec5ea6"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.1"
+    version: "1.7.2"
   flame_svg:
     dependency: "direct main"
     description:

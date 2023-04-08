@@ -5,7 +5,7 @@ import 'package:flame/widgets.dart';
 import '../models/state.dart';
 import 'board.dart';
 
-class DjambiGame extends FlameGame with HasTappableComponents {
+class DjambiGame extends FlameGame {
   final state = GameState();
 
   @override
