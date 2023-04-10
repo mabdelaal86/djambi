@@ -22,6 +22,9 @@ abstract class GameTheme {
   Paint get moveMarkPaint;
   // parties
   Paint getPartyPaint(Ideology ideology);
+  // gui
+  Paint get buttonPaint;
+  TextStyle get buttonTextStyle;
 }
 
 class DefaultTheme extends GameTheme {
@@ -82,4 +85,11 @@ class DefaultTheme extends GameTheme {
 
     return Paint()..color = partyColors[ideology.index];
   }
+
+  @override
+  Paint get buttonPaint => Paint()..color = Colors.grey.shade600;
+
+  @override
+  TextStyle get buttonTextStyle => const TextStyle(
+      color: Colors.white, fontSize: 500, fontWeight: FontWeight.bold);
 }

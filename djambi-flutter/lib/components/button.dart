@@ -1,19 +1,17 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
-import 'package:flutter/cupertino.dart';
-
-import 'settings.dart';
-import 'theme.dart';
+import 'package:flutter/material.dart';
 
 class Button extends PositionComponent with TapCallbacks {
-  final Color color;
+  final IconData? icon;
   final String text;
+  final Paint bgPaint;
+  final TextStyle textStyle;
   final Function _tapUpCallback;
 
-  GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
-
-  Button(this.color, Vector2 position, Vector2 size, {required Function tapUpCallback, this.text = ""}):
+  Button(Vector2 position, Vector2 size, this.bgPaint, this.textStyle,
+      {required Function tapUpCallback, this.icon, this.text = ""}):
         _tapUpCallback = tapUpCallback,
         super(position: position, size: size);
 
@@ -22,17 +20,24 @@ class Button extends PositionComponent with TapCallbacks {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawOval(size.toRect(), _gameTheme.marginPaint);
-    if (text.isNotEmpty) {
-      writeText(canvas);
-    }
+    canvas.drawOval(size.toRect(), bgPaint);
+    _draw(canvas);
   }
 
-  void writeText(Canvas canvas) {
+  void _draw(Canvas canvas) {
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
-    textPainter.text = TextSpan(style: _gameTheme.marginTextStyle, text: text);
+    textPainter.text = _textSpan();
     textPainter.layout();
     final cellCenter = (size - textPainter.size.toVector2()) / 2;
     textPainter.paint(canvas, cellCenter.toOffset());
+  }
+
+  TextSpan _textSpan() {
+    return icon == null ?
+      TextSpan(text: text, style: textStyle) :
+      TextSpan(
+        text: String.fromCharCode(icon!.codePoint),
+        style: textStyle.copyWith(fontFamily: icon!.fontFamily),
+      );
   }
 }
