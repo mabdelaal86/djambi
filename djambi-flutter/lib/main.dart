@@ -1,23 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
 
-import 'widgets/game.dart';
+import 'components/game.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Djambi',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      home: const GamePage(),
-    );
-  }
+  final game = DjambiGame();
+  runApp(GameWidget(game: game));
 }

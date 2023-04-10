@@ -1,9 +1,10 @@
+import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flame/widgets.dart';
 
 import '../models/state.dart';
 import 'board.dart';
+import 'play_page.dart';
 
 class DjambiGame extends FlameGame {
   final state = GameState();
@@ -11,14 +12,16 @@ class DjambiGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final board = Board(state);
-
+    final playPage = PlayPage(state);
     final world = World();
-    world.add(board);
+
+    playPage.add(board);
+    world.add(playPage);
     add(world);
 
     final camera = CameraComponent(world: world)
-      ..viewfinder.visibleGameSize = board.size
-      ..viewfinder.anchor = Anchor.topLeft;
+      ..viewfinder.visibleGameSize = playPage.size
+      ..viewfinder.anchor = Anchor.center;
     add(camera);
   }
 }
