@@ -3,6 +3,7 @@ import 'package:stack/stack.dart';
 import 'cell.dart';
 import 'member.dart';
 import 'parliament.dart';
+import 'ai/tree.dart';
 
 class GameState {
   final _undoStack = Stack<Parliament>();
@@ -16,10 +17,10 @@ class GameState {
     // copy to undo stack
     final copy = parliament.makeCopy();
     _undoStack.push(copy);
-    // do the action
-    parliament.act(member, cell);
     // clean redo stack
     _redoStack = Stack<Parliament>();
+    // do the action
+    parliament.act(member, cell);
   }
 
   void undo() {
@@ -34,5 +35,16 @@ class GameState {
       _undoStack.push(parliament);
       parliament = _redoStack.pop();
     }
+  }
+
+  void aiAct() {
+    // copy to undo stack
+    _undoStack.push(parliament);
+    // clean redo stack
+    _redoStack = Stack<Parliament>();
+    // decide the best action
+    Tree engine = Tree(parliament);
+    engine.build();
+    parliament = engine.getBest().parliament;
   }
 }

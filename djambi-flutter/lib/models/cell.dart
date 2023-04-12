@@ -9,8 +9,10 @@ class Cell {
   const Cell.zero(): this(0, 0);
   const Cell.all(int xy): this(xy, xy);
 
+  static const cols = "ABCDEFGHI", rows = "123456789";
+
   @override
-  String toString() => "Cell($x, $y)";
+  String toString() => isValid ? cols[x] + rows[y] : "$x,$y";
 
   String get value => "$x$y";
 

@@ -71,11 +71,10 @@ class BackgroundRenderer {
       textPainter.paint(canvas, cellOffset + cellCenter.toOffset());
     }
 
-    const cols = "ABCDEFGHI", rows = "123456789";
     for (int i = 0; i < Constants.boardSize; i++) {
       final d = Dimensions.margin + i * Dimensions.cellSide;
-      writeText(cols[i], Offset(d, 0), Dimensions.marginColCell);
-      writeText(rows[i], Offset(0, d), Dimensions.marginRowCell);
+      writeText(Cell.cols[i], Offset(d, 0), Dimensions.marginColCell);
+      writeText(Cell.rows[i], Offset(0, d), Dimensions.marginRowCell);
     }
   }
 

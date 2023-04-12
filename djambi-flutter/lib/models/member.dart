@@ -33,7 +33,7 @@ abstract class Member {
   Member(this.parliament, this.ideology, this.id);
 
   @override
-  String toString() => "${ideology.name}:${role.name}($id)";
+  String toString() => "${ideology.name}:${role.name}($location)";
 
   String get value => (isDead ? "xx" : "${ideology.name[0]}${role.name[0]}") + location.value;
 
