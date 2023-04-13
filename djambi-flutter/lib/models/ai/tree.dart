@@ -28,7 +28,7 @@ class Node {
   void calcMaxN() {
     assert(_evaluations.isEmpty);
     assert(subNodes.isNotEmpty);
-    int max = -999999999999999999;
+    int max = -999999999999999;
     Map<Ideology, int>? evaluations;
     Node? bestSub;
     for (Node sub in subNodes) {
