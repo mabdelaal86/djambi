@@ -37,13 +37,13 @@ class GameState {
     }
   }
 
-  void aiAct() {
+  void aiAct(int maxDepth) {
     // copy to undo stack
     _undoStack.push(parliament);
     // clean redo stack
     _redoStack = Stack<Parliament>();
     // decide the best action
-    Tree engine = Tree(parliament);
+    Tree engine = Tree(parliament, maxDepth);
     engine.build();
     parliament = engine.getBest().parliament;
   }

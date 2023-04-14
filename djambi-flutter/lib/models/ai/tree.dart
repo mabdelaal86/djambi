@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 
 import '../cell.dart';
 import '../common.dart';
@@ -46,7 +45,7 @@ class Node {
 }
 
 class Tree {
-  Tree(Parliament parliament, {this.maxDepth = 3}): _root = Node(parliament, 0);
+  Tree(Parliament parliament, this.maxDepth): _root = Node(parliament, 0);
 
   final Node _root;
   final int maxDepth;
@@ -93,7 +92,7 @@ class Tree {
     int depth = node.depth;
     if (copyMember.manoeuvre == Manoeuvre.none) {
       depth++;
-      debugPrint("${'--' * depth} do action: $member => $cell");
+      // print("${'--' * depth} do action: $member => $cell");
     }
     final subNode = Node(copyParliament, depth);
     node.subNodes.add(subNode);
