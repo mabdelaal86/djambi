@@ -14,7 +14,7 @@ class Cell {
   @override
   String toString() => isValid ? cols[x] + rows[y] : "$x,$y";
 
-  String get value => "$x$y";
+  String get sign => "$x$y";
 
   @override
   bool operator ==(Object other) =>

@@ -55,7 +55,7 @@ class Tree {
   Node getBest() => _root.bestSubNode;
 
   void build() {
-    visitedNodes.add(_root.parliament.value);
+    visitedNodes.add(_root.parliament.sign);
     _createSubNodes(_root);
   }
 
@@ -84,11 +84,11 @@ class Tree {
     final copyParliament = node.parliament.makeCopy();
     final copyMember = copyParliament.members[member.id];
     copyParliament.act(copyMember, cell);
-    if (visitedNodes.contains(copyParliament.value)) {
+    if (!visitedNodes.add(copyParliament.sign)) {
+      // skip as the node is already visited before
       // print("skip: $member => $cell");
       return;
     }
-    visitedNodes.add(copyParliament.value);
     int depth = node.depth;
     if (copyMember.manoeuvre == Manoeuvre.none) {
       depth++;

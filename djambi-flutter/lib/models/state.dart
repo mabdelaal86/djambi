@@ -13,16 +13,6 @@ class GameState {
   bool get canUndo => _undoStack.isNotEmpty;
   bool get canRedo => _redoStack.isNotEmpty;
 
-  void doAction(Member member, Cell cell) {
-    // copy to undo stack
-    final copy = parliament.makeCopy();
-    _undoStack.push(copy);
-    // clean redo stack
-    _redoStack = Stack<Parliament>();
-    // do the action
-    parliament.act(member, cell);
-  }
-
   void undo() {
     if (_undoStack.isNotEmpty) {
       _redoStack.push(parliament);
@@ -35,6 +25,16 @@ class GameState {
       _undoStack.push(parliament);
       parliament = _redoStack.pop();
     }
+  }
+
+  void doAction(Member member, Cell cell) {
+    // copy to undo stack
+    final copy = parliament.makeCopy();
+    _undoStack.push(copy);
+    // clean redo stack
+    _redoStack = Stack<Parliament>();
+    // do the action
+    parliament.act(member, cell);
   }
 
   void aiAct(int maxDepth) {

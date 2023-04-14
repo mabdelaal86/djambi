@@ -24,7 +24,7 @@ class Parliament {
   late Party _currentParty;
   Party get currentParty => _currentParty;
 
-  String get value => "${currentParty.ideology.name[0]}:${members.map((m) => m.value).join()}";
+  String get sign => "${currentParty.ideology.name[0]}:${members.map((m) => m.sign).join()}";
 
   Parliament() {
     // create members
@@ -117,10 +117,6 @@ class Parliament {
     if (isGameFinished) {
       return;
     }
-    // final actor = getActor() ?? member;
-    // if (actor != member) {
-    //   throw StateError("Current actor is not the selected member");
-    // }
     var actor = getActor();
     if (actor == null) {
       if (member.ideology != currentParty.ideology) {
