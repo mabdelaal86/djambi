@@ -10,7 +10,7 @@ class Node {
   Node(this.parliament, this.depth);
 
   final Parliament parliament;
-  bool get isManoeuvreCompleted => parliament.getActor() == null;
+  bool get isManoeuvreCompleted => parliament.actor == null;
 
   final int depth;
   List<Node> subNodes = [];
@@ -63,7 +63,7 @@ class Tree {
     if (node.depth > maxDepth) {
       throw StateError("Exceed the maximum depth!");
     }
-    final actor = node.parliament.getActor();
+    final actor = node.parliament.actor;
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
       assert(actor == null);
       node.evaluate(evaluator);
@@ -92,7 +92,7 @@ class Tree {
     int depth = node.depth;
     if (copyMember.manoeuvre == Manoeuvre.none) {
       depth++;
-      // print("${'--' * depth} do action: $member => $cell");
+      // print("${'--- ' * depth} do action: $member => $cell");
     }
     final subNode = Node(copyParliament, depth);
     node.subNodes.add(subNode);

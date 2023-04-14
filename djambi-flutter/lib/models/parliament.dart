@@ -14,16 +14,15 @@ class Parliament {
   Party getParty(Ideology ideology) => parties.firstWhere((p) => p.ideology == ideology);
   Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isAlive);
   Iterable<Party> get activeParties => parties.where((p) => p.isActive);
-  bool get isGameFinished => activeParties.length == 1;
-
-  // make sure there is one actor or zero
-  Member? getActor() => members.cast<Member?>()
-      .singleWhere((m) => m!.manoeuvre != Manoeuvre.none, orElse: () => null);
 
   late Ideology _currentIdeology;
   late Party _currentParty;
   Party get currentParty => _currentParty;
 
+  Member? _actor;
+  Member? get actor => _actor;
+
+  bool get isGameFinished => activeParties.length == 1 && actor == null;
   String get sign => "${currentParty.ideology.name[0]}:${members.map((m) => m.sign).join()}";
 
   Parliament() {
@@ -48,6 +47,7 @@ class Parliament {
     // other properties
     _currentIdeology = other._currentIdeology;
     _currentParty = getParty(other._currentParty.ideology);
+    _actor = other._actor == null ? null : members[other._actor!.id] ;
   }
 
   Parliament makeCopy() => Parliament.copy(this);
@@ -117,20 +117,23 @@ class Parliament {
     if (isGameFinished) {
       return;
     }
-    var actor = getActor();
-    if (actor == null) {
+    if (_actor == null) {
       if (member.ideology != currentParty.ideology) {
         throw StateError("Selected member is not from current turn party");
       }
-      actor = member;
-    } else if (actor != member) {
+      _actor = member;
+    } else if (_actor != member) {
       throw StateError("Current actor is not the selected member");
+    } else {
+      // it should be in middle of a manoeuvre
+      assert(_actor!.manoeuvre != Manoeuvre.end);
     }
     // do an action
-    actor.act(cell);
+    _actor!.act(cell);
     // if current manoeuvre is finished, move to next turn/player
-    if (actor.manoeuvre == Manoeuvre.end) {
-      actor.manoeuvre = Manoeuvre.none;
+    if (_actor!.manoeuvre == Manoeuvre.end) {
+      _actor!.manoeuvre = Manoeuvre.none;
+      _actor = null;
       _nextTurn();
     }
   }

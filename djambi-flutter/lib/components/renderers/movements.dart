@@ -33,7 +33,7 @@ class MovementsRenderer {
     }
     // ---------------
     // game is still going
-    final actor = parliament.getActor();
+    final actor = parliament.actor;
     if (actor != null) {
       _markSelected(canvas, actor.location);
       _markActions(canvas, actor.cellsToAct());
@@ -57,7 +57,7 @@ class MovementsRenderer {
     // ---------------
     // game is still going
     // check if there is an actor (or ongoing manoeuvre)
-    final actor = parliament.getActor();
+    final actor = parliament.actor;
     if (actor != null) {
       _selectedMember = null; // just to make sure
       // check if actor can act on the selected cell

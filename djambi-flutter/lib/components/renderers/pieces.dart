@@ -41,7 +41,7 @@ class PiecesRenderer {
   }
 
   void _drawActor(Canvas canvas) {
-    final actor = parliament.getActor();
+    final actor = parliament.actor;
     if (actor != null) {
       _drawMember(canvas, actor);
     }
