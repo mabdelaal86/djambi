@@ -118,16 +118,11 @@ class Parliament {
       return;
     }
     if (_actor == null) {
-      if (member.ideology != currentParty.ideology) {
-        throw StateError("Selected member is not from current turn party");
-      }
+      assert(member.ideology == currentParty.ideology, "Selected member is not from current turn party");
       _actor = member;
-    } else if (_actor != member) {
-      throw StateError("Current actor is not the selected member");
-    } else {
-      // it should be in middle of a manoeuvre
-      assert(_actor!.manoeuvre != Manoeuvre.end);
     }
+    assert(_actor == member, "Current actor is not the selected member");
+    assert(_actor!.manoeuvre != Manoeuvre.end, "Current actor should be in middle of a manoeuvre");
     // do an action
     _actor!.act(cell);
     // if current manoeuvre is finished, move to next turn/player

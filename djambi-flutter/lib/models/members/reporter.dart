@@ -33,17 +33,15 @@ class Reporter extends Member {
 
   @override
   void onKill(Cell cell) {
-    if (!canKillOn(cell)) {
-      throw StateError("Can't do an action on the selected cell");
-    }
+    assert(canKillOn(cell), "Can't do an action on the selected cell");
     final member = parliament.getMemberAt(cell);
     kill(member!);
     manoeuvre = Manoeuvre.end;
   }
 
   @override
-  void onExit(Cell cell) => throw StateError("Unhandled state!");
+  void onExit(Cell cell) => throw UnsupportedError("Unhandled state!");
 
   @override
-  void onBury(Cell cell) => throw StateError("Unhandled state!");
+  void onBury(Cell cell) => throw UnsupportedError("Unhandled state!");
 }

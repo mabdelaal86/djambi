@@ -100,8 +100,7 @@ abstract class Member {
       case Manoeuvre.move:  return Cell.allCells().where(canKillOn);
       case Manoeuvre.kill:  return cellsToMove(false);
       case Manoeuvre.exit:  return Cell.allCells().where(canBuryOn);
-      default:
-        return [];
+      case Manoeuvre.end:   return [];
     }
   }
 
@@ -114,41 +113,34 @@ abstract class Member {
       case Manoeuvre.move:  onKill(cell); break;
       case Manoeuvre.kill:  onExit(cell); break;
       case Manoeuvre.exit:  onBury(cell); break;
-      default:
-        throw StateError("Unhandled state!");
+      case Manoeuvre.end:   throw AssertionError("Can't act on the `end` state!");
     }
   }
 
   @protected
   void onMove(Cell cell) {
-    if (!cellsToMove(true).contains(cell)) {
-      throw StateError("Can't do an action on the selected cell");
-    }
+    assert(cellsToMove(true).contains(cell), "Can't do an action on the selected cell");
     _bodyId = parliament.getMemberAt(cell)?.id;
     location = cell;
     manoeuvre = Manoeuvre.move;
   }
 
   @protected
-  void postMove() => throw StateError("Unhandled state!");
+  void postMove() => throw UnsupportedError("Unhandled state!");
 
   @protected
-  void onKill(Cell cell) => throw StateError("Unhandled state!");
+  void onKill(Cell cell) => throw UnsupportedError("Unhandled state!");
 
   @protected
   void onExit(Cell cell) {
-    if (!cellsToMove(false).contains(cell)) {
-      throw StateError("Can't do an action on the selected cell");
-    }
+    assert(cellsToMove(false).contains(cell), "Can't do an action on the selected cell");
     location = cell;
     manoeuvre = Manoeuvre.exit;
   }
 
   @protected
   void onBury(Cell cell) {
-    if (!canBuryOn(cell)) {
-      throw StateError("Can't do an action on the selected cell");
-    }
+    assert(canBuryOn(cell), "Can't do an action on the selected cell");
     body!.location = cell;
     manoeuvre = Manoeuvre.end;
   }

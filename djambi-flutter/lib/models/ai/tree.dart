@@ -20,13 +20,14 @@ class Node {
   Node get bestSubNode => _bestSubNode ?? this;
 
   void evaluate(StateEvaluator evaluator) {
-    assert(subNodes.isEmpty);
+    assert(subNodes.isEmpty, "evaluate should run on leaf nodes only");
+    assert(parliament.actor == null, "As maneuver is finished, there should be no actor");
     _evaluations = { for (final p in parliament.parties) p.ideology: evaluator.evaluate(p) };
   }
 
   void calcMaxN() {
-    assert(_evaluations.isEmpty);
-    assert(subNodes.isNotEmpty);
+    assert(_evaluations.isEmpty, "evaluations is expected to be empty");
+    assert(subNodes.isNotEmpty, "should run on NONE leaf nodes");
     int max = -999999999999999;
     Map<Ideology, int>? evaluations;
     Node? bestSub;
@@ -60,17 +61,14 @@ class Tree {
   }
 
   void _createSubNodes(Node node) {
-    if (node.depth > maxDepth) {
-      throw StateError("Exceed the maximum depth!");
-    }
-    final actor = node.parliament.actor;
+    assert (node.depth <= maxDepth, "Exceed the maximum depth!");
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
-      assert(actor == null);
       node.evaluate(evaluator);
       return;
     }
     // should do an action -----------------
-    final members = actor != null ? [actor] : node.parliament.currentParty.movableMembers;
+    final actor = node.parliament.actor;
+    final Iterable<Member> members = actor != null ? [actor] : node.parliament.currentParty.movableMembers;
     for (final member in members) {
       for (final cell in member.cellsToAct()) {
         _doAction(node, member, cell);

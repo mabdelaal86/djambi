@@ -29,5 +29,5 @@ class Militant extends Member {
   }
 
   @override
-  void onExit(Cell cell) => throw StateError("Unhandled state!");
+  void onExit(Cell cell) => throw UnsupportedError("Unhandled state!");
 }

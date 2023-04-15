@@ -59,5 +59,5 @@ class Assassin extends Member {
   }
 
   @override
-  void onBury(Cell cell) => throw StateError("Unhandled state!");
+  void onBury(Cell cell) => throw UnsupportedError("Unhandled state!");
 }
