@@ -28,23 +28,20 @@ class GameState {
   }
 
   void doAction(Member member, Cell cell) {
-    // copy to undo stack
-    final copy = parliament.makeCopy();
-    _undoStack.push(copy);
-    // clean redo stack
-    _redoStack = Stack<Parliament>();
-    // do the action
-    parliament.act(member, cell);
+    final newParliament = parliament.makeCopy();
+    newParliament.act(member.id, cell);
+    _handleNewState(newParliament);
   }
 
   void aiAct(int maxDepth) {
-    // copy to undo stack
-    _undoStack.push(parliament);
-    // clean redo stack
+    final tree = Tree(parliament, maxDepth);
+    tree.build();
+    _handleNewState(tree.decision.parliament);
+  }
+
+  void _handleNewState(Parliament newParliament) {
     _redoStack = Stack<Parliament>();
-    // decide the best action
-    Tree engine = Tree(parliament, maxDepth);
-    engine.build();
-    parliament = engine.getBest().parliament;
+    _undoStack.push(parliament);
+    parliament = newParliament;
   }
 }

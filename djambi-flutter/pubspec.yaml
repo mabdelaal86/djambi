@@ -1,5 +1,5 @@
 name: djambi
-description: An implemetation of Djambi board game.
+description: An implementation of Djambi board game.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -36,6 +36,7 @@ dependencies:
   flutter_svg: ^2.0.4
   meta: ^1.8.0
   stack: ^0.2.1
+  tuple: ^2.0.1
   vector_graphics: ^1.1.4
 
   # The following adds the Cupertino Icons font to your application.

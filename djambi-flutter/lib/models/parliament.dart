@@ -113,15 +113,15 @@ class Parliament {
     _currentParty = _getNextParty();
   }
 
-  void act(Member member, Cell cell) {
+  void act(int memberId, Cell cell) {
     if (isGameFinished) {
       return;
     }
     if (_actor == null) {
-      assert(member.ideology == currentParty.ideology, "Selected member is not from current turn party");
-      _actor = member;
+      assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
+      _actor = members[memberId];
     }
-    assert(_actor == member, "Current actor is not the selected member");
+    assert(_actor!.id == memberId, "Current actor is not the selected member");
     assert(_actor!.manoeuvre != Manoeuvre.end, "Current actor should be in middle of a manoeuvre");
     // do an action
     _actor!.act(cell);

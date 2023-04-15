@@ -14,9 +14,9 @@ class PlayPage extends PositionComponent {
 
   PlayPage(this.gameState, {super.position}):
         super(size: Dimensions.boardSize + Vector2(0, Dimensions.cellSide), anchor: Anchor.center) {
-    _addButton(0, Icons.undo, () => { gameState.undo() });
-    _addButton(1, Icons.redo, () => { gameState.redo() });
-    _addButton(2, Icons.computer, () => { gameState.aiAct(2) });
+    _addButton(0, Icons.undo, () => { debugPrint("Tap up Undo"), gameState.undo() });
+    _addButton(1, Icons.redo, () => { debugPrint("Tap up Redo"), gameState.redo() });
+    _addButton(2, Icons.computer, () => { debugPrint("Tap up AI"), gameState.aiAct(2) });
   }
 
   @override

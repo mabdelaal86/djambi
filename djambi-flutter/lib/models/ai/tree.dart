@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:tuple/tuple.dart';
 
 import '../cell.dart';
 import '../common.dart';
@@ -23,6 +24,15 @@ class Node {
     assert(subNodes.isEmpty, "evaluate should run on leaf nodes only");
     assert(parliament.actor == null, "As maneuver is finished, there should be no actor");
     _evaluations = { for (final p in parliament.parties) p.ideology: evaluator.evaluate(p) };
+  }
+
+  Iterable<Tuple2<Member, Cell>> availableActions() sync* {
+    final Iterable<Member> members = isManoeuvreCompleted ? parliament.currentParty.aliveMembers : [parliament.actor!];
+    for (final member in members) {
+      for (final cell in member.cellsToAct()) {
+        yield Tuple2(member, cell);
+      }
+    }
   }
 
   void calcMaxN() {
@@ -53,7 +63,7 @@ class Tree {
   final StateEvaluator evaluator = const DefaultEvaluator();
   final Set<String> visitedNodes = {};
 
-  Node getBest() => _root.bestSubNode;
+  Node get decision => _root.bestSubNode;
 
   void build() {
     visitedNodes.add(_root.parliament.sign);
@@ -64,31 +74,25 @@ class Tree {
     assert (node.depth <= maxDepth, "Exceed the maximum depth!");
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
       node.evaluate(evaluator);
-      return;
-    }
-    // should do an action -----------------
-    final actor = node.parliament.actor;
-    final Iterable<Member> members = actor != null ? [actor] : node.parliament.currentParty.movableMembers;
-    for (final member in members) {
-      for (final cell in member.cellsToAct()) {
-        _doAction(node, member, cell);
+    } else {
+      for (final action in node.availableActions()) {
+        _doAction(node, action.item1, action.item2);
       }
+      // calc max^n
+      node.calcMaxN();
     }
-    // calc max^n
-    node.calcMaxN();
   }
 
   void _doAction(Node node, Member member, Cell cell) {
     final copyParliament = node.parliament.makeCopy();
-    final copyMember = copyParliament.members[member.id];
-    copyParliament.act(copyMember, cell);
+    copyParliament.act(member.id, cell);
     if (!visitedNodes.add(copyParliament.sign)) {
       // skip as the node is already visited before
       // print("skip: $member => $cell");
       return;
     }
     int depth = node.depth;
-    if (copyMember.manoeuvre == Manoeuvre.none) {
+    if (copyParliament.actor == null) {
       depth++;
       // print("${'--- ' * depth} do action: $member => $cell");
     }

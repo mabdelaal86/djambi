@@ -107,7 +107,7 @@ class MovementsRenderer {
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCircle(canvas, cell, _gameTheme.cellMarkPaint);
+      _markCell(canvas, cell, _gameTheme.cellMarkPaint);
     }
   }
 
@@ -118,20 +118,20 @@ class MovementsRenderer {
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCircle(canvas, cell, _gameTheme.moveMarkPaint);
+      _markCell(canvas, cell, _gameTheme.moveMarkPaint);
     }
   }
 
-  void _markRect(Canvas canvas, Cell cell, Paint paint) {
+  void _markCell(Canvas canvas, Cell cell, Paint paint) {
     final offset = Dimensions.cellCenterOffset(cell).toOffset();
-    const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
-    canvas.drawRect(
-        Rect.fromCircle(center: offset, radius: radius), paint..stroke());
-  }
 
-  void _markCircle(Canvas canvas, Cell cell, Paint paint) {
-    final offset = Dimensions.cellCenterOffset(cell).toOffset();
+    // draw circle
     const radius = Dimensions.pieceRadius + Dimensions.stroke;
     canvas.drawCircle(offset, radius, paint..stroke());
+
+    // draw rect
+    // const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
+    // final rect = Rect.fromCircle(center: offset, radius: radius);
+    // canvas.drawRect(rect, paint..stroke());
   }
 }
