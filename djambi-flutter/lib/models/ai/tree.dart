@@ -8,13 +8,18 @@ import '../parliament.dart';
 import 'evaluation.dart';
 
 class Node {
-  Node(this.parliament, this.depth);
+  Node(this.parliament, this.parent):
+        depth = parent == null ? 0 : parent.depth + (parliament.isManoeuvreCompleted ? 1 : 0) {
+    if (parent != null) {
+      parent!.subNodes.add(this);
+    }
+  }
 
   final Parliament parliament;
-  bool get isManoeuvreCompleted => parliament.actor == null;
 
   final int depth;
-  List<Node> subNodes = [];
+  final Node? parent;
+  final List<Node> subNodes = [];
   Node? _bestSubNode;
   Map<Ideology, int> _evaluations = {};
 
@@ -22,13 +27,16 @@ class Node {
 
   void evaluate(StateEvaluator evaluator) {
     assert(subNodes.isEmpty, "evaluate should run on leaf nodes only");
-    assert(parliament.actor == null, "As maneuver is finished, there should be no actor");
+    assert(parliament.isManoeuvreCompleted, "the maneuver should be completed");
     _evaluations = { for (final p in parliament.parties) p.ideology: evaluator.evaluate(p) };
   }
 
+  Iterable<Member> _whoCanAct() => parliament.isManoeuvreCompleted
+      ? parliament.currentParty.aliveMembers
+      : [parliament.actor!];
+
   Iterable<Tuple2<Member, Cell>> availableActions() sync* {
-    final Iterable<Member> members = isManoeuvreCompleted ? parliament.currentParty.aliveMembers : [parliament.actor!];
-    for (final member in members) {
+    for (final member in _whoCanAct()) {
       for (final cell in member.cellsToAct()) {
         yield Tuple2(member, cell);
       }
@@ -38,7 +46,7 @@ class Node {
   void calcMaxN() {
     assert(_evaluations.isEmpty, "evaluations is expected to be empty");
     assert(subNodes.isNotEmpty, "should run on NONE leaf nodes");
-    int max = -999999999999999;
+    int max = -999999999999999; // just a very small number as no const for min int
     Map<Ideology, int>? evaluations;
     Node? bestSub;
     for (Node sub in subNodes) {
@@ -47,7 +55,7 @@ class Node {
       if (subMax > max) {
         max = subMax;
         evaluations = sub._evaluations;
-        bestSub = sub.isManoeuvreCompleted ? sub : sub.bestSubNode;
+        bestSub = sub.parliament.isManoeuvreCompleted ? sub : sub.bestSubNode;
       }
     }
     _evaluations = evaluations!;
@@ -56,17 +64,19 @@ class Node {
 }
 
 class Tree {
-  Tree(Parliament parliament, this.maxDepth): _root = Node(parliament, 0);
+  Tree(Parliament parliament, this.maxDepth): _root = Node(parliament, null);
 
   final Node _root;
   final int maxDepth;
   final StateEvaluator evaluator = const DefaultEvaluator();
-  final Set<String> visitedNodes = {};
+  final Set<String> _visitedNodes = {};
+  // int _level = 0; // just used for debugging
 
   Node get decision => _root.bestSubNode;
 
   void build() {
-    visitedNodes.add(_root.parliament.sign);
+    assert(!_root.parliament.isGameFinished);
+    _visitedNodes.add(_root.parliament.getSign());
     _createSubNodes(_root);
   }
 
@@ -76,28 +86,29 @@ class Tree {
       node.evaluate(evaluator);
     } else {
       for (final action in node.availableActions()) {
+        // _level++;
         _doAction(node, action.item1, action.item2);
+        // _level--;
       }
-      // calc max^n
-      node.calcMaxN();
+      if (node.subNodes.isEmpty) {
+        // all sub nodes are visited
+        node.parent!.subNodes.remove(node);
+      } else {
+        // calc max^n
+        node.calcMaxN();
+      }
     }
   }
 
   void _doAction(Node node, Member member, Cell cell) {
-    final copyParliament = node.parliament.makeCopy();
-    copyParliament.act(member.id, cell);
-    if (!visitedNodes.add(copyParliament.sign)) {
-      // skip as the node is already visited before
-      // print("skip: $member => $cell");
+    // print("${'- ' * _level}do action: $member => $cell [${member.manoeuvre.name}]");
+    final copy = node.parliament.makeCopy();
+    copy.act(member.id, cell);
+    if (copy.isManoeuvreCompleted && !_visitedNodes.add(copy.getSign())) {
+      // print("${'  ' * _level}// skip");
       return;
     }
-    int depth = node.depth;
-    if (copyParliament.actor == null) {
-      depth++;
-      // print("${'--- ' * depth} do action: $member => $cell");
-    }
-    final subNode = Node(copyParliament, depth);
-    node.subNodes.add(subNode);
+    final subNode = Node(copy, node);
     _createSubNodes(subNode);
   }
 }

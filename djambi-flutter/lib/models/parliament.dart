@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:collection/collection.dart';
 
 import 'cell.dart';
@@ -22,8 +23,15 @@ class Parliament {
   Member? _actor;
   Member? get actor => _actor;
 
-  bool get isGameFinished => activeParties.length == 1 && actor == null;
-  String get sign => "${currentParty.ideology.name[0]}:${members.map((m) => m.sign).join()}";
+  bool get isManoeuvreCompleted => _actor == null;
+  bool get isGameFinished => activeParties.length == 1 && isManoeuvreCompleted;
+  String getSign() {
+    assert(isManoeuvreCompleted);
+    sign(Member m) => MapEntry<int, int>(m.location.y * 10 + m.location.x, m.isDead ? -1 : m.id);
+    final stm = SplayTreeMap<int, int>();
+    stm.addEntries(members.map(sign));
+    return "${currentParty.ideology.name[0]}:${stm.entries.map((e) => "${e.key},${e.value}").join(";")}#";
+  }
 
   Parliament() {
     // create members
@@ -47,7 +55,7 @@ class Parliament {
     // other properties
     _currentIdeology = other._currentIdeology;
     _currentParty = getParty(other._currentParty.ideology);
-    _actor = other._actor == null ? null : members[other._actor!.id] ;
+    _actor = other._actor == null ? null : members[other._actor!.id];
   }
 
   Parliament makeCopy() => Parliament.copy(this);
@@ -114,9 +122,7 @@ class Parliament {
   }
 
   void act(int memberId, Cell cell) {
-    if (isGameFinished) {
-      return;
-    }
+    assert(!isGameFinished);
     if (_actor == null) {
       assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
       _actor = members[memberId];

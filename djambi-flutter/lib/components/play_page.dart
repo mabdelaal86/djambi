@@ -14,14 +14,30 @@ class PlayPage extends PositionComponent {
 
   PlayPage(this.gameState, {super.position}):
         super(size: Dimensions.boardSize + Vector2(0, Dimensions.cellSide), anchor: Anchor.center) {
-    _addButton(0, Icons.undo, () => { debugPrint("Tap up Undo"), gameState.undo() });
-    _addButton(1, Icons.redo, () => { debugPrint("Tap up Redo"), gameState.redo() });
-    _addButton(2, Icons.computer, () => { debugPrint("Tap up AI"), gameState.aiAct(2) });
+    _addButton(0, Icons.undo, _undo);
+    _addButton(1, Icons.redo, _redo);
+    _addButton(2, Icons.computer, _aiAct);
   }
 
   @override
   void render(Canvas canvas) {
     canvas.drawRect(size.toRect(), Paint()..color = Colors.green.shade900);
+  }
+
+  void _undo() {
+    debugPrint("Tap up Undo");
+    gameState.undo();
+  }
+
+  void _redo() {
+    debugPrint("Tap up Redo");
+    gameState.redo();
+  }
+
+  void _aiAct() {
+    debugPrint("Tap up AI");
+    if (gameState.parliament.isGameFinished) return;
+    gameState.aiAct(2);
   }
 
   void _addButton(int count, IconData icon, Function tapUpCallback) {

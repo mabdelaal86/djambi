@@ -35,8 +35,6 @@ abstract class Member {
   @override
   String toString() => "${ideology.name}:${role.name}($location)";
 
-  String get sign => (isDead ? "xx" : "${ideology.name[0]}${role.name[0]}") + location.sign;
-
   factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) {
     switch (role) {
       case Role.chief:        return Chief(parliament, ideology, id);

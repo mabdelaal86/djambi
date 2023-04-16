@@ -28,9 +28,7 @@ class MovementsRenderer {
   }
 
   void _markAvailableMoves(Canvas canvas) {
-    if (parliament.isGameFinished) {
-      return;
-    }
+    if (parliament.isGameFinished) return;
     // ---------------
     // game is still going
     final actor = parliament.actor;
@@ -51,9 +49,7 @@ class MovementsRenderer {
   }
 
   void _handleCellTapUp(Cell cell) {
-    if (parliament.isGameFinished) {
-      return;
-    }
+    if (parliament.isGameFinished) return;
     // ---------------
     // game is still going
     // check if there is an actor (or ongoing manoeuvre)
