@@ -18,8 +18,9 @@ abstract class GameTheme {
   Paint get pieceEdgePaint;
   TextStyle get pieceSymbolStyle;
   Paint get deadPaint;
-  Paint get cellMarkPaint;
-  Paint get moveMarkPaint;
+  Paint get selectMarkPaint;
+  Paint get actionMarkPaint;
+  Paint get movedMarkPaint;
   // parties
   Paint getPartyPaint(Ideology ideology);
   // gui
@@ -69,10 +70,13 @@ class DefaultTheme extends GameTheme {
   Paint get deadPaint => Paint()..color = Colors.grey.shade600;
 
   @override
-  Paint get cellMarkPaint => Paint()..color = Colors.purpleAccent.shade100;
+  Paint get selectMarkPaint => Paint()..color = Colors.purpleAccent.shade100;
 
   @override
-  Paint get moveMarkPaint => Paint()..color = Colors.grey.shade600;
+  Paint get actionMarkPaint => Paint()..color = Colors.grey.shade600;
+
+  @override
+  Paint get movedMarkPaint => Paint()..color = Colors.brown.shade200;
 
   @override
   Paint getPartyPaint(Ideology ideology) {

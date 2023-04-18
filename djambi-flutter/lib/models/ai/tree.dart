@@ -37,9 +37,12 @@ class Node {
 
   Iterable<Tuple2<Member, Cell>> availableActions() sync* {
     for (final member in _whoCanAct()) {
-      for (final cell in member.cellsToAct()) {
-        yield Tuple2(member, cell);
-      }
+      // as the algorithm doesn't go deep in the tree,
+      // it is better to shuffle available cell to make it looks smarter.
+      // if it can go deeper, then use the next line instead to improve performance
+      // yield* member.cellsToAct().map((cell) => Tuple2(member, cell));
+      final cells = member.cellsToAct().toList()..shuffle();
+      yield* cells.map((cell) => Tuple2(member, cell));
     }
   }
 

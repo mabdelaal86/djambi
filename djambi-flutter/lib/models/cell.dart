@@ -56,8 +56,8 @@ class Cell {
   Iterable<Cell> adjacentCells() => orthogonalDirections.map((d) => this + d).where((c) => c.isValid);
 
   static Iterable<Cell> allCells() sync* {
-    for (int x = 0; x < Constants.boardSize; x++) {
-      for (int y = 0; y < Constants.boardSize; y++) {
+    for (int y = 0; y < Constants.boardSize; y++) {
+      for (int x = 0; x < Constants.boardSize; x++) {
         yield Cell(x, y);
       }
     }

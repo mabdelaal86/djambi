@@ -19,18 +19,21 @@ class MovementsRenderer {
   MovementsRenderer(this.gameState);
 
   void render(Canvas canvas) {
-    _markAvailableMoves(canvas);
+    _markLastMovement(canvas);
+    if (!parliament.isGameFinished) {
+      _markAvailableMoves(canvas);
+    }
   }
 
   void onTapUp(Vector2 position) {
-    final cell = Dimensions.vector2cell(position - Dimensions.gridOffset);
-    _handleCellTapUp(cell);
+    if (!parliament.isGameFinished) {
+      final cell = Dimensions.vector2cell(position - Dimensions.gridOffset);
+      _handleCellTapUp(cell);
+    }
   }
 
   void _markAvailableMoves(Canvas canvas) {
-    if (parliament.isGameFinished) return;
-    // ---------------
-    // game is still going
+    // check if there is an actor (or ongoing manoeuvre)
     final actor = parliament.actor;
     if (actor != null) {
       _markSelected(canvas, actor.location);
@@ -49,9 +52,6 @@ class MovementsRenderer {
   }
 
   void _handleCellTapUp(Cell cell) {
-    if (parliament.isGameFinished) return;
-    // ---------------
-    // game is still going
     // check if there is an actor (or ongoing manoeuvre)
     final actor = parliament.actor;
     if (actor != null) {
@@ -103,31 +103,41 @@ class MovementsRenderer {
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCell(canvas, cell, _gameTheme.cellMarkPaint);
+      _markCircle(canvas, cell, _gameTheme.selectMarkPaint);
     }
   }
 
   void _markSelected(Canvas canvas, Cell cell) {
     final offset = Dimensions.cellOffset(cell);
-    canvas.drawRect(offset & Dimensions.cellSize, _gameTheme.cellMarkPaint);
+    canvas.drawRect(offset & Dimensions.cellSize, _gameTheme.selectMarkPaint);
   }
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCell(canvas, cell, _gameTheme.moveMarkPaint);
+      _markCircle(canvas, cell, _gameTheme.actionMarkPaint);
     }
   }
 
-  void _markCell(Canvas canvas, Cell cell, Paint paint) {
+  void _markLastMovement(Canvas canvas) {
+    for (final cell in gameState.lastMovementCells()) {
+      _markRect(canvas, cell, _gameTheme.movedMarkPaint);
+    }
+  }
+
+  void _markCircle(Canvas canvas, Cell cell, Paint paint) {
     final offset = Dimensions.cellCenterOffset(cell).toOffset();
 
     // draw circle
     const radius = Dimensions.pieceRadius + Dimensions.stroke;
     canvas.drawCircle(offset, radius, paint..stroke());
+  }
+
+  void _markRect(Canvas canvas, Cell cell, Paint paint) {
+    final offset = Dimensions.cellCenterOffset(cell).toOffset();
 
     // draw rect
-    // const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
-    // final rect = Rect.fromCircle(center: offset, radius: radius);
-    // canvas.drawRect(rect, paint..stroke());
+    const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
+    final rect = Rect.fromCircle(center: offset, radius: radius);
+    canvas.drawRect(rect, paint..stroke());
   }
 }

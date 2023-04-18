@@ -44,4 +44,18 @@ class GameState {
     _undoStack.push(parliament);
     parliament = newParliament;
   }
+
+  Iterable<Cell> lastMovementCells() sync* {
+    if (_undoStack.isEmpty) return;
+    final lastParliament = _undoStack.top();
+    for (final member in parliament.members) {
+      final lastMember = lastParliament.members[member.id];
+      if (member.location != lastMember.location) {
+        yield member.location;
+        yield lastMember.location;
+      } else if (member.isDead != lastMember.isDead) {
+        yield member.location;
+      }
+    }
+  }
 }
