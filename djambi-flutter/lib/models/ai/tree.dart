@@ -78,6 +78,7 @@ class Tree {
   Node get decision => _root.bestSubNode;
 
   void build() {
+    assert(_root.parliament.isManoeuvreCompleted);
     assert(!_root.parliament.isGameFinished);
     _visitedNodes.add(_root.parliament.getSign());
     _createSubNodes(_root);

@@ -36,6 +36,7 @@ class PlayPage extends PositionComponent {
 
   void _aiAct() {
     debugPrint("Tap up AI");
+    if (!gameState.parliament.isManoeuvreCompleted) return;
     if (gameState.parliament.isGameFinished) return;
     gameState.aiAct(2);
   }

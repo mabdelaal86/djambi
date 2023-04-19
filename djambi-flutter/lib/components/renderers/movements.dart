@@ -44,11 +44,19 @@ class MovementsRenderer {
     // no actor, so selection logic apply
     // mark selectable members
     _markSelectable(canvas, parliament.currentParty.movableMembers.map((m) => m.location));
-    // mark selected member if exists
-    if (_selectedMember != null) {
-      _markSelected(canvas, _selectedMember!.location);
-      _markActions(canvas, _selectedMember!.cellsToAct());
+    // check if there is a selected member
+    if (_selectedMember == null) return;
+    // ---------------
+    // make sure selected member is from current party
+    // might not, is AI clicked after selecting a member
+    if (_selectedMember!.ideology != parliament.currentParty.ideology) {
+      _selectedMember = null;
+      return;
     }
+    // ---------------
+    // mark selected member
+    _markSelected(canvas, _selectedMember!.location);
+    _markActions(canvas, _selectedMember!.cellsToAct());
   }
 
   void _handleCellTapUp(Cell cell) {
