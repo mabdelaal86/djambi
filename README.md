@@ -9,9 +9,11 @@ More details about the rules: https://www.djambi.net/
 
 <img src="docs/assets/screenshot.png" width="400px">
 
+
 ## Missing Rules
 
 * Surrounding a Chief with corpses is not implemented.
+
 
 ## Roadmap
 
@@ -19,6 +21,7 @@ More details about the rules: https://www.djambi.net/
 - [x] Undo last play is missing.
 - [ ] Save game state.
 - [ ] Complete GUI with Home page and Settings page.
+
 
 ## License
 
