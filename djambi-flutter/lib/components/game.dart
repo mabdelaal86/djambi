@@ -2,8 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-import '../models/state.dart';
-import 'board.dart';
+import '../views/board.dart';
+import '../views/state.dart';
 import 'play_page.dart';
 
 class DjambiGame extends FlameGame {

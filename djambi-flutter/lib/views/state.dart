@@ -1,9 +1,9 @@
 import 'package:stack/stack.dart';
 
-import 'cell.dart';
-import 'member.dart';
-import 'parliament.dart';
-import 'ai/tree.dart';
+import '../models/cell.dart';
+import '../models/member.dart';
+import '../models/parliament.dart';
+import '../models/ai/tree.dart';
 
 class GameState {
   final _undoStack = Stack<Parliament>();
