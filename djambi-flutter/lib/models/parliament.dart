@@ -125,6 +125,7 @@ class Parliament {
     assert(!isGameFinished);
     if (_actor == null) {
       assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
+      assert(members[memberId].isAlive, "Selected member is dead");
       _actor = members[memberId];
     }
     assert(_actor!.id == memberId, "Current actor is not the selected member");

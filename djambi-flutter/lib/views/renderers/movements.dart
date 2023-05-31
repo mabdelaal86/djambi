@@ -73,11 +73,8 @@ class MovementsRenderer {
     // ---------------
     // no actor, so selection logic apply
     if (_selectedMember == null) {
-      final member = parliament.getMemberAt(cell);
-      if (member != null &&
-          member.ideology == parliament.currentParty.ideology &&
-          member.cellsToAct().isNotEmpty
-      ) {
+      final member = parliament.currentParty.getMemberAt(cell);
+      if (member != null && member.cellsToAct().isNotEmpty) {
         _selectedMember = member;
       }
       return;
