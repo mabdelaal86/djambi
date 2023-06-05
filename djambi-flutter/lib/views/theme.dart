@@ -18,7 +18,8 @@ abstract class GameTheme {
   Paint get pieceEdgePaint;
   TextStyle get pieceSymbolStyle;
   Paint get deadPaint;
-  Paint get selectMarkPaint;
+  Paint get selectableMarkPaint;
+  Paint get selectedMarkPaint;
   Paint get actionMarkPaint;
   Paint get movedMarkPaint;
   // parties
@@ -70,7 +71,10 @@ class DefaultTheme extends GameTheme {
   Paint get deadPaint => Paint()..color = Colors.grey.shade600;
 
   @override
-  Paint get selectMarkPaint => Paint()..color = Colors.purpleAccent.shade100;
+  Paint get selectableMarkPaint => Paint()..color = Colors.grey.shade600;
+
+  @override
+  Paint get selectedMarkPaint => Paint()..color = Colors.purpleAccent.shade100;
 
   @override
   Paint get actionMarkPaint => Paint()..color = Colors.grey.shade600;

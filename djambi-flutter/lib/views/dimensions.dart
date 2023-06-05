@@ -7,7 +7,7 @@ abstract class Dimensions {
   static const double cellSide = 1000;
   static const double pieceRadius = 400;
   static const double margin = 320;
-  static const double stroke = 30;
+  static const double stroke = 40;
   static final Vector2 cellSize = Vector2.all(cellSide);
   static final Vector2 pieceSize = Vector2.all(pieceRadius * 2);
   static final Vector2 gridSize = cellSize * Constants.boardSize.toDouble();

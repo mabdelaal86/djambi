@@ -108,13 +108,12 @@ class MovementsRenderer {
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCircle(canvas, cell, _gameTheme.selectMarkPaint);
+      _markCircle(canvas, cell, _gameTheme.selectableMarkPaint);
     }
   }
 
   void _markSelected(Canvas canvas, Cell cell) {
-    final offset = Dimensions.cellOffset(cell);
-    canvas.drawRect(offset & Dimensions.cellSize, _gameTheme.selectMarkPaint);
+    _paintRect(canvas, cell, _gameTheme.selectedMarkPaint);
   }
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
@@ -144,5 +143,10 @@ class MovementsRenderer {
     const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
     final rect = Rect.fromCircle(center: offset, radius: radius);
     canvas.drawRect(rect, paint..stroke());
+  }
+
+  void _paintRect(Canvas canvas, Cell cell, Paint paint) {
+    final offset = Dimensions.cellOffset(cell);
+    canvas.drawRect(offset & Dimensions.cellSize, paint);
   }
 }
