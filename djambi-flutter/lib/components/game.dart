@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
 import '../views/board.dart';
@@ -20,8 +19,9 @@ class DjambiGame extends FlameGame {
     add(world);
 
     final camera = CameraComponent(world: world)
-      ..viewfinder.visibleGameSize = playPage.size
-      ..viewfinder.anchor = Anchor.center;
+      // ..viewfinder.visibleGameSize = playPage.size
+      ..viewfinder.anchor = Anchor.center
+    ;
     add(camera);
   }
 }
