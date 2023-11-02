@@ -10,10 +10,10 @@ class PlayPage extends PositionComponent {
   // @override
   // bool get debugMode => true;
 
+  static final Vector2 pageSize = Dimensions.boardSize + Vector2(0, Dimensions.cellSide);
   final GameState gameState;
 
-  PlayPage(this.gameState, {super.position}):
-        super(size: Dimensions.boardSize + Vector2(0, Dimensions.cellSide), anchor: Anchor.center) {
+  PlayPage(this.gameState, {super.position}): super(size: pageSize, anchor: Anchor.center) {
     _addButton(0, Icons.undo, _undo);
     _addButton(1, Icons.redo, _redo);
     _addButton(2, Icons.computer, _aiAct);
@@ -47,9 +47,12 @@ class PlayPage extends PositionComponent {
     final y = Dimensions.boardSize.y + space;
     final x = Dimensions.margin + (count * Dimensions.cellSide) + space;
     final button = Button(
-        Vector2(x, y), Dimensions.pieceSize,
-        gameTheme.buttonPaint, gameTheme.buttonTextStyle,
-        icon: icon, tapUpCallback: tapUpCallback
+        Vector2(x, y),
+        Dimensions.pieceSize,
+        gameTheme.buttonPaint,
+        gameTheme.buttonTextStyle,
+        icon: icon,
+        tapUpCallback: tapUpCallback
     );
     add(button);
   }

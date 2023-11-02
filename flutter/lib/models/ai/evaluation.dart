@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 
 import '../common.dart';
-import '../member.dart';
 import '../party.dart';
 
 abstract class StateEvaluator {
@@ -13,16 +12,14 @@ class DefaultEvaluator extends StateEvaluator {
   const DefaultEvaluator();
 
   @override
-  int evaluate(Party party) => party.aliveMembers.map(_getValue).sum;
+  int evaluate(Party party) => party.aliveMembers.map((m) => _roleValues[m.role]!).sum;
 
-  int _getValue(Member member) {
-    switch (member.role) {
-      case Role.militant:     return 5;
-      case Role.necromobile:  return 10;
-      case Role.diplomat:     return 10;
-      case Role.assassin:     return 15;
-      case Role.reporter:     return 18;
-      case Role.chief:        return 300;
-    }
-  }
+  static const _roleValues = {
+    Role.militant:      5,
+    Role.necromobile:   10,
+    Role.diplomat:      10,
+    Role.assassin:      15,
+    Role.reporter:      18,
+    Role.chief:         300,
+  };
 }

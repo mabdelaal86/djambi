@@ -18,15 +18,10 @@ class Diplomat extends Member {
 
   @override
   bool canBuryOn(Cell cell) =>
-      parliament.isEmpty(cell) && (!cell.isMaze || body!.role == Role.chief);
+      parliament.isEmpty(cell) && (!cell.isMaze || body!.isChief);  // only chief can be moved into maze
 
   @override
   void postMove() {
-    if (body == null) {
-      manoeuvre = Manoeuvre.end;
-      return;
-    }
-
-    manoeuvre = body!.location.isMaze ? Manoeuvre.kill : Manoeuvre.exit;
+    manoeuvre = body == null ? Manoeuvre.end : body!.location.isMaze ? Manoeuvre.kill : Manoeuvre.exit;
   }
 }

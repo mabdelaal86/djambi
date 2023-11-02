@@ -11,9 +11,16 @@ enum Ideology {
   green,
   ;
 
-  static const Ideology first = red;
   Ideology get next => Ideology.values[(index + 1) % 4];
   Ideology get previous => Ideology.values[(index + 3) % 4];
+}
+
+enum TurnDirection {
+  anticlockwise,
+  clockwise,
+  ;
+
+  Ideology next(Ideology ideology) => this == anticlockwise ? ideology.next : ideology.previous;
 }
 
 enum Role {

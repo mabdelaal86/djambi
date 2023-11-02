@@ -18,11 +18,6 @@ class Necromobile extends Member {
 
   @override
   void postMove() {
-    if (body == null) {
-      manoeuvre = Manoeuvre.end;
-      return;
-    }
-
-    manoeuvre = body!.location.isMaze ? Manoeuvre.kill : Manoeuvre.exit;
+    manoeuvre = body == null ? Manoeuvre.end : body!.location.isMaze ? Manoeuvre.kill : Manoeuvre.exit;
   }
 }

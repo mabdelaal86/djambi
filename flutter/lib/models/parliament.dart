@@ -16,9 +16,10 @@ class Parliament {
   Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isAlive);
   Iterable<Party> get activeParties => parties.where((p) => p.isActive);
 
-  late Ideology _currentIdeology;
+  Ideology _currentIdeology;
   late Party _currentParty;
   Party get currentParty => _currentParty;
+  final TurnDirection turnDirection;
 
   Member? _actor;
   Member? get actor => _actor;
@@ -33,27 +34,27 @@ class Parliament {
     return "${currentParty.ideology.name[0]}:${stm.entries.map((e) => "${e.key},${e.value}").join(";")}#";
   }
 
-  Parliament() {
+  Parliament(this._currentIdeology, this.turnDirection) {
     // create members
     members = Ideology.values.map((id) => _recruitMembers(id)).flattened.toList();
     assert(members.length == 9 * 4);
     _setInitialPositions();
     // create parties
-    parties = members.where((m) => m.role == Role.chief).map((m) => Party(m)).toList();
+    parties = members.where((m) => m.isChief).map((m) => Party(m)).toList();
     assert(parties.length == 4);
     // other properties
-    _currentIdeology = Ideology.first;
     _currentParty = getParty(_currentIdeology);
   }
-  Parliament.copy(Parliament other) {
+  Parliament.copy(Parliament other):
+        _currentIdeology = other._currentIdeology,
+        turnDirection = other.turnDirection {
     // copy members
     members = other.members.map((m) => Member.copy(this, m)).toList();
     assert(members.length == 9 * 4);
     // copy parties
-    parties = members.where((m) => m.role == Role.chief).map((m) => Party(m)).toList();
+    parties = members.where((m) => m.isChief).map((m) => Party(m)).toList();
     assert(parties.length == 4);
     // other properties
-    _currentIdeology = other._currentIdeology;
     _currentParty = getParty(other._currentParty.ideology);
     _actor = other._actor == null ? null : members[other._actor!.id];
   }
@@ -90,31 +91,24 @@ class Parliament {
   }
 
   Party _getNextParty() {
-    final partyInPower = getPartyInPower();
-    Party? party;
-    // check if there is a party in power
-    if (partyInPower == null) {
-      // no party is in power, so just
-      // find next ideology in turn but skip lost/dead parties
-      do {
-        _currentIdeology = _currentIdeology.next;
-        party = getParty(_currentIdeology);
-      } while (party.isLost);
-      return party;
+    nextActiveParty() sync* {
+      for (final _ in Ideology.values) {
+        _currentIdeology = turnDirection.next(_currentIdeology);
+        final party = getParty(_currentIdeology);
+        if (party.isActive) yield party;
+      }
+      throw AssertionError("Shouldn't reach this point!");
     }
+    final partyInPower = getPartyInPower();
+    // check if there is a party in power
+    // if not, just find next active party
+    if (partyInPower == null) return nextActiveParty().first;
     // else: there is a party in power
     // check if current is not the party in power
-    if (currentParty != partyInPower) {
-      return partyInPower;
-    }
+    if (currentParty != partyInPower) return partyInPower;
     // else: current ideology is in power, so
-    // find next ideology in turn but skip lost/dead parties and
-    // skip the party in power if there is more then 2 active parties
-    do {
-      _currentIdeology = _currentIdeology.next;
-      party = getParty(_currentIdeology);
-    } while (party.isLost || (activeParties.length > 2 && _currentIdeology == partyInPower.ideology));
-    return party;
+    // find next active party but skip the party in power if there is more then 2 active parties
+    return nextActiveParty().firstWhere((p) => activeParties.length == 2 || p.ideology != partyInPower.ideology);
   }
 
   void _nextTurn() {

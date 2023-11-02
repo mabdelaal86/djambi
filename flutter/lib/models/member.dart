@@ -18,6 +18,7 @@ abstract class Member {
   final int id;
 
   Role get role;
+  bool get isChief => role == Role.chief;
 
   Cell location = const Cell.zero();
 
@@ -35,16 +36,15 @@ abstract class Member {
   @override
   String toString() => "${ideology.name}:${role.name}($location)";
 
-  factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) {
-    switch (role) {
-      case Role.chief:        return Chief(parliament, ideology, id);
-      case Role.assassin:     return Assassin(parliament, ideology, id);
-      case Role.reporter:     return Reporter(parliament, ideology, id);
-      case Role.diplomat:     return Diplomat(parliament, ideology, id);
-      case Role.necromobile:  return Necromobile(parliament, ideology, id);
-      case Role.militant:     return Militant(parliament, ideology, id);
-    }
-  }
+  factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) =>
+      switch (role) {
+        Role.chief =>         Chief(parliament, ideology, id),
+        Role.assassin =>      Assassin(parliament, ideology, id),
+        Role.reporter =>      Reporter(parliament, ideology, id),
+        Role.diplomat =>      Diplomat(parliament, ideology, id),
+        Role.necromobile =>   Necromobile(parliament, ideology, id),
+        Role.militant =>      Militant(parliament, ideology, id),
+      };
 
   factory Member.copy(Parliament parliament, Member other) =>
       Member.create(parliament, other.role, other.ideology, other.id)..copy(other);
@@ -63,7 +63,7 @@ abstract class Member {
   void kill(Member member) {
     member._isDead = true;
     // take over other members if the killed member is a chief
-    if (member.role == Role.chief) {
+    if (member.isChief) {
       for (final other in parliament.getParty(member.ideology).aliveMembers) {
         other.ideology = ideology;
       }
@@ -92,15 +92,13 @@ abstract class Member {
     }
   }
 
-  Iterable<Cell> cellsToAct() {
-    switch (manoeuvre) {
-      case Manoeuvre.none:  return cellsToMove(true);
-      case Manoeuvre.move:  return Cell.allCells().where(canKillOn);
-      case Manoeuvre.kill:  return cellsToMove(false);
-      case Manoeuvre.exit:  return Cell.allCells().where(canBuryOn);
-      case Manoeuvre.end:   return [];
-    }
-  }
+  Iterable<Cell> cellsToAct() => switch (manoeuvre) {
+      Manoeuvre.none => cellsToMove(true),
+      Manoeuvre.move => Cell.allCells().where(canKillOn),
+      Manoeuvre.kill => cellsToMove(false),
+      Manoeuvre.exit => Cell.allCells().where(canBuryOn),
+      Manoeuvre.end =>  const Iterable.empty(),
+    };
 
   bool canKillOn(Cell cell) => false;
   bool canBuryOn(Cell cell) => parliament.isEmpty(cell) && !cell.isMaze;

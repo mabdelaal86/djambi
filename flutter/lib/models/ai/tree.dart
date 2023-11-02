@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:tuple/tuple.dart';
 
 import '../cell.dart';
 import '../common.dart';
@@ -35,14 +34,14 @@ class Node {
       ? parliament.currentParty.aliveMembers
       : [parliament.actor!];
 
-  Iterable<Tuple2<Member, Cell>> availableActions() sync* {
+  Iterable<(Member, Cell)> availableActions() sync* {
     for (final member in _whoCanAct()) {
       // as the algorithm doesn't go deep in the tree,
       // it is better to shuffle available cell to make it looks smarter.
       // if it can go deeper, then use the next line instead to improve performance
-      // yield* member.cellsToAct().map((cell) => Tuple2(member, cell));
+      // yield* member.cellsToAct().map((cell) => (member, cell));
       final cells = member.cellsToAct().toList()..shuffle();
-      yield* cells.map((cell) => Tuple2(member, cell));
+      yield* cells.map((cell) => (member, cell));
     }
   }
 
@@ -91,7 +90,7 @@ class Tree {
     } else {
       for (final action in node.availableActions()) {
         // _level++;
-        _doAction(node, action.item1, action.item2);
+        _doAction(node, action.$1, action.$2);
         // _level--;
       }
       if (node.subNodes.isEmpty) {
