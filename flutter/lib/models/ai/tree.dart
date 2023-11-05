@@ -7,12 +7,17 @@ import '../parliament.dart';
 import 'evaluation.dart';
 
 class Node {
-  Node(this.parliament, this.parent):
-        depth = parent == null ? 0 : parent.depth + (parliament.isManoeuvreCompleted ? 1 : 0) {
+  Node(this.parliament, this.parent) : depth = _newDepth(parent, parliament) {
     if (parent != null) {
       parent!.subNodes.add(this);
     }
   }
+
+  static int _newDepth(Node? parent, Parliament parliament) =>
+      switch (parent?.depth) {
+        null => 0, // root node
+        final d => parliament.isManoeuvreCompleted ? d + 1 : d,
+      };
 
   final Parliament parliament;
 
@@ -66,7 +71,7 @@ class Node {
 }
 
 class Tree {
-  Tree(Parliament parliament, this.maxDepth): _root = Node(parliament, null);
+  Tree(Parliament parliament, this.maxDepth) : _root = Node(parliament, null);
 
   final Node _root;
   final int maxDepth;
@@ -84,15 +89,11 @@ class Tree {
   }
 
   void _createSubNodes(Node node) {
-    assert (node.depth <= maxDepth, "Exceed the maximum depth!");
+    assert(node.depth <= maxDepth, "Exceed the maximum depth!");
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
       node.evaluate(evaluator);
     } else {
-      for (final action in node.availableActions()) {
-        // _level++;
-        _doAction(node, action.$1, action.$2);
-        // _level--;
-      }
+      node.availableActions().forEach((a) => _doAction(node, a.$1, a.$2));
       if (node.subNodes.isEmpty) {
         // all sub nodes are visited
         node.parent!.subNodes.remove(node);

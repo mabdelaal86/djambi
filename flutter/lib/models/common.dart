@@ -20,7 +20,8 @@ enum TurnDirection {
   clockwise,
   ;
 
-  Ideology next(Ideology ideology) => this == anticlockwise ? ideology.next : ideology.previous;
+  Ideology next(Ideology ideology) =>
+      this == anticlockwise ? ideology.next : ideology.previous;
 }
 
 enum Role {

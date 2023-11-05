@@ -34,8 +34,7 @@ class MovementsRenderer {
 
   void _markAvailableMoves(Canvas canvas) {
     // check if there is an actor (or ongoing manoeuvre)
-    final actor = parliament.actor;
-    if (actor != null) {
+    if (parliament.actor case final actor?) {
       _markSelected(canvas, actor.location);
       _markActions(canvas, actor.cellsToAct());
       return;
@@ -61,8 +60,7 @@ class MovementsRenderer {
 
   void _handleCellTapUp(Cell cell) {
     // check if there is an actor (or ongoing manoeuvre)
-    final actor = parliament.actor;
-    if (actor != null) {
+    if (parliament.actor case final actor?) {
       _selectedMember = null; // just to make sure
       // check if actor can act on the selected cell
       if (actor.cellsToAct().contains(cell)) {
@@ -107,9 +105,7 @@ class MovementsRenderer {
   }
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
-    for (final cell in cells) {
-      _markCircle(canvas, cell, _gameTheme.selectableMarkPaint);
-    }
+    cells.forEach((c) => _markCircle(canvas, c, _gameTheme.selectableMarkPaint));
   }
 
   void _markSelected(Canvas canvas, Cell cell) {
@@ -117,15 +113,11 @@ class MovementsRenderer {
   }
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
-    for (final cell in cells) {
-      _markCircle(canvas, cell, _gameTheme.actionMarkPaint);
-    }
+    cells.forEach((c) => _markCircle(canvas, c, _gameTheme.actionMarkPaint));
   }
 
   void _markLastMovement(Canvas canvas) {
-    for (final cell in gameState.lastMovementCells()) {
-      _markRect(canvas, cell, _gameTheme.movedMarkPaint);
-    }
+    gameState.lastMovementCells().forEach((c) => _markRect(canvas, c, _gameTheme.movedMarkPaint));
   }
 
   void _markCircle(Canvas canvas, Cell cell, Paint paint) {

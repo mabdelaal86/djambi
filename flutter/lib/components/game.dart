@@ -8,12 +8,11 @@ import 'play_page.dart';
 
 class DjambiGame extends FlameGame {
   final state = GameState();
+  static CameraComponent _camera() => CameraComponent.withFixedResolution(
+        width: Dimensions.boardSize.x,
+        height: Dimensions.boardSize.y + Dimensions.cellSide);
 
-  DjambiGame(): super(
-      camera: CameraComponent.withFixedResolution(
-          width: Dimensions.boardSize.x,
-          height: Dimensions.boardSize.y + Dimensions.cellSide,
-      ));
+  DjambiGame() : super(camera: _camera());
 
   @override
   Future<void> onLoad() async {

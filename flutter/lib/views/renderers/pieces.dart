@@ -35,26 +35,20 @@ class PiecesRenderer {
   }
 
   void _drawMembers(Canvas canvas) {
-    for (final member in parliament.members) {
-      _drawMember(canvas, member);
-    }
+    parliament.members.forEach((m) => _drawMember(canvas, m));
   }
 
   void _drawActor(Canvas canvas) {
-    final actor = parliament.actor;
-    if (actor != null) {
-      _drawMember(canvas, actor);
-    }
+    if (parliament.actor case final a?) _drawMember(canvas, a);
   }
 
   void _drawMember(Canvas canvas, Member member) {
     final centerOffset = Dimensions.cellCenterOffset(member.location).toOffset();
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
-      if (_pieceTheme == PieceTheme.classic) {
-        _drawRoleClassicImage(canvas, member.role, centerOffset);
-      } else {
-        _drawRoleSymbol(canvas, member.role, centerOffset);
+      switch (_pieceTheme) {
+        case PieceTheme.classic: _drawRoleClassicImage(canvas, member.role, centerOffset);
+        case PieceTheme.characters: _drawRoleSymbol(canvas, member.role, centerOffset);
       }
     }
   }

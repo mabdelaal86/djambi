@@ -6,8 +6,8 @@ class Cell {
   final int x, y;
 
   const Cell(this.x, this.y);
-  const Cell.zero(): this(0, 0);
-  const Cell.all(int xy): this(xy, xy);
+  const Cell.zero() : this(0, 0);
+  const Cell.all(int xy) : this(xy, xy);
 
   static const cols = "ABCDEFGHI", rows = "123456789";
 
@@ -53,7 +53,8 @@ class Cell {
            (y == other.y && (x - other.x).abs() == 1);
   }
 
-  Iterable<Cell> adjacentCells() => orthogonalDirections.map((d) => this + d).where((c) => c.isValid);
+  Iterable<Cell> adjacentCells() =>
+      orthogonalDirections.map((d) => this + d).where((c) => c.isValid);
 
   static Iterable<Cell> allCells() sync* {
     for (int y = 0; y < Constants.boardSize; y++) {

@@ -32,20 +32,16 @@ class BackgroundRenderer {
     // paint margin background
     canvas.drawRect(Dimensions.boardSize.toRect(), _gameTheme.marginPaint);
     // paint cells background
-    for (final cell in Cell.allCells()) {
-      canvas.drawRect(
-          Dimensions.cellOffset(cell) & Dimensions.cellSize,
-          cell.isDark ? _gameTheme.darkCellPaint : _gameTheme.lightCellPaint
-      );
-    }
+    Cell.allCells().forEach((cell) => canvas.drawRect(
+        Dimensions.cellOffset(cell) & Dimensions.cellSize,
+        cell.isDark ? _gameTheme.darkCellPaint : _gameTheme.lightCellPaint));
   }
 
   void _drawMaze(Canvas canvas) {
     canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, _gameTheme.mazePaint);
-    if (_pieceTheme == PieceTheme.classic) {
-      _drawChiefClassicImage(canvas);
-    } else {
-      _drawChiefSymbol(canvas);
+    switch (_pieceTheme) {
+      case PieceTheme.classic: _drawChiefClassicImage(canvas);
+      case PieceTheme.characters: _drawChiefSymbol(canvas);
     }
   }
 

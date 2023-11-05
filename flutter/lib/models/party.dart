@@ -17,7 +17,9 @@ class Party {
   Iterable<Member> get aliveMembers =>
       parliament.members.where((m) => m.ideology == ideology && m.isAlive);
 
-  Iterable<Member> get movableMembers => aliveMembers.where((m) => m.cellsToAct().isNotEmpty);
+  Iterable<Member> get movableMembers =>
+      aliveMembers.where((m) => m.cellsToAct().isNotEmpty);
 
-  Member? getMemberAt(Cell cell) => aliveMembers.firstWhereOrNull((m) => m.location == cell);
+  Member? getMemberAt(Cell cell) =>
+      aliveMembers.firstWhereOrNull((m) => m.location == cell);
 }

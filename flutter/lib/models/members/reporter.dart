@@ -9,11 +9,10 @@ class Reporter extends Member {
   Role get role => Role.reporter;
 
   @override
-  Iterable<Cell> cellsToMove(bool canKill) => super.cellsToMove(canKill).where((cell) {
-        final member = parliament.getMemberAt(cell);
-        // empty non maze cell
-        return member == null && !cell.isMaze;
-      });
+  Iterable<Cell> cellsToMove(bool canKill) => super
+      .cellsToMove(canKill)
+      // empty non maze cell
+      .where((cell) => !cell.isMaze && parliament.isEmpty(cell));
 
   @override
   bool canKillOn(Cell cell) =>
@@ -34,8 +33,7 @@ class Reporter extends Member {
   @override
   void onKill(Cell cell) {
     assert(canKillOn(cell), "Can't do an action on the selected cell");
-    final member = parliament.getMemberAt(cell);
-    kill(member!);
+    kill(parliament.getMemberAt(cell)!);
     manoeuvre = Manoeuvre.end;
   }
 

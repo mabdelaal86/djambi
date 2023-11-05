@@ -11,17 +11,18 @@ class Assassin extends Member {
   Cell? _cellFrom;
 
   @override
-  Iterable<Cell> cellsToMove(bool canKill) => super.cellsToMove(canKill).where((cell) {
-        final enemy = parliament.getMemberAt(cell);
-        // if not empty, it should an alive enemy
-        if (enemy != null) return enemy.isAlive;
-        // empty cell: not the maze and not the cell coming from if exiting maze
-        return !cell.isMaze && (canKill || cell != _cellFrom);
-      });
+  Iterable<Cell> cellsToMove(bool canKill) => super
+      .cellsToMove(canKill)
+      .where((cell) => switch (parliament.getMemberAt(cell)) {
+            // not empty cell: it should be occupied by an alive enemy
+            var enemy? => enemy.isAlive,
+            // empty cell: not the maze and not the cell coming from if exiting maze
+            null => !cell.isMaze && (canKill || cell != _cellFrom),
+          });
 
   @override
-  void copy(Member other) {
-    super.copy(other);
+  void copyFrom(Member other) {
+    super.copyFrom(other);
     _cellFrom = (other as Assassin)._cellFrom;
   }
 
@@ -36,18 +37,16 @@ class Assassin extends Member {
 
   @override
   void postMove() {
-    if (body == null) {
-      manoeuvre = Manoeuvre.end;
-      return;
-    }
-
-    kill(body!);
-
-    if (body!.location.isMaze) {
-      manoeuvre = Manoeuvre.kill;
-    } else {
-      body!.location = _cellFrom!;
-      manoeuvre = Manoeuvre.end;
+    switch (body?.location.isMaze) {
+      case null:
+        manoeuvre = Manoeuvre.end;
+      case true:
+        kill(body!);
+        manoeuvre = Manoeuvre.kill;
+      case false:
+        kill(body!);
+        body!.location = _cellFrom!;
+        manoeuvre = Manoeuvre.end;
     }
   }
 

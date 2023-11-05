@@ -45,8 +45,8 @@ class Parliament {
     // other properties
     _currentParty = getParty(_currentIdeology);
   }
-  Parliament.copy(Parliament other):
-        _currentIdeology = other._currentIdeology,
+  Parliament.copy(Parliament other)
+      : _currentIdeology = other._currentIdeology,
         turnDirection = other.turnDirection {
     // copy members
     members = other.members.map((m) => Member.copy(this, m)).toList();
@@ -80,10 +80,10 @@ class Parliament {
 
   void _setInitialPositions() {
     void setInitPosition(Ideology ideology, Cell scale, Cell translation) {
-      for (final m in members.where((m) => m.ideology == ideology)) {
-        m.location = m.location * scale + translation;
-      }
+      members.where((m) => m.ideology == ideology)
+          .forEach((m) => m.location = m.location * scale + translation);
     }
+
     setInitPosition(Ideology.red,    const Cell( 1, -1), const Cell(1, 7));
     setInitPosition(Ideology.blue,   const Cell(-1, -1), const Cell(7, 7));
     setInitPosition(Ideology.yellow, const Cell(-1,  1), const Cell(7, 1));
@@ -92,23 +92,19 @@ class Parliament {
 
   Party _getNextParty() {
     nextActiveParty() sync* {
-      for (final _ in Ideology.values) {
+      for (int i = 0; i < Ideology.values.length; i++) {
         _currentIdeology = turnDirection.next(_currentIdeology);
         final party = getParty(_currentIdeology);
         if (party.isActive) yield party;
       }
       throw AssertionError("Shouldn't reach this point!");
     }
+
     final partyInPower = getPartyInPower();
-    // check if there is a party in power
-    // if not, just find next active party
     if (partyInPower == null) return nextActiveParty().first;
-    // else: there is a party in power
-    // check if current is not the party in power
     if (currentParty != partyInPower) return partyInPower;
-    // else: current ideology is in power, so
-    // find next active party but skip the party in power if there is more then 2 active parties
-    return nextActiveParty().firstWhere((p) => activeParties.length == 2 || p.ideology != partyInPower.ideology);
+    if (activeParties.length == 2) return nextActiveParty().first;
+    return nextActiveParty().firstWhere((p) => p.ideology != partyInPower.ideology);
   }
 
   void _nextTurn() {
@@ -118,12 +114,14 @@ class Parliament {
   void act(int memberId, Cell cell) {
     assert(!isGameFinished);
     if (_actor == null) {
-      assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
+      assert(members[memberId].ideology == currentParty.ideology,
+          "Selected member is not from current turn party");
       assert(members[memberId].isAlive, "Selected member is dead");
       _actor = members[memberId];
     }
     assert(_actor!.id == memberId, "Current actor is not the selected member");
-    assert(_actor!.manoeuvre != Manoeuvre.end, "Current actor should be in middle of a manoeuvre");
+    assert(_actor!.manoeuvre != Manoeuvre.end,
+        "Current actor should be in middle of a manoeuvre");
     // do an action
     _actor!.act(cell);
     // if current manoeuvre is finished, move to next turn/player

@@ -47,10 +47,11 @@ abstract class Member {
       };
 
   factory Member.copy(Parliament parliament, Member other) =>
-      Member.create(parliament, other.role, other.ideology, other.id)..copy(other);
+      Member.create(parliament, other.role, other.ideology, other.id)
+        ..copyFrom(other);
 
   @protected
-  void copy(Member other) {
+  void copyFrom(Member other) {
     // not constant properties
     location = other.location;
     _isDead = other._isDead;
@@ -64,9 +65,7 @@ abstract class Member {
     member._isDead = true;
     // take over other members if the killed member is a chief
     if (member.isChief) {
-      for (final other in parliament.getParty(member.ideology).aliveMembers) {
-        other.ideology = ideology;
-      }
+      parliament.getParty(member.ideology).aliveMembers.forEach((m) => m.ideology = ideology);
     }
   }
 
@@ -101,21 +100,22 @@ abstract class Member {
     };
 
   bool canKillOn(Cell cell) => false;
-  bool canBuryOn(Cell cell) => parliament.isEmpty(cell) && !cell.isMaze;
+  bool canBuryOn(Cell cell) => !cell.isMaze && parliament.isEmpty(cell);
 
   void act(Cell cell) {
     switch (manoeuvre) {
-      case Manoeuvre.none:  onMove(cell); postMove(); break;
-      case Manoeuvre.move:  onKill(cell); break;
-      case Manoeuvre.kill:  onExit(cell); break;
-      case Manoeuvre.exit:  onBury(cell); break;
+      case Manoeuvre.none:  onMove(cell); postMove();
+      case Manoeuvre.move:  onKill(cell);
+      case Manoeuvre.kill:  onExit(cell);
+      case Manoeuvre.exit:  onBury(cell);
       case Manoeuvre.end:   throw AssertionError("Can't act on the `end` state!");
     }
   }
 
   @protected
   void onMove(Cell cell) {
-    assert(cellsToMove(true).contains(cell), "Can't do an action on the selected cell");
+    assert(cellsToMove(true).contains(cell),
+        "Can't do an action on the selected cell");
     _bodyId = parliament.getMemberAt(cell)?.id;
     location = cell;
     manoeuvre = Manoeuvre.move;
@@ -129,7 +129,8 @@ abstract class Member {
 
   @protected
   void onExit(Cell cell) {
-    assert(cellsToMove(false).contains(cell), "Can't do an action on the selected cell");
+    assert(cellsToMove(false).contains(cell),
+        "Can't do an action on the selected cell");
     location = cell;
     manoeuvre = Manoeuvre.exit;
   }

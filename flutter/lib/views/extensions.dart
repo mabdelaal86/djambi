@@ -17,12 +17,14 @@ extension ColorHex on Color {
 }
 
 class Utils {
-  static Future<Svg> loadImage(String image, Color color, {String style = "classic"}) async {
+  static Future<Svg> loadImage(String image, Color color,
+      {String style = "classic"}) async {
     String fileName = "$style/$image.svg";
     final fileContent = await Flame.assets.readFile(fileName);
     final opacity = color.alpha.toDouble() / 0xff;
     final svgString = fileContent.replaceFirst(
-        "fill:#000000;fill-opacity:1", "fill:${color.toHex()};fill-opacity:$opacity");
+        "fill:#000000;fill-opacity:1",
+        "fill:${color.toHex()};fill-opacity:$opacity");
     final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
     return Svg(pictureInfo);
   }

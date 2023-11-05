@@ -10,10 +10,15 @@ class Button extends PositionComponent with TapCallbacks {
   final TextStyle textStyle;
   final Function _tapUpCallback;
 
-  Button(Vector2 position, Vector2 size, this.bgPaint, this.textStyle,
-      {required Function tapUpCallback, this.icon, this.text = ""}):
-        _tapUpCallback = tapUpCallback,
-        super(position: position, size: size);
+  Button({
+      required super.position,
+      required super.size,
+      required this.bgPaint,
+      required this.textStyle,
+      this.icon,
+      this.text = "",
+      required Function tapUpCallback
+  }) : _tapUpCallback = tapUpCallback;
 
   @override
   void onTapUp(TapUpEvent event) => _tapUpCallback.call();
@@ -33,11 +38,10 @@ class Button extends PositionComponent with TapCallbacks {
   }
 
   TextSpan _textSpan() {
-    return icon == null ?
-      TextSpan(text: text, style: textStyle) :
-      TextSpan(
-        text: String.fromCharCode(icon!.codePoint),
-        style: textStyle.copyWith(fontFamily: icon!.fontFamily),
-      );
+    return icon == null
+        ? TextSpan(text: text, style: textStyle)
+        : TextSpan(
+            text: String.fromCharCode(icon!.codePoint),
+            style: textStyle.copyWith(fontFamily: icon!.fontFamily));
   }
 }
