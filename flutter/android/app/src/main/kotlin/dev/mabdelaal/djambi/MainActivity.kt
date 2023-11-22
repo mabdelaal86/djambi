@@ -1,4 +1,4 @@
-package com.example.djambi
+package dev.mabdelaal.djambi
 
 import io.flutter.embedding.android.FlutterActivity
 

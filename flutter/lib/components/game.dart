@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import '../views/board.dart';
 import '../views/dimensions.dart';
 import '../views/state.dart';
-import 'play_page.dart';
+import 'pages/play.dart';
 
 class DjambiGame extends FlameGame {
   final state = GameState();

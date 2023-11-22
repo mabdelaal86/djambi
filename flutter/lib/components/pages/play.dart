@@ -1,10 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../views/dimensions.dart';
-import '../views/settings.dart';
-import '../views/state.dart';
-import 'button.dart';
+import '../../views/dimensions.dart';
+import '../../views/settings.dart';
+import '../../views/state.dart';
+import '../button.dart';
 
 class PlayPage extends PositionComponent {
   // @override

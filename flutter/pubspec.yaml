@@ -32,12 +32,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  collection: ^1.17.0
+  collection: ^1.18.0
   flame: ^1.10.0
   flame_svg: ^1.8.0
   flutter_svg: ^2.0.0
-  meta: ^1.9.0
-  stack: ^0.2.1
+  meta: ^1.10.0
+  stack: ^0.2.0
   vector_graphics: ^1.1.0
 
   # The following adds the Cupertino Icons font to your application.
