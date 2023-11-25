@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../models/common.dart';
 
-abstract class GameTheme {
+enum PieceTheme {
+  classic,
+  characters,
+}
+
+abstract class BoardTheme {
   // margins
   Paint get marginPaint;
   TextStyle get marginTextStyle;
   // background
   Paint get lightCellPaint;
   Paint get darkCellPaint;
+  bool get drawLines;
   Paint get linePaint;
   // maze
   Paint get mazePaint;
@@ -24,12 +30,9 @@ abstract class GameTheme {
   Paint get movedMarkPaint;
   // parties
   Paint getPartyPaint(Ideology ideology);
-  // gui
-  Paint get buttonPaint;
-  TextStyle get buttonTextStyle;
 }
 
-class DefaultTheme extends GameTheme {
+class DefaultBoardTheme extends BoardTheme {
   @override
   Paint get marginPaint => Paint()..color = Colors.grey.shade600;
 
@@ -42,6 +45,9 @@ class DefaultTheme extends GameTheme {
 
   @override
   Paint get darkCellPaint => Paint()..color = Colors.grey.shade300;
+
+  @override
+  bool get drawLines => false;
 
   @override
   Paint get linePaint => Paint()
@@ -93,11 +99,4 @@ class DefaultTheme extends GameTheme {
 
     return Paint()..color = partyColors[ideology.index];
   }
-
-  @override
-  Paint get buttonPaint => Paint()..color = Colors.grey.shade600;
-
-  @override
-  TextStyle get buttonTextStyle => const TextStyle(
-      color: Colors.white, fontSize: 500, fontWeight: FontWeight.bold);
 }

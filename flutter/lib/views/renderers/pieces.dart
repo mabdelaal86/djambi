@@ -7,24 +7,23 @@ import '../../models/member.dart';
 import '../../models/parliament.dart';
 import '../dimensions.dart';
 import '../extensions.dart';
-import '../settings.dart';
 import '../state.dart';
 import '../theme.dart';
 
 class PiecesRenderer {
   final GameState gameState;
   Parliament get parliament => gameState.parliament;
-  GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
-  PieceTheme get _pieceTheme => AppearanceSettings.instance.pieceTheme;
+  final BoardTheme boardTheme;
+  final PieceTheme pieceTheme;
 
-  PiecesRenderer(this.gameState);
+  PiecesRenderer(this.gameState, this.boardTheme, this.pieceTheme);
 
   late final Map<Role, Svg> _memberImages;
 
   Future<void> onLoad() async {
     _memberImages = {
       for (final r in Role.values)
-        r: await Utils.loadImage(r.name, _gameTheme.pieceForeColor)
+        r: await Utils.loadImage(r.name, boardTheme.pieceForeColor)
     };
   }
 
@@ -46,7 +45,7 @@ class PiecesRenderer {
     final centerOffset = Dimensions.cellCenterOffset(member.location).toOffset();
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
-      switch (_pieceTheme) {
+      switch (pieceTheme) {
         case PieceTheme.classic: _drawRoleClassicImage(canvas, member.role, centerOffset);
         case PieceTheme.characters: _drawRoleSymbol(canvas, member.role, centerOffset);
       }
@@ -55,10 +54,10 @@ class PiecesRenderer {
 
   void _paintMemberBackground(Canvas canvas, Member member, Offset offset) {
     final bgPaint = member.isDead
-        ? _gameTheme.deadPaint
-        : _gameTheme.getPartyPaint(member.ideology);
+        ? boardTheme.deadPaint
+        : boardTheme.getPartyPaint(member.ideology);
     canvas.drawCircle(offset, Dimensions.pieceRadius, bgPaint);
-    canvas.drawCircle(offset, Dimensions.pieceRadius, _gameTheme.pieceEdgePaint);
+    canvas.drawCircle(offset, Dimensions.pieceRadius, boardTheme.pieceEdgePaint);
   }
 
   void _drawRoleClassicImage(Canvas canvas, Role role, Offset offset) {
@@ -68,7 +67,9 @@ class PiecesRenderer {
 
   void _drawRoleSymbol(Canvas canvas, Role role, Offset offset) {
     final textPainter = TextPainter(textDirection: TextDirection.ltr)
-      ..text = TextSpan(style: _gameTheme.pieceSymbolStyle, text: role.name[0].toUpperCase());
+      ..text = TextSpan(
+          style: boardTheme.pieceSymbolStyle,
+          text: role.name[0].toUpperCase());
     textPainter.layout();
     textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
   }

@@ -101,10 +101,10 @@ class Parliament {
     }
 
     final partyInPower = getPartyInPower();
-    if (partyInPower == null) return nextActiveParty().first;
-    if (currentParty != partyInPower) return partyInPower;
-    if (activeParties.length == 2) return nextActiveParty().first;
-    return nextActiveParty().firstWhere((p) => p.ideology != partyInPower.ideology);
+    if (partyInPower == null)           return nextActiveParty().first;
+    if (partyInPower != currentParty)   return partyInPower;
+    if (activeParties.length == 2)      return nextActiveParty().first;
+    return nextActiveParty().firstWhere((p) => p.ideology != currentParty.ideology);
   }
 
   void _nextTurn() {
@@ -114,14 +114,12 @@ class Parliament {
   void act(int memberId, Cell cell) {
     assert(!isGameFinished);
     if (_actor == null) {
-      assert(members[memberId].ideology == currentParty.ideology,
-          "Selected member is not from current turn party");
+      assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
       assert(members[memberId].isAlive, "Selected member is dead");
       _actor = members[memberId];
     }
     assert(_actor!.id == memberId, "Current actor is not the selected member");
-    assert(_actor!.manoeuvre != Manoeuvre.end,
-        "Current actor should be in middle of a manoeuvre");
+    assert(_actor!.manoeuvre != Manoeuvre.end, "Current actor should be in middle of a manoeuvre");
     // do an action
     _actor!.act(cell);
     // if current manoeuvre is finished, move to next turn/player

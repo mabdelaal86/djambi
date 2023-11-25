@@ -7,6 +7,7 @@ import 'renderers/background.dart';
 import 'renderers/movements.dart';
 import 'renderers/pieces.dart';
 import 'state.dart';
+import 'theme.dart';
 
 class Board extends PositionComponent with TapCallbacks {
   // @override
@@ -16,10 +17,12 @@ class Board extends PositionComponent with TapCallbacks {
   final MovementsRenderer _movements;
   final PiecesRenderer _pieces;
 
-  Board(GameState gameState, {super.position})
-      : _background = BackgroundRenderer(),
-        _movements = MovementsRenderer(gameState),
-        _pieces = PiecesRenderer(gameState),
+  Board(
+      GameState gameState, BoardTheme boardTheme, PieceTheme pieceTheme,
+      {super.position})
+      : _background = BackgroundRenderer(boardTheme, pieceTheme),
+        _movements = MovementsRenderer(gameState, boardTheme),
+        _pieces = PiecesRenderer(gameState, boardTheme, pieceTheme),
         super(size: Dimensions.boardSize);
 
   @override

@@ -1,14 +1,10 @@
+import '../views/theme.dart';
 import 'theme.dart';
 
-enum PieceTheme {
-  classic,
-  characters,
-}
-
 class AppearanceSettings {
-  bool drawLines = false;
   PieceTheme pieceTheme = PieceTheme.classic;
-  GameTheme gameTheme = DefaultTheme();
+  BoardTheme boardTheme = DefaultBoardTheme();
+  GuiTheme guiTheme = GuiTheme();
 
   AppearanceSettings._();
   static final AppearanceSettings instance = AppearanceSettings._();

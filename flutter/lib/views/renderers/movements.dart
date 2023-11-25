@@ -6,7 +6,6 @@ import '../../models/member.dart';
 import '../../models/parliament.dart';
 import '../dimensions.dart';
 import '../extensions.dart';
-import '../settings.dart';
 import '../state.dart';
 import '../theme.dart';
 
@@ -14,9 +13,9 @@ class MovementsRenderer {
   final GameState gameState;
   Parliament get parliament => gameState.parliament;
   Member? _selectedMember;
-  GameTheme get _gameTheme => AppearanceSettings.instance.gameTheme;
+  final BoardTheme boardTheme;
 
-  MovementsRenderer(this.gameState);
+  MovementsRenderer(this.gameState, this.boardTheme);
 
   void render(Canvas canvas) {
     _markLastMovement(canvas);
@@ -105,19 +104,19 @@ class MovementsRenderer {
   }
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
-    cells.forEach((c) => _markCircle(canvas, c, _gameTheme.selectableMarkPaint));
+    cells.forEach((c) => _markCircle(canvas, c, boardTheme.selectableMarkPaint));
   }
 
   void _markSelected(Canvas canvas, Cell cell) {
-    _paintRect(canvas, cell, _gameTheme.selectedMarkPaint);
+    _paintRect(canvas, cell, boardTheme.selectedMarkPaint);
   }
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
-    cells.forEach((c) => _markCircle(canvas, c, _gameTheme.actionMarkPaint));
+    cells.forEach((c) => _markCircle(canvas, c, boardTheme.actionMarkPaint));
   }
 
   void _markLastMovement(Canvas canvas) {
-    gameState.lastMovementCells().forEach((c) => _markRect(canvas, c, _gameTheme.movedMarkPaint));
+    gameState.lastMovementCells().forEach((c) => _markRect(canvas, c, boardTheme.movedMarkPaint));
   }
 
   void _markCircle(Canvas canvas, Cell cell, Paint paint) {

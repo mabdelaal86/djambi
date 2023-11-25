@@ -8,7 +8,7 @@ class Button extends PositionComponent with TapCallbacks {
   final String text;
   final Paint bgPaint;
   final TextStyle textStyle;
-  final Function _tapUpCallback;
+  final void Function() action;
 
   Button({
       required super.position,
@@ -17,11 +17,11 @@ class Button extends PositionComponent with TapCallbacks {
       required this.textStyle,
       this.icon,
       this.text = "",
-      required Function tapUpCallback
-  }) : _tapUpCallback = tapUpCallback;
+      required this.action,
+  });
 
   @override
-  void onTapUp(TapUpEvent event) => _tapUpCallback.call();
+  void onTapUp(TapUpEvent event) => action();
 
   @override
   void render(Canvas canvas) {

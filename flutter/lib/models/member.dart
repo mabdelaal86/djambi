@@ -114,8 +114,7 @@ abstract class Member {
 
   @protected
   void onMove(Cell cell) {
-    assert(cellsToMove(true).contains(cell),
-        "Can't do an action on the selected cell");
+    assert(cellsToMove(true).contains(cell), "Can't do an action on the selected cell");
     _bodyId = parliament.getMemberAt(cell)?.id;
     location = cell;
     manoeuvre = Manoeuvre.move;
@@ -129,8 +128,7 @@ abstract class Member {
 
   @protected
   void onExit(Cell cell) {
-    assert(cellsToMove(false).contains(cell),
-        "Can't do an action on the selected cell");
+    assert(cellsToMove(false).contains(cell), "Can't do an action on the selected cell");
     location = cell;
     manoeuvre = Manoeuvre.exit;
   }
