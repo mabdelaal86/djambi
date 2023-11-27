@@ -55,7 +55,7 @@ class PiecesRenderer {
   void _paintMemberBackground(Canvas canvas, Member member, Offset offset) {
     final bgPaint = member.isDead
         ? boardTheme.deadPaint
-        : boardTheme.getPartyPaint(member.ideology);
+        : boardTheme.partyPaint[member.ideology.index];
     canvas.drawCircle(offset, Dimensions.pieceRadius, bgPaint);
     canvas.drawCircle(offset, Dimensions.pieceRadius, boardTheme.pieceEdgePaint);
   }

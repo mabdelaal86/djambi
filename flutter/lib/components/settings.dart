@@ -3,7 +3,7 @@ import 'theme.dart';
 
 class AppearanceSettings {
   PieceTheme pieceTheme = PieceTheme.classic;
-  BoardTheme boardTheme = DefaultBoardTheme();
+  BoardTheme boardTheme = getDefaultBoardTheme();
   GuiTheme guiTheme = GuiTheme();
 
   AppearanceSettings._();

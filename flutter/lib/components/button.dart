@@ -25,11 +25,10 @@ class Button extends PositionComponent with TapCallbacks {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRRect(_rect, bgPaint);
+    final rect = RRect.fromRectAndRadius(size.toRect(), const Radius.circular(150));
+    canvas.drawRRect(rect, bgPaint);
     _draw(canvas);
   }
-
-  RRect get _rect => RRect.fromRectAndRadius(size.toRect(), const Radius.circular(150));
 
   void _draw(Canvas canvas) {
     final textPainter = TextPainter(textDirection: TextDirection.ltr);

@@ -123,7 +123,7 @@ class MovementsRenderer {
     final offset = Dimensions.cellCenterOffset(cell).toOffset();
 
     // draw circle
-    const radius = Dimensions.pieceRadius + Dimensions.stroke;
+    const radius = Dimensions.pieceRadius + Dimensions.markStroke;
     canvas.drawCircle(offset, radius, paint..stroke());
   }
 
@@ -131,7 +131,7 @@ class MovementsRenderer {
     final offset = Dimensions.cellCenterOffset(cell).toOffset();
 
     // draw rect
-    const radius = Dimensions.cellSide / 2 - Dimensions.stroke;
+    const radius = Dimensions.cellSide / 2 - Dimensions.markStroke;
     final rect = Rect.fromCircle(center: offset, radius: radius);
     canvas.drawRect(rect, paint..stroke());
   }

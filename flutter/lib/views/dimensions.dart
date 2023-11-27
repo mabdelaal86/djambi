@@ -4,10 +4,13 @@ import '../models/cell.dart';
 import '../models/common.dart';
 
 abstract class Dimensions {
-  static const double cellSide = 1000;
-  static const double pieceRadius = 400;
-  static const double margin = 320;
-  static const double stroke = 40;
+  static const double cellSide = 100;
+  static const double pieceRadius = 40;
+  static const double pieceFontSize = 50;
+  static const double pieceStroke = 3;
+  static const double margin = 32;
+  static const double marginFontSize = 30;
+  static const double markStroke = 4;
   static final Vector2 cellSize = Vector2.all(cellSide);
   static final Vector2 pieceSize = Vector2.all(pieceRadius * 2);
   static final Vector2 gridSize = cellSize * Constants.boardSize.toDouble();

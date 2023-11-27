@@ -1,102 +1,95 @@
+import 'package:djambi/views/extensions.dart';
 import 'package:flutter/painting.dart';
 
-import '../models/common.dart';
+import 'dimensions.dart';
 
 enum PieceTheme {
   classic,
   characters,
 }
 
-abstract class BoardTheme {
+class BoardTheme {
   // margins
-  Paint get marginPaint;
-  TextStyle get marginTextStyle;
+  final Paint marginPaint;
+  final TextStyle marginTextStyle;
   // background
-  Paint get lightCellPaint;
-  Paint get darkCellPaint;
-  bool get drawLines;
-  Paint get linePaint;
+  final Paint lightCellPaint;
+  final Paint darkCellPaint;
+  final bool drawLines;
+  final Paint linePaint;
   // maze
-  Paint get mazePaint;
-  Color get mazeForeColor;
+  final Paint mazePaint;
+  final Color mazeForeColor;
   // pieces
-  Color get pieceForeColor;
-  Paint get pieceEdgePaint;
-  TextStyle get pieceSymbolStyle;
-  Paint get deadPaint;
-  Paint get selectableMarkPaint;
-  Paint get selectedMarkPaint;
-  Paint get actionMarkPaint;
-  Paint get movedMarkPaint;
+  final Color pieceForeColor;
+  final Paint pieceEdgePaint;
+  final TextStyle pieceSymbolStyle;
+  final Paint deadPaint;
+  final Paint selectableMarkPaint;
+  final Paint selectedMarkPaint;
+  final Paint actionMarkPaint;
+  final Paint movedMarkPaint;
   // parties
-  Paint getPartyPaint(Ideology ideology);
+  final List<Paint> partyPaint;
+
+  BoardTheme({
+    required this.marginPaint,
+    required this.marginTextStyle,
+    required this.lightCellPaint,
+    required this.darkCellPaint,
+    required this.drawLines,
+    required this.linePaint,
+    required this.mazePaint,
+    required this.mazeForeColor,
+    required this.pieceForeColor,
+    required this.pieceEdgePaint,
+    required this.pieceSymbolStyle,
+    required this.deadPaint,
+    required this.selectableMarkPaint,
+    required this.selectedMarkPaint,
+    required this.actionMarkPaint,
+    required this.movedMarkPaint,
+    required this.partyPaint,
+  });
 }
 
-class DefaultBoardTheme extends BoardTheme {
-  @override
-  Paint get marginPaint => Paint()..color = const Color(0xff757575);
-
-  @override
-  TextStyle get marginTextStyle => const TextStyle(
-      color: Color(0xffffffff), fontSize: 300, fontWeight: FontWeight.bold);
-
-  @override
-  Paint get lightCellPaint => Paint()..color = const Color(0xffffffff);
-
-  @override
-  Paint get darkCellPaint => Paint()..color = const Color(0xffe0e0e0);
-
-  @override
-  bool get drawLines => false;
-
-  @override
-  Paint get linePaint => Paint()
-    ..color = const Color(0xff000000)
-    ..style = PaintingStyle.stroke;
-
-  @override
-  Paint get mazePaint => Paint()..color = const Color(0xff000000);
-
-  @override
-  Color get mazeForeColor => const Color(0xffe0e0e0);
-
-  @override
-  Color get pieceForeColor => const Color(0xff000000);
-
-  @override
-  Paint get pieceEdgePaint => Paint()
-    ..color = pieceForeColor
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 22;
-
-  @override
-  TextStyle get pieceSymbolStyle => TextStyle(
-      color: pieceForeColor, fontSize: 500, fontWeight: FontWeight.bold);
-
-  @override
-  Paint get deadPaint => Paint()..color = const Color(0xff757575);
-
-  @override
-  Paint get selectableMarkPaint => Paint()..color = const Color(0xff757575);
-
-  @override
-  Paint get selectedMarkPaint => Paint()..color = const Color(0xffea80fc);
-
-  @override
-  Paint get actionMarkPaint => Paint()..color = const Color(0xff757575);
-
-  @override
-  Paint get movedMarkPaint => Paint()..color = const Color(0xffbcaaa4);
-
-  @override
-  Paint getPartyPaint(Ideology ideology) {
-    const partyColors = [
-      Color(0xfff44336),  // Ideology.red
-      Color(0xff2196f3),  // Ideology.blue
-      Color(0xffff9800),  // Ideology.yellow
-      Color(0xff4caf50),  // Ideology.green
-    ];
-
-    return Paint()..color = partyColors[ideology.index];
-  }
+BoardTheme getDefaultBoardTheme() {
+  const pieceForeColor = Color(0xff000000);
+  return BoardTheme(
+    marginPaint: const Color(0xff757575).paint(),
+    marginTextStyle: const TextStyle(
+      color: Color(0xffffffff),
+      fontSize: Dimensions.marginFontSize,
+      fontWeight: FontWeight.bold,
+    ),
+    lightCellPaint: const Color(0xffffffff).paint(),
+    darkCellPaint: const Color(0xffe0e0e0).paint(),
+    drawLines: false,
+    linePaint: Paint()
+      ..color = const Color(0xff000000)
+      ..style = PaintingStyle.stroke,
+    mazePaint: const Color(0xff000000).paint(),
+    mazeForeColor: const Color(0xffe0e0e0),
+    pieceForeColor: pieceForeColor,
+    pieceEdgePaint: Paint()
+      ..color = pieceForeColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = Dimensions.pieceStroke,
+    pieceSymbolStyle: const TextStyle(
+      color: pieceForeColor,
+      fontSize: Dimensions.pieceFontSize,
+      fontWeight: FontWeight.bold,
+    ),
+    deadPaint: const Color(0xff757575).paint(),
+    selectableMarkPaint: const Color(0xff757575).paint(),
+    selectedMarkPaint: const Color(0xffea80fc).paint(),
+    actionMarkPaint: const Color(0xff757575).paint(),
+    movedMarkPaint: const Color(0xffbcaaa4).paint(),
+    partyPaint: [
+      const Color(0xfff44336).paint(), // Ideology.red
+      const Color(0xff2196f3).paint(), // Ideology.blue
+      const Color(0xffff9800).paint(), // Ideology.yellow
+      const Color(0xff4caf50).paint(), // Ideology.green
+    ],
+  );
 }

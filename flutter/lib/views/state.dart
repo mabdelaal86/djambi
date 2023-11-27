@@ -9,14 +9,13 @@ import '../models/ai/tree.dart';
 class GameState {
   final _undoStack = Stack<Parliament>();
   var _redoStack = Stack<Parliament>();
-  late Parliament parliament;
+  Parliament parliament;
 
   bool get canUndo => _undoStack.isNotEmpty;
   bool get canRedo => _redoStack.isNotEmpty;
 
-  GameState() {
-    parliament = Parliament(Ideology.red, TurnDirection.anticlockwise);
-  }
+  GameState()
+    : parliament = Parliament(Ideology.red, TurnDirection.anticlockwise);
 
   void undo() {
     if (_undoStack.isNotEmpty) {
