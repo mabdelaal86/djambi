@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../views/dimensions.dart';
 import '../../views/state.dart';
@@ -16,9 +16,9 @@ class PlayPage extends PositionComponent {
 
   PlayPage(this.gameState, {super.position})
       : super(size: pageSize, anchor: Anchor.center) {
-    _addButton(0, Icons.undo, _undo);
-    _addButton(1, Icons.redo, _redo);
-    _addButton(2, Icons.computer, _aiAct);
+    _addButton(0, "<", _undo);
+    _addButton(1, ">", _redo);
+    _addButton(2, "?", _aiAct);
   }
 
   @override
@@ -43,7 +43,7 @@ class PlayPage extends PositionComponent {
     gameState.aiAct(2);
   }
 
-  void _addButton(int count, IconData icon, void Function() action) {
+  void _addButton(int count, String text, void Function() action) {
     const space = Dimensions.cellSide / 2 - Dimensions.pieceRadius;
     final y = Dimensions.boardSize.y + space;
     final x = Dimensions.margin + (count * Dimensions.cellSide) + space;
@@ -52,7 +52,7 @@ class PlayPage extends PositionComponent {
         size: Dimensions.pieceSize,
         bgPaint: guiTheme.buttonPaint,
         textStyle: guiTheme.buttonTextStyle,
-        icon: icon,
+        text: text,
         action: action);
     add(button);
   }

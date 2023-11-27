@@ -1,6 +1,6 @@
 import 'package:flame/extensions.dart';
 import 'package:flame_svg/svg.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import '../../models/common.dart';
 import '../../models/member.dart';

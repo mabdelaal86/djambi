@@ -1,6 +1,6 @@
-import 'dart:ui';
 import 'package:flame/flame.dart';
 import 'package:flame_svg/flame_svg.dart' show Svg;
+import 'package:flutter/painting.dart';
 import 'package:flutter_svg/flutter_svg.dart' show SvgStringLoader;
 import 'package:vector_graphics/vector_graphics.dart';
 

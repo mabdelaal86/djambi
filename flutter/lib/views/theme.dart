@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import '../models/common.dart';
 
@@ -34,34 +34,34 @@ abstract class BoardTheme {
 
 class DefaultBoardTheme extends BoardTheme {
   @override
-  Paint get marginPaint => Paint()..color = Colors.grey.shade600;
+  Paint get marginPaint => Paint()..color = const Color(0xff757575);
 
   @override
   TextStyle get marginTextStyle => const TextStyle(
-      color: Colors.white, fontSize: 300, fontWeight: FontWeight.bold);
+      color: Color(0xffffffff), fontSize: 300, fontWeight: FontWeight.bold);
 
   @override
-  Paint get lightCellPaint => Paint()..color = Colors.white;
+  Paint get lightCellPaint => Paint()..color = const Color(0xffffffff);
 
   @override
-  Paint get darkCellPaint => Paint()..color = Colors.grey.shade300;
+  Paint get darkCellPaint => Paint()..color = const Color(0xffe0e0e0);
 
   @override
   bool get drawLines => false;
 
   @override
   Paint get linePaint => Paint()
-    ..color = Colors.black
+    ..color = const Color(0xff000000)
     ..style = PaintingStyle.stroke;
 
   @override
-  Paint get mazePaint => Paint()..color = Colors.black;
+  Paint get mazePaint => Paint()..color = const Color(0xff000000);
 
   @override
-  Color get mazeForeColor => Colors.grey.shade300;
+  Color get mazeForeColor => const Color(0xffe0e0e0);
 
   @override
-  Color get pieceForeColor => Colors.black;
+  Color get pieceForeColor => const Color(0xff000000);
 
   @override
   Paint get pieceEdgePaint => Paint()
@@ -74,27 +74,27 @@ class DefaultBoardTheme extends BoardTheme {
       color: pieceForeColor, fontSize: 500, fontWeight: FontWeight.bold);
 
   @override
-  Paint get deadPaint => Paint()..color = Colors.grey.shade600;
+  Paint get deadPaint => Paint()..color = const Color(0xff757575);
 
   @override
-  Paint get selectableMarkPaint => Paint()..color = Colors.grey.shade600;
+  Paint get selectableMarkPaint => Paint()..color = const Color(0xff757575);
 
   @override
-  Paint get selectedMarkPaint => Paint()..color = Colors.purpleAccent.shade100;
+  Paint get selectedMarkPaint => Paint()..color = const Color(0xffea80fc);
 
   @override
-  Paint get actionMarkPaint => Paint()..color = Colors.grey.shade600;
+  Paint get actionMarkPaint => Paint()..color = const Color(0xff757575);
 
   @override
-  Paint get movedMarkPaint => Paint()..color = Colors.brown.shade200;
+  Paint get movedMarkPaint => Paint()..color = const Color(0xffbcaaa4);
 
   @override
   Paint getPartyPaint(Ideology ideology) {
     const partyColors = [
-      Colors.red,       // Ideology.red
-      Colors.blue,      // Ideology.blue
-      Colors.orange,    // Ideology.yellow
-      Colors.green,     // Ideology.green
+      Color(0xfff44336),  // Ideology.red
+      Color(0xff2196f3),  // Ideology.blue
+      Color(0xffff9800),  // Ideology.yellow
+      Color(0xff4caf50),  // Ideology.green
     ];
 
     return Paint()..color = partyColors[ideology.index];

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 class GuiTheme {
-  final Paint bgPaint = Paint()..color = Colors.green.shade900;
+  final Paint bgPaint = Paint()..color = const Color(0xff1b5e20);
 
-  final Paint buttonPaint = Paint()..color = Colors.grey.shade600;
+  final Paint buttonPaint = Paint()..color = const Color(0xff757575);
 
   final TextStyle buttonTextStyle = const TextStyle(
-      color: Colors.white, fontSize: 500, fontWeight: FontWeight.bold);
+      color: Color(0xffffffff), fontSize: 500, fontWeight: FontWeight.bold);
 }

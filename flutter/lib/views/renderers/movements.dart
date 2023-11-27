@@ -1,5 +1,5 @@
 import 'package:flame/extensions.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import '../../models/cell.dart';
 import '../../models/member.dart';

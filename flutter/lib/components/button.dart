@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Button extends PositionComponent with TapCallbacks {
   final IconData? icon;
