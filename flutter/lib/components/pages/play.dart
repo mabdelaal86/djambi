@@ -1,69 +1,63 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../views/board.dart';
 import '../../views/dimensions.dart';
 import '../../views/state.dart';
 import '../button.dart';
+import '../header.dart';
 import '../settings.dart';
 
 class PlayPage extends PositionComponent {
   // @override
   // bool get debugMode => true;
 
-  static final Vector2 pageSize = Dimensions.boardSize + Vector2(0, Dimensions.cellSide);
-  final GameState gameState;
+  late final Board _board;
+  final GameState gameState = GameState();
   final boardTheme = AppearanceSettings.instance.boardTheme;
   final pieceTheme = AppearanceSettings.instance.pieceTheme;
-  final guiTheme = AppearanceSettings.instance.guiTheme;
 
-  PlayPage(this.gameState, {super.position})
-      : super(size: pageSize, anchor: Anchor.center);
+  late final Button _undo, _redo, _aiAct;
+  final _btnSize = Vector2.all(40);
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     await addAll([
-      Board(gameState, boardTheme, pieceTheme),
-      _addButton(0, "<", _undo),
-      _addButton(1, ">", _redo),
-      _addButton(2, "?", _aiAct),
+      Header(),
+      _board = Board(
+        gameState, boardTheme, pieceTheme,
+        anchor: Anchor.center,
+      ),
+      _undo = Button(
+        text: "<",
+        size: _btnSize,
+        action: () => gameState.undo(),
+      ),
+      _redo = Button(
+        text: ">",
+        size: _btnSize,
+        action: () => gameState.redo(),
+      ),
+      _aiAct = Button(
+        text: "?",
+        size: _btnSize,
+        action: () => gameState.aiAct(2),
+      ),
     ]);
   }
 
   @override
-  void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), guiTheme.bgPaint);
-  }
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
 
-  void _undo() {
-    debugPrint("Tap up Undo");
-    gameState.undo();
-  }
+    _undo.position =  Vector2(size.x / 2 - 100, size.y - 50);
+    _redo.position =  _undo.position + Vector2(100, 0);
+    _aiAct.position = _redo.position + Vector2(100, 0);
 
-  void _redo() {
-    debugPrint("Tap up Redo");
-    gameState.redo();
-  }
-
-  void _aiAct() {
-    debugPrint("Tap up AI");
-    if (!gameState.parliament.isManoeuvreCompleted) return;
-    if (gameState.parliament.isGameFinished) return;
-    gameState.aiAct(2);
-  }
-
-  Button _addButton(int count, String text, void Function() action) {
-    const space = Dimensions.cellSide / 2 - Dimensions.pieceRadius;
-    final x = Dimensions.margin + (count * Dimensions.cellSide) + space;
-    final y = Dimensions.boardSize.y + space;
-    return Button(
-        position: Vector2(x, y),
-        size: Dimensions.pieceSize,
-        bgPaint: guiTheme.buttonPaint,
-        textStyle: guiTheme.buttonTextStyle,
-        text: text,
-        action: action
-    );
+    final scale = min(size.x, size.y - 200) / Dimensions.boardSize.x;
+    _board.scale = Vector2.all(scale);
+    _board.position = size / 2;
   }
 }

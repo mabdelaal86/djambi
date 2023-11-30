@@ -18,17 +18,15 @@ class GameState {
     : parliament = Parliament(Ideology.red, TurnDirection.anticlockwise);
 
   void undo() {
-    if (_undoStack.isNotEmpty) {
-      _redoStack.push(parliament);
-      parliament = _undoStack.pop();
-    }
+    if (_undoStack.isEmpty) return;
+    _redoStack.push(parliament);
+    parliament = _undoStack.pop();
   }
 
   void redo() {
-    if (_redoStack.isNotEmpty) {
-      _undoStack.push(parliament);
-      parliament = _redoStack.pop();
-    }
+    if (_redoStack.isEmpty) return;
+    _undoStack.push(parliament);
+    parliament = _redoStack.pop();
   }
 
   void doAction(Member member, Cell cell) {
@@ -38,6 +36,8 @@ class GameState {
   }
 
   void aiAct(int maxDepth) {
+    if (!parliament.isManoeuvreCompleted) return;
+    if (parliament.isGameFinished) return;
     final tree = Tree(parliament, maxDepth);
     tree.build();
     _handleNewState(tree.decision.parliament);
