@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:ui';
 import 'package:collection/collection.dart';
 
 import 'cell.dart';
@@ -24,6 +25,8 @@ class Parliament {
   Member? _actor;
   Member? get actor => _actor;
 
+  final VoidCallback? onManoeuvreCompleted;
+
   bool get isManoeuvreCompleted => _actor == null;
   bool get isGameFinished => activeParties.length == 1 && isManoeuvreCompleted;
   String getSign() {
@@ -34,7 +37,7 @@ class Parliament {
     return "${currentParty.ideology.name[0]}:${stm.entries.map((e) => "${e.key},${e.value}").join(";")}#";
   }
 
-  Parliament(this._currentIdeology, this.turnDirection) {
+  Parliament(this._currentIdeology, this.turnDirection, [this.onManoeuvreCompleted]) {
     // create members
     members = Ideology.values.map((id) => _recruitMembers(id)).flattened.toList();
     assert(members.length == 9 * 4);
@@ -47,7 +50,8 @@ class Parliament {
   }
   Parliament.copy(Parliament other)
       : _currentIdeology = other._currentIdeology,
-        turnDirection = other.turnDirection {
+        turnDirection = other.turnDirection,
+        onManoeuvreCompleted = other.onManoeuvreCompleted {
     // copy members
     members = other.members.map((m) => Member.copy(this, m)).toList();
     assert(members.length == 9 * 4);
@@ -90,6 +94,30 @@ class Parliament {
     setInitPosition(Ideology.green,  const Cell( 1,  1), const Cell(1, 1));
   }
 
+  void act(int memberId, Cell cell) {
+    assert(!isGameFinished);
+    if (_actor == null) {
+      assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
+      assert(members[memberId].isAlive, "Selected member is dead");
+      _actor = members[memberId];
+    }
+    assert(_actor!.id == memberId, "Current actor is not the selected member");
+    assert(_actor!.manoeuvre != Manoeuvre.end, "Current actor should be in middle of a manoeuvre");
+    // do an action
+    _actor!.act(cell);
+    // if current manoeuvre is finished, move to next turn/player
+    if (_actor!.manoeuvre == Manoeuvre.end) {
+      _nextTurn();
+    }
+  }
+
+  void _nextTurn() {
+    _actor!.manoeuvre = Manoeuvre.none;
+    _actor = null;
+    _currentParty = _getNextParty();
+    onManoeuvreCompleted?.call();
+  }
+
   Party _getNextParty() {
     nextActiveParty() sync* {
       for (int i = 0; i < Ideology.values.length; i++) {
@@ -105,28 +133,5 @@ class Parliament {
     if (partyInPower != currentParty)   return partyInPower;
     if (activeParties.length == 2)      return nextActiveParty().first;
     return nextActiveParty().firstWhere((p) => p.ideology != currentParty.ideology);
-  }
-
-  void _nextTurn() {
-    _currentParty = _getNextParty();
-  }
-
-  void act(int memberId, Cell cell) {
-    assert(!isGameFinished);
-    if (_actor == null) {
-      assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
-      assert(members[memberId].isAlive, "Selected member is dead");
-      _actor = members[memberId];
-    }
-    assert(_actor!.id == memberId, "Current actor is not the selected member");
-    assert(_actor!.manoeuvre != Manoeuvre.end, "Current actor should be in middle of a manoeuvre");
-    // do an action
-    _actor!.act(cell);
-    // if current manoeuvre is finished, move to next turn/player
-    if (_actor!.manoeuvre == Manoeuvre.end) {
-      _actor!.manoeuvre = Manoeuvre.none;
-      _actor = null;
-      _nextTurn();
-    }
   }
 }

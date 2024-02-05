@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 
-import 'button.dart';
+import 'buttons.dart';
 import 'game.dart';
 
 class Header extends PositionComponent with HasGameReference<DjambiGame> {
@@ -20,11 +21,11 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
         anchor: Anchor.center,
       ),
       if (game.router.previousRoute != null)
-        Button(
-          text: "<<",
+        RoundedButton(
+          icon: Icons.arrow_back,
           position: Vector2(50, 50),
-          size: Vector2.all(40),
-          action: () => game.router.pop(),
+          size: RoundedButton.defaultSize,
+          onReleased: () => game.router.pop(),
         ),
     ]);
   }

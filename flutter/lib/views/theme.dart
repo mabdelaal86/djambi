@@ -1,7 +1,7 @@
-import 'package:djambi/views/extensions.dart';
 import 'package:flutter/painting.dart';
 
 import 'dimensions.dart';
+import 'extensions.dart';
 
 enum PieceTheme {
   classic,

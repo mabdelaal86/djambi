@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 
 import '../../views/board.dart';
 import '../../views/dimensions.dart';
 import '../../views/state.dart';
-import '../button.dart';
+import '../buttons.dart';
 import '../header.dart';
 import '../settings.dart';
 
@@ -14,36 +15,37 @@ class PlayPage extends PositionComponent {
   // bool get debugMode => true;
 
   late final Board _board;
-  final GameState gameState = GameState();
-  final boardTheme = AppearanceSettings.instance.boardTheme;
-  final pieceTheme = AppearanceSettings.instance.pieceTheme;
+  late final GameState _gameState;
+  final _boardTheme = AppearanceSettings.instance.boardTheme;
+  final _pieceTheme = AppearanceSettings.instance.pieceTheme;
+  final _gameSettings = GameSettings.instance;
 
-  late final Button _undo, _redo, _aiAct;
-  final _btnSize = Vector2.all(40);
+  late final RoundedButton _undo, _redo, _aiAct;
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    _gameState = GameState(
+        _gameSettings.startIdeology, _gameSettings.turnDirection);
     await addAll([
       Header(),
       _board = Board(
-        gameState, boardTheme, pieceTheme,
+        _gameState, _boardTheme, _pieceTheme,
         anchor: Anchor.center,
       ),
-      _undo = Button(
-        text: "<",
-        size: _btnSize,
-        action: () => gameState.undo(),
+      _undo = RoundedButton(
+        icon: Icons.undo,
+        size: RoundedButton.defaultSize,
+        onReleased: () => _gameState.undo(),
       ),
-      _redo = Button(
-        text: ">",
-        size: _btnSize,
-        action: () => gameState.redo(),
+      _redo = RoundedButton(
+        icon: Icons.redo,
+        size: RoundedButton.defaultSize,
+        onReleased: () => _gameState.redo(),
       ),
-      _aiAct = Button(
-        text: "?",
-        size: _btnSize,
-        action: () => gameState.aiAct(2),
+      _aiAct = RoundedButton(
+        icon: Icons.computer,
+        size: RoundedButton.defaultSize,
+        onReleased: () => _gameState.aiAct(2),
       ),
     ]);
   }
