@@ -1,8 +1,6 @@
 import 'package:flame/flame.dart';
 import 'package:flame_svg/flame_svg.dart' show Svg;
 import 'package:flutter/painting.dart';
-import 'package:flutter_svg/flutter_svg.dart' show SvgStringLoader;
-import 'package:vector_graphics/vector_graphics.dart';
 
 import 'dimensions.dart';
 
@@ -26,7 +24,6 @@ class Utils {
     final svgString = fileContent.replaceFirst(
         "fill:#000000;fill-opacity:1",
         "fill:${color.hex};fill-opacity:$opacity");
-    final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
-    return Svg(pictureInfo);
+    return Svg.loadFromString(svgString);
   }
 }
