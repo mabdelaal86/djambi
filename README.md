@@ -16,6 +16,12 @@ More details about the rules: https://www.djambi.net/
 * Surrounding a Chief with corpses is not implemented.
 
 
+## Todo
+* Stop the game when no one can kill other players'chief.
+* improve IA algorithm
+* implement traitors when chief is surrounded
+* end of game message
+
 ## Roadmap
 
 - [x] Simple AI algorithm.

@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'cell.dart';
 import 'common.dart';
 import 'parliament.dart';
+import 'party.dart';
 
 // member roles
 import 'members/assassin.dart';
@@ -90,6 +91,45 @@ abstract class Member {
       }
     }
   }
+
+  bool isSurrounded([Set<Cell>? visited]) {
+    visited ??= {};
+    if (visited.contains(location)) {
+      return true;
+    }
+    visited.add(location);
+    List<Cell> directions = [
+      Cell(0, 1),   // haut
+      Cell(1, 0),   // droite
+      Cell(0, -1),  // bas
+      Cell(-1, 0),  // gauche
+      Cell(1, 1),   // diagonale haut-droite
+      Cell(-1, -1), // diagonale bas-gauche
+      Cell(1, -1),  // diagonale bas-droite
+      Cell(-1, 1),  // diagonale haut-gauche
+    ];
+
+    for (Cell direction in directions) {
+      Cell newPosition = Cell(location.x + direction.x, location.y + direction.y);
+      if (!newPosition.isValid) {
+        continue;  // Case hors du plateau, considéré comme non-encerclement.
+      }
+      Member? piece = parliament.getMemberAt(newPosition);
+      if (piece == null) {
+        return false;  // Il y a une case vide, donc pas encerclé.
+      }
+      if (piece.isDead) {
+        continue;  // Continue d'examiner les autres directions.
+      }
+      // Pour une pièce alliée, vérifie si elle est encerclée.
+      if (!piece.isSurrounded(visited)) {
+        return false;  // Trouvé une pièce alliée qui n'est pas encerclée.
+      }
+    }
+    return true;  // Toutes les directions sont bloquées ou conduisent à des pièces mortes/alliées encerclées.
+  }
+
+  bool get isTraitor => !isChief && isDead && !isSurrounded() && parliament.getParty(ideology).chief.isSurrounded();
 
   Iterable<Cell> cellsToAct() => switch (manoeuvre) {
       Manoeuvre.none => cellsToMove(true),
