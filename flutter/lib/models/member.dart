@@ -92,42 +92,42 @@ abstract class Member {
     }
   }
 
-  bool isSurrounded([Set<Cell>? visited]) {
-    visited ??= {};
-    if (visited.contains(location)) {
-      return true;
-    }
-    visited.add(location);
-    List<Cell> directions = [
-      Cell(0, 1),   // haut
-      Cell(1, 0),   // droite
-      Cell(0, -1),  // bas
-      Cell(-1, 0),  // gauche
-      Cell(1, 1),   // diagonale haut-droite
-      Cell(-1, -1), // diagonale bas-gauche
-      Cell(1, -1),  // diagonale bas-droite
-      Cell(-1, 1),  // diagonale haut-gauche
-    ];
-
-    for (Cell direction in directions) {
-      Cell newPosition = Cell(location.x + direction.x, location.y + direction.y);
-      if (!newPosition.isValid) {
-        continue;  // Case hors du plateau, considéré comme non-encerclement.
-      }
-      Member? piece = parliament.getMemberAt(newPosition);
-      if (piece == null) {
-        return false;  // Il y a une case vide, donc pas encerclé.
-      }
-      if (piece.isDead) {
-        continue;  // Continue d'examiner les autres directions.
-      }
-      // Pour une pièce alliée, vérifie si elle est encerclée.
-      if (!piece.isSurrounded(visited)) {
-        return false;  // Trouvé une pièce alliée qui n'est pas encerclée.
-      }
-    }
-    return true;  // Toutes les directions sont bloquées ou conduisent à des pièces mortes/alliées encerclées.
+bool isSurrounded([Set<Cell>? visited]) {
+  visited ??= {};
+  if (visited.contains(location)) {
+    return true;
   }
+  visited.add(location);
+  List<Cell> directions = [
+    Cell(0, 1),   // up
+    Cell(1, 0),   // right
+    Cell(0, -1),  // down
+    Cell(-1, 0),  // left
+    Cell(1, 1),   // top-right diagonal
+    Cell(-1, -1), // bottom-left diagonal
+    Cell(1, -1),  // bottom-right diagonal
+    Cell(-1, 1),  // top-left diagonal
+  ];
+
+  for (Cell direction in directions) {
+    Cell newPosition = Cell(location.x + direction.x, location.y + direction.y);
+    if (!newPosition.isValid) {
+      continue;  // Cell is off the board, considered as not surrounded.
+    }
+    Member? piece = parliament.getMemberAt(newPosition);
+    if (piece == null) {
+      return false;  // There is an empty cell, so not surrounded.
+    }
+    if (piece.isDead) {
+      continue;  // Continue to examine other directions.
+    }
+    // For an allied piece, check if it is surrounded.
+    if (!piece.isSurrounded(visited)) {
+      return false;  // Found an allied piece that is not surrounded.
+    }
+  }
+  return true;  // All directions are blocked or lead to dead/surrounded allied pieces.
+}
 
   bool get isTraitor => !isChief && isDead && !isSurrounded() && parliament.getParty(ideology).chief.isSurrounded();
 
@@ -177,6 +177,17 @@ abstract class Member {
   void onBury(Cell cell) {
     assert(canBuryOn(cell), "Can't do an action on the selected cell");
     body!.location = cell;
+    Party? partyInPower = parliament.getPartyInPower();
+    if (partyInPower != null) {
+      for (final dir in Cell.allDirections) {
+        final adjacent = cell + dir;
+        final member = parliament.getMemberAt(adjacent);
+        if (member?.isChief == true && member!.isSurrounded()) {
+          parliament.getParty(member.ideology).movableMembers.forEach((m) => m.ideology = partyInPower.ideology);
+          // if there is a chief in power, all movables pieces are converted to his ideology
+        }
+      }
+    }
     manoeuvre = Manoeuvre.end;
   }
 }
