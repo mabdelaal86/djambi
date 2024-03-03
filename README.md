@@ -15,10 +15,10 @@ More details about the rules: https://www.djambi.net/
 
 - [x] Simple AI algorithm.
 - [x] Undo last play is missing.
-- [x] implement traitors when chief is surrounded
-- [ ] improve IA algorithm
-- [ ] end of game message
-- [ ] Stop the game when no one can kill other players'chief.
+- [x] Implement traitors when chief is surrounded
+- [ ] Improve the AI algorithm
+- [ ] Display an end of game message
+- [ ] Stop the game when no player is able to kill an other players'chief.
 - [ ] Save game state.
 - [ ] Complete GUI with Home page and Settings page.
 

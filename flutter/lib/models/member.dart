@@ -98,21 +98,10 @@ bool isSurrounded([Set<Cell>? visited]) {
     return true;
   }
   visited.add(location);
-  List<Cell> directions = [
-    Cell(0, 1),   // up
-    Cell(1, 0),   // right
-    Cell(0, -1),  // down
-    Cell(-1, 0),  // left
-    Cell(1, 1),   // top-right diagonal
-    Cell(-1, -1), // bottom-left diagonal
-    Cell(1, -1),  // bottom-right diagonal
-    Cell(-1, 1),  // top-left diagonal
-  ];
-
-  for (Cell direction in directions) {
-    Cell newPosition = Cell(location.x + direction.x, location.y + direction.y);
+  for (Cell direction in Cell.allDirections) {
+    final newPosition = location + direction;
     if (!newPosition.isValid) {
-      continue;  // Cell is off the board, considered as not surrounded.
+      continue;  // Cell is off the board, continue to examine other directions.
     }
     Member? piece = parliament.getMemberAt(newPosition);
     if (piece == null) {
