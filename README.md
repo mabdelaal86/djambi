@@ -11,15 +11,14 @@ More details about the rules: https://www.djambi.net/
 <img src="docs/assets/screenshot.png" width="400px">
 
 
-## Missing Rules
-
-* Surrounding a Chief with corpses is not implemented.
-
-
 ## Roadmap
 
 - [x] Simple AI algorithm.
 - [x] Undo last play is missing.
+- [x] Implement traitors when chief is surrounded
+- [ ] Improve the AI algorithm
+- [ ] Display an end of game message
+- [ ] Stop the game when no player is able to kill an other players'chief.
 - [ ] Save game state.
 - [ ] Complete GUI with Home page and Settings page.
 

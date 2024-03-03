@@ -25,5 +25,17 @@ class Chief extends Member {
   }
 
   @override
+  void onMove(Cell cell) {
+    super.onMove(cell);
+    if (cell.isMaze) {
+      for (final party in parliament.parties) {
+        if (party.chief.isSurrounded()) {
+          party.movableMembers.forEach((m) => m.ideology = ideology);
+        }
+      }
+    }
+  }
+
+  @override
   void onExit(Cell cell) => throw UnsupportedError("Unhandled state!");
 }
