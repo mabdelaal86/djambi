@@ -22,9 +22,30 @@ More details about the rules: https://www.djambi.net/
 - [ ] Save game state.
 - [ ] Complete GUI with Home page and Settings page.
 
+corrections:
+- if surrounded then definitely dead
+- other pieces invulnerable
+- if necromobile here, no surrounding possible
+- solve bug, when someone is leaving the power, he should not have 2 turns
 
 ## License
 
 This project is license under a [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html) license.
 
 Images of [pieces](./flutter/assets/classic) are based on Djambi classic theme create by [Rsalen](https://commons.wikimedia.org/wiki/User:Rsalen).
+
+
+## Personal Readme.
+
+- Open game to 3, 4 and 6 players. Rules are differents.
+- For 6 players (and maybe 4), rules can be set in "advanced".
+--> diplo, necro, killer and reporter see their moves evolving.
+- In the menu:
+- in the settings: 
+    - nb players (3, 4, 6, 6-advanced)
+    - IA difficulty (easy, medium, hard)
+- personal space:
+    - pseudo/name
+    - Elo (for each mode)
+- game local on the phone (no elo involved)/train/local game
+- game on remote (elo involved)/start/remote game
