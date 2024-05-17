@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'cell.dart';
 import 'common.dart';
 import 'parliament.dart';
+import 'party.dart';
 
 // member roles
 import 'members/assassin.dart';
@@ -91,6 +92,34 @@ abstract class Member {
     }
   }
 
+bool isSurrounded([Set<Cell>? visited]) {
+  visited ??= {};
+  if (visited.contains(location)) {
+    return true;
+  }
+  visited.add(location);
+  for (Cell direction in Cell.allDirections) {
+    final newPosition = location + direction;
+    if (!newPosition.isValid) {
+      continue;  // Cell is off the board, continue to examine other directions.
+    }
+    Member? piece = parliament.getMemberAt(newPosition);
+    if (piece == null) {
+      return false;  // There is an empty cell, so not surrounded.
+    }
+    if (piece.isDead) {
+      continue;  // Continue to examine other directions.
+    }
+    // For an allied piece, check if it is surrounded.
+    if (!piece.isSurrounded(visited)) {
+      return false;  // Found an allied piece that is not surrounded.
+    }
+  }
+  return true;  // All directions are blocked or lead to dead/surrounded allied pieces.
+}
+
+  bool get isTraitor => !isChief && isDead && !isSurrounded() && parliament.getParty(ideology).chief.isSurrounded();
+
   Iterable<Cell> cellsToAct() => switch (manoeuvre) {
       Manoeuvre.none => cellsToMove(true),
       Manoeuvre.move => Cell.allCells().where(canKillOn),
@@ -137,6 +166,17 @@ abstract class Member {
   void onBury(Cell cell) {
     assert(canBuryOn(cell), "Can't do an action on the selected cell");
     body!.location = cell;
+    Party? partyInPower = parliament.getPartyInPower();
+    if (partyInPower != null) {
+      for (final dir in Cell.allDirections) {
+        final adjacent = cell + dir;
+        final member = parliament.getMemberAt(adjacent);
+        if (member?.isChief == true && member!.isSurrounded()) {
+          parliament.getParty(member.ideology).movableMembers.forEach((m) => m.ideology = partyInPower.ideology);
+          // if there is a chief in power, all movables pieces are converted to his ideology
+        }
+      }
+    }
     manoeuvre = Manoeuvre.end;
   }
 }

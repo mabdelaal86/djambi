@@ -11,8 +11,8 @@ class Party {
 
   Parliament get parliament => chief.parliament;
   Ideology get ideology => chief.ideology;
-  bool get isLost => chief.isDead;
-  bool get isActive => chief.isAlive;
+  bool get isLost => chief.isDead || chief.isSurrounded();
+  bool get isActive => !isLost && movableMembers.isNotEmpty;
 
   Iterable<Member> get aliveMembers =>
       parliament.members.where((m) => m.ideology == ideology && m.isAlive);
