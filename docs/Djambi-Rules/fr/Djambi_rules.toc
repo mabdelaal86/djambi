@@ -33,9 +33,13 @@
 \contentsline {subsubsection}{\numberline {3.2.2}Le Reporter}{15}{}%
 \contentsline {subsubsection}{\numberline {3.2.3}Le Diplomate}{15}{}%
 \contentsline {subsubsection}{\numberline {3.2.4}Le Necromobile}{15}{}%
+\contentsline {subsubsection}{\numberline {3.2.5}Le Militant}{15}{}%
 \contentsline {subsection}{\numberline {3.3}Coups et stratégies usuelles}{16}{}%
 \contentsline {subsubsection}{\numberline {3.3.1}Stratégies usuelles au pouvoir}{16}{}%
 \contentsline {subsubsection}{\numberline {3.3.2}Stratégies usuelles face au pouvoir}{16}{}%
 \contentsline {subsubsection}{\numberline {3.3.3}Stratégies usuelles en début de partie}{16}{}%
 \contentsline {subsubsection}{\numberline {3.3.4}Coups}{17}{}%
-\contentsline {subsection}{\numberline {3.4}Adaptation du plateau à 3 joueurs}{18}{}%
+\contentsline {subsection}{\numberline {3.4}Adaptation du plateau}{18}{}%
+\contentsline {subsubsection}{\numberline {3.4.1}5 joueurs}{18}{}%
+\contentsline {subsubsection}{\numberline {3.4.2}4 joueurs}{18}{}%
+\contentsline {subsubsection}{\numberline {3.4.3}3 joueurs}{18}{}%
