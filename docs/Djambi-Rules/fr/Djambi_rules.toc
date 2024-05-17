@@ -1,0 +1,41 @@
+\contentsline {section}{\numberline {1}Overview}{2}{}%
+\contentsline {subsection}{\numberline {1.1}Déroulement}{2}{}%
+\contentsline {section}{\numberline {2}Règles classiques}{4}{}%
+\contentsline {subsection}{\numberline {2.1}Déplacement des pièces}{4}{}%
+\contentsline {subsection}{\numberline {2.2}Effet des pièces}{5}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}Le Militant}{5}{}%
+\contentsline {subsubsection}{\numberline {2.2.2}Le Chef}{5}{}%
+\contentsline {subsubsection}{\numberline {2.2.3}L'Assassin}{6}{}%
+\contentsline {subsubsection}{\numberline {2.2.4}Le Reporter}{7}{}%
+\contentsline {subsubsection}{\numberline {2.2.5}Le Diplomate}{8}{}%
+\contentsline {subsubsection}{\numberline {2.2.6}Le Necromobile}{9}{}%
+\contentsline {subsection}{\numberline {2.3}Elimination d'un joueur}{10}{}%
+\contentsline {subsubsection}{\numberline {2.3.1}Mort directe}{10}{}%
+\contentsline {subsubsection}{\numberline {2.3.2}Mort par encerclement}{10}{}%
+\contentsline {subsubsection}{\numberline {2.3.3}Fin de partie}{10}{}%
+\contentsline {subsection}{\numberline {2.4}Prise de pouvoir}{11}{}%
+\contentsline {subsubsection}{\numberline {2.4.1}Soumission des pièces neutres}{11}{}%
+\contentsline {subsubsection}{\numberline {2.4.2}Droit de Réponse}{11}{}%
+\contentsline {subsubsection}{\numberline {2.4.3}Intouchable}{11}{}%
+\contentsline {subsubsection}{\numberline {2.4.4}Forteresse}{11}{}%
+\contentsline {subsection}{\numberline {2.5}Elimination d'un chef au pouvoir}{12}{}%
+\contentsline {subsubsection}{\numberline {2.5.1}Elimination par un autre chef}{12}{}%
+\contentsline {subsubsection}{\numberline {2.5.2}Elimination par un reporter}{12}{}%
+\contentsline {subsubsection}{\numberline {2.5.3}Elimination par un assassin}{12}{}%
+\contentsline {subsubsection}{\numberline {2.5.4}Neutralisation par un diplomate}{12}{}%
+\contentsline {subsubsection}{\numberline {2.5.5}Action du necromobile}{12}{}%
+\contentsline {section}{\numberline {3}Règles Avancées}{13}{}%
+\contentsline {subsection}{\numberline {3.1}Evolution du plateau}{14}{}%
+\contentsline {subsubsection}{\numberline {3.1.1}Déplacements}{14}{}%
+\contentsline {subsubsection}{\numberline {3.1.2}Case centrale}{14}{}%
+\contentsline {subsection}{\numberline {3.2}Evolution des pièces}{15}{}%
+\contentsline {subsubsection}{\numberline {3.2.1}L'Assassin}{15}{}%
+\contentsline {subsubsection}{\numberline {3.2.2}Le Reporter}{15}{}%
+\contentsline {subsubsection}{\numberline {3.2.3}Le Diplomate}{15}{}%
+\contentsline {subsubsection}{\numberline {3.2.4}Le Necromobile}{15}{}%
+\contentsline {subsection}{\numberline {3.3}Coups et stratégies usuelles}{16}{}%
+\contentsline {subsubsection}{\numberline {3.3.1}Stratégies usuelles au pouvoir}{16}{}%
+\contentsline {subsubsection}{\numberline {3.3.2}Stratégies usuelles face au pouvoir}{16}{}%
+\contentsline {subsubsection}{\numberline {3.3.3}Stratégies usuelles en début de partie}{16}{}%
+\contentsline {subsubsection}{\numberline {3.3.4}Coups}{17}{}%
+\contentsline {subsection}{\numberline {3.4}Adaptation du plateau à 3 joueurs}{18}{}%
