@@ -55,36 +55,48 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
 
-    const vrStep = 80;
-    const hrSep = 10;
-    final hrMid = size.x / 2;
-    var vrStart = size.y / 3;
+    const vrSep = 65;
+    const hrSep = 15;
+    final hrMid = size.x * 0.55;
+    var vrStart = size.y * 0.30;
 
     // turn direction
-    _turnDirText.position = Vector2(hrMid - _turnDirText.width / 2, vrStart);
-    _turnDirClockwise.position = Vector2(hrMid + RoundedButton.defaultSize.x * 0.5 + hrSep, vrStart);
-    _turnDirAnticlockwise.position = Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep * 2, vrStart);
+    _turnDirText.position = Vector2(hrMid - hrSep, vrStart);
+    _turnDirClockwise.position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart);
+    _turnDirAnticlockwise.position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
 
     // start ideology
-    _startIdeologyText.position = Vector2(hrMid - _startIdeologyText.width / 2, vrStart += vrStep);
-    for (final (i, btn) in _startIdeologyButtons.indexed) {
-      btn.position = Vector2(hrMid + RoundedButton.defaultSize.x * (i + 0.5) + hrSep * (i + 1), vrStart);
-    }
+    _startIdeologyText.position = Vector2(hrMid - hrSep, vrStart += vrSep * 1.5);
+    _startIdeologyButtons[Ideology.green.index].position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart);
+    _startIdeologyButtons[Ideology.yellow.index].position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
+    _startIdeologyButtons[Ideology.red.index].position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart += vrSep);
+    _startIdeologyButtons[Ideology.blue.index].position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
 
     // human players
-    _humanPlayersText.position = Vector2(hrMid - _humanPlayersText.width / 2, vrStart += vrStep);
-    for (final (i, btn) in _humanPlayersButtons.indexed) {
-      btn.position = Vector2(hrMid + RoundedButton.defaultSize.x * (i + 0.5) + hrSep * (i + 1), vrStart);
-    }
+    _humanPlayersText.position = Vector2(hrMid - hrSep, vrStart += vrSep * 1.5);
+    _humanPlayersButtons[Ideology.green.index].position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart);
+    _humanPlayersButtons[Ideology.yellow.index].position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
+    _humanPlayersButtons[Ideology.red.index].position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart += vrSep);
+    _humanPlayersButtons[Ideology.blue.index].position =
+        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
 
     // play
-    _playButton.position = Vector2(hrMid, vrStart += vrStep * 1.5);
+    _playButton.position = Vector2(size.x / 2, size.y - _playButton.height - hrSep);
   }
 
   void _createTurnDirection() {
     _turnDirText = TextComponent(
       text: "Turn Direction:",
-      anchor: Anchor.center,
+      anchor: Anchor.centerRight,
     );
     _turnDirClockwise = OptionButton(
       icon: Icons.rotate_right,
@@ -101,7 +113,7 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
   void _createStartIdeology() {
     _startIdeologyText = TextComponent(
       text: "Start Player:",
-      anchor: Anchor.center,
+      anchor: Anchor.centerRight,
     );
     _startIdeologyButtons = Ideology.values.map((e) => OptionButton(
         text: e.name[0].toUpperCase(),
@@ -113,7 +125,7 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
   void _createHumanPlayers() {
     _humanPlayersText = TextComponent(
       text: "Human Players:",
-      anchor: Anchor.center,
+      anchor: Anchor.centerRight,
     );
     _humanPlayersButtons = Ideology.values.map((e) => ToggleButton(
         text: e.name[0].toUpperCase(),

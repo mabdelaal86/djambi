@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'dart:ui';
+
 import 'package:collection/collection.dart';
 
 import 'cell.dart';
@@ -25,8 +25,6 @@ class Parliament {
   Member? _actor;
   Member? get actor => _actor;
 
-  final VoidCallback? onManoeuvreCompleted;
-
   bool get isManoeuvreCompleted => _actor == null;
   bool get isGameFinished => activeParties.length == 1 && isManoeuvreCompleted;
   String getSign() {
@@ -37,7 +35,7 @@ class Parliament {
     return "${currentParty.ideology.name[0]}:${stm.entries.map((e) => "${e.key},${e.value}").join(";")}#";
   }
 
-  Parliament(this._currentIdeology, this.turnDirection, [this.onManoeuvreCompleted]) {
+  Parliament(this._currentIdeology, this.turnDirection) {
     // create members
     members = Ideology.values.map((id) => _recruitMembers(id)).flattened.toList();
     assert(members.length == 9 * 4);
@@ -50,8 +48,7 @@ class Parliament {
   }
   Parliament.copy(Parliament other)
       : _currentIdeology = other._currentIdeology,
-        turnDirection = other.turnDirection,
-        onManoeuvreCompleted = other.onManoeuvreCompleted {
+        turnDirection = other.turnDirection {
     // copy members
     members = other.members.map((m) => Member.copy(this, m)).toList();
     assert(members.length == 9 * 4);
@@ -115,7 +112,6 @@ class Parliament {
     _actor!.manoeuvre = Manoeuvre.none;
     _actor = null;
     _currentParty = _getNextParty();
-    onManoeuvreCompleted?.call();
   }
 
   Party _getNextParty() {

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:stack/stack.dart';
 
 import '../models/cell.dart';
@@ -13,8 +15,10 @@ class GameState {
 
   bool get canUndo => _undoStack.isNotEmpty;
   bool get canRedo => _redoStack.isNotEmpty;
+  final VoidCallback? onManoeuvreCompleted;
 
-  GameState(Ideology startIdeology, TurnDirection turnDirection)
+  GameState(
+      Ideology startIdeology, TurnDirection turnDirection, [this.onManoeuvreCompleted])
     : parliament = Parliament(startIdeology, turnDirection);
 
   void undo() {
@@ -32,7 +36,12 @@ class GameState {
   void doAction(Member member, Cell cell) {
     final newParliament = parliament.makeCopy();
     newParliament.act(member.id, cell);
-    _handleNewState(newParliament);
+    _redoStack.clear();
+    _undoStack.push(parliament);
+    parliament = newParliament;
+    if (parliament.isManoeuvreCompleted) {
+      onManoeuvreCompleted?.call();
+    }
   }
 
   void aiAct(int maxDepth) {
@@ -40,13 +49,10 @@ class GameState {
     if (parliament.isGameFinished) return;
     final tree = Tree(parliament, maxDepth);
     tree.build();
-    _handleNewState(tree.decision.parliament);
-  }
-
-  void _handleNewState(Parliament newParliament) {
-    _redoStack.clear();
-    _undoStack.push(parliament);
-    parliament = newParliament;
+    parliament = tree.decision.parliament;
+    if (parliament.isManoeuvreCompleted) {
+      onManoeuvreCompleted?.call();
+    }
   }
 
   Iterable<Cell> lastMovementCells() sync* {

@@ -20,12 +20,15 @@ class PlayPage extends PositionComponent {
   final _pieceTheme = AppearanceSettings.instance.pieceTheme;
   final _gameSettings = GameSettings.instance;
 
-  late final RoundedButton _undo, _redo, _aiAct;
+  late final RoundedButton _undo, _redo;
 
   @override
   Future<void> onLoad() async {
     _gameState = GameState(
-        _gameSettings.startIdeology, _gameSettings.turnDirection);
+      _gameSettings.startIdeology,
+      _gameSettings.turnDirection,
+      onManoeuvreCompleted,
+    );
     await addAll([
       Header(),
       _board = Board(
@@ -42,12 +45,8 @@ class PlayPage extends PositionComponent {
         size: RoundedButton.defaultSize,
         onReleased: () => _gameState.redo(),
       ),
-      _aiAct = RoundedButton(
-        icon: Icons.computer,
-        size: RoundedButton.defaultSize,
-        onReleased: () => _gameState.aiAct(2),
-      ),
     ]);
+    onManoeuvreCompleted();
   }
 
   @override
@@ -56,10 +55,19 @@ class PlayPage extends PositionComponent {
 
     _undo.position =  Vector2(size.x / 2 - 100, size.y - 50);
     _redo.position =  _undo.position + Vector2(100, 0);
-    _aiAct.position = _redo.position + Vector2(100, 0);
 
     final scale = min(size.x, size.y - 200) / Dimensions.boardSize.x;
     _board.scale = Vector2.all(scale);
     _board.position = size / 2;
+  }
+
+  void onManoeuvreCompleted() {
+    print("onManoeuvreCompleted....");
+    final curIdeology = _gameState.parliament.currentParty.ideology;
+    print(curIdeology);
+    if (_gameSettings.players[curIdeology] == PlayerType.aiMaxN) {
+      print("aii");
+      _gameState.aiAct(2);
+    }
   }
 }
