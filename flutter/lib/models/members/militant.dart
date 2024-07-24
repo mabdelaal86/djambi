@@ -15,8 +15,8 @@ class Militant extends Member {
           !cell.isMaze &&
           // move only 2 steps
           _stepsTo(cell) <= 2 &&
-          // empty cell or alive enemy member
-          (parliament.getMemberAt(cell)?.isAlive ?? true));
+          // empty cell or active enemy member
+          (parliament.getMemberAt(cell)?.isActive ?? true));
 
   int _stepsTo(Cell cell) => (location - cell).abs().max;
 

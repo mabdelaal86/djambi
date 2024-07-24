@@ -33,6 +33,12 @@ enum Role {
   militant,
 }
 
+enum MemberState {
+  active,
+  dead,
+  paralysed, // might need a better name
+}
+
 // represent which stage of the manoeuvre is finished
 enum Manoeuvre {
   none,

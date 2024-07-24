@@ -63,7 +63,7 @@ class GameState {
       if (member.location != lastMember.location) {
         yield member.location;
         yield lastMember.location;
-      } else if (member.isDead != lastMember.isDead) {
+      } else if (member.state != lastMember.state) {
         yield member.location;
       }
     }

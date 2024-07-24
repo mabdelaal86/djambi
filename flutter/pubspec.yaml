@@ -35,7 +35,7 @@ dependencies:
   collection: ^1.18.0
   flame: ^1.18.0
   flame_svg: ^1.10.0
-  meta: ^1.11.0
+  meta: ^1.15.0
   stack: ^0.2.0
   vector_graphics: ^1.1.0
 

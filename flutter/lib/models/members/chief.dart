@@ -11,8 +11,8 @@ class Chief extends Member {
   @override
   Iterable<Cell> cellsToMove(bool canKill) => super
       .cellsToMove(canKill)
-      // empty cell or alive enemy member
-      .where((cell) => parliament.getMemberAt(cell)?.isAlive ?? true);
+      // empty cell or active enemy member
+      .where((cell) => parliament.getMemberAt(cell)?.isActive ?? true);
 
   @override
   void postMove() {

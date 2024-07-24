@@ -13,7 +13,7 @@ class DefaultEvaluator extends StateEvaluator {
 
   @override
   int evaluate(Party party) =>
-      party.aliveMembers.map((m) => _roleValues[m.role]!).sum;
+      party.activeMembers.map((m) => _roleValues[m.role]!).sum;
 
   static const _roleValues = {
     Role.militant: 5,

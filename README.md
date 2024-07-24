@@ -8,12 +8,12 @@ An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 
 More details about the rules: https://www.djambi.net/
 
-<img src="docs/assets/screenshot.png" width="400px">
+<img src="docs/assets/screenshot.png" width="400px" alt="Game screenshot">
 
 
-## Missing Rules
+## Known Issues
 
-* Surrounding a Chief with corpses is not implemented.
+* When a Chief leave the Maze, its team still get extra turn.
 
 
 ## Roadmap
@@ -22,6 +22,7 @@ More details about the rules: https://www.djambi.net/
 - [x] Undo last play is missing.
 - [ ] Save game state.
 - [ ] Complete GUI with Home page and Settings page.
+- [ ] Add two players variation.
 
 
 ## License

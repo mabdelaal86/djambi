@@ -11,8 +11,8 @@ class Diplomat extends Member {
   @override
   Iterable<Cell> cellsToMove(bool canKill) => super
       .cellsToMove(canKill)
-      // empty non maze cell or alive enemy member
-      .where((cell) => parliament.getMemberAt(cell)?.isAlive ?? !cell.isMaze);
+      // empty non maze cell or active enemy member
+      .where((cell) => parliament.getMemberAt(cell)?.isActive ?? !cell.isMaze);
 
   @override
   bool canBuryOn(Cell cell) =>

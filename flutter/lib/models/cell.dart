@@ -42,6 +42,9 @@ class Cell {
     Cell(-1,  1), Cell(0,  1), Cell(1,  1),
   ];
 
+  Iterable<Cell> surroundingCells() =>
+      allDirections.map((d) => this + d).where((c) => c.isValid);
+
   static const List<Cell> orthogonalDirections = [
                  Cell(0, -1),
     Cell(-1, 0), /*location*/ Cell(1, 0),

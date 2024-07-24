@@ -14,8 +14,8 @@ class Assassin extends Member {
   Iterable<Cell> cellsToMove(bool canKill) => super
       .cellsToMove(canKill)
       .where((cell) => switch (parliament.getMemberAt(cell)) {
-            // not empty cell: it should be occupied by an alive enemy
-            var enemy? => enemy.isAlive,
+            // not empty cell: it should be occupied by an active enemy
+            var enemy? => enemy.isActive,
             // empty cell: not the maze and not the cell coming from if exiting maze
             null => !cell.isMaze && (canKill || cell != _cellFrom),
           });

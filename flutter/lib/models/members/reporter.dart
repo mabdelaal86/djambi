@@ -20,7 +20,7 @@ class Reporter extends Member {
 
   bool occupiedByEnemy(Cell cell) {
     final other = parliament.getMemberAt(cell);
-    return other != null && other.isAlive && other.ideology != ideology;
+    return other != null && other.isActive && other.ideology != ideology;
   }
 
   @override

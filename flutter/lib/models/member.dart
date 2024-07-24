@@ -22,9 +22,11 @@ abstract class Member {
 
   Cell location = const Cell.zero();
 
-  bool _isDead = false;
-  bool get isDead => _isDead;
-  bool get isAlive => !_isDead;
+  MemberState state = MemberState.active;
+  bool get isDead => state == MemberState.dead;
+  bool get isAlive => state != MemberState.dead;
+  bool get isActive => state == MemberState.active;
+  bool get isParalysed => state == MemberState.paralysed;
 
   Manoeuvre manoeuvre = Manoeuvre.none;
 
@@ -54,7 +56,7 @@ abstract class Member {
   void copyFrom(Member other) {
     // not constant properties
     location = other.location;
-    _isDead = other._isDead;
+    state = other.state;
     // manoeuvre properties
     manoeuvre = other.manoeuvre;
     _bodyId = other._bodyId;
@@ -62,10 +64,10 @@ abstract class Member {
 
   @protected
   void kill(Member member) {
-    member._isDead = true;
+    member.state = MemberState.dead;
     // take over other members if the killed member is a chief
     if (member.isChief) {
-      parliament.getParty(member.ideology).aliveMembers.forEach((m) => m.ideology = ideology);
+      parliament.getParty(member.ideology).activeMembers.forEach((m) => m.ideology = ideology);
     }
   }
 
@@ -79,11 +81,13 @@ abstract class Member {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {
-          // if can kill, cell should be occupied by dead or enemy member
-          if (canKill && (member.isDead || member.ideology != ideology)) {
-            yield cell;
-          }
-          break; // stop this direction after first occupied cell
+          // should `break` in all cases to stop this direction after first occupied cell
+          if (!canKill) break;
+          if (member.isParalysed) break;
+          if (member.isActive && member.ideology == ideology) break;
+          // if can kill, cell should be occupied by dead or active enemy member
+          yield cell;
+          break;
         }
         // empty cell
         yield cell;

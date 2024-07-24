@@ -6,6 +6,7 @@ import 'cell.dart';
 import 'common.dart';
 import 'member.dart';
 import 'party.dart';
+import 'members/chief.dart';
 
 class Parliament {
   late final List<Member> members;
@@ -14,8 +15,8 @@ class Parliament {
 
   late final List<Party> parties;
   Party getParty(Ideology ideology) => parties.firstWhere((p) => p.ideology == ideology);
-  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isAlive);
-  Iterable<Party> get activeParties => parties.where((p) => p.isActive);
+  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isActive);
+  Iterable<Party> get activeParties => parties.where((p) => p.chief.isActive);
 
   Ideology _currentIdeology;
   late Party _currentParty;
@@ -29,6 +30,7 @@ class Parliament {
   bool get isGameFinished => activeParties.length == 1 && isManoeuvreCompleted;
   String getSign() {
     assert(isManoeuvreCompleted);
+    // TODO: update this part
     sign(Member m) => MapEntry<int, int>(m.location.y * 10 + m.location.x, m.isDead ? -1 : m.id);
     final stm = SplayTreeMap<int, int>();
     stm.addEntries(members.map(sign));
@@ -41,11 +43,12 @@ class Parliament {
     assert(members.length == 9 * 4);
     _setInitialPositions();
     // create parties
-    parties = members.where((m) => m.isChief).map((m) => Party(m)).toList();
+    parties = members.where((m) => m.isChief).map((m) => Party(m as Chief)).toList();
     assert(parties.length == 4);
     // other properties
     _currentParty = getParty(_currentIdeology);
   }
+
   Parliament.copy(Parliament other)
       : _currentIdeology = other._currentIdeology,
         turnDirection = other.turnDirection {
@@ -53,7 +56,7 @@ class Parliament {
     members = other.members.map((m) => Member.copy(this, m)).toList();
     assert(members.length == 9 * 4);
     // copy parties
-    parties = members.where((m) => m.isChief).map((m) => Party(m)).toList();
+    parties = members.where((m) => m.isChief).map((m) => Party(m as Chief)).toList();
     assert(parties.length == 4);
     // other properties
     _currentParty = getParty(other._currentParty.ideology);
@@ -95,7 +98,7 @@ class Parliament {
     assert(!isGameFinished);
     if (_actor == null) {
       assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
-      assert(members[memberId].isAlive, "Selected member is dead");
+      assert(members[memberId].isActive, "Selected member is not active");
       _actor = members[memberId];
     }
     assert(_actor!.id == memberId, "Current actor is not the selected member");
@@ -104,6 +107,8 @@ class Parliament {
     _actor!.act(cell);
     // if current manoeuvre is finished, move to next turn/player
     if (_actor!.manoeuvre == Manoeuvre.end) {
+      _checkSurroundings();
+      _takeOverParalysed();
       _nextTurn();
     }
   }
@@ -119,7 +124,7 @@ class Parliament {
       for (int i = 0; i < Ideology.values.length; i++) {
         _currentIdeology = turnDirection.next(_currentIdeology);
         final party = getParty(_currentIdeology);
-        if (party.isActive) yield party;
+        if (party.chief.isActive) yield party;
       }
       throw AssertionError("Shouldn't reach this point!");
     }
@@ -129,5 +134,25 @@ class Parliament {
     if (partyInPower != currentParty)   return partyInPower;
     if (activeParties.length == 2)      return nextActiveParty().first;
     return nextActiveParty().firstWhere((p) => p.ideology != currentParty.ideology);
+  }
+
+  void _checkSurroundings() {
+    for (final party in activeParties) {
+      if (party.isChiefSurrounded()) {
+        party.chief.state = MemberState.dead;
+        for (final member in party.activeMembers) {
+          member.state = MemberState.paralysed;
+        }
+      }
+    }
+  }
+
+  void _takeOverParalysed() {
+    if (getPartyInPower() case final inPower?) {
+      for (final member in members.where((m) => m.isParalysed)) {
+        member.ideology = inPower.ideology;
+        member.state = MemberState.active;
+      }
+    }
   }
 }

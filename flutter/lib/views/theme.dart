@@ -25,6 +25,7 @@ class BoardTheme {
   final Paint pieceEdgePaint;
   final TextStyle pieceSymbolStyle;
   final Paint deadPaint;
+  final Paint paralysedPaint;
   final Paint selectableMarkPaint;
   final Paint selectedMarkPaint;
   final Paint actionMarkPaint;
@@ -45,6 +46,7 @@ class BoardTheme {
     required this.pieceEdgePaint,
     required this.pieceSymbolStyle,
     required this.deadPaint,
+    required this.paralysedPaint,
     required this.selectableMarkPaint,
     required this.selectedMarkPaint,
     required this.actionMarkPaint,
@@ -81,6 +83,7 @@ BoardTheme getDefaultBoardTheme() {
       fontWeight: FontWeight.bold,
     ),
     deadPaint: const Color(0xff757575).paint(),
+    paralysedPaint: const Color(0xffe4e4e4).paint(),
     selectableMarkPaint: const Color(0xff757575).paint(),
     selectedMarkPaint: const Color(0xffea80fc).paint(),
     actionMarkPaint: const Color(0xff757575).paint(),

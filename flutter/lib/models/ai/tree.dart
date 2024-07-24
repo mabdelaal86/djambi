@@ -36,7 +36,7 @@ class Node {
   }
 
   Iterable<Member> _whoCanAct() => parliament.isManoeuvreCompleted
-      ? parliament.currentParty.aliveMembers
+      ? parliament.currentParty.activeMembers
       : [parliament.actor!];
 
   Iterable<(Member, Cell)> availableActions() sync* {
