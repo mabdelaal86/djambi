@@ -27,7 +27,9 @@ class PlayPage extends PositionComponent {
     await addAll([
       Header(),
       _board = Board(
-        gameState, boardTheme, pieceTheme,
+        gameState,
+        boardTheme,
+        pieceTheme,
         anchor: Anchor.center,
       ),
       _undo = Button(
@@ -52,8 +54,8 @@ class PlayPage extends PositionComponent {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
 
-    _undo.position =  Vector2(size.x / 2 - 100, size.y - 50);
-    _redo.position =  _undo.position + Vector2(100, 0);
+    _undo.position = Vector2(size.x / 2 - 100, size.y - 50);
+    _redo.position = _undo.position + Vector2(100, 0);
     _aiAct.position = _redo.position + Vector2(100, 0);
 
     final scale = min(size.x, size.y - 200) / Dimensions.boardSize.x;

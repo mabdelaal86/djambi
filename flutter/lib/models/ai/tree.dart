@@ -32,7 +32,9 @@ class Node {
   void evaluate(StateEvaluator evaluator) {
     assert(subNodes.isEmpty, "evaluate should run on leaf nodes only");
     assert(parliament.isManoeuvreCompleted, "the maneuver should be completed");
-    _evaluations = { for (final p in parliament.parties) p.ideology: evaluator.evaluate(p) };
+    _evaluations = {
+      for (final p in parliament.parties) p.ideology: evaluator.evaluate(p)
+    };
   }
 
   Iterable<Member> _whoCanAct() => parliament.isManoeuvreCompleted
@@ -53,7 +55,8 @@ class Node {
   void calcMaxN() {
     assert(_evaluations.isEmpty, "evaluations is expected to be empty");
     assert(subNodes.isNotEmpty, "should run on NONE leaf nodes");
-    int max = -999999999999999; // just a very small number as no const for min int
+    int max =
+        -999999999999999; // just a very small number as no const for min int
     Map<Ideology, int>? evaluations;
     Node? bestSub;
     for (Node sub in subNodes) {

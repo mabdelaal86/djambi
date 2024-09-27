@@ -16,11 +16,11 @@ class DefaultEvaluator extends StateEvaluator {
       party.aliveMembers.map((m) => _roleValues[m.role]!).sum;
 
   static const _roleValues = {
-    Role.militant: 6,
-    Role.necromobile: 12,
-    Role.diplomat: 12,
-    Role.assassin: 18,
-    Role.reporter: 18,
+    Role.militant: 5,
+    Role.necromobile: 15,
+    Role.diplomat: 10,
+    Role.assassin: 10,
+    Role.reporter: 12,
     Role.chief: 30, // 48 if in power.
   };
 }

@@ -6,6 +6,7 @@ import 'member.dart';
 import 'parliament.dart';
 
 class Party {
+  // add everything that could impact heuristics.
   final Member chief;
   Party(this.chief);
 
@@ -13,6 +14,7 @@ class Party {
   Ideology get ideology => chief.ideology;
   bool get isLost => chief.isDead || chief.isSurrounded();
   bool get isActive => !isLost && movableMembers.isNotEmpty;
+  // has leader in power.
 
   Iterable<Member> get aliveMembers =>
       parliament.members.where((m) => m.ideology == ideology && m.isAlive);

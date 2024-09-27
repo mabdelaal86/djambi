@@ -17,8 +17,7 @@ class Board extends PositionComponent with TapCallbacks {
   final MovementsRenderer _movements;
   final PiecesRenderer _pieces;
 
-  Board(
-      GameState gameState, BoardTheme boardTheme, PieceTheme pieceTheme,
+  Board(GameState gameState, BoardTheme boardTheme, PieceTheme pieceTheme,
       {super.position, super.anchor})
       : _background = BackgroundRenderer(boardTheme, pieceTheme),
         _movements = MovementsRenderer(gameState, boardTheme),

@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 
 import 'pages/home.dart';
 import 'pages/play.dart';
+import 'pages/settings.dart';
 
 class DjambiGame extends FlameGame {
   late final RouterComponent router;
@@ -12,6 +13,7 @@ class DjambiGame extends FlameGame {
       routes: {
         "home": Route(HomePage.new),
         "play": Route(PlayPage.new),
+        'settings': Route(SettingsPage.new),
       },
       initialRoute: "home",
     ));

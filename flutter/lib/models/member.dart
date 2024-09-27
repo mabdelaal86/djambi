@@ -37,14 +37,15 @@ abstract class Member {
   @override
   String toString() => "${ideology.name}:${role.name}($location)";
 
-  factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) =>
+  factory Member.create(
+          Parliament parliament, Role role, Ideology ideology, int id) =>
       switch (role) {
-        Role.chief =>         Chief(parliament, ideology, id),
-        Role.assassin =>      Assassin(parliament, ideology, id),
-        Role.reporter =>      Reporter(parliament, ideology, id),
-        Role.diplomat =>      Diplomat(parliament, ideology, id),
-        Role.necromobile =>   Necromobile(parliament, ideology, id),
-        Role.militant =>      Militant(parliament, ideology, id),
+        Role.chief => Chief(parliament, ideology, id),
+        Role.assassin => Assassin(parliament, ideology, id),
+        Role.reporter => Reporter(parliament, ideology, id),
+        Role.diplomat => Diplomat(parliament, ideology, id),
+        Role.necromobile => Necromobile(parliament, ideology, id),
+        Role.militant => Militant(parliament, ideology, id),
       };
 
   factory Member.copy(Parliament parliament, Member other) =>
@@ -66,7 +67,10 @@ abstract class Member {
     member._isDead = true;
     // take over other members if the killed member is a chief
     if (member.isChief) {
-      parliament.getParty(member.ideology).aliveMembers.forEach((m) => m.ideology = ideology);
+      parliament
+          .getParty(member.ideology)
+          .aliveMembers
+          .forEach((m) => m.ideology = ideology);
     }
   }
 
@@ -80,11 +84,16 @@ abstract class Member {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {
-          // if can kill, cell should be occupied by dead or enemy member
-          if (canKill && (member.isDead || member.ideology != ideology)) {
-            yield cell;
+          // if assassin in advanced rules, you can go through your own pieces
+          if (member.ideology != ideology ||
+              role != Role.assassin ||
+              member.isDead) {
+            // if can kill, cell should be occupied by dead or enemy member
+            if (canKill && (member.isDead || member.ideology != ideology)) {
+              yield cell;
+            }
+            break; // stop this direction after first occupied cell
           }
-          break; // stop this direction after first occupied cell
         }
         // empty cell
         yield cell;
@@ -92,58 +101,69 @@ abstract class Member {
     }
   }
 
-bool isSurrounded([Set<Cell>? visited]) {
-  visited ??= {};
-  if (visited.contains(location)) {
-    return true;
+  bool isSurrounded([Set<Cell>? visited]) {
+    visited ??= {};
+    if (visited.contains(location)) {
+      return true;
+    }
+    visited.add(location);
+    for (Cell direction in Cell.allDirections) {
+      final newPosition = location + direction;
+      if (!newPosition.isValid) {
+        continue; // Cell is off the board, continue to examine other directions.
+      }
+      Member? piece = parliament.getMemberAt(newPosition);
+      if (piece == null) {
+        return false; // There is an empty cell, so not surrounded.
+      }
+      if (piece.isDead) {
+        continue; // Continue to examine other directions.
+      }
+      // For an allied piece, check if it is surrounded.
+      if (!piece.isSurrounded(visited)) {
+        return false; // Found an allied piece that is not surrounded.
+      }
+    }
+    return true; // All directions are blocked or lead to dead/surrounded allied pieces.
   }
-  visited.add(location);
-  for (Cell direction in Cell.allDirections) {
-    final newPosition = location + direction;
-    if (!newPosition.isValid) {
-      continue;  // Cell is off the board, continue to examine other directions.
-    }
-    Member? piece = parliament.getMemberAt(newPosition);
-    if (piece == null) {
-      return false;  // There is an empty cell, so not surrounded.
-    }
-    if (piece.isDead) {
-      continue;  // Continue to examine other directions.
-    }
-    // For an allied piece, check if it is surrounded.
-    if (!piece.isSurrounded(visited)) {
-      return false;  // Found an allied piece that is not surrounded.
-    }
-  }
-  return true;  // All directions are blocked or lead to dead/surrounded allied pieces.
-}
 
-  bool get isTraitor => !isChief && isDead && !isSurrounded() && parliament.getParty(ideology).chief.isSurrounded();
+  bool get isTraitor =>
+      !isChief &&
+      isDead &&
+      !isSurrounded() &&
+      parliament.getParty(ideology).chief.isSurrounded();
 
   Iterable<Cell> cellsToAct() => switch (manoeuvre) {
-      Manoeuvre.none => cellsToMove(true),
-      Manoeuvre.move => Cell.allCells().where(canKillOn),
-      Manoeuvre.kill => cellsToMove(false),
-      Manoeuvre.exit => Cell.allCells().where(canBuryOn),
-      Manoeuvre.end =>  const Iterable.empty(),
-    };
+        Manoeuvre.none => cellsToMove(true),
+        Manoeuvre.move => Cell.allCells().where(canKillOn),
+        Manoeuvre.kill => cellsToMove(false),
+        Manoeuvre.exit => Cell.allCells().where(canBuryOn),
+        Manoeuvre.end => const Iterable.empty(),
+      };
 
   bool canKillOn(Cell cell) => false;
   bool canBuryOn(Cell cell) => !cell.isMaze && parliament.isEmpty(cell);
 
   void act(Cell cell) {
     switch (manoeuvre) {
-      case Manoeuvre.none:  onMove(cell); postMove();
-      case Manoeuvre.move:  onKill(cell);
-      case Manoeuvre.kill:  onExit(cell);
-      case Manoeuvre.exit:  onBury(cell);
-      case Manoeuvre.end:   throw AssertionError("Can't act on the `end` state!");
+      case Manoeuvre.none:
+        onMove(cell);
+        postMove();
+      case Manoeuvre.move:
+        onKill(cell);
+      case Manoeuvre.kill:
+        onExit(cell);
+      case Manoeuvre.exit:
+        onBury(cell);
+      case Manoeuvre.end:
+        throw AssertionError("Can't act on the `end` state!");
     }
   }
 
   @protected
   void onMove(Cell cell) {
-    assert(cellsToMove(true).contains(cell), "Can't do an action on the selected cell");
+    assert(cellsToMove(true).contains(cell),
+        "Can't do an action on the selected cell");
     _bodyId = parliament.getMemberAt(cell)?.id;
     location = cell;
     manoeuvre = Manoeuvre.move;
@@ -157,7 +177,8 @@ bool isSurrounded([Set<Cell>? visited]) {
 
   @protected
   void onExit(Cell cell) {
-    assert(cellsToMove(false).contains(cell), "Can't do an action on the selected cell");
+    assert(cellsToMove(false).contains(cell),
+        "Can't do an action on the selected cell");
     location = cell;
     manoeuvre = Manoeuvre.exit;
   }
@@ -172,7 +193,10 @@ bool isSurrounded([Set<Cell>? visited]) {
         final adjacent = cell + dir;
         final member = parliament.getMemberAt(adjacent);
         if (member?.isChief == true && member!.isSurrounded()) {
-          parliament.getParty(member.ideology).movableMembers.forEach((m) => m.ideology = partyInPower.ideology);
+          parliament
+              .getParty(member.ideology)
+              .movableMembers
+              .forEach((m) => m.ideology = partyInPower.ideology);
           // if there is a chief in power, all movables pieces are converted to his ideology
         }
       }
