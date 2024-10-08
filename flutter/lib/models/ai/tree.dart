@@ -56,13 +56,14 @@ class Node {
     int max = -999999999999999; // just a very small number as no const for min int
     Map<Ideology, int>? evaluations;
     Node? bestSub;
-    for (Node sub in subNodes) {
-      int nodeValue = sub._evaluations[parliament.currentParty.ideology]!;
-      int subMax = sub._evaluations.values.map((v) => nodeValue - v).sum;
+    for (final subNode in subNodes) {
+      int nodeValue = subNode._evaluations[parliament.currentParty.ideology]!;
+      int subMax = subNode._evaluations.values.map((v) => nodeValue - v).sum;
       if (subMax > max) {
         max = subMax;
-        evaluations = sub._evaluations;
-        bestSub = sub.parliament.isManoeuvreCompleted ? sub : sub.bestSubNode;
+        evaluations = subNode._evaluations;
+        bestSub = subNode.parliament.isManoeuvreCompleted
+            ? subNode : subNode.bestSubNode;
       }
     }
     _evaluations = evaluations!;
@@ -93,7 +94,9 @@ class Tree {
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
       node.evaluate(evaluator);
     } else {
-      node.availableActions().forEach((a) => _doAction(node, a.$1, a.$2));
+      for (final action in node.availableActions()) {
+        _doAction(node, action.$1, action.$2);
+      }
       if (node.subNodes.isEmpty) {
         // all sub nodes are visited
         node.parent!.subNodes.remove(node);

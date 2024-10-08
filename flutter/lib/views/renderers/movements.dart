@@ -104,7 +104,9 @@ class MovementsRenderer {
   }
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
-    cells.forEach((c) => _markCircle(canvas, c, boardTheme.selectableMarkPaint));
+    for (final cell in cells) {
+      _markCircle(canvas, cell, boardTheme.selectableMarkPaint);
+    }
   }
 
   void _markSelected(Canvas canvas, Cell cell) {
@@ -112,11 +114,15 @@ class MovementsRenderer {
   }
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
-    cells.forEach((c) => _markCircle(canvas, c, boardTheme.actionMarkPaint));
+    for (final cell in cells) {
+      _markCircle(canvas, cell, boardTheme.actionMarkPaint);
+    }
   }
 
   void _markLastMovement(Canvas canvas) {
-    gameState.lastMovementCells().forEach((c) => _markRect(canvas, c, boardTheme.movedMarkPaint));
+    for (final cell in gameState.lastMovementCells()) {
+      _markRect(canvas, cell, boardTheme.movedMarkPaint);
+    }
   }
 
   void _markCircle(Canvas canvas, Cell cell, Paint paint) {

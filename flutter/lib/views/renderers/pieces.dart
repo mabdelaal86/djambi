@@ -34,7 +34,9 @@ class PiecesRenderer {
   }
 
   void _drawMembers(Canvas canvas) {
-    parliament.members.forEach((m) => _drawMember(canvas, m));
+    for (final member in parliament.members) {
+      _drawMember(canvas, member);
+    }
   }
 
   void _drawActor(Canvas canvas) {

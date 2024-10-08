@@ -62,11 +62,8 @@ class PlayPage extends PositionComponent {
   }
 
   void onManoeuvreCompleted() {
-    print("onManoeuvreCompleted....");
     final curIdeology = _gameState.parliament.currentParty.ideology;
-    print(curIdeology);
     if (_gameSettings.players[curIdeology] == PlayerType.aiMaxN) {
-      print("aii");
       _gameState.aiAct(2);
     }
   }

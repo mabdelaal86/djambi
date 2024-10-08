@@ -84,8 +84,10 @@ class Parliament {
 
   void _setInitialPositions() {
     void setInitPosition(Ideology ideology, Cell scale, Cell translation) {
-      members.where((m) => m.ideology == ideology)
-          .forEach((m) => m.location = m.location * scale + translation);
+      final partyMembers = members.where((m) => m.ideology == ideology);
+      for (final member in partyMembers) {
+        member.location = member.location * scale + translation;
+      }
     }
 
     setInitPosition(Ideology.red,    const Cell( 1, -1), const Cell(1, 7));

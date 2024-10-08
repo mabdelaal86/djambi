@@ -32,9 +32,11 @@ class BackgroundRenderer {
     // paint margin background
     canvas.drawRect(Dimensions.boardSize.toRect(), boardTheme.marginPaint);
     // paint cells background
-    Cell.allCells().forEach((cell) => canvas.drawRect(
+    for (final cell in Cell.allCells()) {
+      canvas.drawRect(
         Dimensions.cellOffset(cell) & Dimensions.cellSize,
-        cell.isDark ? boardTheme.darkCellPaint : boardTheme.lightCellPaint));
+        cell.isDark ? boardTheme.darkCellPaint : boardTheme.lightCellPaint);
+    }
   }
 
   void _drawMaze(Canvas canvas) {
