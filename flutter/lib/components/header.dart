@@ -6,11 +6,13 @@ import 'game.dart';
 
 class Header extends PositionComponent with HasGameReference<DjambiGame> {
   final String title;
-  
+  final VoidCallback? onBackTapUp;
+
   late final TextComponent _text;
 
   Header({
     this.title = "Djambi",
+    this.onBackTapUp,
   });
 
   @override
@@ -25,7 +27,10 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
           icon: Icons.arrow_back,
           position: Vector2(50, 50),
           size: RoundedButton.defaultSize,
-          onReleased: () => game.router.pop(),
+          onReleased: () => switch(onBackTapUp) {
+            null => game.router.pop(),
+            final fun => fun.call(),
+          },
         ),
     ]);
   }

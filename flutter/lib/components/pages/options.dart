@@ -28,23 +28,16 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   @override
   Future<void> onLoad() async {
-    _createTurnDirection();
-    _createStartIdeology();
-    _createHumanPlayers();
     await addAll([
       Header(),
+      ..._createTurnDirection(),
+      ..._createStartIdeology(),
+      ..._createHumanPlayers(),
       _playButton = RoundedButton(
         text: "Play",
         size: Vector2(300, 75),
         onReleased: () => game.router.pushNamed("play"),
       ),
-      _turnDirText,
-      _turnDirClockwise,
-      _turnDirAnticlockwise,
-      _startIdeologyText,
-      ..._startIdeologyButtons,
-      _humanPlayersText,
-      ..._humanPlayersButtons,
     ]);
     _setTurnDirection(_settings.turnDirection);
     _setStartIdeology(_settings.startIdeology);
@@ -93,48 +86,48 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
     _playButton.position = Vector2(size.x / 2, size.y - _playButton.height - hrSep);
   }
 
-  void _createTurnDirection() {
+  List<Component> _createTurnDirection() => [
     _turnDirText = TextComponent(
       text: "Turn Direction:",
       anchor: Anchor.centerRight,
-    );
+    ),
     _turnDirClockwise = OptionButton(
       icon: Icons.rotate_right,
       size: RoundedButton.defaultSize,
       onSelect: () => _setTurnDirection(TurnDirection.clockwise),
-    );
+    ),
     _turnDirAnticlockwise = OptionButton(
       icon: Icons.rotate_left,
       size: RoundedButton.defaultSize,
       onSelect: () => _setTurnDirection(TurnDirection.anticlockwise),
-    );
-  }
+    ),
+  ];
 
-  void _createStartIdeology() {
+  List<Component> _createStartIdeology() => [
     _startIdeologyText = TextComponent(
       text: "Start Player:",
       anchor: Anchor.centerRight,
-    );
-    _startIdeologyButtons = Ideology.values.map((e) => OptionButton(
+    ),
+    ..._startIdeologyButtons = Ideology.values.map((e) => OptionButton(
         text: e.name[0].toUpperCase(),
         size: RoundedButton.defaultSize,
         onSelect: () => _setStartIdeology(e),
-    )).toList();
-  }
+    )).toList(),
+  ];
 
-  void _createHumanPlayers() {
+  List<Component> _createHumanPlayers() => [
     _humanPlayersText = TextComponent(
       text: "Human Players:",
       anchor: Anchor.centerRight,
-    );
-    _humanPlayersButtons = Ideology.values.map((e) => ToggleButton(
+    ),
+    ..._humanPlayersButtons = Ideology.values.map((e) => ToggleButton(
         text: e.name[0].toUpperCase(),
         size: RoundedButton.defaultSize,
         onSelectedChanged: (value) {
           _settings.players[e] = value ? PlayerType.human : PlayerType.aiMaxN;
         },
-    )).toList();
-  }
+    )).toList(),
+  ];
 
   void _setTurnDirection(TurnDirection direction) {
     _settings.turnDirection = direction;

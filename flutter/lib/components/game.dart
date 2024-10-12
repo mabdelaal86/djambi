@@ -12,8 +12,8 @@ class DjambiGame extends FlameGame {
     await add(router = RouterComponent(
       routes: {
         "home": Route(HomePage.new),
-        "options": Route(OptionsPage.new),
-        "play": Route(PlayPage.new),
+        "options": Route(OptionsPage.new, maintainState: false),
+        "play": Route(PlayPage.new, maintainState: false),
       },
       initialRoute: "home",
     ));

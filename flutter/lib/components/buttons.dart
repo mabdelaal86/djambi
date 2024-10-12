@@ -44,7 +44,7 @@ class RoundedButton extends AdvancedButtonComponent {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     defaultLabel = createLabel(icon, text);
     defaultSkin = RoundedRectComponent()..setColor(defaultColor);
     hoverSkin = RoundedRectComponent()..setColor(hoverColor);
@@ -79,7 +79,7 @@ class ToggleButton extends ToggleButtonComponent {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     defaultLabel = defaultSelectedLabel = RoundedButton.createLabel(icon, text);
     defaultSkin = RoundedRectComponent()..setColor(defaultColor);
     hoverSkin = RoundedRectComponent()..setColor(hoverColor);

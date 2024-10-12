@@ -7,10 +7,12 @@ import '../../views/board.dart';
 import '../../views/dimensions.dart';
 import '../../views/state.dart';
 import '../buttons.dart';
+import '../dialogs.dart';
+import '../game.dart';
 import '../header.dart';
 import '../settings.dart';
 
-class PlayPage extends PositionComponent {
+class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
   // @override
   // bool get debugMode => true;
 
@@ -30,7 +32,7 @@ class PlayPage extends PositionComponent {
       onManoeuvreCompleted,
     );
     await addAll([
-      Header(),
+      Header(onBackTapUp: onBackTapUp),
       _board = Board(
         _gameState, _boardTheme, _pieceTheme,
         anchor: Anchor.center,
@@ -65,6 +67,14 @@ class PlayPage extends PositionComponent {
     final curIdeology = _gameState.parliament.currentParty.ideology;
     if (_gameSettings.players[curIdeology] == PlayerType.aiMaxN) {
       _gameState.aiAct(2);
+    }
+  }
+
+  Future<void> onBackTapUp() async {
+    const msg = "Are you sure?\nThe match state will not be saved!";
+    final result = await game.router.pushAndWait(ConfirmDialog(msg));
+    if (result) {
+      game.router.popUntilNamed("home");
     }
   }
 }
