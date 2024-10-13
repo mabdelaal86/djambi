@@ -22,15 +22,17 @@ class GameState {
     : parliament = Parliament(startIdeology, turnDirection);
 
   void undo() {
-    if (_undoStack.isEmpty) return;
-    _redoStack.push(parliament);
-    parliament = _undoStack.pop();
+    if (canUndo) {
+      _redoStack.push(parliament);
+      parliament = _undoStack.pop();
+    }
   }
 
   void redo() {
-    if (_redoStack.isEmpty) return;
-    _undoStack.push(parliament);
-    parliament = _redoStack.pop();
+    if (canRedo) {
+      _undoStack.push(parliament);
+      parliament = _redoStack.pop();
+    }
   }
 
   void doAction(Member member, Cell cell) {

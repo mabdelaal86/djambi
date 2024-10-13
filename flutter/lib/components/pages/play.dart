@@ -40,15 +40,20 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
       _undo = RoundedButton(
         icon: Icons.undo,
         size: RoundedButton.defaultSize,
-        onReleased: () => _gameState.undo(),
+        onReleased: onUndoTapUp,
       ),
       _redo = RoundedButton(
         icon: Icons.redo,
         size: RoundedButton.defaultSize,
-        onReleased: () => _gameState.redo(),
+        onReleased: onRedoTapUp,
       ),
     ]);
     onManoeuvreCompleted();
+  }
+
+  bool get isCurPlayerHuman {
+    final curIdeology = _gameState.parliament.currentParty.ideology;
+    return _gameSettings.players[curIdeology] == PlayerType.human;
   }
 
   @override
@@ -64,9 +69,21 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
   }
 
   void onManoeuvreCompleted() {
-    final curIdeology = _gameState.parliament.currentParty.ideology;
-    if (_gameSettings.players[curIdeology] == PlayerType.aiMaxN) {
+    _board.enableTapUp = isCurPlayerHuman;
+    if (!isCurPlayerHuman) {
       _gameState.aiAct(2);
+    }
+  }
+
+  void onUndoTapUp() {
+    if (isCurPlayerHuman) {
+      _gameState.undo();
+    }
+  }
+
+  void onRedoTapUp() {
+    if (isCurPlayerHuman) {
+      _gameState.redo();
     }
   }
 

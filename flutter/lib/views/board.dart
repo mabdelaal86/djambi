@@ -17,6 +17,8 @@ class Board extends PositionComponent with TapCallbacks {
   final MovementsRenderer _movements;
   final PiecesRenderer _pieces;
 
+  bool enableTapUp = true;
+
   Board(
       GameState gameState, BoardTheme boardTheme, PieceTheme pieceTheme,
       {super.position, super.anchor})
@@ -41,6 +43,8 @@ class Board extends PositionComponent with TapCallbacks {
 
   @override
   void onTapUp(TapUpEvent event) {
-    _movements.onTapUp(event.localPosition);
+    if (enableTapUp) {
+      _movements.onTapUp(event.localPosition);
+    }
   }
 }
