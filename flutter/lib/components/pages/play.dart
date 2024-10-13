@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:math';
 
-import 'package:flame/components.dart';
+import 'package:flame/components.dart' hide Timer;
 import 'package:flutter/material.dart';
 
+import '../../models/contest.dart';
 import '../../views/board.dart';
 import '../../views/dimensions.dart';
-import '../../views/state.dart';
 import '../buttons.dart';
 import '../dialogs.dart';
 import '../game.dart';
@@ -17,7 +18,7 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
   // bool get debugMode => true;
 
   late final Board _board;
-  late final GameState _gameState;
+  late final Contest _contest;
   final _boardTheme = AppearanceSettings.instance.boardTheme;
   final _pieceTheme = AppearanceSettings.instance.pieceTheme;
   final _gameSettings = GameSettings.instance;
@@ -26,7 +27,7 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   @override
   Future<void> onLoad() async {
-    _gameState = GameState(
+    _contest = Contest(
       _gameSettings.startIdeology,
       _gameSettings.turnDirection,
       onManoeuvreCompleted,
@@ -34,7 +35,7 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
     await addAll([
       Header(onBackTapUp: onBackTapUp),
       _board = Board(
-        _gameState, _boardTheme, _pieceTheme,
+        _contest, _boardTheme, _pieceTheme,
         anchor: Anchor.center,
       ),
       _undo = RoundedButton(
@@ -52,7 +53,7 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
   }
 
   bool get isCurPlayerHuman {
-    final curIdeology = _gameState.parliament.currentParty.ideology;
+    final curIdeology = _contest.parliament.currentParty.ideology;
     return _gameSettings.players[curIdeology] == PlayerType.human;
   }
 
@@ -71,19 +72,19 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
   void onManoeuvreCompleted() {
     _board.enableTapUp = isCurPlayerHuman;
     if (!isCurPlayerHuman) {
-      _gameState.aiAct(2);
+      Timer(GameSettings.actionDuration, () => _contest.aiAct(2));
     }
   }
 
   void onUndoTapUp() {
     if (isCurPlayerHuman) {
-      _gameState.undo();
+      _contest.undo();
     }
   }
 
   void onRedoTapUp() {
     if (isCurPlayerHuman) {
-      _gameState.redo();
+      _contest.redo();
     }
   }
 

@@ -4,19 +4,17 @@ import 'package:flutter/painting.dart';
 
 import '../../models/common.dart';
 import '../../models/member.dart';
-import '../../models/parliament.dart';
+import '../../models/contest.dart';
 import '../dimensions.dart';
 import '../extensions.dart';
-import '../state.dart';
 import '../theme.dart';
 
 class PiecesRenderer {
-  final GameState gameState;
-  Parliament get parliament => gameState.parliament;
+  final Contest contest;
   final BoardTheme boardTheme;
   final PieceTheme pieceTheme;
 
-  PiecesRenderer(this.gameState, this.boardTheme, this.pieceTheme);
+  PiecesRenderer(this.contest, this.boardTheme, this.pieceTheme);
 
   late final Map<Role, Svg> _memberImages;
 
@@ -34,13 +32,15 @@ class PiecesRenderer {
   }
 
   void _drawMembers(Canvas canvas) {
-    for (final member in parliament.members) {
+    for (final member in contest.parliament.members) {
       _drawMember(canvas, member);
     }
   }
 
   void _drawActor(Canvas canvas) {
-    if (parliament.actor case final a?) _drawMember(canvas, a);
+    if (contest.parliament.actor case final actor?) {
+      _drawMember(canvas, actor);
+    }
   }
 
   void _drawMember(Canvas canvas, Member member) {

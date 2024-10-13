@@ -2,30 +2,33 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/painting.dart';
 
 import '../../models/cell.dart';
+import '../../models/contest.dart';
 import '../../models/member.dart';
-import '../../models/parliament.dart';
+import '../../models/party.dart';
 import '../dimensions.dart';
 import '../extensions.dart';
-import '../state.dart';
 import '../theme.dart';
 
 class MovementsRenderer {
-  final GameState gameState;
-  Parliament get parliament => gameState.parliament;
-  Member? _selectedMember;
+  final Contest contest;
   final BoardTheme boardTheme;
+  Member? _selectedMember;
 
-  MovementsRenderer(this.gameState, this.boardTheme);
+  MovementsRenderer(this.contest, this.boardTheme);
+
+  bool get _gameIsNotFinished => !contest.parliament.isGameFinished;
+  Party get _curParty => contest.parliament.currentParty;
+  Member? get _curActor => contest.parliament.actor;
 
   void render(Canvas canvas) {
     _markLastMovement(canvas);
-    if (!parliament.isGameFinished) {
+    if (_gameIsNotFinished) {
       _markAvailableMoves(canvas);
     }
   }
 
   void onTapUp(Vector2 position) {
-    if (!parliament.isGameFinished) {
+    if (_gameIsNotFinished) {
       final cell = Dimensions.vector2cell(position - Dimensions.gridOffset);
       _handleCellTapUp(cell);
     }
@@ -33,21 +36,21 @@ class MovementsRenderer {
 
   void _markAvailableMoves(Canvas canvas) {
     // check if there is an actor (or ongoing manoeuvre)
-    if (parliament.actor case final actor?) {
-      _markSelected(canvas, actor.location);
-      _markActions(canvas, actor.cellsToAct());
+    if (_curActor != null) {
+      _markSelected(canvas, _curActor!.location);
+      _markActions(canvas, _curActor!.cellsToAct());
       return;
     }
     // ---------------
     // no actor, so selection logic apply
     // mark selectable members
-    _markSelectable(canvas, parliament.currentParty.movableMembers.map((m) => m.location));
+    _markSelectable(canvas, _curParty.movableMembers.map((m) => m.location));
     // check if there is a selected member
     if (_selectedMember == null) return;
     // ---------------
     // make sure selected member is from current party
     // might not, is AI clicked after selecting a member
-    if (_selectedMember!.ideology != parliament.currentParty.ideology) {
+    if (_selectedMember!.ideology != _curParty.ideology) {
       _selectedMember = null;
       return;
     }
@@ -59,18 +62,18 @@ class MovementsRenderer {
 
   void _handleCellTapUp(Cell cell) {
     // check if there is an actor (or ongoing manoeuvre)
-    if (parliament.actor case final actor?) {
+    if (_curActor != null) {
       _selectedMember = null; // just to make sure
       // check if actor can act on the selected cell
-      if (actor.cellsToAct().contains(cell)) {
-        gameState.doAction(actor, cell);
+      if (_curActor!.cellsToAct().contains(cell)) {
+        contest.doAction(_curActor!, cell);
       }
       return;
     }
     // ---------------
     // no actor, so selection logic apply
     if (_selectedMember == null) {
-      final member = parliament.currentParty.getMemberAt(cell);
+      final member = _curParty.getMemberAt(cell);
       if (member != null && member.cellsToAct().isNotEmpty) {
         _selectedMember = member;
       }
@@ -86,7 +89,7 @@ class MovementsRenderer {
     // ---------------
     // another cell is clicked
     // check if user try to select another member from current party
-    final member = parliament.currentParty.getMemberAt(cell);
+    final member = _curParty.getMemberAt(cell);
     if (member != null) {
       _selectedMember = null;
       if (member.cellsToAct().isNotEmpty) {
@@ -98,7 +101,7 @@ class MovementsRenderer {
     // empty cell or an enemy is clicked
     // check if selected member can act on the selected cell
     if (_selectedMember!.cellsToAct().contains(cell)) {
-      gameState.doAction(_selectedMember!, cell);
+      contest.doAction(_selectedMember!, cell);
     }
     _selectedMember = null;
   }
@@ -120,7 +123,7 @@ class MovementsRenderer {
   }
 
   void _markLastMovement(Canvas canvas) {
-    for (final cell in gameState.lastMovementCells()) {
+    for (final cell in contest.lastMovedCells) {
       _markRect(canvas, cell, boardTheme.movedMarkPaint);
     }
   }

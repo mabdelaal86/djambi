@@ -15,6 +15,8 @@ enum PlayerType {
 }
 
 class GameSettings {
+  static const actionDuration = Duration(seconds: 1);
+
   var turnDirection = TurnDirection.anticlockwise;
   var startIdeology = Ideology.red;
   final players = {
