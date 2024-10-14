@@ -99,7 +99,7 @@ class Parliament {
   void act(int memberId, Cell cell) {
     assert(!isGameFinished);
     if (_actor == null) {
-      assert(members[memberId].ideology == currentParty.ideology, "Selected member is not from current turn party");
+      assert(members[memberId].ideology == _currentParty.ideology, "Selected member is not from current turn party");
       assert(members[memberId].isActive, "Selected member is not active");
       _actor = members[memberId];
     }
@@ -118,24 +118,34 @@ class Parliament {
   void _nextTurn() {
     _actor!.manoeuvre = Manoeuvre.none;
     _actor = null;
-    _currentParty = _getNextParty();
+    final nextTurnState = getNextTurnState();
+    _currentIdeology = nextTurnState.$1;
+    _currentParty = nextTurnState.$2;
   }
 
-  Party _getNextParty() {
-    nextActiveParty() sync* {
+  (Ideology, Party) getNextTurnState() {
+    var ideology = _currentIdeology;
+
+    Iterable<Party> nextActiveParties() sync* {
       for (int i = 0; i < Ideology.values.length; i++) {
-        _currentIdeology = turnDirection.next(_currentIdeology);
-        final party = getParty(_currentIdeology);
+        ideology = turnDirection.next(ideology);
+        final party = getParty(ideology);
         if (party.chief.isActive) yield party;
       }
       throw AssertionError("Shouldn't reach this point!");
     }
 
-    final partyInPower = getPartyInPower();
-    if (partyInPower == null)           return nextActiveParty().first;
-    if (partyInPower != currentParty)   return partyInPower;
-    if (activeParties.length == 2)      return nextActiveParty().first;
-    return nextActiveParty().firstWhere((p) => p.ideology != currentParty.ideology);
+    Party nextParty() {
+      final partyInPower = getPartyInPower();
+      if (partyInPower == null) return nextActiveParties().first;
+      if (partyInPower != _currentParty) return partyInPower;
+      if (activeParties.length == 2) return nextActiveParties().first;
+      return nextActiveParties()
+          .firstWhere((p) => p.ideology != _currentParty.ideology);
+    }
+
+    final party = nextParty();
+    return (ideology, party);
   }
 
   void _checkSurroundings() {

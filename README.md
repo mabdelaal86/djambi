@@ -6,8 +6,6 @@
 
 An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 
-More details about the rules: https://www.djambi.net/
-
 <img src="docs/assets/screenshot.png" alt="A screenshot of Djambi game">
 
 
@@ -20,7 +18,7 @@ More details about the rules: https://www.djambi.net/
 
 - [x] Simple AI algorithm.
 - [x] Undo last play is missing.
-- [ ] Show next player.
+- [x] Show next player.
 - [ ] Save game state.
 - [ ] Complete GUI with Home page and Settings page.
 - [ ] Detailed description about the game and its rules.
