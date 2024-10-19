@@ -3,10 +3,11 @@ import 'package:flame_svg/svg.dart';
 import 'package:flutter/painting.dart';
 
 import '../../models/cell.dart';
-import '../../models/common.dart';
-import '../dimensions.dart';
-import '../extensions.dart';
+import '../../models/constants.dart' as constants;
+import '../../models/enums.dart';
+import '../dimensions.dart' as dimensions;
 import '../theme.dart';
+import '../utils.dart';
 
 class BackgroundRenderer {
   final BoardTheme boardTheme;
@@ -16,7 +17,7 @@ class BackgroundRenderer {
   BackgroundRenderer(this.boardTheme, this.pieceTheme);
 
   Future<void> onLoad() async {
-    _mazeImage = await Utils.loadImage(Role.chief.name, boardTheme.mazeForeColor);
+    _mazeImage = await loadImage(Role.chief.name, boardTheme.mazeForeColor);
   }
 
   void render(Canvas canvas) {
@@ -30,17 +31,17 @@ class BackgroundRenderer {
 
   void _paintBackground(Canvas canvas) {
     // paint margin background
-    canvas.drawRect(Dimensions.boardSize.toRect(), boardTheme.marginPaint);
+    canvas.drawRect(dimensions.boardSize.toRect(), boardTheme.marginPaint);
     // paint cells background
     for (final cell in Cell.allCells()) {
       canvas.drawRect(
-        Dimensions.cellOffset(cell) & Dimensions.cellSize,
+        dimensions.cellOffset(cell) & dimensions.cellSize,
         cell.isDark ? boardTheme.darkCellPaint : boardTheme.lightCellPaint);
     }
   }
 
   void _drawMaze(Canvas canvas) {
-    canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, boardTheme.mazePaint);
+    canvas.drawRect(dimensions.mazeOffset & dimensions.cellSize, boardTheme.mazePaint);
     switch (pieceTheme) {
       case PieceTheme.classic: _drawChiefClassicImage(canvas);
       case PieceTheme.characters: _drawChiefSymbol(canvas);
@@ -49,13 +50,13 @@ class BackgroundRenderer {
 
   void _drawLines(Canvas canvas) {
     // margins
-    canvas.drawLine(Offset.zero, Offset(Dimensions.boardSize.x, 0), boardTheme.linePaint);
-    canvas.drawLine(Offset.zero, Offset(0, Dimensions.boardSize.y), boardTheme.linePaint);
+    canvas.drawLine(Offset.zero, Offset(dimensions.boardSize.x, 0), boardTheme.linePaint);
+    canvas.drawLine(Offset.zero, Offset(0, dimensions.boardSize.y), boardTheme.linePaint);
     // draw 10 vertical/horizontal lines with board height/width
-    for (int i = 0; i <= Constants.boardSize; i++) {
-      final d = Dimensions.margin + i * Dimensions.cellSide;
-      canvas.drawLine(Offset(d, 0), Offset(d, Dimensions.boardSize.y), boardTheme.linePaint);
-      canvas.drawLine(Offset(0, d), Offset(Dimensions.boardSize.x, d), boardTheme.linePaint);
+    for (var i = 0; i <= constants.boardSize; i++) {
+      final d = dimensions.margin + i * dimensions.cellSide;
+      canvas.drawLine(Offset(d, 0), Offset(d, dimensions.boardSize.y), boardTheme.linePaint);
+      canvas.drawLine(Offset(0, d), Offset(dimensions.boardSize.x, d), boardTheme.linePaint);
     }
   }
 
@@ -69,21 +70,21 @@ class BackgroundRenderer {
       textPainter.paint(canvas, cellOffset + cellCenter.toOffset());
     }
 
-    for (int i = 0; i < Constants.boardSize; i++) {
-      final d = Dimensions.margin + i * Dimensions.cellSide;
-      writeText(Cell.cols[i], Offset(d, 0), Dimensions.marginColCell);
-      writeText(Cell.rows[i], Offset(0, d), Dimensions.marginRowCell);
+    for (var i = 0; i < constants.boardSize; i++) {
+      final d = dimensions.margin + i * dimensions.cellSide;
+      writeText(constants.colSymbols[i], Offset(d, 0), dimensions.marginColCell);
+      writeText(constants.rowSymbols[i], Offset(0, d), dimensions.marginRowCell);
     }
   }
 
   void _drawChiefClassicImage(Canvas canvas) {
-    final offset = Dimensions.mazeCentralOffset.toOffset();
-    final vector = offset.toVector2() - Vector2.all(Dimensions.pieceRadius);
-    _mazeImage.renderPosition(canvas, vector, Dimensions.pieceSize);
+    final offset = dimensions.mazeCentralOffset.toOffset();
+    final vector = offset.toVector2() - Vector2.all(dimensions.pieceRadius);
+    _mazeImage.renderPosition(canvas, vector, dimensions.pieceSize);
   }
 
   void _drawChiefSymbol(Canvas canvas) {
-    final offset = Dimensions.mazeCentralOffset.toOffset();
+    final offset = dimensions.mazeCentralOffset.toOffset();
     final style = boardTheme.pieceSymbolStyle.copyWith(color: boardTheme.mazeForeColor);
     final textPainter = TextPainter(textDirection: TextDirection.ltr)
       ..text = TextSpan(style: style, text: Role.chief.name[0].toUpperCase());

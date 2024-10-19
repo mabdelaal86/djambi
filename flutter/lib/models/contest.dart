@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:stack/stack.dart';
 
+import 'ai/tree.dart';
 import 'cell.dart';
-import 'common.dart';
+import 'enums.dart';
 import 'member.dart';
 import 'parliament.dart';
-import 'ai/tree.dart';
 
 class State {
   final Parliament parliament;

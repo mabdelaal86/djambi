@@ -5,9 +5,9 @@ import '../../models/cell.dart';
 import '../../models/contest.dart';
 import '../../models/member.dart';
 import '../../models/party.dart';
-import '../dimensions.dart';
-import '../extensions.dart';
+import '../dimensions.dart' as dimensions;
 import '../theme.dart';
+import '../utils.dart';
 
 class MovementsRenderer {
   final Contest contest;
@@ -29,7 +29,7 @@ class MovementsRenderer {
 
   void onTapUp(Vector2 position) {
     if (_gameIsNotFinished) {
-      final cell = Dimensions.vector2cell(position - Dimensions.gridOffset);
+      final cell = dimensions.vector2cell(position - dimensions.gridOffset);
       _handleCellTapUp(cell);
     }
   }
@@ -129,24 +129,24 @@ class MovementsRenderer {
   }
 
   void _markCircle(Canvas canvas, Cell cell, Paint paint) {
-    final offset = Dimensions.cellCenterOffset(cell).toOffset();
+    final offset = dimensions.cellCenterOffset(cell).toOffset();
 
     // draw circle
-    const radius = Dimensions.pieceRadius + Dimensions.markStroke;
+    const radius = dimensions.pieceRadius + dimensions.markStroke;
     canvas.drawCircle(offset, radius, paint..stroke());
   }
 
   void _markRect(Canvas canvas, Cell cell, Paint paint) {
-    final offset = Dimensions.cellCenterOffset(cell).toOffset();
+    final offset = dimensions.cellCenterOffset(cell).toOffset();
 
     // draw rect
-    const radius = Dimensions.cellSide / 2 - Dimensions.markStroke;
+    const radius = dimensions.cellSide / 2 - dimensions.markStroke;
     final rect = Rect.fromCircle(center: offset, radius: radius);
     canvas.drawRect(rect, paint..stroke());
   }
 
   void _paintRect(Canvas canvas, Cell cell, Paint paint) {
-    final offset = Dimensions.cellOffset(cell);
-    canvas.drawRect(offset & Dimensions.cellSize, paint);
+    final offset = dimensions.cellOffset(cell);
+    canvas.drawRect(offset & dimensions.cellSize, paint);
   }
 }

@@ -1,4 +1,4 @@
-import '../models/common.dart';
+import '../models/enums.dart';
 import '../views/theme.dart';
 
 class AppearanceSettings {

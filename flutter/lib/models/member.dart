@@ -1,16 +1,14 @@
 import 'package:meta/meta.dart';
 
 import 'cell.dart';
-import 'common.dart';
-import 'parliament.dart';
-
-// member roles
+import 'enums.dart';
 import 'members/assassin.dart';
 import 'members/chief.dart';
 import 'members/diplomat.dart';
 import 'members/militant.dart';
 import 'members/necromobile.dart';
 import 'members/reporter.dart';
+import 'parliament.dart';
 
 abstract class Member {
   final Parliament parliament;
@@ -78,9 +76,9 @@ abstract class Member {
   ///
   /// The default implementation returns empty cells and cells occupied
   /// by an enemy member or a dead member in all 8 directions.
-  Iterable<Cell> cellsToMove(bool canKill) sync* {
+  Iterable<Cell> cellsToMove({required bool canKill}) sync* {
     for (final dir in Cell.allDirections) {
-      for (Cell cell = location + dir; cell.isValid; cell += dir) {
+      for (var cell = location + dir; cell.isValid; cell += dir) {
         // check if cell is occupied
         final member = parliament.getMemberAt(cell);
         if (member != null) {
@@ -99,9 +97,9 @@ abstract class Member {
   }
 
   Iterable<Cell> cellsToAct() => switch (manoeuvre) {
-      Manoeuvre.none => cellsToMove(true),
+      Manoeuvre.none => cellsToMove(canKill: true),
       Manoeuvre.move => Cell.allCells().where(canKillOn),
-      Manoeuvre.kill => cellsToMove(false),
+      Manoeuvre.kill => cellsToMove(canKill: false),
       Manoeuvre.exit => Cell.allCells().where(canBuryOn),
       Manoeuvre.end =>  const Iterable.empty(),
     };
@@ -121,7 +119,7 @@ abstract class Member {
 
   @protected
   void onMove(Cell cell) {
-    assert(cellsToMove(true).contains(cell), "Can't do an action on the selected cell");
+    assert(cellsToMove(canKill: true).contains(cell), "Can't do an action on the selected cell");
     _bodyId = parliament.getMemberAt(cell)?.id;
     location = cell;
     manoeuvre = Manoeuvre.move;
@@ -135,7 +133,7 @@ abstract class Member {
 
   @protected
   void onExit(Cell cell) {
-    assert(cellsToMove(false).contains(cell), "Can't do an action on the selected cell");
+    assert(cellsToMove(canKill: false).contains(cell), "Can't do an action on the selected cell");
     location = cell;
     manoeuvre = Manoeuvre.exit;
   }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/contest.dart';
 import '../../views/board.dart';
-import '../../views/dimensions.dart';
+import '../../views/dimensions.dart' as dimensions;
 import '../buttons.dart';
 import '../dialogs.dart';
 import '../game.dart';
@@ -82,7 +82,7 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
     _nextPlayerIcon.position = _nextPlayerLabel.position + Vector2(100, 0);
     _nextPlayerText.position = _nextPlayerIcon.position;
 
-    final scale = min(size.x, size.y - 200) / Dimensions.boardSize.x;
+    final scale = min(size.x, size.y - 200) / dimensions.boardSize.x;
     _board.scale = Vector2.all(scale);
     _board.position = size / 2;
   }

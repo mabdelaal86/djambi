@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 
 import '../models/contest.dart';
-import 'dimensions.dart';
+import 'dimensions.dart' as dimensions;
 import 'renderers/background.dart';
 import 'renderers/movements.dart';
 import 'renderers/pieces.dart';
@@ -25,7 +25,7 @@ class Board extends PositionComponent with TapCallbacks {
       : _background = BackgroundRenderer(boardTheme, pieceTheme),
         _movements = MovementsRenderer(contest, boardTheme),
         _pieces = PiecesRenderer(contest, boardTheme, pieceTheme),
-        super(size: Dimensions.boardSize);
+        super(size: dimensions.boardSize);
 
   @override
   Future<void> onLoad() async {

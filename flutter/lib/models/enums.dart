@@ -1,8 +1,3 @@
-abstract class Constants {
-  static const int boardSize = 9;
-  static const int mazeIndex = boardSize ~/ 2;
-}
-
 // order is important
 enum Ideology {
   red,

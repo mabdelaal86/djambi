@@ -1,5 +1,5 @@
 import '../cell.dart';
-import '../common.dart';
+import '../enums.dart';
 import '../member.dart';
 
 class Chief extends Member {
@@ -9,8 +9,8 @@ class Chief extends Member {
   Role get role => Role.chief;
 
   @override
-  Iterable<Cell> cellsToMove(bool canKill) => super
-      .cellsToMove(canKill)
+  Iterable<Cell> cellsToMove({required bool canKill}) => super
+      .cellsToMove(canKill: canKill)
       // empty cell or active enemy member
       .where((cell) => parliament.getMemberAt(cell)?.isActive ?? true);
 

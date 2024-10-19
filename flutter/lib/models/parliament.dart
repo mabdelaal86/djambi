@@ -3,10 +3,11 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 
 import 'cell.dart';
-import 'common.dart';
+import 'constants.dart' as constants;
+import 'enums.dart';
 import 'member.dart';
-import 'party.dart';
 import 'members/chief.dart';
+import 'party.dart';
 
 class Parliament {
   late final List<Member> members;
@@ -29,22 +30,24 @@ class Parliament {
   bool get isManoeuvreCompleted => _actor == null;
   bool get isGameFinished => activeParties.length == 1 && isManoeuvreCompleted;
   String getSign() {
-    assert(isManoeuvreCompleted);
+    assert(isManoeuvreCompleted, "the maneuver should be completed");
     // TODO: update this part
-    sign(Member m) => MapEntry<int, int>(m.location.y * 10 + m.location.x, m.isDead ? -1 : m.id);
-    final stm = SplayTreeMap<int, int>();
-    stm.addEntries(members.map(sign));
+    final stm = SplayTreeMap<int, int>.fromIterable(
+      members,
+      key: (m) => m.location.y * 10 + m.location.x,
+      value: (m) => m.isDead ? -1 : m.id,
+    );
     return "${currentParty.ideology.name[0]}:${stm.entries.map((e) => "${e.key},${e.value}").join(";")}#";
   }
 
   Parliament(this._currentIdeology, this.turnDirection) {
     // create members
-    members = Ideology.values.map((id) => _recruitMembers(id)).flattened.toList();
-    assert(members.length == 9 * 4);
+    members = Ideology.values.map(_recruitMembers).flattened.toList();
+    assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
     _setInitialPositions();
     // create parties
     parties = members.where((m) => m.isChief).map((m) => Party(m as Chief)).toList();
-    assert(parties.length == 4);
+    assert(parties.length == 4, "number of parties should be 4");
     // other properties
     _currentParty = getParty(_currentIdeology);
   }
@@ -54,10 +57,10 @@ class Parliament {
         turnDirection = other.turnDirection {
     // copy members
     members = other.members.map((m) => Member.copy(this, m)).toList();
-    assert(members.length == 9 * 4);
+    assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
     // copy parties
     parties = members.where((m) => m.isChief).map((m) => Party(m as Chief)).toList();
-    assert(parties.length == 4);
+    assert(parties.length == 4, "number of parties should be 4");
     // other properties
     _currentParty = getParty(other._currentParty.ideology);
     _actor = other._actor == null ? null : members[other._actor!.id];
@@ -73,9 +76,9 @@ class Parliament {
     ];
 
     // create members and place them around (0,0) point, so it is easier to rotate or flip
-    for (int r = 0; r < 3; r++) {
-      for (int c = 0; c < 3; c++) {
-        final int id = (ideology.index * Constants.boardSize) + (r * 3) + c;
+    for (var r = 0; r < 3; r++) {
+      for (var c = 0; c < 3; c++) {
+        final id = (ideology.index * constants.boardSize) + (r * 3) + c;
         yield Member.create(this, roles[r][c], ideology, id)
           ..location = Cell(c - 1, r - 1);
       }
@@ -97,7 +100,7 @@ class Parliament {
   }
 
   void act(int memberId, Cell cell) {
-    assert(!isGameFinished);
+    assert(!isGameFinished, "the game should be still ongoing");
     if (_actor == null) {
       assert(members[memberId].ideology == _currentParty.ideology, "Selected member is not from current turn party");
       assert(members[memberId].isActive, "Selected member is not active");
@@ -127,7 +130,7 @@ class Parliament {
     var ideology = _currentIdeology;
 
     Iterable<Party> nextActiveParties() sync* {
-      for (int i = 0; i < Ideology.values.length; i++) {
+      for (var i = 0; i < Ideology.values.length; i++) {
         ideology = turnDirection.next(ideology);
         final party = getParty(ideology);
         if (party.chief.isActive) yield party;
@@ -160,9 +163,11 @@ class Parliament {
   }
 
   void _takeOverParalysed() {
-    if (getPartyInPower() case final inPower?) {
-      for (final member in members.where((m) => m.isParalysed)) {
-        member.ideology = inPower.ideology;
+    final partyInPower = getPartyInPower();
+    if (partyInPower == null) return;
+    for (final member in members) {
+      if (member.isParalysed) {
+        member.ideology = partyInPower.ideology;
         member.state = MemberState.active;
       }
     }

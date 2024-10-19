@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: "7cf60b9f0cc88203c5a190b4cd62a99feea42759a7fa695010eb5de1c0b2252a"
+      sha256: bf9f5caeea8d8fe6721a9c358dd8a5c1947b27f1cfaa18b39c301273594919e6
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.0"
   async:
     dependency: transitive
     description:
@@ -69,18 +69,18 @@ packages:
     dependency: "direct main"
     description:
       name: flame
-      sha256: "89d65fdb10b8c4ac46c86b8d5541e560604bf55317c01f3f558d09c4a65953c1"
+      sha256: baafe5c38075b60577db05e0421c12941695b246547d9aca95166def3f29e57f
       url: "https://pub.dev"
     source: hosted
-    version: "1.20.0"
+    version: "1.21.0"
   flame_svg:
     dependency: "direct main"
     description:
       name: flame_svg
-      sha256: "32bdeb6ebc486bc8faa60877c39884ed24b2cf71dc5517f962b2301beced112e"
+      sha256: c10900f1181a445e803fbd45ab2dccb5723584b33b4809334a1897dc34eb6744
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.1"
+    version: "1.11.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -276,10 +276,10 @@ packages:
     dependency: transitive
     description:
       name: typed_data
-      sha256: facc8d6582f16042dd49f2463ff1bd6e2c9ef9f3d5da3d9b087e244a7b564b3c
+      sha256: f9049c039ebfeb4cf7a7104a675823cd72dba8297f264b6637062516699fa006
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.2"
+    version: "1.4.0"
   vector_graphics:
     dependency: "direct main"
     description:

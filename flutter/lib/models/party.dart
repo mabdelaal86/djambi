@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 
 import 'cell.dart';
-import 'common.dart';
+import 'enums.dart';
 import 'member.dart';
-import 'parliament.dart';
 import 'members/chief.dart';
+import 'parliament.dart';
 
 class Party {
   final Chief chief;

@@ -1,26 +1,18 @@
 import 'package:collection/collection.dart';
 
-import '../common.dart';
+import '../enums.dart';
 import '../party.dart';
 
-abstract class StateEvaluator {
-  const StateEvaluator();
-  int evaluate(Party party);
-}
+typedef PartyEvaluation = int Function(Party party);
 
-class DefaultEvaluator extends StateEvaluator {
-  const DefaultEvaluator();
+int defaultPartyEvaluation(Party party) =>
+    party.activeMembers.map((m) => _roleValues[m.role]!).sum;
 
-  @override
-  int evaluate(Party party) =>
-      party.activeMembers.map((m) => _roleValues[m.role]!).sum;
-
-  static const _roleValues = {
-    Role.militant: 5,
-    Role.necromobile: 10,
-    Role.diplomat: 10,
-    Role.assassin: 15,
-    Role.reporter: 18,
-    Role.chief: 300,
-  };
-}
+const _roleValues = {
+  Role.militant: 5,
+  Role.necromobile: 10,
+  Role.diplomat: 10,
+  Role.assassin: 15,
+  Role.reporter: 18,
+  Role.chief: 300,
+};

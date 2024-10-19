@@ -1,7 +1,8 @@
 import 'package:collection/collection.dart';
 
 import '../cell.dart';
-import '../common.dart';
+import '../constants.dart' as constants;
+import '../enums.dart';
 import '../member.dart';
 import '../parliament.dart';
 import 'evaluation.dart';
@@ -29,10 +30,10 @@ class Node {
 
   Node get bestSubNode => _bestSubNode ?? this;
 
-  void evaluate(StateEvaluator evaluator) {
+  void evaluate(PartyEvaluation evaluateParty) {
     assert(subNodes.isEmpty, "evaluate should run on leaf nodes only");
     assert(parliament.isManoeuvreCompleted, "the maneuver should be completed");
-    _evaluations = { for (final p in parliament.parties) p.ideology: evaluator.evaluate(p) };
+    _evaluations = { for (final p in parliament.parties) p.ideology: evaluateParty(p) };
   }
 
   Iterable<Member> _whoCanAct() => parliament.isManoeuvreCompleted
@@ -53,12 +54,12 @@ class Node {
   void calcMaxN() {
     assert(_evaluations.isEmpty, "evaluations is expected to be empty");
     assert(subNodes.isNotEmpty, "should run on NONE leaf nodes");
-    int max = -999999999999999; // just a very small number as no const for min int
+    var max = constants.minInt;
     Map<Ideology, int>? evaluations;
     Node? bestSub;
     for (final subNode in subNodes) {
-      int nodeValue = subNode._evaluations[parliament.currentParty.ideology]!;
-      int subMax = subNode._evaluations.values.map((v) => nodeValue - v).sum;
+      final nodeValue = subNode._evaluations[parliament.currentParty.ideology]!;
+      final subMax = subNode._evaluations.values.map((v) => nodeValue - v).sum;
       if (subMax > max) {
         max = subMax;
         evaluations = subNode._evaluations;
@@ -76,15 +77,15 @@ class Tree {
 
   final Node _root;
   final int maxDepth;
-  final StateEvaluator evaluator = const DefaultEvaluator();
+  final PartyEvaluation evaluateParty = defaultPartyEvaluation;
   final Set<String> _visitedNodes = {};
   // int _level = 0; // just used for debugging
 
   Node get decision => _root.bestSubNode;
 
   void build() {
-    assert(_root.parliament.isManoeuvreCompleted);
-    assert(!_root.parliament.isGameFinished);
+    assert(_root.parliament.isManoeuvreCompleted, "the maneuver should be completed");
+    assert(!_root.parliament.isGameFinished, "the game should be still ongoing");
     _visitedNodes.add(_root.parliament.getSign());
     _createSubNodes(_root);
   }
@@ -92,7 +93,7 @@ class Tree {
   void _createSubNodes(Node node) {
     assert(node.depth <= maxDepth, "Exceed the maximum depth!");
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
-      node.evaluate(evaluator);
+      node.evaluate(evaluateParty);
     } else {
       for (final action in node.availableActions()) {
         _doAction(node, action.$1, action.$2);

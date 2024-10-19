@@ -21,8 +21,68 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # Rules for effective dart design
+    # https://dart.dev/effective-dart/design
+    - always_declare_return_types
+    - avoid_catches_without_on_clauses
+    - avoid_classes_with_only_static_members
+    - avoid_equals_and_hash_code_on_mutable_classes
+    - avoid_positional_boolean_parameters
+    - avoid_private_typedef_functions
+    - avoid_returning_this
+    - avoid_setters_without_getters
+    - avoid_types_on_closure_parameters
+    - directives_ordering
+    - omit_local_variable_types
+    - one_member_abstracts
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - use_setters_to_change_properties
+    # Other custom rules
+    - avoid_bool_literals_in_conditional_expressions
+    - avoid_catching_errors
+    - avoid_js_rounded_ints
+    - avoid_type_to_string
+    - avoid_void_async
+    - cast_nullable_to_non_nullable
+    - combinators_ordering
+    - deprecated_consistency
+    - eol_at_end_of_file
+    - matching_super_parameters
+    - missing_whitespace_between_adjacent_strings
+    - leading_newlines_in_multiline_strings
+    - literal_only_boolean_expressions
+    - no_adjacent_strings_in_list
+    - no_literal_bool_comparisons
+    - no_runtimeType_toString
+    - no_self_assignments
+    - noop_primitive_operations
+    - only_throw_errors
+    - parameter_assignments
+    - prefer_asserts_with_message
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - prefer_constructors_over_static_methods
+    - prefer_expression_function_bodies
+    - prefer_if_elements_to_conditional_expressions
+    - prefer_int_literals
+    - prefer_null_aware_method_calls
+    - prefer_relative_imports
+    - test_types_in_equals
+    - throw_in_finally
+    - unawaited_futures
+    - unnecessary_await_in_return
+    - unnecessary_breaks
+    - unnecessary_lambdas
+    - unnecessary_parenthesis
+    - unnecessary_raw_strings
+    - unnecessary_statements
+    - use_enums
+    - use_if_null_to_convert_nulls_to_bools
+    - use_named_constants
+    - use_string_buffers
+    - use_raw_strings
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

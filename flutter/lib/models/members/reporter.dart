@@ -1,5 +1,5 @@
 import '../cell.dart';
-import '../common.dart';
+import '../enums.dart';
 import '../member.dart';
 
 class Reporter extends Member {
@@ -9,8 +9,8 @@ class Reporter extends Member {
   Role get role => Role.reporter;
 
   @override
-  Iterable<Cell> cellsToMove(bool canKill) => super
-      .cellsToMove(canKill)
+  Iterable<Cell> cellsToMove({required bool canKill}) => super
+      .cellsToMove(canKill: canKill)
       // empty non maze cell
       .where((cell) => !cell.isMaze && parliament.isEmpty(cell));
 

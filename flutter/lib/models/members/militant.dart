@@ -1,5 +1,5 @@
 import '../cell.dart';
-import '../common.dart';
+import '../enums.dart';
 import '../member.dart';
 
 class Militant extends Member {
@@ -9,8 +9,8 @@ class Militant extends Member {
   Role get role => Role.militant;
 
   @override
-  Iterable<Cell> cellsToMove(bool canKill) =>
-      super.cellsToMove(canKill).where((cell) =>
+  Iterable<Cell> cellsToMove({required bool canKill}) =>
+      super.cellsToMove(canKill: canKill).where((cell) =>
           // can't target maze even if a chief is there
           !cell.isMaze &&
           // move only 2 steps

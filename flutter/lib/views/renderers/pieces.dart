@@ -2,12 +2,12 @@ import 'package:flame/extensions.dart';
 import 'package:flame_svg/svg.dart';
 import 'package:flutter/painting.dart';
 
-import '../../models/common.dart';
-import '../../models/member.dart';
 import '../../models/contest.dart';
-import '../dimensions.dart';
-import '../extensions.dart';
+import '../../models/enums.dart';
+import '../../models/member.dart';
+import '../dimensions.dart' as dimensions;
 import '../theme.dart';
+import '../utils.dart';
 
 class PiecesRenderer {
   final Contest contest;
@@ -21,7 +21,7 @@ class PiecesRenderer {
   Future<void> onLoad() async {
     _memberImages = {
       for (final r in Role.values)
-        r: await Utils.loadImage(r.name, boardTheme.pieceForeColor)
+        r: await loadImage(r.name, boardTheme.pieceForeColor)
     };
   }
 
@@ -44,7 +44,7 @@ class PiecesRenderer {
   }
 
   void _drawMember(Canvas canvas, Member member) {
-    final centerOffset = Dimensions.cellCenterOffset(member.location).toOffset();
+    final centerOffset = dimensions.cellCenterOffset(member.location).toOffset();
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
       switch (pieceTheme) {
@@ -60,13 +60,13 @@ class PiecesRenderer {
       MemberState.paralysed => boardTheme.paralysedPaint,
       MemberState.active => boardTheme.partyPaint[member.ideology.index],
     };
-    canvas.drawCircle(offset, Dimensions.pieceRadius, bgPaint);
-    canvas.drawCircle(offset, Dimensions.pieceRadius, boardTheme.pieceEdgePaint);
+    canvas.drawCircle(offset, dimensions.pieceRadius, bgPaint);
+    canvas.drawCircle(offset, dimensions.pieceRadius, boardTheme.pieceEdgePaint);
   }
 
   void _drawRoleClassicImage(Canvas canvas, Role role, Offset offset) {
-    final vector = offset.toVector2() - Vector2.all(Dimensions.pieceRadius);
-    _memberImages[role]!.renderPosition(canvas, vector, Dimensions.pieceSize);
+    final vector = offset.toVector2() - Vector2.all(dimensions.pieceRadius);
+    _memberImages[role]!.renderPosition(canvas, vector, dimensions.pieceSize);
   }
 
   void _drawRoleSymbol(Canvas canvas, Role role, Offset offset) {

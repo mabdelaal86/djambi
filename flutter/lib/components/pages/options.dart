@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/common.dart';
+import '../../models/enums.dart';
 import '../buttons.dart';
 import '../game.dart';
 import '../header.dart';
