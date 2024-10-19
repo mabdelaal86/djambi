@@ -30,4 +30,6 @@ An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 
 This project is license under a [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html) license.
 
+## Credits
+
 Images of [pieces](./flutter/assets/classic) are based on Djambi classic theme create by [Rsalen](https://commons.wikimedia.org/wiki/User:Rsalen).

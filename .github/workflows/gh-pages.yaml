@@ -9,9 +9,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/flutter-gh-pages@v7
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+      - name: Create web app on Github gh pages
+        uses: bluefireteam/flutter-gh-pages@v8
         with:
           workingDir: flutter
           baseHref: /djambi/
