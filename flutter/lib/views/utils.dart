@@ -1,6 +1,6 @@
 import 'package:flame/flame.dart';
-import 'package:flame_svg/flame_svg.dart' show Svg;
 import 'package:flutter/painting.dart';
+import 'package:flame_svg/flame_svg.dart' show Svg;
 
 import 'dimensions.dart' as dimensions;
 
