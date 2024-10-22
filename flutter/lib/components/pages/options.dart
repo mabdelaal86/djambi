@@ -5,13 +5,12 @@ import '../../models/enums.dart';
 import '../buttons.dart';
 import '../game.dart';
 import '../header.dart';
-import '../settings.dart';
+import '../options.dart';
 
 class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
   // @override
   // bool get debugMode => true;
 
-  final GameSettings _settings = GameSettings.instance;
   late final RoundedButton _playButton;
 
   // turn direction
@@ -36,11 +35,11 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
       _playButton = RoundedButton(
         text: "Play",
         size: Vector2(300, 75),
-        onReleased: () => game.router.pushNamed("play"),
+        onReleased: () => game.router.pushReplacementNamed("play"),
       ),
     ]);
-    _setTurnDirection(_settings.turnDirection);
-    _setStartIdeology(_settings.startIdeology);
+    _setTurnDirection(game.options.turnDirection);
+    _setStartIdeology(game.options.startIdeology);
     _showHumanPlayers();
   }
 
@@ -61,7 +60,8 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
         Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
 
     // start ideology
-    _startIdeologyText.position = Vector2(hrMid - hrSep, vrStart += vrSep * 1.5);
+    _startIdeologyText.position =
+        Vector2(hrMid - hrSep, vrStart += vrSep * 1.5);
     _startIdeologyButtons[Ideology.green.index].position =
         Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart);
     _startIdeologyButtons[Ideology.yellow.index].position =
@@ -72,7 +72,8 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
         Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
 
     // human players
-    _humanPlayersText.position = Vector2(hrMid - hrSep, vrStart += vrSep * 1.5);
+    _humanPlayersText.position =
+        Vector2(hrMid - hrSep, vrStart += vrSep * 1.5);
     _humanPlayersButtons[Ideology.green.index].position =
         Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart);
     _humanPlayersButtons[Ideology.yellow.index].position =
@@ -83,60 +84,63 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
         Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
 
     // play
-    _playButton.position = Vector2(size.x / 2, size.y - _playButton.height - hrSep);
+    _playButton.position =
+        Vector2(size.x / 2, size.y - _playButton.height - hrSep);
   }
 
   List<Component> _createTurnDirection() => [
-    _turnDirText = TextComponent(
-      text: "Turn Direction:",
-      anchor: Anchor.centerRight,
-    ),
-    _turnDirClockwise = OptionButton(
-      icon: Icons.rotate_right,
-      size: RoundedButton.defaultSize,
-      onSelect: () => _setTurnDirection(TurnDirection.clockwise),
-    ),
-    _turnDirAnticlockwise = OptionButton(
-      icon: Icons.rotate_left,
-      size: RoundedButton.defaultSize,
-      onSelect: () => _setTurnDirection(TurnDirection.anticlockwise),
-    ),
-  ];
+        _turnDirText = TextComponent(
+          text: "Turn Direction:",
+          anchor: Anchor.centerRight,
+        ),
+        _turnDirClockwise = OptionButton(
+          icon: Icons.rotate_right,
+          size: RoundedButton.defaultSize,
+          onSelect: () => _setTurnDirection(TurnDirection.clockwise),
+        ),
+        _turnDirAnticlockwise = OptionButton(
+          icon: Icons.rotate_left,
+          size: RoundedButton.defaultSize,
+          onSelect: () => _setTurnDirection(TurnDirection.anticlockwise),
+        ),
+      ];
 
   List<Component> _createStartIdeology() => [
-    _startIdeologyText = TextComponent(
-      text: "Start Player:",
-      anchor: Anchor.centerRight,
-    ),
-    ..._startIdeologyButtons = Ideology.values.map((e) => OptionButton(
-        text: e.name[0].toUpperCase(),
-        size: RoundedButton.defaultSize,
-        onSelect: () => _setStartIdeology(e),
-    )).toList(),
-  ];
+        _startIdeologyText = TextComponent(
+          text: "Start Player:",
+          anchor: Anchor.centerRight,
+        ),
+        ..._startIdeologyButtons = Ideology.values.map((e) => OptionButton(
+            text: e.name[0].toUpperCase(),
+            size: RoundedButton.defaultSize,
+            onSelect: () => _setStartIdeology(e),
+        )).toList(),
+      ];
 
   List<Component> _createHumanPlayers() => [
-    _humanPlayersText = TextComponent(
-      text: "Human Players:",
-      anchor: Anchor.centerRight,
-    ),
-    ..._humanPlayersButtons = Ideology.values.map((e) => ToggleButton(
-        text: e.name[0].toUpperCase(),
-        size: RoundedButton.defaultSize,
-        onSelectedChanged: (value) {
-          _settings.players[e] = value ? PlayerType.human : PlayerType.aiMaxN;
-        },
-    )).toList(),
-  ];
+        _humanPlayersText = TextComponent(
+          text: "Human Players:",
+          anchor: Anchor.centerRight,
+        ),
+        ..._humanPlayersButtons = Ideology.values.map((e) => ToggleButton(
+            text: e.name[0].toUpperCase(),
+            size: RoundedButton.defaultSize,
+            onSelectedChanged: (value) {
+              game.options.players[e] = value
+                  ? PlayerType.human
+                  : PlayerType.aiMaxN;
+            },
+        )).toList(),
+      ];
 
   void _setTurnDirection(TurnDirection direction) {
-    _settings.turnDirection = direction;
+    game.options.turnDirection = direction;
     _turnDirClockwise.isSelected = direction == TurnDirection.clockwise;
     _turnDirAnticlockwise.isSelected = direction == TurnDirection.anticlockwise;
   }
 
   void _setStartIdeology(Ideology ideology) {
-    _settings.startIdeology = ideology;
+    game.options.startIdeology = ideology;
     for (final (i, button) in _startIdeologyButtons.indexed) {
       button.isSelected = i == ideology.index;
     }
@@ -144,7 +148,7 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   void _showHumanPlayers() {
     for (final (i, v) in Ideology.values.indexed) {
-      _humanPlayersButtons[i].isSelected = _settings.players[v] == PlayerType.human;
+      _humanPlayersButtons[i].isSelected = game.options.players[v]!.isHuman;
     }
   }
 }

@@ -1,31 +1,53 @@
-import '../models/enums.dart';
-import '../views/theme.dart';
+import 'package:flutter/painting.dart';
 
-class AppearanceSettings {
+import '../views/dimensions.dart' as dimensions;
+import '../views/theme.dart';
+import '../views/utils.dart';
+
+class Settings {
+  static const actionDuration = Duration(seconds: 1);
   var pieceTheme = PieceTheme.classic;
   var boardTheme = getDefaultBoardTheme();
-
-  AppearanceSettings._();
-  static final AppearanceSettings instance = AppearanceSettings._();
 }
 
-enum PlayerType {
-  human,
-  aiMaxN,
-}
-
-class GameSettings {
-  static const actionDuration = Duration(seconds: 1);
-
-  var turnDirection = TurnDirection.anticlockwise;
-  var startIdeology = Ideology.red;
-  final players = {
-    Ideology.red: PlayerType.human,
-    Ideology.blue: PlayerType.aiMaxN,
-    Ideology.yellow: PlayerType.aiMaxN,
-    Ideology.green: PlayerType.aiMaxN,
-  };
-
-  GameSettings._();
-  static final GameSettings instance = GameSettings._();
+BoardTheme getDefaultBoardTheme() {
+  const pieceForeColor = Color(0xFF000000);
+  return BoardTheme(
+    marginPaint: const Color(0xFF757575).toPaint(),
+    marginTextStyle: const TextStyle(
+      color: Color(0xFFFFFFFF),
+      fontSize: dimensions.marginFontSize,
+      fontWeight: FontWeight.bold,
+    ),
+    lightCellPaint: const Color(0xFFFFFFFF).toPaint(),
+    darkCellPaint: const Color(0xFFE0E0E0).toPaint(),
+    drawLines: false,
+    linePaint: Paint()
+      ..color = const Color(0xFF000000)
+      ..style = PaintingStyle.stroke,
+    mazePaint: const Color(0xFF000000).toPaint(),
+    mazeForeColor: const Color(0xFFE0E0E0),
+    pieceForeColor: pieceForeColor,
+    pieceEdgePaint: Paint()
+      ..color = pieceForeColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = dimensions.pieceStroke,
+    pieceSymbolStyle: const TextStyle(
+      color: pieceForeColor,
+      fontSize: dimensions.pieceFontSize,
+      fontWeight: FontWeight.bold,
+    ),
+    deadPaint: const Color(0xFF757575).toPaint(),
+    paralysedPaint: const Color(0xFFE4E4E4).toPaint(),
+    selectableMarkPaint: const Color(0xFF757575).toPaint(),
+    selectedMarkPaint: const Color(0xFFEA80FC).toPaint(),
+    actionMarkPaint: const Color(0xFF757575).toPaint(),
+    movedMarkPaint: const Color(0xFFBCAAA4).toPaint(),
+    partyPaint: [
+      const Color(0xFFF44336).toPaint(), // Ideology.red
+      const Color(0xFF2196F3).toPaint(), // Ideology.blue
+      const Color(0xFFFF9800).toPaint(), // Ideology.yellow
+      const Color(0xFF4CAF50).toPaint(), // Ideology.green
+    ],
+  );
 }

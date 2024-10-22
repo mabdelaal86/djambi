@@ -19,9 +19,6 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   late final Board _board;
   late final Contest _contest;
-  final _boardTheme = AppearanceSettings.instance.boardTheme;
-  final _pieceTheme = AppearanceSettings.instance.pieceTheme;
-  final _gameSettings = GameSettings.instance;
 
   late final RoundedButton _undoButton, _redoButton;
   late final TextComponent _nextPlayerLabel, _nextPlayerText;
@@ -30,15 +27,15 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
   @override
   Future<void> onLoad() async {
     _contest = Contest(
-      _gameSettings.startIdeology,
-      _gameSettings.turnDirection,
+      game.options.startIdeology,
+      game.options.turnDirection,
       onManoeuvreCompleted,
       onStateChanged,
     );
     await addAll([
       Header(onBackTapUp: onBackTapUp),
       _board = Board(
-        _contest, _boardTheme, _pieceTheme,
+        _contest, game.settings.boardTheme, game.settings.pieceTheme,
         anchor: Anchor.center,
       ),
       _undoButton = RoundedButton(
@@ -69,7 +66,7 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   bool get isCurPlayerHuman {
     final curIdeology = _contest.parliament.currentParty.ideology;
-    return _gameSettings.players[curIdeology] == PlayerType.human;
+    return game.options.players[curIdeology]!.isHuman;
   }
 
   @override
@@ -90,13 +87,14 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
   void onManoeuvreCompleted() {
     _board.enableTapUp = isCurPlayerHuman;
     if (!isCurPlayerHuman) {
-      Timer(GameSettings.actionDuration, () => _contest.aiAct(2));
+      Timer(Settings.actionDuration, () => _contest.aiAct(2));
     }
   }
 
   void onStateChanged() {
     final (_, next) = _contest.parliament.getNextTurnState();
-    _nextPlayerIcon.setColor(_boardTheme.partyPaint[next.ideology.index].color);
+    final nextPlayerColor = game.settings.boardTheme.partyPaint[next.ideology.index].color;
+    _nextPlayerIcon.setColor(nextPlayerColor);
     _nextPlayerText.text = next.ideology.name.toUpperCase()[0];
   }
 
@@ -116,7 +114,7 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
     const msg = "Are you sure?\nThe match state will not be saved!";
     final result = await game.router.pushAndWait(ConfirmDialog(msg));
     if (result) {
-      game.router.popUntilNamed("home");
+      game.router.pop();
     }
   }
 }

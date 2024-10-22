@@ -1,4 +1,4 @@
-name: CICD
+name: CI/CD
 
 on:
   push:
@@ -18,5 +18,5 @@ jobs:
         uses: subosito/flutter-action@v2
       - name: Install dependencies
         run: flutter pub get --directory ./flutter
-      - name: Anayze source code
-        run: flutter analyze --no-pub --no-preamble ./flutter/lib
+      - name: Analyze source code
+        run: flutter analyze --no-pub ./flutter

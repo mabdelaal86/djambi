@@ -1,11 +1,15 @@
 import 'package:flame/game.dart';
 
+import 'options.dart';
 import 'pages/home.dart';
 import 'pages/options.dart';
 import 'pages/play.dart';
+import 'settings.dart';
 
 class DjambiGame extends FlameGame {
   late final RouterComponent router;
+  final Options options = Options();
+  final Settings settings = Settings();
 
   @override
   Future<void> onLoad() async {

@@ -12,7 +12,7 @@ extension PaintExtension on Paint {
 
 extension ColorExtension on Color {
   String get hex => '#${(value & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
-  Paint paint() => Paint()..color = this;
+  Paint toPaint() => Paint()..color = this;
 }
 
 Future<Svg> loadImage(String image, Color color,

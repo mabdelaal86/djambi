@@ -46,7 +46,7 @@ class Parliament {
     assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
     _setInitialPositions();
     // create parties
-    parties = members.where((m) => m.isChief).map((m) => Party(m as Chief)).toList();
+    parties = [ for (final m in members) if (m.isChief) Party(m as Chief) ];
     assert(parties.length == 4, "number of parties should be 4");
     // other properties
     _currentParty = getParty(_currentIdeology);
@@ -56,10 +56,10 @@ class Parliament {
       : _currentIdeology = other._currentIdeology,
         turnDirection = other.turnDirection {
     // copy members
-    members = other.members.map((m) => Member.copy(this, m)).toList();
+    members = [ for (final m in other.members) Member.copy(this, m) ];
     assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
     // copy parties
-    parties = members.where((m) => m.isChief).map((m) => Party(m as Chief)).toList();
+    parties = [ for (final m in members) if (m.isChief) Party(m as Chief) ];
     assert(parties.length == 4, "number of parties should be 4");
     // other properties
     _currentParty = getParty(other._currentParty.ideology);

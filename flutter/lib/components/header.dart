@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/layout.dart';
 import 'package:flutter/material.dart';
 
 import 'buttons.dart';
@@ -8,8 +9,6 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
   final String title;
   final VoidCallback? onBackTapUp;
 
-  late final TextComponent _text;
-
   Header({
     this.title = "Djambi",
     this.onBackTapUp,
@@ -18,9 +17,9 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
   @override
   Future<void> onLoad() async {
     await addAll([
-      _text = TextComponent(
-        text: title,
-        anchor: Anchor.center,
+      AlignComponent(
+        alignment: Anchor.center,
+        child: TextComponent(text: title),
       ),
       if (game.router.previousRoute != null)
         RoundedButton(
@@ -39,6 +38,5 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     this.size = Vector2(size.x, 100);
-    _text.position = this.size / 2;
   }
 }
