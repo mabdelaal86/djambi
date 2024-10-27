@@ -5,7 +5,6 @@ import '../views/theme.dart';
 import '../views/utils.dart';
 
 class Settings {
-  static const actionDuration = Duration(seconds: 1);
   var pieceTheme = PieceTheme.classic;
   var boardTheme = getDefaultBoardTheme();
 }

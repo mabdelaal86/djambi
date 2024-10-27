@@ -3,38 +3,54 @@ import 'package:flutter/material.dart';
 
 import '../../models/enums.dart';
 import '../buttons.dart';
+import '../configs.dart' as configs;
 import '../game.dart';
 import '../header.dart';
 import '../options.dart';
+import '../utils.dart';
+
+const _ideologyAnchor = {
+  Ideology.red: Anchor.bottomLeft,
+  Ideology.blue: Anchor.bottomRight,
+  Ideology.yellow: Anchor.topRight,
+  Ideology.green: Anchor.topLeft,
+};
+
+const _space = 20.0;
+final _labelSize = Vector2(200, configs.smallBtnSize.y);
+final _buttonsPanelSize = (configs.smallBtnSize * 2) + Vector2.all(_space);
 
 class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
   // @override
   // bool get debugMode => true;
 
-  late final RoundedButton _playButton;
-
-  // turn direction
-  late final TextComponent _turnDirText;
   late final OptionButton _turnDirClockwise, _turnDirAnticlockwise;
-
-  // start ideology
-  late final TextComponent _startIdeologyText;
   late final List<OptionButton> _startIdeologyButtons;
-
-  // start ideology
-  late final TextComponent _humanPlayersText;
   late final List<ToggleButton> _humanPlayersButtons;
 
   @override
   Future<void> onLoad() async {
+    size = game.size;
     await addAll([
       Header(),
-      ..._createTurnDirection(),
-      ..._createStartIdeology(),
-      ..._createHumanPlayers(),
-      _playButton = RoundedButton(
+      PositionComponent(
+        anchor: Anchor.center,
+        position: size * 0.5,
+        size: Vector2(
+          _labelSize.x + _space + _buttonsPanelSize.x,
+          configs.smallBtnSize.y + _space*4 + _buttonsPanelSize.y*2,
+        ),
+        children: [
+          _createTurnDirection(),
+          _createStartIdeology(),
+          _createHumanPlayers(),
+        ],
+      ),
+      RoundedButton(
         text: "Play",
-        size: Vector2(300, 75),
+        size: configs.largeBtnSize,
+        anchor: Anchor.bottomCenter,
+        position: Vector2(size.x / 2, size.y - 50),
         onReleased: () => game.router.pushReplacementNamed("play"),
       ),
     ]);
@@ -43,95 +59,96 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
     _showHumanPlayers();
   }
 
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-
-    const vrSep = 65;
-    const hrSep = 15;
-    final hrMid = size.x * 0.55;
-    var vrStart = size.y * 0.30;
-
-    // turn direction
-    _turnDirText.position = Vector2(hrMid - hrSep, vrStart);
-    _turnDirClockwise.position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart);
-    _turnDirAnticlockwise.position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
-
-    // start ideology
-    _startIdeologyText.position =
-        Vector2(hrMid - hrSep, vrStart += vrSep * 1.5);
-    _startIdeologyButtons[Ideology.green.index].position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart);
-    _startIdeologyButtons[Ideology.yellow.index].position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
-    _startIdeologyButtons[Ideology.red.index].position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart += vrSep);
-    _startIdeologyButtons[Ideology.blue.index].position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
-
-    // human players
-    _humanPlayersText.position =
-        Vector2(hrMid - hrSep, vrStart += vrSep * 1.5);
-    _humanPlayersButtons[Ideology.green.index].position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart);
-    _humanPlayersButtons[Ideology.yellow.index].position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
-    _humanPlayersButtons[Ideology.red.index].position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 0.5, vrStart += vrSep);
-    _humanPlayersButtons[Ideology.blue.index].position =
-        Vector2(hrMid + RoundedButton.defaultSize.x * 1.5 + hrSep, vrStart);
-
-    // play
-    _playButton.position =
-        Vector2(size.x / 2, size.y - _playButton.height - hrSep);
-  }
-
-  List<Component> _createTurnDirection() => [
-        _turnDirText = TextComponent(
-          text: "Turn Direction:",
-          anchor: Anchor.centerRight,
+  Component _createTurnDirection() =>
+      PositionComponent(
+        position: Vector2.zero(),
+        size: Vector2(
+          _labelSize.x + 2 * (_space + configs.smallBtnSize.x),
+          configs.smallBtnSize.y,
         ),
-        _turnDirClockwise = OptionButton(
-          icon: Icons.rotate_right,
-          size: RoundedButton.defaultSize,
-          onSelect: () => _setTurnDirection(TurnDirection.clockwise),
-        ),
-        _turnDirAnticlockwise = OptionButton(
-          icon: Icons.rotate_left,
-          size: RoundedButton.defaultSize,
-          onSelect: () => _setTurnDirection(TurnDirection.anticlockwise),
-        ),
-      ];
+        children: [
+          _createLabel("Turn Direction:"),
+          PositionComponent(
+            position: Vector2(_labelSize.x + _space, 0),
+            size: Vector2(
+              configs.smallBtnSize.x * 2 + _space,
+              configs.smallBtnSize.y,
+            ),
+            children: [
+              _turnDirClockwise = OptionButton(
+                icon: Icons.rotate_right,
+                size: configs.smallBtnSize,
+                position: Anchor.topLeft.ofSize(_buttonsPanelSize),
+                anchor: Anchor.topLeft,
+                onSelect: () => _setTurnDirection(TurnDirection.clockwise),
+              ),
+              _turnDirAnticlockwise = OptionButton(
+                icon: Icons.rotate_left,
+                size: configs.smallBtnSize,
+                position: Anchor.topRight.ofSize(_buttonsPanelSize),
+                anchor: Anchor.topRight,
+                onSelect: () => _setTurnDirection(TurnDirection.anticlockwise),
+              ),
+            ],
+          ),
+        ],
+      );
 
-  List<Component> _createStartIdeology() => [
-        _startIdeologyText = TextComponent(
-          text: "Start Player:",
-          anchor: Anchor.centerRight,
-        ),
-        ..._startIdeologyButtons = Ideology.values.map((e) => OptionButton(
-            text: e.name[0].toUpperCase(),
-            size: RoundedButton.defaultSize,
-            onSelect: () => _setStartIdeology(e),
-        )).toList(),
-      ];
+  Component _createStartIdeology() =>
+      PositionComponent(
+        position: Vector2(0, configs.smallBtnSize.y + _space*2),
+        size: _buttonsPanelSize + Vector2(_labelSize.x + _space, 0),
+        children: [
+          _createLabel("Start Player:"),
+          PositionComponent(
+            position: Vector2(_labelSize.x + _space, 0),
+            size: _buttonsPanelSize,
+            children: _startIdeologyButtons = Ideology.values.map((e) => OptionButton(
+              text: e.name[0].toUpperCase(),
+              size: configs.smallBtnSize,
+              position: _ideologyAnchor[e]?.ofSize(_buttonsPanelSize),
+              anchor: _ideologyAnchor[e],
+              onSelect: () => _setStartIdeology(e),
+            )).toList(),
+          ),
+        ],
+      );
 
-  List<Component> _createHumanPlayers() => [
-        _humanPlayersText = TextComponent(
-          text: "Human Players:",
-          anchor: Anchor.centerRight,
-        ),
-        ..._humanPlayersButtons = Ideology.values.map((e) => ToggleButton(
-            text: e.name[0].toUpperCase(),
-            size: RoundedButton.defaultSize,
-            onSelectedChanged: (value) {
-              game.options.players[e] = value
-                  ? PlayerType.human
-                  : PlayerType.aiMaxN;
-            },
-        )).toList(),
-      ];
+  Component _createHumanPlayers() =>
+      PositionComponent(
+        position: Vector2(0, configs.smallBtnSize.y + _buttonsPanelSize.y + _space*4),
+        size: _buttonsPanelSize + Vector2(_labelSize.x + _space, 0),
+        children: [
+          _createLabel("Human Players:"),
+          PositionComponent(
+            position: Vector2(_labelSize.x + _space, 0),
+            size: _buttonsPanelSize,
+            children: _humanPlayersButtons = Ideology.values.map((e) => ToggleButton(
+              text: e.name[0].toUpperCase(),
+              size: configs.smallBtnSize,
+              position: _ideologyAnchor[e]?.ofSize(_buttonsPanelSize),
+              anchor: _ideologyAnchor[e],
+              onSelectedChanged: (value) {
+                game.options.players[e] = value ? PlayerType.human : PlayerType.aiMaxN;
+              },
+            )).toList(),
+          ),
+        ],
+      );
+
+  Component _createLabel(String text, {Vector2? position}) =>
+      PositionComponent(
+        size: _labelSize,
+        position: position,
+        children: [
+          TextComponent(
+            text: text,
+            anchor: Anchor.centerRight,
+            position: _labelSize.clone()
+              ..multiply(Anchor.centerRight.toVector2()),
+          ),
+        ],
+      );
 
   void _setTurnDirection(TurnDirection direction) {
     game.options.turnDirection = direction;

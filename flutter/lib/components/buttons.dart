@@ -4,8 +4,6 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/widgets.dart';
 
 class RoundedButton extends AdvancedButtonComponent {
-  static final Vector2 defaultSize = Vector2.all(50);
-
   final String? text;
   final IconData? icon;
   final Color defaultColor;
@@ -23,7 +21,7 @@ class RoundedButton extends AdvancedButtonComponent {
     this.hoverColor = const Color(0xFF00B400),
     this.downColor = const Color(0xFF006400),
     this.disabledColor = const Color(0xFF646464),
-    super.anchor = Anchor.center,
+    super.anchor = Anchor.topLeft,
   });
 
   static TextComponent createLabel(IconData? icon, String? text) {
@@ -67,6 +65,7 @@ class ToggleButton extends ToggleButtonComponent {
     required super.onSelectedChanged,
     this.text,
     this.icon,
+    super.position,
     required super.size,
     this.defaultColor = const Color(0xFF00C800),
     this.hoverColor = const Color(0xFF00B400),
@@ -74,7 +73,7 @@ class ToggleButton extends ToggleButtonComponent {
     this.defaultSelectedColor = const Color(0xFF0000C8),
     this.hoverSelectedColor = const Color(0xFF0000B4),
     this.downSelectedColor = const Color(0xFF000064),
-    super.anchor = Anchor.center,
+    super.anchor = Anchor.topLeft,
   });
 
   @override
@@ -99,6 +98,7 @@ class OptionButton extends ToggleButton {
     super.onSelectedChanged,
     super.text,
     super.icon,
+    super.position,
     required super.size,
     super.defaultColor = const Color(0x4400C800),
     super.hoverColor = const Color(0x4400B400),
@@ -106,7 +106,7 @@ class OptionButton extends ToggleButton {
     super.defaultSelectedColor = const Color(0xFF00C800),
     super.hoverSelectedColor = const Color(0xFF00B400),
     super.downSelectedColor = const Color(0xFF006400),
-    super.anchor = Anchor.center,
+    super.anchor = Anchor.topLeft,
   });
 
   @override

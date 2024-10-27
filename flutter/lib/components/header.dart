@@ -3,9 +3,13 @@ import 'package:flame/layout.dart';
 import 'package:flutter/material.dart';
 
 import 'buttons.dart';
+import 'configs.dart' as configs;
 import 'game.dart';
 
 class Header extends PositionComponent with HasGameReference<DjambiGame> {
+  // @override
+  // bool get debugMode => true;
+
   final String title;
   final VoidCallback? onBackTapUp;
 
@@ -16,6 +20,7 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
 
   @override
   Future<void> onLoad() async {
+    size = configs.headerSize;
     await addAll([
       AlignComponent(
         alignment: Anchor.center,
@@ -24,19 +29,14 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
       if (game.router.previousRoute != null)
         RoundedButton(
           icon: Icons.arrow_back,
-          position: Vector2(50, 50),
-          size: RoundedButton.defaultSize,
+          position: Vector2.all(configs.headerSize.y / 2),
+          anchor: Anchor.center,
+          size: configs.smallBtnSize,
           onReleased: () => switch(onBackTapUp) {
             null => game.router.pop(),
             final fun => fun.call(),
           },
         ),
     ]);
-  }
-
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    this.size = Vector2(size.x, 100);
   }
 }
