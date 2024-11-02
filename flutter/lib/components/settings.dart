@@ -1,8 +1,8 @@
 import 'package:flutter/painting.dart';
 
+import '../../common/utils.dart';
 import '../views/dimensions.dart' as dimensions;
 import '../views/theme.dart';
-import '../views/utils.dart';
 
 class Settings {
   var pieceTheme = PieceTheme.classic;

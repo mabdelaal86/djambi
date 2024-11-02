@@ -3,17 +3,18 @@ import 'dart:async';
 import 'package:flame/components.dart' hide Timer;
 import 'package:flutter/material.dart';
 
+import '../../common/utils.dart';
 import '../../models/contest.dart';
 import '../../views/board.dart';
 import '../../views/dimensions.dart' as dimensions;
 import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../dialogs.dart';
-import '../game.dart';
 import '../header.dart';
 import '../utils.dart';
+import 'base.dart';
 
-class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
+class PlayPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
@@ -25,9 +26,9 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   @override
   Future<void> onLoad() async {
-    size = game.size;
-    final footerSize = Vector2(600, configs.smallBtnSize.y);
-    const space = 20.0;
+    await super.onLoad();
+
+    final footerSize = Vector2(size.x * 0.75, configs.smallBtnSize.y);
 
     _contest = Contest(
       game.options.startIdeology,
@@ -49,10 +50,11 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
       PositionComponent(
         size: footerSize,
         anchor: Anchor.bottomCenter,
-        position: Vector2(size.x / 2, size.y - 50),
+        position: Vector2(size.x / 2, size.y - configs.largeMargin),
         children: [
           RoundedButton(
             icon: Icons.undo,
+            fontSize: configs.iconFontSize,
             size: configs.smallBtnSize,
             onReleased: onUndoTapUp,
             anchor: Anchor.centerLeft,
@@ -60,11 +62,12 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
           ),
           RoundedButton(
             icon: Icons.redo,
+            fontSize: configs.iconFontSize,
             size: configs.smallBtnSize,
             onReleased: onRedoTapUp,
             anchor: Anchor.centerLeft,
             position: Anchor.centerLeft.ofSize(footerSize) +
-                Vector2(configs.smallBtnSize.x + space, 0),
+                Vector2(configs.smallBtnSize.x + configs.smallMargin, 0),
           ),
           _nextPlayerIcon = CircleComponent(
             radius: configs.smallBtnSize.x / 2,
@@ -73,15 +76,19 @@ class PlayPage extends PositionComponent with HasGameReference<DjambiGame> {
           ),
           _nextPlayerText = TextBoxComponent(
             size: configs.smallBtnSize,
+            textRenderer: TextPaint(
+              style: const TextStyle(fontSize: configs.defaultFontSize),
+            ),
             align: Anchor.center,
             anchor: Anchor.centerRight,
             position: Anchor.centerRight.ofSize(footerSize),
           ),
           TextComponent(
             text: "Next Player:",
+            textRenderer: getRenderer(configs.defaultFontSize),
             anchor: Anchor.centerRight,
             position: Anchor.centerRight.ofSize(footerSize) -
-                Vector2(configs.smallBtnSize.x + space, 0),
+                Vector2(configs.smallBtnSize.x + configs.smallMargin, 0),
           ),
         ],
       ),

@@ -2,17 +2,13 @@ import 'package:flame/flame.dart';
 import 'package:flame_svg/flame_svg.dart' show Svg;
 import 'package:flutter/painting.dart';
 
+import '../common/utils.dart';
 import 'dimensions.dart' as dimensions;
 
 extension PaintExtension on Paint {
   Paint stroke() => this
     ..style = PaintingStyle.stroke
     ..strokeWidth = dimensions.markStroke * 2;
-}
-
-extension ColorExtension on Color {
-  String get hex => '#${(value & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
-  Paint toPaint() => Paint()..color = this;
 }
 
 Future<Svg> loadImage(String image, Color color,

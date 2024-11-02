@@ -3,13 +3,14 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/widgets.dart';
 
+import 'configs.dart' as configs;
+import 'utils.dart';
+
 class RoundedButton extends AdvancedButtonComponent {
   final String? text;
   final IconData? icon;
-  final Color defaultColor;
-  final Color hoverColor;
-  final Color downColor;
-  final Color disabledColor;
+  final ButtonColorSchema colorSchema;
+  final double fontSize;
 
   RoundedButton({
     this.text,
@@ -17,49 +18,31 @@ class RoundedButton extends AdvancedButtonComponent {
     required super.size,
     super.position,
     required super.onReleased,
-    this.defaultColor = const Color(0xFF00C800),
-    this.hoverColor = const Color(0xFF00B400),
-    this.downColor = const Color(0xFF006400),
-    this.disabledColor = const Color(0xFF646464),
+    this.colorSchema = configs.primaryBtnColors,
+    this.fontSize = configs.defaultFontSize,
     super.anchor = Anchor.topLeft,
   });
-
-  static TextComponent createLabel(IconData? icon, String? text) {
-    if (icon == null) {
-      return TextComponent(text: text);
-    }
-
-    return TextComponent(
-      text: String.fromCharCode(icon.codePoint),
-      textRenderer: TextPaint(
-        style: TextStyle(
-          fontSize: 32,
-          fontFamily: icon.fontFamily,
-        ),
-      ),
-    );
-  }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    defaultLabel = createLabel(icon, text);
-    defaultSkin = RoundedRectComponent()..setColor(defaultColor);
-    hoverSkin = RoundedRectComponent()..setColor(hoverColor);
-    downSkin = RoundedRectComponent()..setColor(downColor);
-    disabledSkin = RoundedRectComponent()..setColor(disabledColor);
+    defaultLabel = TextComponent(
+      text: icon == null ? text : String.fromCharCode(icon!.codePoint),
+      textRenderer: getRenderer(fontSize, icon?.fontFamily),
+    );
+    defaultSkin = RoundedRectComponent()..setColor(colorSchema.natural);
+    hoverSkin = RoundedRectComponent()..setColor(colorSchema.hover);
+    downSkin = RoundedRectComponent()..setColor(colorSchema.down);
+    disabledSkin = RoundedRectComponent()..setColor(colorSchema.disabled);
   }
 }
 
 class ToggleButton extends ToggleButtonComponent {
   final String? text;
   final IconData? icon;
-  final Color defaultColor;
-  final Color hoverColor;
-  final Color downColor;
-  final Color defaultSelectedColor;
-  final Color hoverSelectedColor;
-  final Color downSelectedColor;
+  final ButtonColorSchema colorSchema;
+  final ButtonColorSchema selectedColorSchema;
+  final double fontSize;
 
   ToggleButton({
     required super.onSelectedChanged,
@@ -67,25 +50,25 @@ class ToggleButton extends ToggleButtonComponent {
     this.icon,
     super.position,
     required super.size,
-    this.defaultColor = const Color(0xFF00C800),
-    this.hoverColor = const Color(0xFF00B400),
-    this.downColor = const Color(0xFF006400),
-    this.defaultSelectedColor = const Color(0xFF0000C8),
-    this.hoverSelectedColor = const Color(0xFF0000B4),
-    this.downSelectedColor = const Color(0xFF000064),
+    this.colorSchema = configs.secondaryBtnColors,
+    this.selectedColorSchema = configs.primaryBtnColors,
+    this.fontSize = configs.defaultFontSize,
     super.anchor = Anchor.topLeft,
   });
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    defaultLabel = defaultSelectedLabel = RoundedButton.createLabel(icon, text);
-    defaultSkin = RoundedRectComponent()..setColor(defaultColor);
-    hoverSkin = RoundedRectComponent()..setColor(hoverColor);
-    downSkin = RoundedRectComponent()..setColor(downColor);
-    defaultSelectedSkin = RoundedRectComponent()..setColor(defaultSelectedColor);
-    hoverAndSelectedSkin = RoundedRectComponent()..setColor(hoverSelectedColor);
-    downAndSelectedSkin = RoundedRectComponent()..setColor(downSelectedColor);
+    defaultLabel = defaultSelectedLabel = TextComponent(
+      text: icon == null ? text : String.fromCharCode(icon!.codePoint),
+      textRenderer: getRenderer(fontSize, icon?.fontFamily),
+    );
+    defaultSkin = RoundedRectComponent()..setColor(colorSchema.natural);
+    hoverSkin = RoundedRectComponent()..setColor(colorSchema.hover);
+    downSkin = RoundedRectComponent()..setColor(colorSchema.down);
+    defaultSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.natural);
+    hoverAndSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.hover);
+    downAndSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.down);
   }
 }
 
@@ -100,12 +83,9 @@ class OptionButton extends ToggleButton {
     super.icon,
     super.position,
     required super.size,
-    super.defaultColor = const Color(0x4400C800),
-    super.hoverColor = const Color(0x4400B400),
-    super.downColor = const Color(0x44006400),
-    super.defaultSelectedColor = const Color(0xFF00C800),
-    super.hoverSelectedColor = const Color(0xFF00B400),
-    super.downSelectedColor = const Color(0xFF006400),
+    super.colorSchema = configs.secondaryBtnColors,
+    super.selectedColorSchema = configs.primaryBtnColors,
+    super.fontSize = configs.defaultFontSize,
     super.anchor = Anchor.topLeft,
   });
 

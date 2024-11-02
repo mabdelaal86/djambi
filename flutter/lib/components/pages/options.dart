@@ -1,13 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/utils.dart';
 import '../../models/enums.dart';
 import '../buttons.dart';
 import '../configs.dart' as configs;
-import '../game.dart';
 import '../header.dart';
 import '../options.dart';
 import '../utils.dart';
+import 'base.dart';
 
 const _ideologyAnchor = {
   Ideology.red: Anchor.bottomLeft,
@@ -16,11 +17,11 @@ const _ideologyAnchor = {
   Ideology.green: Anchor.topLeft,
 };
 
-const _space = 20.0;
 final _labelSize = Vector2(200, configs.smallBtnSize.y);
-final _buttonsPanelSize = (configs.smallBtnSize * 2) + Vector2.all(_space);
+final _buttonsPanelSize = (configs.smallBtnSize * 2) +
+    Vector2.all(configs.smallMargin);
 
-class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
+class OptionsPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
@@ -30,15 +31,15 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   @override
   Future<void> onLoad() async {
-    size = game.size;
+    await super.onLoad();
     await addAll([
       Header(),
       PositionComponent(
         anchor: Anchor.center,
         position: size * 0.5,
         size: Vector2(
-          _labelSize.x + _space + _buttonsPanelSize.x,
-          configs.smallBtnSize.y + _space*4 + _buttonsPanelSize.y*2,
+          _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
+          configs.smallBtnSize.y + 2 * (configs.largeMargin + _buttonsPanelSize.y),
         ),
         children: [
           _createTurnDirection(),
@@ -50,7 +51,7 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
         text: "Play",
         size: configs.largeBtnSize,
         anchor: Anchor.bottomCenter,
-        position: Vector2(size.x / 2, size.y - 50),
+        position: Vector2(size.x / 2, size.y - configs.largeMargin),
         onReleased: () => game.router.pushReplacementNamed("play"),
       ),
     ]);
@@ -63,20 +64,21 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
       PositionComponent(
         position: Vector2.zero(),
         size: Vector2(
-          _labelSize.x + 2 * (_space + configs.smallBtnSize.x),
+          _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
           configs.smallBtnSize.y,
         ),
         children: [
           _createLabel("Turn Direction:"),
           PositionComponent(
-            position: Vector2(_labelSize.x + _space, 0),
+            position: Vector2(_labelSize.x + configs.smallMargin, 0),
             size: Vector2(
-              configs.smallBtnSize.x * 2 + _space,
+              configs.smallBtnSize.x * 2 + configs.smallMargin,
               configs.smallBtnSize.y,
             ),
             children: [
               _turnDirClockwise = OptionButton(
                 icon: Icons.rotate_right,
+                fontSize: configs.iconFontSize,
                 size: configs.smallBtnSize,
                 position: Anchor.topLeft.ofSize(_buttonsPanelSize),
                 anchor: Anchor.topLeft,
@@ -84,6 +86,7 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
               ),
               _turnDirAnticlockwise = OptionButton(
                 icon: Icons.rotate_left,
+                fontSize: configs.iconFontSize,
                 size: configs.smallBtnSize,
                 position: Anchor.topRight.ofSize(_buttonsPanelSize),
                 anchor: Anchor.topRight,
@@ -96,12 +99,15 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   Component _createStartIdeology() =>
       PositionComponent(
-        position: Vector2(0, configs.smallBtnSize.y + _space*2),
-        size: _buttonsPanelSize + Vector2(_labelSize.x + _space, 0),
+        position: Vector2(0, configs.smallBtnSize.y + configs.largeMargin),
+        size: Vector2(
+          _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
+          _buttonsPanelSize.y,
+        ),
         children: [
           _createLabel("Start Player:"),
           PositionComponent(
-            position: Vector2(_labelSize.x + _space, 0),
+            position: Vector2(_labelSize.x + configs.smallMargin, 0),
             size: _buttonsPanelSize,
             children: _startIdeologyButtons = Ideology.values.map((e) => OptionButton(
               text: e.name[0].toUpperCase(),
@@ -116,12 +122,15 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
 
   Component _createHumanPlayers() =>
       PositionComponent(
-        position: Vector2(0, configs.smallBtnSize.y + _buttonsPanelSize.y + _space*4),
-        size: _buttonsPanelSize + Vector2(_labelSize.x + _space, 0),
+        position: Vector2(0, configs.smallBtnSize.y + _buttonsPanelSize.y + 2 * configs.largeMargin),
+        size: Vector2(
+          _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
+          _buttonsPanelSize.y,
+        ),
         children: [
           _createLabel("Human Players:"),
           PositionComponent(
-            position: Vector2(_labelSize.x + _space, 0),
+            position: Vector2(_labelSize.x + configs.smallMargin, 0),
             size: _buttonsPanelSize,
             children: _humanPlayersButtons = Ideology.values.map((e) => ToggleButton(
               text: e.name[0].toUpperCase(),
@@ -143,9 +152,9 @@ class OptionsPage extends PositionComponent with HasGameReference<DjambiGame> {
         children: [
           TextComponent(
             text: text,
+            textRenderer: getRenderer(configs.defaultFontSize),
             anchor: Anchor.centerRight,
-            position: _labelSize.clone()
-              ..multiply(Anchor.centerRight.toVector2()),
+            position: Anchor.centerRight.ofSize(_labelSize),
           ),
         ],
       );
