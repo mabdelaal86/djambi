@@ -28,7 +28,7 @@ class RoundedButton extends AdvancedButtonComponent {
     await super.onLoad();
     defaultLabel = TextComponent(
       text: icon == null ? text : String.fromCharCode(icon!.codePoint),
-      textRenderer: getRenderer(fontSize, icon?.fontFamily),
+      textRenderer: getRenderer(fontSize, colorSchema.text, icon?.fontFamily),
     );
     defaultSkin = RoundedRectComponent()..setColor(colorSchema.natural);
     hoverSkin = RoundedRectComponent()..setColor(colorSchema.hover);
@@ -61,7 +61,7 @@ class ToggleButton extends ToggleButtonComponent {
     await super.onLoad();
     defaultLabel = defaultSelectedLabel = TextComponent(
       text: icon == null ? text : String.fromCharCode(icon!.codePoint),
-      textRenderer: getRenderer(fontSize, icon?.fontFamily),
+      textRenderer: getRenderer(fontSize, colorSchema.text, icon?.fontFamily),
     );
     defaultSkin = RoundedRectComponent()..setColor(colorSchema.natural);
     hoverSkin = RoundedRectComponent()..setColor(colorSchema.hover);

@@ -18,6 +18,7 @@ const defaultFontSize = 32.0;
 const headerFontSize = 40.0;
 const iconFontSize = 40.0;
 
+const textColor = Color(0xFFFFFFFF);
 final pageBackground = Paint()
   ..color = const Color(0x88888888);
 
@@ -26,6 +27,7 @@ const primaryBtnColors = ButtonColorSchema(
   Color(0xFF00B400),
   Color(0xFF006400),
   Color(0xFF646464),
+  Color(0xFFFFFFFF),
 );
 
 const secondaryBtnColors = ButtonColorSchema(
@@ -33,4 +35,5 @@ const secondaryBtnColors = ButtonColorSchema(
   Color(0x4400B400),
   Color(0x44006400),
   Color(0xFF646464),
+  Color(0xFFFFFFFF),
 );

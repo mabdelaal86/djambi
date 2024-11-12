@@ -85,7 +85,7 @@ class PlayPage extends BasePage {
           ),
           TextComponent(
             text: "Next Player:",
-            textRenderer: getRenderer(configs.defaultFontSize),
+            textRenderer: getRenderer(configs.defaultFontSize, configs.textColor),
             anchor: Anchor.centerRight,
             position: Anchor.centerRight.ofSize(footerSize) -
                 Vector2(configs.smallBtnSize.x + configs.smallMargin, 0),

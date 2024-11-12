@@ -7,18 +7,21 @@ class ButtonColorSchema {
   final Color hover;
   final Color down;
   final Color disabled;
+  final Color text;
 
   const ButtonColorSchema(
-    this.natural,
-    this.hover,
-    this.down,
-    this.disabled,
+      this.natural,
+      this.hover,
+      this.down,
+      this.disabled,
+      this.text,
   );
 }
 
-TextPaint getRenderer(double fontSize, [String? fontFamily]) => TextPaint(
+TextPaint getRenderer(double fontSize, Color color, [String? fontFamily]) => TextPaint(
   style: TextStyle(
-    fontSize: fontSize,
+    color: color,
     fontFamily: fontFamily,
+    fontSize: fontSize,
   ),
 );

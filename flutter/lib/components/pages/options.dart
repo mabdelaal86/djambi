@@ -152,7 +152,7 @@ class OptionsPage extends BasePage {
         children: [
           TextComponent(
             text: text,
-            textRenderer: getRenderer(configs.defaultFontSize),
+            textRenderer: getRenderer(configs.defaultFontSize, configs.textColor),
             anchor: Anchor.centerRight,
             position: Anchor.centerRight.ofSize(_labelSize),
           ),
