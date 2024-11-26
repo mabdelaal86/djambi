@@ -25,7 +25,7 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
     await addAll([
       TextComponent(
         text:  title,
-        textRenderer: getRenderer(configs.headerFontSize, configs.textColor),
+        textRenderer: getRenderer(fontSize: configs.headerFontSize),
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
       ),

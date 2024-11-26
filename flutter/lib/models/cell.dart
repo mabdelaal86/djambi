@@ -10,6 +10,7 @@ class Cell {
   const Cell(this.x, this.y);
   const Cell.zero() : this(0, 0);
   const Cell.all(int xy) : this(xy, xy);
+  const Cell.maze() : this(constants.mazeIndex, constants.mazeIndex);
 
   @override
   String toString() => isValid
@@ -26,8 +27,8 @@ class Cell {
   bool get isMaze => x == constants.mazeIndex && y == constants.mazeIndex;
   bool get isDark => x.isEven == y.isEven;
   bool get isValid =>
-      (0 <= x && x < constants.boardSize) &&
-      (0 <= y && y < constants.boardSize);
+      (0 <= x && x < constants.sideCellsCount) &&
+      (0 <= y && y < constants.sideCellsCount);
   int get max => x > y ? x : y;
   int get min => x < y ? x : y;
 
@@ -61,8 +62,8 @@ class Cell {
       orthogonalDirections.map((d) => this + d).where((c) => c.isValid);
 
   static Iterable<Cell> allCells() sync* {
-    for (var y = 0; y < constants.boardSize; y++) {
-      for (var x = 0; x < constants.boardSize; x++) {
+    for (var y = 0; y < constants.sideCellsCount; y++) {
+      for (var x = 0; x < constants.sideCellsCount; x++) {
         yield Cell(x, y);
       }
     }

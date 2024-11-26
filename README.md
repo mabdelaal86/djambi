@@ -12,6 +12,9 @@ An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 ## Known Issues
 
 * When a Chief leave the Maze, its team still get extra turn.
+* When a player has no legal moves, the game stuck.
+* Show a message when all human players loss.
+* When no player can win, nothing is happen.
 
 
 ## Roadmap

@@ -78,7 +78,7 @@ class Parliament {
     // create members and place them around (0,0) point, so it is easier to rotate or flip
     for (var r = 0; r < 3; r++) {
       for (var c = 0; c < 3; c++) {
-        final id = (ideology.index * constants.boardSize) + (r * 3) + c;
+        final id = (ideology.index * constants.sideCellsCount) + (r * 3) + c;
         yield Member.create(this, roles[r][c], ideology, id)
           ..location = Cell(c - 1, r - 1);
       }

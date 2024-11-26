@@ -1,5 +1,5 @@
-const int boardSize = 9;
-const int mazeIndex = boardSize ~/ 2;
+const int sideCellsCount = 9;
+const int mazeIndex = sideCellsCount ~/ 2;
 
 const colSymbols = "ABCDEFGHI";
 const rowSymbols = "123456789";

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../common/utils.dart';
 import '../../models/contest.dart';
 import '../../views/board.dart';
-import '../../views/dimensions.dart' as dimensions;
 import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../dialogs.dart';
@@ -43,9 +42,9 @@ class PlayPage extends BasePage {
         _contest,
         game.settings.boardTheme,
         game.settings.pieceTheme,
+        game.settings.showMargins,
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
-        scale: Vector2.all(size.x / dimensions.boardSize.x),
       ),
       PositionComponent(
         size: footerSize,
@@ -85,7 +84,7 @@ class PlayPage extends BasePage {
           ),
           TextComponent(
             text: "Next Player:",
-            textRenderer: getRenderer(configs.defaultFontSize, configs.textColor),
+            textRenderer: getRenderer(),
             anchor: Anchor.centerRight,
             position: Anchor.centerRight.ofSize(footerSize) -
                 Vector2(configs.smallBtnSize.x + configs.smallMargin, 0),
@@ -93,6 +92,7 @@ class PlayPage extends BasePage {
         ],
       ),
     ]);
+    _board.scale = Vector2.all(size.x / _board.width);
     onStateChanged();
     onManoeuvreCompleted();
   }

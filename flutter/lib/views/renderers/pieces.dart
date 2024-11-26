@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_svg/svg.dart';
 import 'package:flutter/painting.dart';
@@ -9,15 +10,21 @@ import '../dimensions.dart' as dimensions;
 import '../theme.dart';
 import '../utils.dart';
 
-class PiecesRenderer {
+class PiecesRenderer extends PositionComponent {
+  // @override
+  // bool get debugMode => true;
+
   final Contest contest;
   final BoardTheme boardTheme;
   final PieceTheme pieceTheme;
 
-  PiecesRenderer(this.contest, this.boardTheme, this.pieceTheme);
+  PiecesRenderer(this.contest, this.boardTheme, this.pieceTheme,
+      {super.position, super.anchor, super.scale})
+      : super(size: dimensions.gridSize);
 
   late final Map<Role, Svg> _memberImages;
 
+  @override
   Future<void> onLoad() async {
     _memberImages = {
       for (final r in Role.values)
@@ -25,6 +32,7 @@ class PiecesRenderer {
     };
   }
 
+  @override
   void render(Canvas canvas) {
     _drawMembers(canvas);
     // draw actor again to make sure it is shown on top of other members

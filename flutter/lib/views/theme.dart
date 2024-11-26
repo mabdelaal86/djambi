@@ -5,6 +5,12 @@ enum PieceTheme {
   characters,
 }
 
+enum MarginsVisibility {
+  none,
+  half,
+  full,
+}
+
 class BoardTheme {
   // margins
   final Paint marginPaint;

@@ -10,6 +10,7 @@ const gameWidth = 820.0;
 const gameHeight = 1600.0;
 
 final smallBtnSize = Vector2.all(80);
+final mediumBtnSize = Vector2(200, 80);
 final largeBtnSize = Vector2(320, 100);
 final headerSize = Vector2(gameWidth, 140);
 const largeMargin = 50.0;

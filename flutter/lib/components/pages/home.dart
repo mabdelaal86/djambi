@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 
+import '../../common/utils.dart';
 import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../header.dart';
@@ -17,7 +18,7 @@ class HomePage extends BasePage {
       Header(),
       PositionComponent(
         anchor: Anchor.center,
-        position: size * 0.5,
+        position: Anchor.center.ofSize(size),
         size: Vector2(
           configs.largeBtnSize.x,
           configs.largeBtnSize.y * 3 + configs.largeMargin * 2,
@@ -39,7 +40,7 @@ class HomePage extends BasePage {
             text: "Settings",
             size: configs.largeBtnSize,
             position: Vector2(0, 2 * (configs.largeBtnSize.y + configs.largeMargin)),
-            onReleased: () {},
+            onReleased: () => game.router.pushNamed("settings"),
           ),
         ],
       ),

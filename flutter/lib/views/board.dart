@@ -1,52 +1,45 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
-import 'package:flame/extensions.dart';
 
 import '../models/contest.dart';
 import 'dimensions.dart' as dimensions;
 import 'renderers/background.dart';
+import 'renderers/margins.dart';
 import 'renderers/movements.dart';
 import 'renderers/pieces.dart';
 import 'theme.dart';
+import 'utils.dart';
 
-class Board extends PositionComponent with TapCallbacks {
+class Board extends PositionComponent {
   // @override
   // bool get debugMode => true;
 
-  final BackgroundRenderer _background;
-  final MovementsRenderer _movements;
-  final PiecesRenderer _pieces;
+  final Contest contest;
+  final BoardTheme boardTheme;
+  final PieceTheme pieceTheme;
+  final MarginsVisibility showMargins;
 
-  bool enableTapUp = true;
+  late final MovementsRenderer _movements;
+
+  bool get enableTapUp => _movements.enableTapUp;
+  set enableTapUp(bool value) => _movements.enableTapUp = value;
 
   Board(
-      Contest contest, BoardTheme boardTheme, PieceTheme pieceTheme,
+      this.contest,
+      this.boardTheme,
+      this.pieceTheme,
+      this.showMargins,
       {super.position, super.anchor, super.scale})
-      : _background = BackgroundRenderer(boardTheme, pieceTheme),
-        _movements = MovementsRenderer(contest, boardTheme),
-        _pieces = PiecesRenderer(contest, boardTheme, pieceTheme),
-        super(size: dimensions.boardSize);
+      : super(size: calcBoardSize(showMargins));
 
   @override
   Future<void> onLoad() async {
+    final margins = Vector2.all(showMargins == MarginsVisibility.none ? 0 : dimensions.margin);
     await super.onLoad();
-    await _background.onLoad();
-    await _pieces.onLoad();
-  }
-
-  @override
-  void render(Canvas canvas) {
-    _background.render(canvas);
-    _movements.render(canvas);
-    _pieces.render(canvas);
-  }
-
-  @override
-  void onTapUp(TapUpEvent event) {
-    if (enableTapUp) {
-      _movements.onTapUp(event.localPosition);
-    }
+    await addAll([
+      MarginsRenderer(boardTheme, showMargins),
+      BackgroundRenderer(boardTheme, pieceTheme, position: margins),
+      _movements = MovementsRenderer(contest, boardTheme, position: margins),
+      PiecesRenderer(contest, boardTheme, pieceTheme, position: margins),
+    ]);
   }
 }

@@ -6,6 +6,7 @@ import 'options.dart';
 import 'pages/home.dart';
 import 'pages/options.dart';
 import 'pages/play.dart';
+import 'pages/settings.dart';
 import 'settings.dart';
 
 class DjambiGame extends FlameGame {
@@ -24,12 +25,14 @@ class DjambiGame extends FlameGame {
   Future<void> onLoad() async {
     await super.onLoad();
     camera.viewfinder.anchor = Anchor.topLeft;
+    await settings.load();
 
     await world.add(router = RouterComponent(
       routes: {
         "home": Route(HomePage.new),
         "options": Route(OptionsPage.new, maintainState: false),
         "play": Route(PlayPage.new, maintainState: false),
+        "settings": Route(SettingsPage.new, maintainState: false),
       },
       initialRoute: "home",
     ));

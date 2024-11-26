@@ -1,3 +1,5 @@
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/painting.dart';
 
@@ -9,17 +11,25 @@ import '../dimensions.dart' as dimensions;
 import '../theme.dart';
 import '../utils.dart';
 
-class MovementsRenderer {
+class MovementsRenderer extends PositionComponent with TapCallbacks {
+  // @override
+  // bool get debugMode => true;
+
   final Contest contest;
   final BoardTheme boardTheme;
   Member? _selectedMember;
 
-  MovementsRenderer(this.contest, this.boardTheme);
+  bool enableTapUp = true;
+
+  MovementsRenderer(this.contest, this.boardTheme,
+      {super.position, super.anchor, super.scale})
+      : super(size: dimensions.gridSize);
 
   bool get _gameIsNotFinished => !contest.parliament.isGameFinished;
   Party get _curParty => contest.parliament.currentParty;
   Member? get _curActor => contest.parliament.actor;
 
+  @override
   void render(Canvas canvas) {
     _markLastMovement(canvas);
     if (_gameIsNotFinished) {
@@ -27,9 +37,10 @@ class MovementsRenderer {
     }
   }
 
-  void onTapUp(Vector2 position) {
-    if (_gameIsNotFinished) {
-      final cell = dimensions.vector2cell(position - dimensions.gridOffset);
+  @override
+  void onTapUp(TapUpEvent event) {
+    if (_gameIsNotFinished && enableTapUp) {
+      final cell = dimensions.vector2cell(event.localPosition);
       _handleCellTapUp(cell);
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/painting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/utils.dart';
 import '../views/dimensions.dart' as dimensions;
@@ -7,6 +8,20 @@ import '../views/theme.dart';
 class Settings {
   var pieceTheme = PieceTheme.classic;
   var boardTheme = getDefaultBoardTheme();
+  var showMargins = MarginsVisibility.half;
+
+  Future<void> save() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt("show-margins", showMargins.index);
+  }
+
+  Future<void> load() async {
+    final prefs = await SharedPreferences.getInstance();
+    showMargins = switch (prefs.getInt("show-margins")) {
+      null => MarginsVisibility.half,
+      final i => MarginsVisibility.values[i],
+    };
+  }
 }
 
 BoardTheme getDefaultBoardTheme() {

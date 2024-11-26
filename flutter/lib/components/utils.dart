@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/text.dart';
 
+import 'configs.dart' as configs;
+
 class ButtonColorSchema {
   final Color natural;
   final Color hover;
@@ -18,10 +20,16 @@ class ButtonColorSchema {
   );
 }
 
-TextPaint getRenderer(double fontSize, Color color, [String? fontFamily]) => TextPaint(
+TextPaint getRenderer({
+  double fontSize = configs.defaultFontSize,
+  Color color = configs.textColor,
+  String? fontFamily, FontWeight? fontWeight, FontStyle? fontStyle
+}) => TextPaint(
   style: TextStyle(
     color: color,
     fontFamily: fontFamily,
     fontSize: fontSize,
+    fontWeight: fontWeight,
+    fontStyle: fontStyle,
   ),
 );

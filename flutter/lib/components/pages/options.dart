@@ -36,7 +36,7 @@ class OptionsPage extends BasePage {
       Header(),
       PositionComponent(
         anchor: Anchor.center,
-        position: size * 0.5,
+        position: Anchor.center.ofSize(size),
         size: Vector2(
           _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
           configs.smallBtnSize.y + 2 * (configs.largeMargin + _buttonsPanelSize.y),
@@ -152,7 +152,7 @@ class OptionsPage extends BasePage {
         children: [
           TextComponent(
             text: text,
-            textRenderer: getRenderer(configs.defaultFontSize, configs.textColor),
+            textRenderer: getRenderer(),
             anchor: Anchor.centerRight,
             position: Anchor.centerRight.ofSize(_labelSize),
           ),

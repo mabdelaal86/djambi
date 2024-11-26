@@ -1,9 +1,11 @@
+import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_svg/flame_svg.dart' show Svg;
 import 'package:flutter/painting.dart';
 
 import '../common/utils.dart';
 import 'dimensions.dart' as dimensions;
+import 'theme.dart';
 
 extension PaintExtension on Paint {
   Paint stroke() => this
@@ -20,3 +22,9 @@ Future<Svg> loadImage(String image, Color color,
       "fill:${color.hex};fill-opacity:$opacity");
   return Svg.loadFromString(svgString);
 }
+
+Vector2 calcBoardSize(MarginsVisibility showMargins) => switch(showMargins) {
+  MarginsVisibility.none => dimensions.gridSize,
+  MarginsVisibility.half => dimensions.gridSize + dimensions.marginSize,
+  MarginsVisibility.full => dimensions.gridSize + dimensions.marginSize * 2,
+};
