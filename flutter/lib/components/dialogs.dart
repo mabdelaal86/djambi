@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../common/utils.dart';
 import 'buttons.dart';
-import 'configs.dart' as configs;
 import 'game.dart';
+import 'utils.dart';
 
 class ConfirmDialog extends ValueRoute<bool> with HasGameReference<DjambiGame> {
   ConfirmDialog(this.text) : super(value: false);
@@ -27,9 +27,7 @@ class ConfirmDialog extends ValueRoute<bool> with HasGameReference<DjambiGame> {
         align: Anchor.center,
         size: Vector2(550, 150),
         position: Vector2(300, 100),
-        textRenderer: TextPaint(
-          style: const TextStyle(fontSize: configs.defaultFontSize),
-        ),
+        textRenderer: getRenderer(),
       ),
       RoundedButton(
         text: 'Yes',

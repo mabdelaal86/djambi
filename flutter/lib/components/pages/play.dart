@@ -75,9 +75,7 @@ class PlayPage extends BasePage {
           ),
           _nextPlayerText = TextBoxComponent(
             size: configs.smallBtnSize,
-            textRenderer: TextPaint(
-              style: const TextStyle(fontSize: configs.defaultFontSize),
-            ),
+            textRenderer: getRenderer(),
             align: Anchor.center,
             anchor: Anchor.centerRight,
             position: Anchor.centerRight.ofSize(footerSize),

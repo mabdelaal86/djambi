@@ -20,7 +20,7 @@ class SettingsPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
-  late final OptionButton _marginsNone, _marginsHalf, _marginsFull;
+  late final List<OptionButton> _marginsVisibilityButtons;
 
   @override
   Future<void> onLoad() async {
@@ -44,27 +44,29 @@ class SettingsPage extends BasePage {
         size: _marginsPanelSize,
         children: [
           _createSectionLabel("Margins:"),
-          _marginsNone = OptionButton(
-            text: "None",
-            size: configs.mediumBtnSize,
-            position: Anchor.bottomLeft.ofSize(_marginsPanelSize),
-            anchor: Anchor.bottomLeft,
-            onSelect: () => _setMarginsVisibility(MarginsVisibility.none),
-          ),
-          _marginsHalf = OptionButton(
-            text: "Top-Left",
-            size: configs.mediumBtnSize,
-            position: Anchor.bottomCenter.ofSize(_marginsPanelSize),
-            anchor: Anchor.bottomCenter,
-            onSelect: () => _setMarginsVisibility(MarginsVisibility.half),
-          ),
-          _marginsFull = OptionButton(
-            text: "Full",
-            size: configs.mediumBtnSize,
-            position: Anchor.bottomRight.ofSize(_marginsPanelSize),
-            anchor: Anchor.bottomRight,
-            onSelect: () => _setMarginsVisibility(MarginsVisibility.full),
-          ),
+          ..._marginsVisibilityButtons = [
+            OptionButton(
+              text: "None",
+              size: configs.mediumBtnSize,
+              position: Anchor.bottomLeft.ofSize(_marginsPanelSize),
+              anchor: Anchor.bottomLeft,
+              onSelect: () => _setMarginsVisibility(MarginsVisibility.none),
+            ),
+            OptionButton(
+              text: "Top-Left",
+              size: configs.mediumBtnSize,
+              position: Anchor.bottomCenter.ofSize(_marginsPanelSize),
+              anchor: Anchor.bottomCenter,
+              onSelect: () => _setMarginsVisibility(MarginsVisibility.half),
+            ),
+            OptionButton(
+              text: "Full",
+              size: configs.mediumBtnSize,
+              position: Anchor.bottomRight.ofSize(_marginsPanelSize),
+              anchor: Anchor.bottomRight,
+              onSelect: () => _setMarginsVisibility(MarginsVisibility.full),
+            ),
+          ],
         ],
       );
 
@@ -84,9 +86,7 @@ class SettingsPage extends BasePage {
 
   void _setMarginsVisibility(MarginsVisibility visibility) {
     game.settings.showMargins = visibility;
-    _marginsNone.isSelected = visibility == MarginsVisibility.none;
-    _marginsHalf.isSelected = visibility == MarginsVisibility.half;
-    _marginsFull.isSelected = visibility == MarginsVisibility.full;
+    updateSelections(_marginsVisibilityButtons, visibility.index);
   }
 
   Future<void> onBackTapUp() async {

@@ -167,9 +167,7 @@ class OptionsPage extends BasePage {
 
   void _setStartIdeology(Ideology ideology) {
     game.options.startIdeology = ideology;
-    for (final (i, button) in _startIdeologyButtons.indexed) {
-      button.isSelected = i == ideology.index;
-    }
+    updateSelections(_startIdeologyButtons, ideology.index);
   }
 
   void _showHumanPlayers() {

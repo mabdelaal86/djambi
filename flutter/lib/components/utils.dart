@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 
 import 'configs.dart' as configs;
@@ -33,3 +34,9 @@ TextPaint getRenderer({
     fontStyle: fontStyle,
   ),
 );
+
+void updateSelections(Iterable<ToggleButtonComponent> buttons, int value) {
+  for (final (i, button) in buttons.indexed) {
+    button.isSelected = i == value;
+  }
+}
