@@ -1,9 +1,10 @@
 import 'package:flame/components.dart';
 
 import '../../common/utils.dart';
-import '../buttons.dart';
+import '../buttons/rounded.dart';
 import '../configs.dart' as configs;
 import '../header.dart';
+import '../layout.dart';
 import 'base.dart';
 
 class HomePage extends BasePage {
@@ -13,36 +14,32 @@ class HomePage extends BasePage {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
     await addAll([
       Header(),
-      PositionComponent(
+      MultiAlignComponent(
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
         size: Vector2(
           configs.largeBtnSize.x,
           configs.largeBtnSize.y * 3 + configs.largeMargin * 2,
         ),
-        children: [
-          RoundedButton(
+        alignedChildren: {
+          Anchor.topCenter: RoundedButton(
             text: "New Game",
             size: configs.largeBtnSize,
-            position: Vector2(0, 0),
             onReleased: () => game.router.pushNamed("options"),
           ),
-          RoundedButton(
+          Anchor.center: RoundedButton(
             text: "About & Rules",
             size: configs.largeBtnSize,
-            position: Vector2(0, configs.largeBtnSize.y + configs.largeMargin),
             onReleased: () {},
           ),
-          RoundedButton(
+          Anchor.bottomCenter: RoundedButton(
             text: "Settings",
             size: configs.largeBtnSize,
-            position: Vector2(0, 2 * (configs.largeBtnSize.y + configs.largeMargin)),
             onReleased: () => game.router.pushNamed("settings"),
           ),
-        ],
+        },
       ),
     ]);
   }

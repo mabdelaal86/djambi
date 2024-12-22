@@ -11,8 +11,8 @@ enum Ideology {
 }
 
 enum TurnDirection {
-  anticlockwise,
   clockwise,
+  anticlockwise,
   ;
 
   Ideology next(Ideology ideology) =>

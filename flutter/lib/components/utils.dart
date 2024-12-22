@@ -35,7 +35,7 @@ TextPaint getRenderer({
   ),
 );
 
-void updateSelections(Iterable<ToggleButtonComponent> buttons, int value) {
+void updateSelections(int value, Iterable<ToggleButtonComponent> buttons) {
   for (final (i, button) in buttons.indexed) {
     button.isSelected = i == value;
   }

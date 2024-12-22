@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../common/utils.dart';
-import 'buttons.dart';
+import 'buttons/rounded.dart';
 import 'game.dart';
 import 'utils.dart';
 
