@@ -16,10 +16,9 @@ extension PaintExtension on Paint {
 Future<Svg> loadImage(String image, Color color,
     {String style = "classic"}) async {
   final fileContent = await Flame.assets.readFile("$style/$image.svg");
-  final opacity = color.alpha.toDouble() / 0xFF;
   final svgString = fileContent.replaceFirst(
       "fill:#000000;fill-opacity:1",
-      "fill:${color.hex};fill-opacity:$opacity");
+      "fill:${color.toHex()};fill-opacity:${color.a}");
   return Svg.loadFromString(svgString);
 }
 

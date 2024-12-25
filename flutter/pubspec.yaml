@@ -36,7 +36,7 @@ dependencies:
   flame: ^1.22.0
   flame_svg: ^1.11.0
   meta: ^1.15.0
-  shared_preferences: ^2.3.3
+  shared_preferences: ^2.3.0
   stack: ^0.2.0
   vector_graphics: ^1.1.0
 
