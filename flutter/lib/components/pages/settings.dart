@@ -21,7 +21,7 @@ class SettingsPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
-  late final Component _marginsVisibility;
+  late final MultiAlignComponent _marginsVisibility;
 
   @override
   Future<void> onLoad() async {
@@ -65,7 +65,8 @@ class SettingsPage extends BasePage {
 
   void _setMarginsVisibility(MarginsVisibility visibility) {
     game.settings.showMargins = visibility;
-    updateSelections(visibility.index, _marginsVisibility.children.whereType());
+    final buttons = _marginsVisibility.alignedChildren.values.whereType<OptionButton>();
+    updateSelections(visibility.index, buttons);
   }
 
   Future<void> onBackTapUp() async {

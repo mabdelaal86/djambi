@@ -1,7 +1,12 @@
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
+import 'package:flutter/painting.dart';
 
 class MultiAlignComponent extends PositionComponent {
   final Map<Anchor, PositionComponent> alignedChildren;
+  final EdgeInsets padding;
+
+  late final PositionComponent _child;
 
   MultiAlignComponent({
     super.position,
@@ -9,14 +14,23 @@ class MultiAlignComponent extends PositionComponent {
     super.size,
     super.scale,
     required this.alignedChildren,
+    this.padding = EdgeInsets.zero,
   }) {
-    addAll(alignedChildren.values);
     _updateChildrenAnchors();
   }
 
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    await add(_child = PositionComponent(
+      size: size - Vector2(padding.horizontal, padding.vertical),
+      children: alignedChildren.values,
+    ));
+  }
+
   void _updateChildrenAnchors() {
-    for (final item in alignedChildren.entries) {
-      item.value.anchor = item.key;
+    for (final MapEntry(:key, :value) in alignedChildren.entries) {
+      value.anchor = key;
     }
   }
 
@@ -26,8 +40,9 @@ class MultiAlignComponent extends PositionComponent {
   }
 
   void _updateChildrenPositions() {
-    for (final item in alignedChildren.entries) {
-      item.value.position = Vector2(size.x * item.key.x, size.y * item.key.y);
+    _child.position = padding.topLeft.toVector2();
+    for (final MapEntry(:key, :value) in alignedChildren.entries) {
+      value.position = Vector2(_child.size.x * key.x, _child.size.y * key.y);
     }
   }
 }

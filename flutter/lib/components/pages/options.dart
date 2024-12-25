@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/utils.dart';
 import '../../models/enums.dart';
 import '../buttons/option.dart';
 import '../buttons/rounded.dart';
@@ -37,25 +36,27 @@ class OptionsPage extends BasePage {
     await super.onLoad();
     await addAll([
       Header(),
-      PositionComponent(
-        anchor: Anchor.center,
-        position: Anchor.center.ofSize(size),
-        size: Vector2(
-          _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
-          configs.smallBtnSize.y + 2 * (configs.largeMargin + _buttonsPanelSize.y),
-        ),
-        children: [
-          _createTurnDirection(),
-          _createStartIdeology(),
-          _createHumanPlayers(),
-        ],
-      ),
-      RoundedButton(
-        text: "Play",
-        size: configs.largeBtnSize,
-        anchor: Anchor.bottomCenter,
-        position: Vector2(size.x / 2, size.y - configs.largeMargin),
-        onReleased: () => game.router.pushReplacementNamed("play"),
+      MultiAlignComponent(
+        size: size,
+        padding: const EdgeInsets.all(configs.largeMargin),
+        alignedChildren: {
+          Anchor.center: PositionComponent(
+            size: Vector2(
+              _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
+              configs.smallBtnSize.y + 2 * (configs.largeMargin + _buttonsPanelSize.y),
+            ),
+            children: [
+              _createTurnDirection(),
+              _createStartIdeology(),
+              _createHumanPlayers(),
+            ],
+          ),
+          Anchor.bottomCenter: RoundedButton(
+            text: "Play",
+            size: configs.largeBtnSize,
+            onReleased: () => game.router.pushReplacementNamed("play"),
+          ),
+        },
       ),
     ]);
     _setTurnDirection(game.options.turnDirection);

@@ -2,9 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-import '../common/utils.dart';
 import 'buttons/rounded.dart';
 import 'game.dart';
+import 'layout.dart';
 import 'utils.dart';
 
 class ConfirmDialog extends ValueRoute<bool> with HasGameReference<DjambiGame> {
@@ -21,29 +21,27 @@ class ConfirmDialog extends ValueRoute<bool> with HasGameReference<DjambiGame> {
     anchor: Anchor.center,
     paint: Paint()..color = const Color(0x44FF0000),
     children: [
-      TextBoxComponent(
-        text: text,
-        anchor: Anchor.center,
-        align: Anchor.center,
-        size: Vector2(550, 150),
-        position: Vector2(300, 100),
-        textRenderer: getRenderer(),
-      ),
-      RoundedButton(
-        text: 'Yes',
-        size: Vector2(250, 75),
-        onReleased: () => completeWith(true),
-        anchor: Anchor.bottomLeft,
-        position: Anchor.bottomLeft.ofSize(_dialogSize) +
-            Vector2(_margin, -_margin),
-      ),
-      RoundedButton(
-        text: 'No',
-        size: Vector2(250, 75),
-        onReleased: () => completeWith(false),
-        anchor: Anchor.bottomRight,
-        position: Anchor.bottomRight.ofSize(_dialogSize) +
-            Vector2(-_margin, -_margin),
+      MultiAlignComponent(
+        size: _dialogSize,
+        padding: const EdgeInsets.all(_margin),
+        alignedChildren: {
+          Anchor.topCenter: TextBoxComponent(
+            text: text,
+            size: Vector2(550, 150),
+            align: Anchor.center,
+            textRenderer: getRenderer(),
+          ),
+          Anchor.bottomLeft: RoundedButton(
+            text: 'Yes',
+            size: Vector2(250, 75),
+            onReleased: () => completeWith(true),
+          ),
+          Anchor.bottomRight: RoundedButton(
+            text: 'No',
+            size: Vector2(250, 75),
+            onReleased: () => completeWith(false),
+          ),
+        },
       ),
     ],
   );

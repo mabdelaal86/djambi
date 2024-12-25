@@ -7,8 +7,5 @@ extension AnchorExtension on Anchor {
 }
 
 extension ColorExtension on Color {
-  String toHex() => '#${_hex(r)}${_hex(g)}${_hex(b)}';
   Paint toPaint() => Paint()..color = this;
 }
-
-String _hex(double v) => (v * 255).round().toRadixString(16).padLeft(2, '0');
