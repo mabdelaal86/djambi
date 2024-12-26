@@ -4,7 +4,7 @@ import '../../common/utils.dart';
 import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../header.dart';
-import '../layout.dart';
+import '../layouts/flex.dart';
 import 'base.dart';
 
 class HomePage extends BasePage {
@@ -16,30 +16,27 @@ class HomePage extends BasePage {
     await super.onLoad();
     await addAll([
       Header(),
-      MultiAlignComponent(
+      FlexComponent(
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
-        size: Vector2(
-          configs.largeBtnSize.x,
-          configs.largeBtnSize.y * 3 + configs.largeMargin * 2,
-        ),
-        alignedChildren: {
-          Anchor.topCenter: RoundedButton(
+        spacing: configs.largeMargin,
+        children: [
+          RoundedButton(
             text: "New Game",
             size: configs.largeBtnSize,
             onReleased: () => game.router.pushNamed("options"),
           ),
-          Anchor.center: RoundedButton(
+          RoundedButton(
             text: "About & Rules",
             size: configs.largeBtnSize,
             onReleased: () {},
           ),
-          Anchor.bottomCenter: RoundedButton(
+          RoundedButton(
             text: "Settings",
             size: configs.largeBtnSize,
             onReleased: () => game.router.pushNamed("settings"),
           ),
-        },
+        ],
       ),
     ]);
   }

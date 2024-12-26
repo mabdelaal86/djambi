@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flame/components.dart' hide Timer;
 import 'package:flutter/material.dart';
 
-import '../../common/utils.dart';
 import '../../models/contest.dart';
 import '../../views/board.dart';
 import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../dialogs.dart';
 import '../header.dart';
+import '../layouts.dart';
 import '../utils.dart';
 import 'base.dart';
 
@@ -27,8 +27,6 @@ class PlayPage extends BasePage {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final footerSize = Vector2(size.x * 0.75, configs.smallBtnSize.y);
-
     _contest = Contest(
       game.options.startIdeology,
       game.options.turnDirection,
@@ -38,56 +36,19 @@ class PlayPage extends BasePage {
 
     await addAll([
       Header(onBackTapUp: onBackTapUp),
-      _board = Board(
-        _contest,
-        game.settings.boardTheme,
-        game.settings.pieceTheme,
-        game.settings.showMargins,
-        anchor: Anchor.center,
-        position: Anchor.center.ofSize(size),
-      ),
-      PositionComponent(
-        size: footerSize,
-        anchor: Anchor.bottomCenter,
-        position: Vector2(size.x / 2, size.y - configs.largeMargin),
-        children: [
-          RoundedButton(
-            icon: Icons.undo,
-            fontSize: configs.iconFontSize,
-            size: configs.smallBtnSize,
-            onReleased: onUndoTapUp,
-            anchor: Anchor.centerLeft,
-            position: Anchor.centerLeft.ofSize(footerSize),
+      MultiAlignComponent(
+        size: size,
+        padding: const EdgeInsets.all(configs.largeMargin),
+        alignedChildren: {
+          Anchor.center: _board = Board(
+            _contest,
+            game.settings.boardTheme,
+            game.settings.pieceTheme,
+            game.settings.showMargins,
           ),
-          RoundedButton(
-            icon: Icons.redo,
-            fontSize: configs.iconFontSize,
-            size: configs.smallBtnSize,
-            onReleased: onRedoTapUp,
-            anchor: Anchor.centerLeft,
-            position: Anchor.centerLeft.ofSize(footerSize) +
-                Vector2(configs.smallBtnSize.x + configs.smallMargin, 0),
-          ),
-          _nextPlayerIcon = CircleComponent(
-            radius: configs.smallBtnSize.x / 2,
-            anchor: Anchor.centerRight,
-            position: Anchor.centerRight.ofSize(footerSize),
-          ),
-          _nextPlayerText = TextBoxComponent(
-            size: configs.smallBtnSize,
-            textRenderer: getRenderer(),
-            align: Anchor.center,
-            anchor: Anchor.centerRight,
-            position: Anchor.centerRight.ofSize(footerSize),
-          ),
-          TextComponent(
-            text: "Next Player:",
-            textRenderer: getRenderer(),
-            anchor: Anchor.centerRight,
-            position: Anchor.centerRight.ofSize(footerSize) -
-                Vector2(configs.smallBtnSize.x + configs.smallMargin, 0),
-          ),
-        ],
+          Anchor.bottomLeft: _createUndoRedoPanel(),
+          Anchor.bottomRight: _createNextPlayerPanel(),
+        },
       ),
     ]);
     _board.scale = Vector2.all(size.x / _board.width);
@@ -95,13 +56,59 @@ class PlayPage extends BasePage {
     onManoeuvreCompleted();
   }
 
+  PositionComponent _createUndoRedoPanel() =>
+      FlexComponent(
+        spacing: configs.smallMargin,
+        axis: Axis.horizontal,
+        children: [
+          RoundedButton(
+            icon: Icons.undo,
+            fontSize: configs.iconFontSize,
+            size: configs.smallBtnSize,
+            onReleased: onUndoTapUp,
+          ),
+          RoundedButton(
+            icon: Icons.redo,
+            fontSize: configs.iconFontSize,
+            size: configs.smallBtnSize,
+            onReleased: onRedoTapUp,
+          ),
+        ],
+      );
+
+  PositionComponent _createNextPlayerPanel() =>
+      FlexComponent(
+        spacing: configs.smallMargin,
+        axis: Axis.horizontal,
+        children: [
+          TextBoxComponent(
+            text: "Next Player:",
+            textRenderer: getRenderer(),
+            size: Vector2(200, configs.smallBtnSize.y),
+            align: Anchor.centerRight,
+          ),
+          _nextPlayerIcon = CircleComponent(
+            radius: configs.smallBtnSize.x / 2,
+            children: [
+              _nextPlayerText = TextBoxComponent(
+                size: configs.smallBtnSize,
+                textRenderer: getRenderer(),
+                align: Anchor.center,
+              ),
+            ],
+          ),
+        ],
+      );
+
   bool get isCurPlayerHuman {
     final curIdeology = _contest.parliament.currentParty.ideology;
     return game.options.players[curIdeology]!.isHuman;
   }
 
   void onManoeuvreCompleted() {
-    _board.enableTapUp = isCurPlayerHuman;
+    if (_board.isLoaded) {
+      _board.enableTapUp = isCurPlayerHuman;
+    }
     if (!isCurPlayerHuman) {
       Timer(configs.actionDuration, () => _contest.aiAct(2));
     }

@@ -5,7 +5,7 @@ import '../../models/enums.dart';
 import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../header.dart';
-import '../layout.dart';
+import '../layouts.dart';
 import '../options.dart';
 import '../utils.dart';
 import 'base.dart';
@@ -25,7 +25,7 @@ class OptionsPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
-  late final MultiAlignComponent _turnDirPanel;
+  late final MultiAlignComponent _turnDirectionPanel;
   late final MultiAlignComponent _startIdeologyPanel;
   late final MultiAlignComponent _humanPlayersPanel;
 
@@ -38,15 +38,12 @@ class OptionsPage extends BasePage {
         size: size,
         padding: const EdgeInsets.all(configs.largeMargin),
         alignedChildren: {
-          Anchor.center: PositionComponent(
-            size: Vector2(
-              _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
-              configs.smallBtnSize.y + 2 * (configs.largeMargin + _buttonsPanelSize.y),
-            ),
+          Anchor.center: FlexComponent(
+            spacing: configs.largeMargin,
             children: [
-              _createTurnDirection(),
-              _createStartIdeology(),
-              _createHumanPlayers(),
+              _createTurnDirectionPanel(),
+              _createStartIdeologyPanel(),
+              _createHumanPlayersPanel(),
             ],
           ),
           Anchor.bottomCenter: RoundedButton(
@@ -62,20 +59,14 @@ class OptionsPage extends BasePage {
     _showHumanPlayers();
   }
 
-  Component _createTurnDirection() =>
-      MultiAlignComponent(
-        position: Vector2.zero(),
-        size: Vector2(
-          _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
-          configs.smallBtnSize.y,
-        ),
-        alignedChildren: {
-          Anchor.topLeft: _createLabel("Turn Direction:"),
-          Anchor.topRight: _turnDirPanel = MultiAlignComponent(
-            size: Vector2(
-              configs.smallBtnSize.x * 2 + configs.smallMargin,
-              configs.smallBtnSize.y,
-            ),
+  PositionComponent _createTurnDirectionPanel() =>
+      FlexComponent(
+        spacing: configs.smallMargin,
+        axis: Axis.horizontal,
+        children: [
+          _createLabel("Turn Direction:"),
+          _turnDirectionPanel = MultiAlignComponent(
+            size: Vector2(_buttonsPanelSize.x, configs.smallBtnSize.y),
             alignedChildren: {
               Anchor.topLeft: OptionButton(
                 icon: Icons.rotate_right,
@@ -91,19 +82,16 @@ class OptionsPage extends BasePage {
               ),
             },
           ),
-        },
+        ],
       );
 
-  Component _createStartIdeology() =>
-      MultiAlignComponent(
-        position: Vector2(0, configs.smallBtnSize.y + configs.largeMargin),
-        size: Vector2(
-          _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
-          _buttonsPanelSize.y,
-        ),
-        alignedChildren: {
-          Anchor.topLeft: _createLabel("Start Player:"),
-          Anchor.topRight: _startIdeologyPanel = MultiAlignComponent(
+  PositionComponent _createStartIdeologyPanel() =>
+      FlexComponent(
+        spacing: configs.smallMargin,
+        axis: Axis.horizontal,
+        children: [
+          _createLabel("Start Player:"),
+          _startIdeologyPanel = MultiAlignComponent(
             size: _buttonsPanelSize,
             alignedChildren: _ideologyAnchor.map((ideology, anchor) => MapEntry(
               anchor,
@@ -114,20 +102,16 @@ class OptionsPage extends BasePage {
               ),
             )),
           ),
-        },
+        ],
       );
 
-  Component _createHumanPlayers() =>
-      MultiAlignComponent(
-        position: Vector2(0, configs.smallBtnSize.y + _buttonsPanelSize.y + 2 * configs.largeMargin),
-        size: Vector2(
-          _labelSize.x + configs.smallMargin + _buttonsPanelSize.x,
-          _buttonsPanelSize.y,
-        ),
-        alignedChildren: {
-          Anchor.topLeft: _createLabel("Human Players:"),
-          Anchor.topRight: _humanPlayersPanel = MultiAlignComponent(
-            position: Vector2(_labelSize.x + configs.smallMargin, 0),
+  PositionComponent _createHumanPlayersPanel() =>
+      FlexComponent(
+        spacing: configs.smallMargin,
+        axis: Axis.horizontal,
+        children: [
+          _createLabel("Human Players:"),
+          _humanPlayersPanel = MultiAlignComponent(
             size: _buttonsPanelSize,
             alignedChildren: _ideologyAnchor.map((ideology, anchor) => MapEntry(
               anchor,
@@ -141,7 +125,7 @@ class OptionsPage extends BasePage {
               ),
             )),
           ),
-        },
+        ],
       );
 
   PositionComponent _createLabel(String text, {Vector2? position}) =>
@@ -155,7 +139,7 @@ class OptionsPage extends BasePage {
 
   void _setTurnDirection(TurnDirection direction) {
     game.options.turnDirection = direction;
-    final buttons = _turnDirPanel.alignedChildren.values.cast<OptionButton>();
+    final buttons = _turnDirectionPanel.alignedChildren.values.cast<OptionButton>();
     updateSelections(direction.index, buttons);
   }
 

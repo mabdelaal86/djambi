@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'buttons.dart';
 import 'game.dart';
-import 'layout.dart';
+import 'layouts.dart';
 import 'utils.dart';
 
 class ConfirmDialog extends ValueRoute<bool> with HasGameReference<DjambiGame> {

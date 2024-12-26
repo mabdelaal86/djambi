@@ -1,59 +1,68 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
+import 'package:flutter/painting.dart';
 
 import '../../common/utils.dart';
 import '../../views/theme.dart';
 import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../header.dart';
-import '../layout.dart';
+import '../layouts.dart';
 import '../utils.dart';
 import 'base.dart';
 
 final _sectionLabelSize = Vector2(200, configs.smallBtnSize.y);
-final _marginsPanelSize = Vector2(
-  configs.mediumBtnSize.x * 3 + configs.smallMargin * 2,
-  _sectionLabelSize.y + configs.mediumBtnSize.y + configs.smallMargin,
-);
 
 class SettingsPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
-  late final MultiAlignComponent _marginsVisibility;
+  late final List<OptionButton> _marginsButtons;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     await addAll([
       Header(title: "Settings", onBackTapUp: onBackTapUp),
-      _marginsVisibility = MultiAlignComponent(
+      FlexComponent(
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
-        size: _marginsPanelSize,
-        alignedChildren: {
-          Anchor.topLeft: _createSectionLabel("Margins:"),
-          Anchor.bottomLeft: OptionButton(
-            text: "None",
-            size: configs.mediumBtnSize,
-            onSelect: () => _setMarginsVisibility(MarginsVisibility.none),
-          ),
-          Anchor.bottomCenter: OptionButton(
-            text: "Top-Left",
-            size: configs.mediumBtnSize,
-            onSelect: () => _setMarginsVisibility(MarginsVisibility.half),
-          ),
-          Anchor.bottomRight: OptionButton(
-            text: "Full",
-            size: configs.mediumBtnSize,
-            onSelect: () => _setMarginsVisibility(MarginsVisibility.full),
-          ),
-        },
+        spacing: configs.largeMargin,
+        children: [
+          _createMarginsPanel(),
+        ],
       ),
     ]);
     _setMarginsVisibility(game.settings.showMargins);
   }
+
+  PositionComponent _createMarginsPanel() =>
+      FlexComponent(
+        spacing: configs.smallMargin,
+        children: [
+          _createSectionLabel("Margins:"),
+          FlexComponent(
+            axis: Axis.horizontal,
+            spacing: configs.smallMargin,
+            children: _marginsButtons = [
+              OptionButton(
+                text: "None",
+                size: configs.mediumBtnSize,
+                onSelect: () => _setMarginsVisibility(MarginsVisibility.none),
+              ),
+              OptionButton(
+                text: "Top-Left",
+                size: configs.mediumBtnSize,
+                onSelect: () => _setMarginsVisibility(MarginsVisibility.half),
+              ),
+              OptionButton(
+                text: "Full",
+                size: configs.mediumBtnSize,
+                onSelect: () => _setMarginsVisibility(MarginsVisibility.full),
+              ),
+            ],
+          ),
+        ],
+      );
 
   PositionComponent _createSectionLabel(String text) =>
       TextBoxComponent(
@@ -65,8 +74,7 @@ class SettingsPage extends BasePage {
 
   void _setMarginsVisibility(MarginsVisibility visibility) {
     game.settings.showMargins = visibility;
-    final buttons = _marginsVisibility.alignedChildren.values.whereType<OptionButton>();
-    updateSelections(visibility.index, buttons);
+    updateSelections(visibility.index, _marginsButtons);
   }
 
   Future<void> onBackTapUp() async {

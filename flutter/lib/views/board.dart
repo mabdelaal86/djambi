@@ -33,7 +33,9 @@ class Board extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    final margins = Vector2.all(showMargins == MarginsVisibility.none ? 0 : dimensions.margin);
+    final margins = showMargins == MarginsVisibility.none ?
+        Vector2.zero() :
+        Vector2.all(dimensions.margin);
     await super.onLoad();
     await addAll([
       MarginsRenderer(boardTheme, showMargins),
