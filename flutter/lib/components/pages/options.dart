@@ -2,9 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/enums.dart';
-import '../buttons/option.dart';
-import '../buttons/rounded.dart';
-import '../buttons/toggle.dart';
+import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../header.dart';
 import '../layout.dart';

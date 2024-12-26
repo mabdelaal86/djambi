@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-import 'buttons/rounded.dart';
+import 'buttons.dart';
 import 'game.dart';
 import 'layout.dart';
 import 'utils.dart';

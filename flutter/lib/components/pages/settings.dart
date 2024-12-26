@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 
 import '../../common/utils.dart';
 import '../../views/theme.dart';
-import '../buttons/option.dart';
+import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../header.dart';
 import '../layout.dart';

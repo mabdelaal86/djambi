@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../common/utils.dart';
 import '../../models/contest.dart';
 import '../../views/board.dart';
-import '../buttons/rounded.dart';
+import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../dialogs.dart';
 import '../header.dart';
