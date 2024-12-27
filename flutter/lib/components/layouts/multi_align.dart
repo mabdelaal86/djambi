@@ -22,13 +22,12 @@ class MultiAlignComponent extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     await add(_child = PositionComponent(
       size: size - Vector2(padding.horizontal, padding.vertical),
       anchor: Anchor.center,
       position: Anchor.center.ofSize(size),
-      children: alignedChildren.values,
     ));
+    await _child.addAll(alignedChildren.values);
   }
 
   void _updateChildrenAnchors() {

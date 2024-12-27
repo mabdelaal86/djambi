@@ -36,7 +36,6 @@ class Board extends PositionComponent {
     final margins = showMargins == MarginsVisibility.none ?
         Vector2.zero() :
         Vector2.all(dimensions.margin);
-    await super.onLoad();
     await addAll([
       MarginsRenderer(boardTheme, showMargins),
       BackgroundRenderer(boardTheme, pieceTheme, position: margins),

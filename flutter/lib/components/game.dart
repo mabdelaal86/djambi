@@ -23,7 +23,6 @@ class DjambiGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     camera.viewfinder.anchor = Anchor.topLeft;
     await settings.load();
 

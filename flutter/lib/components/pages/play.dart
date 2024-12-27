@@ -30,8 +30,8 @@ class PlayPage extends BasePage {
     _contest = Contest(
       game.options.startIdeology,
       game.options.turnDirection,
-      onManoeuvreCompleted,
       onStateChanged,
+      onManoeuvreCompleted,
     );
 
     await addAll([
@@ -106,9 +106,7 @@ class PlayPage extends BasePage {
   }
 
   void onManoeuvreCompleted() {
-    if (_board.isLoaded) {
-      _board.enableTapUp = isCurPlayerHuman;
-    }
+    _board.enableTapUp = isCurPlayerHuman;
     if (!isCurPlayerHuman) {
       Timer(configs.actionDuration, () => _contest.aiAct(2));
     }
