@@ -35,7 +35,6 @@ class Contest {
   final _undoStack = Stack<State>();
   final _redoStack = Stack<State>();
   final VoidCallback? onStateChanged;
-  final VoidCallback? onManoeuvreCompleted;
 
   Parliament get parliament => _curState.parliament;
   List<Cell> get lastMovedCells => _curState.lastMovedCells;
@@ -45,7 +44,7 @@ class Contest {
   Contest(
       Ideology startIdeology,
       TurnDirection turnDirection,
-      [this.onStateChanged, this.onManoeuvreCompleted])
+      {this.onStateChanged})
     : _curState = State(Parliament(startIdeology, turnDirection));
 
   void undo() {
@@ -65,7 +64,7 @@ class Contest {
   }
 
   void doAction(Member member, Cell cell) {
-    final newParliament = parliament.makeCopy();
+    final newParliament = _curState.parliament.makeCopy();
     newParliament.act(member.id, cell);
     _redoStack.clear();
     _undoStack.push(_curState);
@@ -73,18 +72,15 @@ class Contest {
   }
 
   void aiAct(int maxDepth) {
-    if (!parliament.isManoeuvreCompleted) return;
-    if (parliament.isGameFinished) return;
-    final tree = Tree(parliament, maxDepth);
+    assert(!_curState.parliament.isGameFinished, "Game is already finished!");
+    assert(_curState.parliament.isManoeuvreCompleted, "Can't call AI in middle of a manoeuvre");
+    final tree = Tree(_curState.parliament, maxDepth);
     tree.build();
     _handleNewState(tree.decision.parliament);
   }
 
   void _handleNewState(Parliament newParliament) {
-    _curState = State(newParliament, parliament);
+    _curState = State(newParliament, _curState.parliament);
     onStateChanged?.call();
-    if (newParliament.isManoeuvreCompleted) {
-      onManoeuvreCompleted?.call();
-    }
   }
 }

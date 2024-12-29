@@ -115,15 +115,16 @@ class Parliament {
       _checkSurroundings();
       _takeOverParalysed();
       _nextTurn();
+      // TODO: Handle the case if the new player can't make a move.
     }
   }
 
   void _nextTurn() {
     _actor!.manoeuvre = Manoeuvre.none;
     _actor = null;
-    final nextTurnState = getNextTurnState();
-    _currentIdeology = nextTurnState.$1;
-    _currentParty = nextTurnState.$2;
+    final (nextIdeology, nextParty) = getNextTurnState();
+    _currentIdeology = nextIdeology;
+    _currentParty = nextParty;
   }
 
   (Ideology, Party) getNextTurnState() {

@@ -95,8 +95,8 @@ class Tree {
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
       node.evaluate(evaluateParty);
     } else {
-      for (final action in node.availableActions()) {
-        _doAction(node, action.$1, action.$2);
+      for (final (member, cell) in node.availableActions()) {
+        _doAction(node, member, cell);
       }
       if (node.subNodes.isEmpty) {
         // all sub nodes are visited

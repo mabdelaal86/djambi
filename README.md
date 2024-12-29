@@ -13,7 +13,6 @@ An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 
 * When a Chief leave the Maze, its team still get extra turn.
 * When a player has no legal moves, the game stuck.
-* When all human players loss, the game still continue.
 * When no player can win, nothing is happen.
 * Edge swipe gesture close the app instead of going back.
 
@@ -25,6 +24,7 @@ An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 - [x] Show next player.
 - [x] Complete GUI with Home page and Settings page.
 - [ ] Detailed description about the game and its rules.
+- [ ] Application icon.
 - [ ] Improve UI graphics.
 - [ ] Save game state.
 - [ ] Add two players variation.

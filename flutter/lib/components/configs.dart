@@ -20,6 +20,7 @@ const headerFontSize = 40.0;
 const iconFontSize = 40.0;
 
 const textColor = Color(0xFFFFFFFF);
+const emphaticTextColor = Color(0xFFFFFF00);
 final pageBackground = Paint()
   ..color = const Color(0x88888888);
 

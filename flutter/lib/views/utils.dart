@@ -27,4 +27,4 @@ Vector2 calcBoardSize(MarginsVisibility showMargins) => switch(showMargins) {
   MarginsVisibility.full => dimensions.gridSize + dimensions.marginSize * 2,
 };
 
-String _hex(double v) => (v * 255).round().toRadixString(16).padLeft(2, '0');
+String _hex(double v) => (v * 255).round().toRadixString(16).padLeft(2, "0");

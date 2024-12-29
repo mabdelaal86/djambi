@@ -10,6 +10,8 @@ import '../configs.dart' as configs;
 import '../dialogs.dart';
 import '../header.dart';
 import '../layouts.dart';
+import '../layouts/indexed_stack.dart';
+import '../options.dart';
 import '../utils.dart';
 import 'base.dart';
 
@@ -20,8 +22,14 @@ class PlayPage extends BasePage {
   late final Board _board;
   late final Contest _contest;
 
-  late final TextComponent _nextPlayerText;
   late final CircleComponent _nextPlayerIcon;
+  late final TextComponent _nextPlayerText;
+
+  late final TextComponent _statusLabel;
+  late final IndexedStackComponent _statusPanel;
+
+  late final AdvancedButtonComponent _undoButton, _redoButton;
+  var _allowUndoRedo = false;
 
   @override
   Future<void> onLoad() async {
@@ -30,12 +38,11 @@ class PlayPage extends BasePage {
     _contest = Contest(
       game.options.startIdeology,
       game.options.turnDirection,
-      onStateChanged,
-      onManoeuvreCompleted,
+      onStateChanged: _onStatueChanged,
     );
 
     await addAll([
-      Header(onBackTapUp: onBackTapUp),
+      Header(onBackTapUp: _onBackTapUp),
       MultiAlignComponent(
         size: size,
         padding: const EdgeInsets.all(configs.largeMargin),
@@ -47,13 +54,28 @@ class PlayPage extends BasePage {
             game.settings.showMargins,
           ),
           Anchor.bottomLeft: _createUndoRedoPanel(),
-          Anchor.bottomRight: _createNextPlayerPanel(),
+          Anchor.bottomRight: _statusPanel = IndexedStackComponent(
+            children: [
+              _createNextPlayerPanel(),
+              _statusLabel = TextBoxComponent(
+                size: Vector2(300, 100),
+                align: Anchor.center,
+                textRenderer: getRenderer(
+                  color: configs.emphaticTextColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         },
       ),
     ]);
     _board.scale = Vector2.all(size.x / _board.width);
-    onStateChanged();
-    onManoeuvreCompleted();
+  }
+
+  @override
+  Future<void> onMount() async {
+    await _onStatueChanged();
   }
 
   PositionComponent _createUndoRedoPanel() =>
@@ -61,17 +83,17 @@ class PlayPage extends BasePage {
         spacing: configs.smallMargin,
         axis: Axis.horizontal,
         children: [
-          RoundedButton(
+          _undoButton = RoundedButton(
             icon: Icons.undo,
             fontSize: configs.iconFontSize,
             size: configs.smallBtnSize,
-            onReleased: onUndoTapUp,
+            onReleased: _onUndoTapUp,
           ),
-          RoundedButton(
+          _redoButton = RoundedButton(
             icon: Icons.redo,
             fontSize: configs.iconFontSize,
             size: configs.smallBtnSize,
-            onReleased: onRedoTapUp,
+            onReleased: _onRedoTapUp,
           ),
         ],
       );
@@ -100,41 +122,72 @@ class PlayPage extends BasePage {
         ],
       );
 
-  bool get isCurPlayerHuman {
-    final curIdeology = _contest.parliament.currentParty.ideology;
-    return game.options.players[curIdeology]!.isHuman;
-  }
-
-  void onManoeuvreCompleted() {
-    _board.enableTapUp = isCurPlayerHuman;
-    if (!isCurPlayerHuman) {
-      Timer(configs.actionDuration, () => _contest.aiAct(2));
-    }
-  }
-
-  void onStateChanged() {
-    final (_, next) = _contest.parliament.getNextTurnState();
-    final nextPlayerColor = game.settings.boardTheme.partyPaint[next.ideology.index].color;
-    _nextPlayerIcon.setColor(nextPlayerColor);
-    _nextPlayerText.text = next.ideology.name.toUpperCase()[0];
-  }
-
-  void onUndoTapUp() {
-    if (isCurPlayerHuman) {
+  void _onUndoTapUp() {
+    if (_allowUndoRedo) {
       _contest.undo();
     }
   }
 
-  void onRedoTapUp() {
-    if (isCurPlayerHuman) {
+  void _onRedoTapUp() {
+    if (_allowUndoRedo) {
       _contest.redo();
     }
   }
 
-  Future<void> onBackTapUp() async {
+  Future<void> _onStatueChanged() async {
+    _undoButton.isDisabled = !_contest.canUndo;
+    _redoButton.isDisabled = !_contest.canRedo;
+    _board.enableTapUp = false;
+    _allowUndoRedo = true;
+    if (_contest.parliament.isGameFinished) {
+      await _displayWinner();
+      return;
+    }
+    await _displayNextPlayer();
+    if (_isGameOver()) {
+      await _displayGameOver();
+      return;
+    }
+    if (_isCurPlayerHuman()) {
+      _board.enableTapUp = true;
+      return;
+    }
+    _allowUndoRedo = false;
+    Timer(configs.actionDuration, () => _contest.aiAct(2));
+  }
+
+  bool _isCurPlayerHuman() {
+    final curIdeology = _contest.parliament.currentParty.ideology;
+    return game.options.players[curIdeology]!.isHuman;
+  }
+
+  bool _isGameOver() => _contest.parliament.activeParties
+      .every((p) => game.options.players[p.ideology] != PlayerType.human);
+
+  Future<void> _displayNextPlayer() async {
+    await _statusPanel.setIndex(0);
+    final (_, next) = _contest.parliament.getNextTurnState();
+    final color = _board.boardTheme.partyPaint[next.ideology.index].color;
+    _nextPlayerIcon.setColor(color);
+    _nextPlayerText.text = next.ideology.name.toUpperCase()[0];
+  }
+
+  Future<void> _displayWinner() async {
+    await _statusPanel.setIndex(1);
+    var name = _contest.parliament.currentParty.ideology.name;
+    name = name[0].toUpperCase() + name.substring(1);
+    _statusLabel.text = "$name party win!";
+  }
+
+  Future<void> _displayGameOver() async {
+    await _statusPanel.setIndex(1);
+    _statusLabel.text = "Game over!";
+  }
+
+  Future<void> _onBackTapUp() async {
     const msg = "Are you sure?\nThe match state will not be saved!";
     final result = await game.router.pushAndWait(ConfirmDialog(msg));
-    if (result) {
+    if (result == "Yes") {
       game.router.pop();
     }
   }

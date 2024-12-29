@@ -22,7 +22,7 @@ class SettingsPage extends BasePage {
   Future<void> onLoad() async {
     await super.onLoad();
     await addAll([
-      Header(title: "Settings", onBackTapUp: onBackTapUp),
+      Header(title: "Settings", onBackTapUp: _onBackTapUp),
       FlexComponent(
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
@@ -77,7 +77,7 @@ class SettingsPage extends BasePage {
     updateSelections(visibility.index, _marginsButtons);
   }
 
-  Future<void> onBackTapUp() async {
+  Future<void> _onBackTapUp() async {
     await game.settings.save();
     game.router.pop();
   }

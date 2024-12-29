@@ -8,10 +8,7 @@ plugins {
 android {
     namespace = "dev.mabdelaal.djambi"
     compileSdk = flutter.compileSdkVersion
-    // manually set ndkVersion to solve shared_preferences issue,
-    // TODO: check if that still needed when upgrading flutter
-    //ndkVersion = flutter.ndkVersion
-    ndkVersion = "27.2.12479018"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
