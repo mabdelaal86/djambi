@@ -36,7 +36,7 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
           position: Vector2.all(configs.headerSize.y / 2),
           anchor: Anchor.center,
           size: configs.smallBtnSize,
-          onReleased: () => switch(onBackTapUp) {
+          onReleased: () => switch (onBackTapUp) {
             null => game.router.pop(),
             final fun => fun.call(),
           },

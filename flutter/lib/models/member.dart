@@ -13,6 +13,8 @@ import 'parliament.dart';
 abstract class Member {
   final Parliament parliament;
   Ideology ideology;
+
+  /// Unique ID across all members in the parliament
   final int id;
 
   Role get role;

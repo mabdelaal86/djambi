@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 
 import 'cell.dart';
-import 'constants.dart' as constants;
 import 'enums.dart';
 import 'member.dart';
 import 'members/chief.dart';
@@ -31,13 +30,11 @@ class Parliament {
   bool get isGameFinished => activeParties.length == 1 && isManoeuvreCompleted;
   String getSign() {
     assert(isManoeuvreCompleted, "the maneuver should be completed");
-    // TODO: update this part
-    final stm = SplayTreeMap<int, int>.fromIterable(
-      members,
-      key: (m) => m.location.y * 10 + m.location.x,
-      value: (m) => m.isDead ? -1 : m.id,
-    );
-    return "${currentParty.ideology.name[0]}:${stm.entries.map((e) => "${e.key},${e.value}").join(";")}#";
+    String key(Member m) => "${m.location.y}${m.location.x}";
+    String value(Member m) => m.isDead ? "d**" : "${m.state.name[0]}${m.ideology.name[0]}${m.role.name[0]}";
+    final stm = SplayTreeMap<String, String>.fromIterable(members, key: (m) => key(m), value: (m) => value(m));
+    final memberSigns = stm.entries.map((e) => "${e.key}${e.value}").join();
+    return "${_currentIdeology.name[0]}${_currentParty.ideology.name[0]}$memberSigns#";
   }
 
   Parliament(this._currentIdeology, this.turnDirection) {
@@ -78,7 +75,7 @@ class Parliament {
     // create members and place them around (0,0) point, so it is easier to rotate or flip
     for (var r = 0; r < 3; r++) {
       for (var c = 0; c < 3; c++) {
-        final id = (ideology.index * constants.sideCellsCount) + (r * 3) + c;
+        final id = (ideology.index * 9) + (r * 3) + c;
         yield Member.create(this, roles[r][c], ideology, id)
           ..location = Cell(c - 1, r - 1);
       }

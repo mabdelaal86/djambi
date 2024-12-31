@@ -21,7 +21,7 @@ Future<Svg> loadImage(String image, Color color,
   return Svg.loadFromString(svgString);
 }
 
-Vector2 calcBoardSize(MarginsVisibility showMargins) => switch(showMargins) {
+Vector2 calcBoardSize(MarginsVisibility showMargins) => switch (showMargins) {
   MarginsVisibility.none => dimensions.gridSize,
   MarginsVisibility.half => dimensions.gridSize + dimensions.marginSize,
   MarginsVisibility.full => dimensions.gridSize + dimensions.marginSize * 2,
