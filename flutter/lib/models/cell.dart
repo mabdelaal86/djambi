@@ -12,6 +12,12 @@ class Cell {
   const Cell.all(int xy) : this(xy, xy);
   const Cell.maze() : this(constants.mazeIndex, constants.mazeIndex);
 
+  /// json deserialization
+  Cell.fromJson(Map<String, dynamic> json) : this(json["x"] as int, json["y"] as int);
+
+  /// json serialization
+  Map<String, dynamic> toJson() => {"x": x, "y": y};
+
   @override
   String toString() => isValid
       ? constants.colSymbols[x] + constants.rowSymbols[y]

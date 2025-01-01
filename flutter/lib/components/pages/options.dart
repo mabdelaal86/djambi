@@ -7,7 +7,7 @@ import '../configs.dart' as configs;
 import '../header.dart';
 import '../layouts.dart';
 import '../options.dart';
-import '../utils.dart';
+import '../utils/ui.dart';
 import 'base.dart';
 
 const _ideologyAnchor = {
@@ -119,8 +119,9 @@ class OptionsPage extends BasePage {
                 text: ideology.name[0].toUpperCase(),
                 size: configs.smallBtnSize,
                 onSelectedChanged: (value) {
-                  game.options.players[ideology] =
-                  value ? PlayerType.human : PlayerType.aiMaxN;
+                  game.options.players[ideology] = value
+                      ? PlayerType.human
+                      : PlayerType.aiMaxN;
                 },
               ),
             )),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'buttons.dart';
 import 'game.dart';
 import 'layouts.dart';
-import 'utils.dart';
+import 'utils/ui.dart';
 
 class ConfirmDialog extends ValueRoute<String> with HasGameReference<DjambiGame> {
   final String message, leftText, rightText;

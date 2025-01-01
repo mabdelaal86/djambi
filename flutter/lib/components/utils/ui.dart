@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 
-import 'configs.dart' as configs;
+import '../configs.dart' as configs;
 
 class ButtonColorSchema {
   final Color natural;

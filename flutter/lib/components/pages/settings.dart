@@ -7,7 +7,7 @@ import '../buttons.dart';
 import '../configs.dart' as configs;
 import '../header.dart';
 import '../layouts.dart';
-import '../utils.dart';
+import '../utils/ui.dart';
 import 'base.dart';
 
 final _sectionLabelSize = Vector2(200, configs.smallBtnSize.y);

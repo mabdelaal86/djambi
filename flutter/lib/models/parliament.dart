@@ -65,6 +65,30 @@ class Parliament {
 
   Parliament makeCopy() => Parliament.copy(this);
 
+  /// json deserialization
+  Parliament.fromJson(Map<String, dynamic> json)
+      : _currentIdeology = Ideology.values[json["current_ideology"] as int],
+        turnDirection = TurnDirection.values[json["turn_direction"] as int] {
+    members = (json["members"] as List<dynamic>)
+        .map((e) => Member.fromJson(this, e))
+        .toList();
+    assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
+    parties = [ for (final m in members) if (m.isChief) Party(m as Chief) ];
+    assert(parties.length == 4, "number of parties should be 4");
+    _currentParty = getParty(Ideology.values[json["current_party"] as int]);
+  }
+
+  /// json serialization
+  Map<String, dynamic> toJson() {
+    assert(_actor == null, "Serialization is not allowed during a manoeuvre");
+    return {
+      "current_ideology": _currentIdeology.index,
+      "turn_direction": turnDirection.index,
+      "current_party": _currentParty.ideology.index,
+      "members": members.map((m) => m.toJson()).toList(),
+    };
+  }
+
   Iterable<Member> _recruitMembers(Ideology ideology) sync* {
     final roles = [
       [ Role.chief,    Role.assassin, Role.militant    ],

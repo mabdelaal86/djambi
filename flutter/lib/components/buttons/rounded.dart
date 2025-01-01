@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 import '../configs.dart' as configs;
-import '../utils.dart';
+import '../utils/ui.dart';
 import 'base.dart';
 
 class RoundedButton extends AdvancedButtonComponent {

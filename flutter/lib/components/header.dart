@@ -5,7 +5,7 @@ import '../common/utils.dart';
 import 'buttons.dart';
 import 'configs.dart' as configs;
 import 'game.dart';
-import 'utils.dart';
+import 'utils/ui.dart';
 
 class Header extends PositionComponent with HasGameReference<DjambiGame> {
   // @override

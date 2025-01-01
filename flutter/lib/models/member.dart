@@ -62,6 +62,31 @@ abstract class Member {
     _bodyId = other._bodyId;
   }
 
+  /// json deserialization
+  factory Member.fromJson(Parliament parliament, Map<String, dynamic> json) {
+    final member = Member.create(
+      parliament,
+      Role.values[json["role"] as int],
+      Ideology.values[json["ideology"] as int],
+      json["id"] as int,
+    );
+    member.location = Cell.fromJson(json["location"]);
+    member.state = MemberState.values[json["state"] as int];
+    return member;
+  }
+
+  /// json serialization
+  Map<String, dynamic> toJson() {
+    assert(manoeuvre == Manoeuvre.none, "Serialization is not allowed during a manoeuvre");
+    return {
+      "role": role.index,
+      "ideology": ideology.index,
+      "id": id,
+      "location": location.toJson(),
+      "state": state.index,
+    };
+  }
+
   @protected
   void kill(Member member) {
     member.state = MemberState.dead;

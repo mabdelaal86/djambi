@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 import '../configs.dart' as configs;
-import '../utils.dart';
+import '../utils/ui.dart';
 import 'base.dart';
 
 class ToggleButton extends ToggleButtonComponent {
@@ -38,8 +38,10 @@ class ToggleButton extends ToggleButtonComponent {
     defaultSkin = RoundedRectComponent()..setColor(colorSchema.natural);
     hoverSkin = RoundedRectComponent()..setColor(colorSchema.hover);
     downSkin = RoundedRectComponent()..setColor(colorSchema.down);
+    disabledSkin = RoundedRectComponent()..setColor(colorSchema.disabled);
     defaultSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.natural);
     hoverAndSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.hover);
     downAndSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.down);
+    disabledAndSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.disabled);
   }
 }

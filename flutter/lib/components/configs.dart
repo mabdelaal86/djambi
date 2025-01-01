@@ -2,9 +2,13 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-import 'utils.dart';
+import 'utils/ui.dart';
 
 const actionDuration = Duration(seconds: 1);
+
+/// used for developing and testing
+const saveLoadState = false;
+const statePath = "parliament.json";
 
 const gameWidth = 820.0;
 const gameHeight = 1600.0;

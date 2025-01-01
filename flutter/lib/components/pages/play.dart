@@ -12,7 +12,8 @@ import '../header.dart';
 import '../layouts.dart';
 import '../layouts/indexed_stack.dart';
 import '../options.dart';
-import '../utils.dart';
+import '../utils/serialization.dart';
+import '../utils/ui.dart';
 import 'base.dart';
 
 class PlayPage extends BasePage {
@@ -35,11 +36,7 @@ class PlayPage extends BasePage {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    _contest = Contest(
-      game.options.startIdeology,
-      game.options.turnDirection,
-      onStateChanged: _onStatueChanged,
-    );
+    _contest = await _createContest();
 
     await addAll([
       Header(onBackTapUp: _onBackTapUp),
@@ -148,6 +145,9 @@ class PlayPage extends BasePage {
       await _displayGameOver();
       return;
     }
+    if (configs.saveLoadState && _contest.parliament.isManoeuvreCompleted) {
+      await save(_contest.curState, configs.statePath);
+    }
     if (_isCurPlayerHuman()) {
       _board.enableTapUp = true;
       return;
@@ -190,5 +190,20 @@ class PlayPage extends BasePage {
     if (result == "Yes") {
       game.router.pop();
     }
+  }
+
+  Future<Contest> _createContest() async {
+    if (configs.saveLoadState) {
+      final state = await load(configs.statePath);
+      if (state != null) {
+        return Contest.fromState(state, onStateChanged: _onStatueChanged);
+      }
+    }
+
+    return Contest(
+      game.options.startIdeology,
+      game.options.turnDirection,
+      onStateChanged: _onStatueChanged,
+    );
   }
 }

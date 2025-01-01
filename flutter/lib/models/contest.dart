@@ -36,6 +36,7 @@ class Contest {
   final _redoStack = Stack<State>();
   final VoidCallback? onStateChanged;
 
+  State get curState => _curState;
   Parliament get parliament => _curState.parliament;
   List<Cell> get lastMovedCells => _curState.lastMovedCells;
   bool get canUndo => _undoStack.isNotEmpty;
@@ -45,7 +46,10 @@ class Contest {
       Ideology startIdeology,
       TurnDirection turnDirection,
       {this.onStateChanged})
-    : _curState = State(Parliament(startIdeology, turnDirection));
+      : _curState = State(Parliament(startIdeology, turnDirection));
+
+  Contest.fromState(State initialState, {this.onStateChanged})
+      : _curState = initialState;
 
   void undo() {
     if (canUndo) {
