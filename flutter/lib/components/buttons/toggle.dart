@@ -1,8 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
-import '../configs.dart' as configs;
-import '../utils/ui.dart';
+import '../../common/utils.dart';
+import '../configs.dart';
+import '../utils.dart';
 import 'base.dart';
 
 class ToggleButton extends ToggleButtonComponent {
@@ -18,9 +19,9 @@ class ToggleButton extends ToggleButtonComponent {
     this.icon,
     super.position,
     required super.size,
-    this.colorSchema = configs.secondaryBtnColors,
-    this.selectedColorSchema = configs.primaryBtnColors,
-    this.fontSize = configs.defaultFontSize,
+    this.colorSchema = Configs.secondaryBtnColors,
+    this.selectedColorSchema = Configs.primaryBtnColors,
+    this.fontSize = Configs.defaultFontSize,
     super.anchor = Anchor.topLeft,
   });
 
@@ -28,8 +29,8 @@ class ToggleButton extends ToggleButtonComponent {
   Future<void> onLoad() async {
     await super.onLoad();
     defaultLabel = defaultSelectedLabel = TextComponent(
-      text: icon == null ? text : String.fromCharCode(icon!.codePoint),
-      textRenderer: getRenderer(
+      text: icon?.codePoint.convert(String.fromCharCode) ?? text,
+      textRenderer: getTextRenderer(
         fontSize: fontSize,
         color: colorSchema.text,
         fontFamily: icon?.fontFamily,

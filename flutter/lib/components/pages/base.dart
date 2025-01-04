@@ -3,7 +3,8 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
 
-import '../configs.dart' as configs;
+import '../../common/utils.dart';
+import '../configs.dart';
 import '../game.dart';
 
 abstract class BasePage extends PositionComponent with HasGameReference<DjambiGame> {
@@ -18,6 +19,6 @@ abstract class BasePage extends PositionComponent with HasGameReference<DjambiGa
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), configs.pageBackground);
+    canvas.drawRect(size.toRect(), Configs.pageBackground.toPaint());
   }
 }

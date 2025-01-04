@@ -42,3 +42,11 @@ enum Manoeuvre {
   exit,
   end,
 }
+
+enum PlayerType {
+  human,
+  aiMaxN,
+  ;
+
+  bool get isHuman => this == PlayerType.human;
+}

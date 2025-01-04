@@ -1,22 +1,22 @@
 import 'package:flame/components.dart';
 
-import '../models/contest.dart';
-import 'dimensions.dart' as dimensions;
+import '../models.dart';
+import 'dimensions.dart';
 import 'renderers/background.dart';
 import 'renderers/margins.dart';
 import 'renderers/movements.dart';
 import 'renderers/pieces.dart';
+import 'styles.dart';
 import 'theme.dart';
-import 'utils.dart';
 
 class Board extends PositionComponent {
   // @override
   // bool get debugMode => true;
 
   final Contest contest;
-  final BoardTheme boardTheme;
+  final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
-  final MarginsVisibility showMargins;
+  final MarginsVisibility marginsVisibility;
 
   late final MovementsRenderer _movements;
 
@@ -25,22 +25,29 @@ class Board extends PositionComponent {
 
   Board(
       this.contest,
-      this.boardTheme,
+      BoardTheme boardTheme,
       this.pieceTheme,
-      this.showMargins,
+      this.marginsVisibility,
       {super.position, super.anchor, super.scale})
-      : super(size: calcBoardSize(showMargins));
+      : boardStyle = getBoardStyle(boardTheme),
+        super(size: _calcBoardSize(marginsVisibility));
 
   @override
   Future<void> onLoad() async {
-    final margins = showMargins == MarginsVisibility.none ?
+    final margins = marginsVisibility == MarginsVisibility.none ?
         Vector2.zero() :
-        Vector2.all(dimensions.margin);
+        Vector2.all(Dimensions.margin);
     await addAll([
-      MarginsRenderer(boardTheme, showMargins),
-      BackgroundRenderer(boardTheme, pieceTheme, position: margins),
-      _movements = MovementsRenderer(contest, boardTheme, position: margins),
-      PiecesRenderer(contest, boardTheme, pieceTheme, position: margins),
+      MarginsRenderer(boardStyle, marginsVisibility, size: size),
+      BackgroundRenderer(boardStyle, pieceTheme, position: margins),
+      _movements = MovementsRenderer(contest, boardStyle, position: margins),
+      PiecesRenderer(contest, boardStyle, pieceTheme, position: margins),
     ]);
   }
 }
+
+Vector2 _calcBoardSize(MarginsVisibility visibility) => switch (visibility) {
+  MarginsVisibility.none => Dimensions.gridSize,
+  MarginsVisibility.half => Dimensions.gridSize + Dimensions.marginSize,
+  MarginsVisibility.full => Dimensions.gridSize + Dimensions.marginSize * 2,
+};

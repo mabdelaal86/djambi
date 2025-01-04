@@ -1,8 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
-import '../configs.dart' as configs;
-import '../utils/ui.dart';
+import '../../common/utils.dart';
+import '../configs.dart';
+import '../utils.dart';
 import 'base.dart';
 
 class RoundedButton extends AdvancedButtonComponent {
@@ -17,8 +18,8 @@ class RoundedButton extends AdvancedButtonComponent {
     required super.size,
     super.position,
     required super.onReleased,
-    this.colorSchema = configs.primaryBtnColors,
-    this.fontSize = configs.defaultFontSize,
+    this.colorSchema = Configs.primaryBtnColors,
+    this.fontSize = Configs.defaultFontSize,
     super.anchor = Anchor.topLeft,
   });
 
@@ -26,8 +27,8 @@ class RoundedButton extends AdvancedButtonComponent {
   Future<void> onLoad() async {
     await super.onLoad();
     defaultLabel = TextComponent(
-      text: icon == null ? text : String.fromCharCode(icon!.codePoint),
-      textRenderer: getRenderer(
+      text: icon?.codePoint.convert(String.fromCharCode) ?? text,
+      textRenderer: getTextRenderer(
           fontSize: fontSize,
           color: colorSchema.text,
           fontFamily: icon?.fontFamily,

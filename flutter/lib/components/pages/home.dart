@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 
 import '../../common/utils.dart';
 import '../buttons.dart';
-import '../configs.dart' as configs;
+import '../configs.dart';
 import '../header.dart';
 import '../layouts/flex.dart';
 import 'base.dart';
@@ -19,21 +19,21 @@ class HomePage extends BasePage {
       FlexComponent(
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
-        spacing: configs.largeMargin,
+        spacing: Configs.largeMargin,
         children: [
           RoundedButton(
             text: "New Game",
-            size: configs.largeBtnSize,
+            size: Configs.largeBtnSize,
             onReleased: () => game.router.pushNamed("options"),
           ),
           RoundedButton(
             text: "About & Rules",
-            size: configs.largeBtnSize,
+            size: Configs.largeBtnSize,
             onReleased: () {},
           ),
           RoundedButton(
             text: "Settings",
-            size: configs.largeBtnSize,
+            size: Configs.largeBtnSize,
             onReleased: () => game.router.pushNamed("settings"),
           ),
         ],

@@ -5,13 +5,17 @@ enum PieceTheme {
   characters,
 }
 
+enum BoardTheme {
+  classic,
+}
+
 enum MarginsVisibility {
   none,
   half,
   full,
 }
 
-class BoardTheme {
+class BoardStyle {
   // margins
   final Paint marginPaint;
   final TextStyle marginTextStyle;
@@ -36,7 +40,7 @@ class BoardTheme {
   // parties
   final List<Paint> partyPaint;
 
-  BoardTheme({
+  BoardStyle({
     required this.marginPaint,
     required this.marginTextStyle,
     required this.lightCellPaint,

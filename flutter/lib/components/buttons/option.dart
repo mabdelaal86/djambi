@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/widgets.dart';
 
-import '../configs.dart' as configs;
+import '../configs.dart';
 import 'toggle.dart';
 
 class OptionButton extends ToggleButton {
@@ -16,9 +16,9 @@ class OptionButton extends ToggleButton {
     super.icon,
     super.position,
     required super.size,
-    super.colorSchema = configs.secondaryBtnColors,
-    super.selectedColorSchema = configs.primaryBtnColors,
-    super.fontSize = configs.defaultFontSize,
+    super.colorSchema = Configs.secondaryBtnColors,
+    super.selectedColorSchema = Configs.primaryBtnColors,
+    super.fontSize = Configs.defaultFontSize,
     super.anchor = Anchor.topLeft,
   });
 

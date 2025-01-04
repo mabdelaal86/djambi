@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:flame/components.dart' hide Timer;
 import 'package:flutter/material.dart';
 
-import '../../models/contest.dart';
-import '../../views/board.dart';
+import '../../common/serialization.dart';
+import '../../models.dart';
+import '../../views.dart';
 import '../buttons.dart';
-import '../configs.dart' as configs;
+import '../configs.dart';
 import '../dialogs.dart';
 import '../header.dart';
 import '../layouts.dart';
 import '../layouts/indexed_stack.dart';
-import '../options.dart';
-import '../utils/serialization.dart';
-import '../utils/ui.dart';
+import '../preferences.dart';
+import '../utils.dart';
 import 'base.dart';
 
 class PlayPage extends BasePage {
@@ -32,9 +32,12 @@ class PlayPage extends BasePage {
   late final AdvancedButtonComponent _undoButton, _redoButton;
   var _allowUndoRedo = false;
 
+  late final Preferences _prefs;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    _prefs = await Preferences.getInstance();
 
     _contest = await _createContest();
 
@@ -42,13 +45,13 @@ class PlayPage extends BasePage {
       Header(onBackTapUp: _onBackTapUp),
       MultiAlignComponent(
         size: size,
-        padding: const EdgeInsets.all(configs.largeMargin),
+        padding: const EdgeInsets.all(Configs.largeMargin),
         alignedChildren: {
           Anchor.center: _board = Board(
             _contest,
-            game.settings.boardTheme,
-            game.settings.pieceTheme,
-            game.settings.showMargins,
+            _prefs.getBoardTheme(),
+            _prefs.getPieceTheme(),
+            _prefs.getMarginsVisibility(),
           ),
           Anchor.bottomLeft: _createUndoRedoPanel(),
           Anchor.bottomRight: _statusPanel = IndexedStackComponent(
@@ -57,8 +60,8 @@ class PlayPage extends BasePage {
               _statusLabel = TextBoxComponent(
                 size: Vector2(300, 100),
                 align: Anchor.center,
-                textRenderer: getRenderer(
-                  color: configs.emphaticTextColor,
+                textRenderer: getTextRenderer(
+                  color: Configs.emphaticTextColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -77,19 +80,19 @@ class PlayPage extends BasePage {
 
   PositionComponent _createUndoRedoPanel() =>
       FlexComponent(
-        spacing: configs.smallMargin,
+        spacing: Configs.smallMargin,
         axis: Axis.horizontal,
         children: [
           _undoButton = RoundedButton(
             icon: Icons.undo,
-            fontSize: configs.iconFontSize,
-            size: configs.smallBtnSize,
+            fontSize: Configs.iconFontSize,
+            size: Configs.smallBtnSize,
             onReleased: _onUndoTapUp,
           ),
           _redoButton = RoundedButton(
             icon: Icons.redo,
-            fontSize: configs.iconFontSize,
-            size: configs.smallBtnSize,
+            fontSize: Configs.iconFontSize,
+            size: Configs.smallBtnSize,
             onReleased: _onRedoTapUp,
           ),
         ],
@@ -97,21 +100,21 @@ class PlayPage extends BasePage {
 
   PositionComponent _createNextPlayerPanel() =>
       FlexComponent(
-        spacing: configs.smallMargin,
+        spacing: Configs.smallMargin,
         axis: Axis.horizontal,
         children: [
           TextBoxComponent(
             text: "Next Player:",
-            textRenderer: getRenderer(),
-            size: Vector2(200, configs.smallBtnSize.y),
+            textRenderer: getTextRenderer(),
+            size: Vector2(200, Configs.smallBtnSize.y),
             align: Anchor.centerRight,
           ),
           _nextPlayerIcon = CircleComponent(
-            radius: configs.smallBtnSize.x / 2,
+            radius: Configs.smallBtnSize.x / 2,
             children: [
               _nextPlayerText = TextBoxComponent(
-                size: configs.smallBtnSize,
-                textRenderer: getRenderer(),
+                size: Configs.smallBtnSize,
+                textRenderer: getTextRenderer(),
                 align: Anchor.center,
               ),
             ],
@@ -141,33 +144,25 @@ class PlayPage extends BasePage {
       return;
     }
     await _displayNextPlayer();
-    if (_isGameOver()) {
+    if (_contest.noHumans()) {
       await _displayGameOver();
       return;
     }
-    if (configs.saveLoadState && _contest.parliament.isManoeuvreCompleted) {
-      await save(_contest.curState, configs.statePath);
+    if (Configs.saveLoadState && _contest.parliament.isManoeuvreCompleted) {
+      await save(_contest.toJson(), Configs.statePath);
     }
-    if (_isCurPlayerHuman()) {
+    if (_contest.isCurHuman()) {
       _board.enableTapUp = true;
       return;
     }
     _allowUndoRedo = false;
-    Timer(configs.actionDuration, () => _contest.aiAct(2));
+    Timer(Configs.actionDuration, () => _contest.aiAct(2));
   }
-
-  bool _isCurPlayerHuman() {
-    final curIdeology = _contest.parliament.currentParty.ideology;
-    return game.options.players[curIdeology]!.isHuman;
-  }
-
-  bool _isGameOver() => _contest.parliament.activeParties
-      .every((p) => game.options.players[p.ideology] != PlayerType.human);
 
   Future<void> _displayNextPlayer() async {
     await _statusPanel.setIndex(0);
     final (_, next) = _contest.parliament.getNextTurnState();
-    final color = _board.boardTheme.partyPaint[next.ideology.index].color;
+    final color = _board.boardStyle.partyPaint[next.ideology.index].color;
     _nextPlayerIcon.setColor(color);
     _nextPlayerText.text = next.ideology.name.toUpperCase()[0];
   }
@@ -176,7 +171,7 @@ class PlayPage extends BasePage {
     await _statusPanel.setIndex(1);
     var name = _contest.parliament.currentParty.ideology.name;
     name = name[0].toUpperCase() + name.substring(1);
-    _statusLabel.text = "$name party win!";
+    _statusLabel.text = "$name win!";
   }
 
   Future<void> _displayGameOver() async {
@@ -193,17 +188,17 @@ class PlayPage extends BasePage {
   }
 
   Future<Contest> _createContest() async {
-    if (configs.saveLoadState) {
-      final state = await load(configs.statePath);
-      if (state != null) {
-        return Contest.fromState(state, onStateChanged: _onStatueChanged);
+    if (Configs.saveLoadState) {
+      final json = await load(Configs.statePath);
+      if (json != null) {
+        return Contest.fromJson(json, onStateChanged: _onStatueChanged);
       }
     }
 
     return Contest(
-      game.options.startIdeology,
-      game.options.turnDirection,
-      onStateChanged: _onStatueChanged,
-    );
+        _prefs.getStartIdeology(),
+        _prefs.getTurnDirection(),
+        _prefs.getPlayerTypes(),
+        onStateChanged: _onStatueChanged);
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'buttons.dart';
 import 'game.dart';
 import 'layouts.dart';
-import 'utils/ui.dart';
+import 'utils.dart';
 
 class ConfirmDialog extends ValueRoute<String> with HasGameReference<DjambiGame> {
   final String message, leftText, rightText;
@@ -33,7 +33,7 @@ class ConfirmDialog extends ValueRoute<String> with HasGameReference<DjambiGame>
             text: message,
             size: Vector2(550, 150),
             align: Anchor.center,
-            textRenderer: getRenderer(),
+            textRenderer: getTextRenderer(),
           ),
           Anchor.bottomLeft: RoundedButton(
             text: leftText,

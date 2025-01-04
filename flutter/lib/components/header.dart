@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../common/utils.dart';
 import 'buttons.dart';
-import 'configs.dart' as configs;
+import 'configs.dart';
 import 'game.dart';
-import 'utils/ui.dart';
+import 'utils.dart';
 
 class Header extends PositionComponent with HasGameReference<DjambiGame> {
   // @override
@@ -21,21 +21,21 @@ class Header extends PositionComponent with HasGameReference<DjambiGame> {
 
   @override
   Future<void> onLoad() async {
-    size = configs.headerSize;
+    size = Configs.headerSize;
     await addAll([
       TextComponent(
         text:  title,
-        textRenderer: getRenderer(fontSize: configs.headerFontSize),
+        textRenderer: getTextRenderer(fontSize: Configs.headerFontSize),
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
       ),
       if (game.router.previousRoute != null)
         RoundedButton(
           icon: Icons.arrow_back,
-          fontSize: configs.iconFontSize,
-          position: Vector2.all(configs.headerSize.y / 2),
+          fontSize: Configs.iconFontSize,
+          position: Vector2.all(Configs.headerSize.y / 2),
           anchor: Anchor.center,
-          size: configs.smallBtnSize,
+          size: Configs.smallBtnSize,
           onReleased: () => switch (onBackTapUp) {
             null => game.router.pop(),
             final fun => fun.call(),

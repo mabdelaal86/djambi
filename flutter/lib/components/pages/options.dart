@@ -1,13 +1,13 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/enums.dart';
+import '../../models.dart';
 import '../buttons.dart';
-import '../configs.dart' as configs;
+import '../configs.dart';
 import '../header.dart';
 import '../layouts.dart';
-import '../options.dart';
-import '../utils/ui.dart';
+import '../preferences.dart';
+import '../utils.dart';
 import 'base.dart';
 
 const _ideologyAnchor = {
@@ -17,9 +17,9 @@ const _ideologyAnchor = {
   Ideology.green: Anchor.topLeft,
 };
 
-final _labelSize = Vector2(250, configs.smallBtnSize.y);
-final _buttonsPanelSize = (configs.smallBtnSize * 2) +
-    Vector2.all(configs.smallMargin);
+final _labelSize = Vector2(250, Configs.smallBtnSize.y);
+final _buttonsPanelSize = (Configs.smallBtnSize * 2) +
+    Vector2.all(Configs.smallMargin);
 
 class OptionsPage extends BasePage {
   // @override
@@ -29,17 +29,20 @@ class OptionsPage extends BasePage {
   late final MultiAlignComponent _startIdeologyPanel;
   late final MultiAlignComponent _humanPlayersPanel;
 
+  late final Preferences _prefs;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    _prefs = await Preferences.getInstance();
     await addAll([
       Header(),
       MultiAlignComponent(
         size: size,
-        padding: const EdgeInsets.all(configs.largeMargin),
+        padding: const EdgeInsets.all(Configs.largeMargin),
         alignedChildren: {
           Anchor.center: FlexComponent(
-            spacing: configs.largeMargin,
+            spacing: Configs.largeMargin,
             children: [
               _createTurnDirectionPanel(),
               _createStartIdeologyPanel(),
@@ -48,37 +51,37 @@ class OptionsPage extends BasePage {
           ),
           Anchor.bottomCenter: RoundedButton(
             text: "Play",
-            size: configs.largeBtnSize,
+            size: Configs.largeBtnSize,
             onReleased: () => game.router.pushReplacementNamed("play"),
           ),
         },
       ),
     ]);
-    _setTurnDirection(game.options.turnDirection);
-    _setStartIdeology(game.options.startIdeology);
-    _showHumanPlayers();
+    _getTurnDirection();
+    _getStartIdeology();
+    _getPlayerTypes();
   }
 
   PositionComponent _createTurnDirectionPanel() =>
       FlexComponent(
-        spacing: configs.smallMargin,
+        spacing: Configs.smallMargin,
         axis: Axis.horizontal,
         children: [
           _createLabel("Turn Direction:"),
           _turnDirectionPanel = MultiAlignComponent(
-            size: Vector2(_buttonsPanelSize.x, configs.smallBtnSize.y),
+            size: Vector2(_buttonsPanelSize.x, Configs.smallBtnSize.y),
             alignedChildren: {
               Anchor.topLeft: OptionButton(
                 icon: Icons.rotate_right,
-                fontSize: configs.iconFontSize,
-                size: configs.smallBtnSize,
-                onSelect: () => _setTurnDirection(TurnDirection.clockwise),
+                fontSize: Configs.iconFontSize,
+                size: Configs.smallBtnSize,
+                onSelect: () async => _setTurnDirection(TurnDirection.clockwise),
               ),
               Anchor.topRight: OptionButton(
                 icon: Icons.rotate_left,
-                fontSize: configs.iconFontSize,
-                size: configs.smallBtnSize,
-                onSelect: () => _setTurnDirection(TurnDirection.anticlockwise),
+                fontSize: Configs.iconFontSize,
+                size: Configs.smallBtnSize,
+                onSelect: () async => _setTurnDirection(TurnDirection.anticlockwise),
               ),
             },
           ),
@@ -87,7 +90,7 @@ class OptionsPage extends BasePage {
 
   PositionComponent _createStartIdeologyPanel() =>
       FlexComponent(
-        spacing: configs.smallMargin,
+        spacing: Configs.smallMargin,
         axis: Axis.horizontal,
         children: [
           _createLabel("Start Player:"),
@@ -97,8 +100,8 @@ class OptionsPage extends BasePage {
               anchor,
               OptionButton(
                 text: ideology.name[0].toUpperCase(),
-                size: configs.smallBtnSize,
-                onSelect: () => _setStartIdeology(ideology),
+                size: Configs.smallBtnSize,
+                onSelect: () async => _setStartIdeology(ideology),
               ),
             )),
           ),
@@ -107,7 +110,7 @@ class OptionsPage extends BasePage {
 
   PositionComponent _createHumanPlayersPanel() =>
       FlexComponent(
-        spacing: configs.smallMargin,
+        spacing: Configs.smallMargin,
         axis: Axis.horizontal,
         children: [
           _createLabel("Human Players:"),
@@ -117,12 +120,8 @@ class OptionsPage extends BasePage {
               anchor,
               ToggleButton(
                 text: ideology.name[0].toUpperCase(),
-                size: configs.smallBtnSize,
-                onSelectedChanged: (value) {
-                  game.options.players[ideology] = value
-                      ? PlayerType.human
-                      : PlayerType.aiMaxN;
-                },
+                size: Configs.smallBtnSize,
+                onSelectedChanged: (_) async => _setPlayerTypes(),
               ),
             )),
           ),
@@ -135,26 +134,43 @@ class OptionsPage extends BasePage {
         position: position,
         text: text,
         align: Anchor.centerRight,
-        textRenderer: getRenderer(),
+        textRenderer: getTextRenderer(),
       );
 
-  void _setTurnDirection(TurnDirection direction) {
-    game.options.turnDirection = direction;
+  Future<void> _setTurnDirection(TurnDirection direction) async {
     final buttons = _turnDirectionPanel.alignedChildren.values.cast<OptionButton>();
+    await _prefs.setTurnDirection(direction);
     updateSelections(direction.index, buttons);
   }
 
-  void _setStartIdeology(Ideology ideology) {
-    game.options.startIdeology = ideology;
+  void _getTurnDirection() {
+    final buttons = _turnDirectionPanel.alignedChildren.values.cast<OptionButton>();
+    updateSelections(_prefs.getTurnDirection().index, buttons);
+  }
+
+  Future<void> _setStartIdeology(Ideology ideology) async {
     final buttons = _startIdeologyPanel.alignedChildren.values.cast<OptionButton>();
+    await _prefs.setStartIdeology(ideology);
     updateSelections(ideology.index, buttons);
   }
 
-  void _showHumanPlayers() {
+  void _getStartIdeology() {
+    final buttons = _startIdeologyPanel.alignedChildren.values.cast<OptionButton>();
+    updateSelections(_prefs.getStartIdeology().index, buttons);
+  }
+
+  Future<void> _setPlayerTypes() async {
     final buttons = _humanPlayersPanel.alignedChildren.values.cast<ToggleButton>();
+    final playerTypes = buttons
+        .map((b) => b.isSelected ? PlayerType.human : PlayerType.aiMaxN);
+    await _prefs.setPlayerTypes(playerTypes);
+  }
+
+  void _getPlayerTypes() {
+    final buttons = _humanPlayersPanel.alignedChildren.values.cast<ToggleButton>();
+    final playerTypes = _prefs.getPlayerTypes();
     for (final (i, button) in buttons.indexed) {
-      final ideology = Ideology.values[i];
-      button.isSelected = game.options.players[ideology]!.isHuman;
+      button.isSelected = playerTypes[i].isHuman;
     }
   }
 }

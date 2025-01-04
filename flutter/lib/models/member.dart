@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../common/utils.dart';
 import 'cell.dart';
 import 'enums.dart';
 import 'members/assassin.dart';
@@ -31,7 +32,7 @@ abstract class Member {
   Manoeuvre manoeuvre = Manoeuvre.none;
 
   int? _bodyId;
-  Member? get body => _bodyId == null ? null : parliament.members[_bodyId!];
+  Member? get body => _bodyId?.convert((id) => parliament.members[id]);
 
   Member(this.parliament, this.ideology, this.id);
 
@@ -66,12 +67,12 @@ abstract class Member {
   factory Member.fromJson(Parliament parliament, Map<String, dynamic> json) {
     final member = Member.create(
       parliament,
-      Role.values[json["role"] as int],
-      Ideology.values[json["ideology"] as int],
-      json["id"] as int,
+      Role.values[json["role"]],
+      Ideology.values[json["ideology"]],
+      json["id"],
     );
     member.location = Cell.fromJson(json["location"]);
-    member.state = MemberState.values[json["state"] as int];
+    member.state = MemberState.values[json["state"]];
     return member;
   }
 

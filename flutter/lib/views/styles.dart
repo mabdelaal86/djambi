@@ -1,36 +1,20 @@
 import 'package:flutter/painting.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/utils.dart';
-import '../views/dimensions.dart' as dimensions;
-import '../views/theme.dart';
+import 'dimensions.dart';
+import 'theme.dart';
 
-class Settings {
-  var pieceTheme = PieceTheme.classic;
-  var boardTheme = getDefaultBoardTheme();
-  var showMargins = MarginsVisibility.half;
+BoardStyle getBoardStyle(BoardTheme theme) => switch (theme) {
+  BoardTheme.classic => _getClassicBoardStyle(),
+};
 
-  Future<void> save() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt("show-margins", showMargins.index);
-  }
-
-  Future<void> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    showMargins = switch (prefs.getInt("show-margins")) {
-      null => MarginsVisibility.half,
-      final i => MarginsVisibility.values[i],
-    };
-  }
-}
-
-BoardTheme getDefaultBoardTheme() {
+BoardStyle _getClassicBoardStyle() {
   const pieceForeColor = Color(0xFF000000);
-  return BoardTheme(
+  return BoardStyle(
     marginPaint: const Color(0xFF757575).toPaint(),
     marginTextStyle: const TextStyle(
       color: Color(0xFFFFFFFF),
-      fontSize: dimensions.marginFontSize,
+      fontSize: Dimensions.marginFontSize,
       fontWeight: FontWeight.bold,
     ),
     lightCellPaint: const Color(0xFFFFFFFF).toPaint(),
@@ -45,10 +29,10 @@ BoardTheme getDefaultBoardTheme() {
     pieceEdgePaint: Paint()
       ..color = pieceForeColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = dimensions.pieceStroke,
+      ..strokeWidth = Dimensions.pieceStroke,
     pieceSymbolStyle: const TextStyle(
       color: pieceForeColor,
-      fontSize: dimensions.pieceFontSize,
+      fontSize: Dimensions.pieceFontSize,
       fontWeight: FontWeight.bold,
     ),
     deadPaint: const Color(0xFF757575).toPaint(),

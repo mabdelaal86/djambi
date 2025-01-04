@@ -1,7 +1,7 @@
 import 'package:flame/extensions.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'constants.dart' as constants;
+import 'constants.dart';
 
 @immutable
 class Cell {
@@ -10,17 +10,17 @@ class Cell {
   const Cell(this.x, this.y);
   const Cell.zero() : this(0, 0);
   const Cell.all(int xy) : this(xy, xy);
-  const Cell.maze() : this(constants.mazeIndex, constants.mazeIndex);
+  const Cell.maze() : this(Constants.mazeIndex, Constants.mazeIndex);
 
   /// json deserialization
-  Cell.fromJson(Map<String, dynamic> json) : this(json["x"] as int, json["y"] as int);
+  Cell.fromJson(Map<String, dynamic> json) : this(json["x"], json["y"]);
 
   /// json serialization
   Map<String, dynamic> toJson() => {"x": x, "y": y};
 
   @override
   String toString() => isValid
-      ? constants.colSymbols[x] + constants.rowSymbols[y]
+      ? Constants.colSymbols[x] + Constants.rowSymbols[y]
       : "$x,$y";
 
   @override
@@ -30,11 +30,11 @@ class Cell {
   @override
   int get hashCode => Object.hash(x, y);
 
-  bool get isMaze => x == constants.mazeIndex && y == constants.mazeIndex;
+  bool get isMaze => x == Constants.mazeIndex && y == Constants.mazeIndex;
   bool get isDark => x.isEven == y.isEven;
   bool get isValid =>
-      (0 <= x && x < constants.sideCellsCount) &&
-      (0 <= y && y < constants.sideCellsCount);
+      (0 <= x && x < Constants.sideCellsCount) &&
+      (0 <= y && y < Constants.sideCellsCount);
   int get max => x > y ? x : y;
   int get min => x < y ? x : y;
 
@@ -68,8 +68,8 @@ class Cell {
       orthogonalDirections.map((d) => this + d).where((c) => c.isValid);
 
   static Iterable<Cell> allCells() sync* {
-    for (var y = 0; y < constants.sideCellsCount; y++) {
-      for (var x = 0; x < constants.sideCellsCount; x++) {
+    for (var y = 0; y < Constants.sideCellsCount; y++) {
+      for (var x = 0; x < Constants.sideCellsCount; x++) {
         yield Cell(x, y);
       }
     }

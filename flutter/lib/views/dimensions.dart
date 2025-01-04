@@ -1,25 +1,27 @@
 import 'package:flame/extensions.dart';
 
-import '../models/cell.dart';
-import '../models/constants.dart' as constants;
+import '../models.dart';
 
-const cellSide = 100.0;
-const gridSide = cellSide * constants.sideCellsCount;
-const pieceRadius = 40.0;
-const pieceFontSize = 50.0;
-const pieceStroke = 3.0;
-const margin = 32.0;
-const marginFontSize = 30.0;
-const markStroke = 4.0;
-final cellSize = Vector2.all(cellSide);
-final pieceSize = Vector2.all(pieceRadius * 2);
-final gridSize = Vector2.all(gridSide);
-final marginSize = Vector2.all(margin);
-final mazeOffset = cellOffset(const Cell.maze());
-final mazeCentralOffset = mazeOffset + cellSize / 2;
-final marginColCell = Vector2(cellSide, margin);
-final marginRowCell = Vector2(margin, cellSide);
+// ignore: avoid_classes_with_only_static_members
+abstract class Dimensions {
+  static const cellSide = 100.0;
+  static const gridSide = cellSide * Constants.sideCellsCount;
+  static const pieceRadius = 40.0;
+  static const pieceFontSize = 50.0;
+  static const pieceStroke = 3.0;
+  static const margin = 32.0;
+  static const marginFontSize = 30.0;
+  static const markStroke = 4.0;
+  static final cellSize = Vector2.all(cellSide);
+  static final pieceSize = Vector2.all(pieceRadius * 2);
+  static final gridSize = Vector2.all(gridSide);
+  static final marginSize = Vector2.all(margin);
+  static final mazeOffset = cellOffset(const Cell.maze());
+  static final mazeCentralOffset = mazeOffset + cellSize / 2;
+  static final marginColCell = Vector2(cellSide, margin);
+  static final marginRowCell = Vector2(margin, cellSide);
+}
 
-Vector2 cellOffset(Cell cell) => cell.toVector2() * cellSide;
-Vector2 cellCenterOffset(Cell cell) => cellOffset(cell) + cellSize / 2;
-Cell vector2cell(Vector2 v) => Cell(v.x ~/ cellSide, v.y ~/ cellSide);
+Vector2 cellOffset(Cell cell) => cell.toVector2() * Dimensions.cellSide;
+Vector2 cellCenterOffset(Cell cell) => cellOffset(cell) + Dimensions.cellSize / 2;
+Cell vector2cell(Vector2 v) => Cell(v.x ~/ Dimensions.cellSide, v.y ~/ Dimensions.cellSide);

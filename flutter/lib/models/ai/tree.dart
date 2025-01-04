@@ -1,7 +1,8 @@
 import 'package:collection/collection.dart';
 
+import '../../common/utils.dart';
 import '../cell.dart';
-import '../constants.dart' as constants;
+import '../constants.dart';
 import '../enums.dart';
 import '../member.dart';
 import '../parliament.dart';
@@ -9,16 +10,11 @@ import 'evaluation.dart';
 
 class Node {
   Node(this.parliament, this.parent) : depth = _newDepth(parent, parliament) {
-    if (parent != null) {
-      parent!.subNodes.add(this);
-    }
+    parent?.subNodes.add(this);
   }
 
-  static int _newDepth(Node? parent, Parliament parliament) =>
-      switch (parent?.depth) {
-        null => 0, // root node
-        final d => parliament.isManoeuvreCompleted ? d + 1 : d,
-      };
+  static int _newDepth(Node? parent, Parliament parliament) => parent?.depth
+      .convert((d) => parliament.isManoeuvreCompleted ? d + 1 : d) ?? 0;
 
   final Parliament parliament;
 
@@ -54,7 +50,7 @@ class Node {
   void calcMaxN() {
     assert(_evaluations.isEmpty, "evaluations is expected to be empty");
     assert(subNodes.isNotEmpty, "should run on NONE leaf nodes");
-    var max = constants.minInt;
+    var max = Constants.minInt;
     Map<Ideology, int>? evaluations;
     Node? bestSub;
     for (final subNode in subNodes) {

@@ -7,28 +7,7 @@ import 'cell.dart';
 import 'enums.dart';
 import 'member.dart';
 import 'parliament.dart';
-
-class State {
-  final Parliament parliament;
-  final List<Cell> lastMovedCells;
-
-  State(this.parliament, [Parliament? lastParliament])
-      : lastMovedCells = _getDifferentCells(parliament, lastParliament).toList();
-
-  static Iterable<Cell> _getDifferentCells(
-      Parliament newParliament, Parliament? lastParliament) sync* {
-    if (lastParliament == null) return;
-    for (final member in newParliament.members) {
-      final lastMember = lastParliament.members[member.id];
-      if (member.location != lastMember.location) {
-        yield member.location;
-        yield lastMember.location;
-      } else if (member.state != lastMember.state) {
-        yield member.location;
-      }
-    }
-  }
-}
+import 'state.dart';
 
 class Contest {
   State _curState;
@@ -36,20 +15,30 @@ class Contest {
   final _redoStack = Stack<State>();
   final VoidCallback? onStateChanged;
 
-  State get curState => _curState;
   Parliament get parliament => _curState.parliament;
   List<Cell> get lastMovedCells => _curState.lastMovedCells;
   bool get canUndo => _undoStack.isNotEmpty;
   bool get canRedo => _redoStack.isNotEmpty;
 
+  final List<PlayerType> playerTypes;
+
   Contest(
       Ideology startIdeology,
       TurnDirection turnDirection,
+      this.playerTypes,
       {this.onStateChanged})
       : _curState = State(Parliament(startIdeology, turnDirection));
 
-  Contest.fromState(State initialState, {this.onStateChanged})
-      : _curState = initialState;
+  /// json deserialization
+  Contest.fromJson(Map<String, dynamic> json, {this.onStateChanged})
+      : _curState = State(Parliament.fromJson(json["parliament"])),
+        playerTypes = [ for (final p in json["player-types"]) PlayerType.values[p] ];
+
+  /// json serialization
+  Map<String, dynamic> toJson() => {
+      "parliament": parliament.toJson(),
+      "player-types": playerTypes.map((e) => e.index).toList(),
+  };
 
   void undo() {
     if (canUndo) {
@@ -66,6 +55,11 @@ class Contest {
       onStateChanged?.call();
     }
   }
+
+  bool noHumans() => parliament.activeParties
+      .every((p) => playerTypes[p.ideology.index] != PlayerType.human);
+
+  bool isCurHuman() => playerTypes[parliament.currentParty.ideology.index].isHuman;
 
   void doAction(Member member, Cell cell) {
     final newParliament = _curState.parliament.makeCopy();

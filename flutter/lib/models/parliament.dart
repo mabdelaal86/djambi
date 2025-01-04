@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 
+import '../common/utils.dart';
 import 'cell.dart';
 import 'enums.dart';
 import 'member.dart';
@@ -60,22 +61,20 @@ class Parliament {
     assert(parties.length == 4, "number of parties should be 4");
     // other properties
     _currentParty = getParty(other._currentParty.ideology);
-    _actor = other._actor == null ? null : members[other._actor!.id];
+    _actor = other._actor?.id.convert((id) => members[id]);
   }
 
   Parliament makeCopy() => Parliament.copy(this);
 
   /// json deserialization
   Parliament.fromJson(Map<String, dynamic> json)
-      : _currentIdeology = Ideology.values[json["current_ideology"] as int],
-        turnDirection = TurnDirection.values[json["turn_direction"] as int] {
-    members = (json["members"] as List<dynamic>)
-        .map((e) => Member.fromJson(this, e))
-        .toList();
+      : _currentIdeology = Ideology.values[json["current_ideology"]],
+        turnDirection = TurnDirection.values[json["turn_direction"]] {
+    members = [ for (final m in json["members"]) Member.fromJson(this, m) ];
     assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
     parties = [ for (final m in members) if (m.isChief) Party(m as Chief) ];
     assert(parties.length == 4, "number of parties should be 4");
-    _currentParty = getParty(Ideology.values[json["current_party"] as int]);
+    _currentParty = getParty(Ideology.values[json["current_party"]]);
   }
 
   /// json serialization

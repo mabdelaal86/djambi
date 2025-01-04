@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 
-import '../configs.dart' as configs;
+import 'configs.dart';
 
 class ButtonColorSchema {
   final Color natural;
@@ -21,9 +21,9 @@ class ButtonColorSchema {
   );
 }
 
-TextPaint getRenderer({
-  double fontSize = configs.defaultFontSize,
-  Color color = configs.textColor,
+TextPaint getTextRenderer({
+  double fontSize = Configs.defaultFontSize,
+  Color color = Configs.textColor,
   String? fontFamily, FontWeight? fontWeight, FontStyle? fontStyle
 }) => TextPaint(
   style: TextStyle(
