@@ -11,8 +11,6 @@ import '../configs.dart';
 import '../dialogs.dart';
 import '../header.dart';
 import '../layouts.dart';
-import '../layouts/indexed_stack.dart';
-import '../preferences.dart';
 import '../utils.dart';
 import 'base.dart';
 
@@ -32,12 +30,9 @@ class PlayPage extends BasePage {
   late final AdvancedButtonComponent _undoButton, _redoButton;
   var _allowUndoRedo = false;
 
-  late final Preferences _prefs;
-
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-    _prefs = await Preferences.getInstance();
+    super.onLoad();
 
     _contest = await _createContest();
 
@@ -49,9 +44,9 @@ class PlayPage extends BasePage {
         alignedChildren: {
           Anchor.center: _board = Board(
             _contest,
-            _prefs.getBoardTheme(),
-            _prefs.getPieceTheme(),
-            _prefs.getMarginsVisibility(),
+            game.prefs.getBoardTheme(),
+            game.prefs.getPieceTheme(),
+            game.prefs.getMarginsVisibility(),
           ),
           Anchor.bottomLeft: _createUndoRedoPanel(),
           Anchor.bottomRight: _statusPanel = IndexedStackComponent(
@@ -196,9 +191,9 @@ class PlayPage extends BasePage {
     }
 
     return Contest(
-        _prefs.getStartIdeology(),
-        _prefs.getTurnDirection(),
-        _prefs.getPlayerTypes(),
+        game.prefs.getStartIdeology(),
+        game.prefs.getTurnDirection(),
+        game.prefs.getPlayerTypes(),
         onStateChanged: _onStatueChanged);
   }
 }

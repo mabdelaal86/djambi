@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../common/utils.dart';
 import '../configs.dart';
 import '../utils.dart';
-import 'base.dart';
+import 'rounded_rect.dart';
 
 class RoundedButton extends AdvancedButtonComponent {
   final String? text;
@@ -34,9 +34,9 @@ class RoundedButton extends AdvancedButtonComponent {
           fontFamily: icon?.fontFamily,
       ),
     );
-    defaultSkin = RoundedRectComponent()..setColor(colorSchema.natural);
-    hoverSkin = RoundedRectComponent()..setColor(colorSchema.hover);
-    downSkin = RoundedRectComponent()..setColor(colorSchema.down);
-    disabledSkin = RoundedRectComponent()..setColor(colorSchema.disabled);
+    defaultSkin = RoundedRectComponent(paint: colorSchema.natural.toPaint());
+    hoverSkin = RoundedRectComponent(paint: colorSchema.hover.toPaint());
+    downSkin = RoundedRectComponent(paint: colorSchema.down.toPaint());
+    disabledSkin = RoundedRectComponent(paint: colorSchema.disabled.toPaint());
   }
 }

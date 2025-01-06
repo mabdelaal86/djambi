@@ -7,7 +7,6 @@ import '../buttons.dart';
 import '../configs.dart';
 import '../header.dart';
 import '../layouts.dart';
-import '../preferences.dart';
 import '../utils.dart';
 import 'base.dart';
 
@@ -18,12 +17,10 @@ class SettingsPage extends BasePage {
   // bool get debugMode => true;
 
   late final List<OptionButton> _marginsButtons;
-  late final Preferences _prefs;
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-    _prefs = await Preferences.getInstance();
+    super.onLoad();
     await addAll([
       Header(title: "Settings"),
       FlexComponent(
@@ -76,11 +73,11 @@ class SettingsPage extends BasePage {
       );
 
   Future<void> _setMarginsVisibility(MarginsVisibility visibility) async {
-    await _prefs.setMarginsVisibility(visibility);
+    await game.prefs.setMarginsVisibility(visibility);
     updateSelections(visibility.index, _marginsButtons);
   }
 
   void _getMarginsVisibility() {
-    updateSelections(_prefs.getMarginsVisibility().index, _marginsButtons);
+    updateSelections(game.prefs.getMarginsVisibility().index, _marginsButtons);
   }
 }

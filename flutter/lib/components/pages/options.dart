@@ -6,7 +6,6 @@ import '../buttons.dart';
 import '../configs.dart';
 import '../header.dart';
 import '../layouts.dart';
-import '../preferences.dart';
 import '../utils.dart';
 import 'base.dart';
 
@@ -29,12 +28,9 @@ class OptionsPage extends BasePage {
   late final MultiAlignComponent _startIdeologyPanel;
   late final MultiAlignComponent _humanPlayersPanel;
 
-  late final Preferences _prefs;
-
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-    _prefs = await Preferences.getInstance();
+    super.onLoad();
     await addAll([
       Header(),
       MultiAlignComponent(
@@ -139,36 +135,36 @@ class OptionsPage extends BasePage {
 
   Future<void> _setTurnDirection(TurnDirection direction) async {
     final buttons = _turnDirectionPanel.alignedChildren.values.cast<OptionButton>();
-    await _prefs.setTurnDirection(direction);
+    await game.prefs.setTurnDirection(direction);
     updateSelections(direction.index, buttons);
   }
 
   void _getTurnDirection() {
     final buttons = _turnDirectionPanel.alignedChildren.values.cast<OptionButton>();
-    updateSelections(_prefs.getTurnDirection().index, buttons);
+    updateSelections(game.prefs.getTurnDirection().index, buttons);
   }
 
   Future<void> _setStartIdeology(Ideology ideology) async {
     final buttons = _startIdeologyPanel.alignedChildren.values.cast<OptionButton>();
-    await _prefs.setStartIdeology(ideology);
+    await game.prefs.setStartIdeology(ideology);
     updateSelections(ideology.index, buttons);
   }
 
   void _getStartIdeology() {
     final buttons = _startIdeologyPanel.alignedChildren.values.cast<OptionButton>();
-    updateSelections(_prefs.getStartIdeology().index, buttons);
+    updateSelections(game.prefs.getStartIdeology().index, buttons);
   }
 
   Future<void> _setPlayerTypes() async {
     final buttons = _humanPlayersPanel.alignedChildren.values.cast<ToggleButton>();
     final playerTypes = buttons
         .map((b) => b.isSelected ? PlayerType.human : PlayerType.aiMaxN);
-    await _prefs.setPlayerTypes(playerTypes);
+    await game.prefs.setPlayerTypes(playerTypes);
   }
 
   void _getPlayerTypes() {
     final buttons = _humanPlayersPanel.alignedChildren.values.cast<ToggleButton>();
-    final playerTypes = _prefs.getPlayerTypes();
+    final playerTypes = game.prefs.getPlayerTypes();
     for (final (i, button) in buttons.indexed) {
       button.isSelected = playerTypes[i].isHuman;
     }

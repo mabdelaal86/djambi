@@ -2,7 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+import '../common/utils.dart';
 import 'buttons.dart';
+import 'buttons/rounded_rect.dart';
 import 'game.dart';
 import 'layouts.dart';
 import 'utils.dart';
@@ -19,11 +21,12 @@ class ConfirmDialog extends ValueRoute<String> with HasGameReference<DjambiGame>
   static const _margin = 20.0;
 
   @override
-  Component build() => RectangleComponent(
+  Component build() => RoundedRectComponent(
     size: _dialogSize,
     position: game.size / 2,
     anchor: Anchor.center,
-    paint: Paint()..color = const Color(0x44FF0000),
+    paint: const Color(0xFF882222).toPaint(),
+    radius: const Radius.circular(50),
     children: [
       MultiAlignComponent(
         size: _dialogSize,

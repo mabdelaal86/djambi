@@ -4,7 +4,7 @@ import '../../common/utils.dart';
 import '../buttons.dart';
 import '../configs.dart';
 import '../header.dart';
-import '../layouts/flex.dart';
+import '../layouts.dart';
 import 'base.dart';
 
 class HomePage extends BasePage {
@@ -13,7 +13,7 @@ class HomePage extends BasePage {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    super.onLoad();
     await addAll([
       Header(),
       FlexComponent(

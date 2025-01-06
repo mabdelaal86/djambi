@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../common/utils.dart';
 import '../configs.dart';
 import '../utils.dart';
-import 'base.dart';
+import 'rounded_rect.dart';
 
 class ToggleButton extends ToggleButtonComponent {
   final String? text;
@@ -36,13 +36,13 @@ class ToggleButton extends ToggleButtonComponent {
         fontFamily: icon?.fontFamily,
       ),
     );
-    defaultSkin = RoundedRectComponent()..setColor(colorSchema.natural);
-    hoverSkin = RoundedRectComponent()..setColor(colorSchema.hover);
-    downSkin = RoundedRectComponent()..setColor(colorSchema.down);
-    disabledSkin = RoundedRectComponent()..setColor(colorSchema.disabled);
-    defaultSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.natural);
-    hoverAndSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.hover);
-    downAndSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.down);
-    disabledAndSelectedSkin = RoundedRectComponent()..setColor(selectedColorSchema.disabled);
+    defaultSkin = RoundedRectComponent(paint: colorSchema.natural.toPaint());
+    hoverSkin = RoundedRectComponent(paint: colorSchema.hover.toPaint());
+    downSkin = RoundedRectComponent(paint: colorSchema.down.toPaint());
+    disabledSkin = RoundedRectComponent(paint: colorSchema.disabled.toPaint());
+    defaultSelectedSkin = RoundedRectComponent(paint: selectedColorSchema.natural.toPaint());
+    hoverAndSelectedSkin = RoundedRectComponent(paint: selectedColorSchema.hover.toPaint());
+    downAndSelectedSkin = RoundedRectComponent(paint: selectedColorSchema.down.toPaint());
+    disabledAndSelectedSkin = RoundedRectComponent(paint: selectedColorSchema.disabled.toPaint());
   }
 }

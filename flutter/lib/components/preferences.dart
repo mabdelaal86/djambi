@@ -4,55 +4,67 @@ import '../common/utils.dart';
 import '../models.dart';
 import '../views.dart';
 
-class Preferences {
-  late final SharedPreferences _prefs;
-  Preferences._();
+// keys
+const _marginsVisibility = "margins-visibility";
+const _turnDirection = "turn-direction";
+const _startIdeology = "start-ideology";
+const _playerTypes = "player-types";
 
-  static Future<Preferences> getInstance() async {
-    final res = Preferences._();
+// default values
+const _defaultMarginsVisibility = MarginsVisibility.half;
+const _defaultTurnDirection = TurnDirection.anticlockwise;
+const _defaultStartIdeology = Ideology.red;
+const _defaultPlayerTypes = [
+  PlayerType.human,
+  PlayerType.aiMaxN,
+  PlayerType.aiMaxN,
+  PlayerType.aiMaxN,
+];
+
+class PreferencesController {
+  late final SharedPreferences _prefs;
+  PreferencesController._();
+
+  static Future<PreferencesController> create() async {
+    final res = PreferencesController._();
     res._prefs = await SharedPreferences.getInstance();
     return res;
   }
 
   Future<void> setMarginsVisibility(MarginsVisibility visibility) async {
-    await _prefs.setInt("margins-visibility", visibility.index);
+    await _prefs.setInt(_marginsVisibility, visibility.index);
   }
 
-  MarginsVisibility getMarginsVisibility() => _prefs.getInt("margins-visibility")
+  MarginsVisibility getMarginsVisibility() => _prefs.getInt(_marginsVisibility)
       ?.convert((e) => MarginsVisibility.values[e])
-      ?? MarginsVisibility.half;
+      ?? _defaultMarginsVisibility;
 
   PieceTheme getPieceTheme() => PieceTheme.classic;
   BoardTheme getBoardTheme() => BoardTheme.classic;
 
   Future<void> setTurnDirection(TurnDirection direction) async {
-    await _prefs.setInt("turn-direction", direction.index);
+    await _prefs.setInt(_turnDirection, direction.index);
   }
 
-  TurnDirection getTurnDirection() => _prefs.getInt("turn-direction")
+  TurnDirection getTurnDirection() => _prefs.getInt(_turnDirection)
       ?.convert((e) => TurnDirection.values[e])
-      ?? TurnDirection.anticlockwise;
+      ?? _defaultTurnDirection;
 
   Future<void> setStartIdeology(Ideology ideology) async {
-    await _prefs.setInt("start-ideology", ideology.index);
+    await _prefs.setInt(_startIdeology, ideology.index);
   }
 
-  Ideology getStartIdeology() => _prefs.getInt("start-ideology")
+  Ideology getStartIdeology() => _prefs.getInt(_startIdeology)
       ?.convert((e) => Ideology.values[e])
-      ?? Ideology.red;
+      ?? _defaultStartIdeology;
 
   Future<void> setPlayerTypes(Iterable<PlayerType> playerTypes) async {
-    await _prefs.setString("player-types", playerTypes.map((e) => e.index).join(","));
+    await _prefs.setString(_playerTypes, playerTypes.map((e) => e.index).join(","));
   }
 
-  List<PlayerType> getPlayerTypes() => _prefs.getString("player-types")
+  List<PlayerType> getPlayerTypes() => _prefs.getString(_playerTypes)
         ?.split(",")
         .map(int.parse)
         .map((e) => PlayerType.values[e])
-        .toList() ?? [
-          PlayerType.human,
-          PlayerType.aiMaxN,
-          PlayerType.aiMaxN,
-          PlayerType.aiMaxN,
-        ];
+        .toList() ?? _defaultPlayerTypes;
 }

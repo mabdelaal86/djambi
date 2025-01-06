@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
@@ -6,20 +8,26 @@ import 'pages/home.dart';
 import 'pages/options.dart';
 import 'pages/play.dart';
 import 'pages/settings.dart';
+import 'preferences.dart';
 
 class DjambiGame extends FlameGame {
   late final RouterComponent router;
+  late final PreferencesController prefs;
 
   DjambiGame() : super(
     camera: CameraComponent.withFixedResolution(
-        width: Configs.gameWidth,
-        height: Configs.gameHeight,
+      width: Configs.gameWidth,
+      height: Configs.gameHeight,
     ),
   );
 
   @override
+  Color backgroundColor() => Configs.pageBackground;
+
+  @override
   Future<void> onLoad() async {
     camera.viewfinder.anchor = Anchor.topLeft;
+    prefs = await PreferencesController.create();
 
     await world.add(router = RouterComponent(
       routes: {
