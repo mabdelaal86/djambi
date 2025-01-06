@@ -166,12 +166,12 @@ class PlayPage extends BasePage {
     await _statusPanel.setIndex(1);
     var name = _contest.parliament.currentParty.ideology.name;
     name = name[0].toUpperCase() + name.substring(1);
-    _statusLabel.text = "$name win!";
+    _statusLabel.text = "$name win!".toUpperCase();
   }
 
   Future<void> _displayGameOver() async {
     await _statusPanel.setIndex(1);
-    _statusLabel.text = "Game over!";
+    _statusLabel.text = "GAME OVER!";
   }
 
   Future<void> _onBackTapUp() async {

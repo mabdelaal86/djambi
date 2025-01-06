@@ -70,8 +70,8 @@ class Contest {
   }
 
   void aiAct(int maxDepth) {
-    assert(!_curState.parliament.isGameFinished, "Game is already finished!");
-    assert(_curState.parliament.isManoeuvreCompleted, "Can't call AI in middle of a manoeuvre");
+    assert(!_curState.parliament.isGameFinished, "game is already finished!");
+    assert(_curState.parliament.isManoeuvreCompleted, "can't call AI in middle of a manoeuvre");
     final tree = Tree(_curState.parliament, maxDepth);
     tree.build();
     _handleNewState(tree.decision.parliament);

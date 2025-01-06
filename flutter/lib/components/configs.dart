@@ -27,7 +27,8 @@ abstract class Configs {
 
   static const textColor = Color(0xFFFFFFFF);
   static const emphaticTextColor = Color(0xFFFFFF00);
-  static const pageBackground = Color(0x88888888);
+  static const pageBackground = Color(0xFF444444);
+  static const dialogBackground = Color(0xFF601010);
 
   static const primaryBtnColors = ButtonColorSchema(
     Color(0xFF00C800),

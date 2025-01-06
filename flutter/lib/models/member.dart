@@ -78,7 +78,7 @@ abstract class Member {
 
   /// json serialization
   Map<String, dynamic> toJson() {
-    assert(manoeuvre == Manoeuvre.none, "Serialization is not allowed during a manoeuvre");
+    assert(manoeuvre == Manoeuvre.none, "serialization is not allowed during a manoeuvre");
     return {
       "role": role.index,
       "ideology": ideology.index,
@@ -141,13 +141,13 @@ abstract class Member {
       case Manoeuvre.move:  onKill(cell);
       case Manoeuvre.kill:  onExit(cell);
       case Manoeuvre.exit:  onBury(cell);
-      case Manoeuvre.end:   throw AssertionError("Can't act on the `end` state!");
+      case Manoeuvre.end:   throw AssertionError("can't act on the `end` state!");
     }
   }
 
   @protected
   void onMove(Cell cell) {
-    assert(cellsToMove(canKill: true).contains(cell), "Can't do an action on the selected cell");
+    assert(cellsToMove(canKill: true).contains(cell), "can't do an action on the selected cell");
     _bodyId = parliament.getMemberAt(cell)?.id;
     location = cell;
     manoeuvre = Manoeuvre.move;
@@ -161,14 +161,14 @@ abstract class Member {
 
   @protected
   void onExit(Cell cell) {
-    assert(cellsToMove(canKill: false).contains(cell), "Can't do an action on the selected cell");
+    assert(cellsToMove(canKill: false).contains(cell), "can't do an action on the selected cell");
     location = cell;
     manoeuvre = Manoeuvre.exit;
   }
 
   @protected
   void onBury(Cell cell) {
-    assert(canBuryOn(cell), "Can't do an action on the selected cell");
+    assert(canBuryOn(cell), "can't do an action on the selected cell");
     body!.location = cell;
     manoeuvre = Manoeuvre.end;
   }

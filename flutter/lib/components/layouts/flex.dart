@@ -17,7 +17,7 @@ class FlexComponent extends PositionComponent {
     this.spacing = 0,
   }) : super(size: _calcSize(spacing, axis, children)) {
     _elements = children;
-    assert(spacing >= 0, "Spacing between elements can't be less than zero");
+    assert(spacing >= 0, "spacing between elements can't be less than zero");
   }
 
   @override
@@ -54,8 +54,8 @@ Vector2 _calcSize(
   final spaces = spacing * (elements.length - 1);
   var res = axis == Axis.vertical ? Vector2(0, spaces) : Vector2(spaces, 0);
   for (final elem in elements) {
-    assert(!elem.size.isZero(), "Element has no size to be arranged");
-    assert(elem.position.isZero(), "Element position shouldn't be set");
+    assert(!elem.size.isZero(), "element has no size to be arranged");
+    assert(elem.position.isZero(), "element position shouldn't be set");
     if (axis == Axis.vertical) {
       res = Vector2(max(res.x, elem.size.x), res.y + elem.size.y);
     } else {

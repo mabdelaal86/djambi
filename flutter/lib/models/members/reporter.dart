@@ -32,7 +32,7 @@ class Reporter extends Member {
 
   @override
   void onKill(Cell cell) {
-    assert(canKillOn(cell), "Can't do an action on the selected cell");
+    assert(canKillOn(cell), "can't do an action on the selected cell");
     kill(parliament.getMemberAt(cell)!);
     manoeuvre = Manoeuvre.end;
   }

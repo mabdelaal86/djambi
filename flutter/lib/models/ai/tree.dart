@@ -87,7 +87,7 @@ class Tree {
   }
 
   void _createSubNodes(Node node) {
-    assert(node.depth <= maxDepth, "Exceed the maximum depth!");
+    assert(node.depth <= maxDepth, "exceed the maximum depth!");
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
       node.evaluate(evaluateParty);
     } else {

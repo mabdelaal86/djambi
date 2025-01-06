@@ -10,7 +10,7 @@ class IndexedStackComponent extends PositionComponent {
     super.scale,
     required List<PositionComponent> children,
   }) : _elements = children {
-    assert(_elements.isNotEmpty, "Children components are empty!");
+    assert(_elements.isNotEmpty, "children components are empty!");
   }
 
   int get index => _index;

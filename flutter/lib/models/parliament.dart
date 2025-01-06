@@ -79,7 +79,7 @@ class Parliament {
 
   /// json serialization
   Map<String, dynamic> toJson() {
-    assert(_actor == null, "Serialization is not allowed during a manoeuvre");
+    assert(_actor == null, "serialization is not allowed during a manoeuvre");
     return {
       "current_ideology": _currentIdeology.index,
       "turn_direction": turnDirection.index,
@@ -122,12 +122,12 @@ class Parliament {
   void act(int memberId, Cell cell) {
     assert(!isGameFinished, "the game should be still ongoing");
     if (_actor == null) {
-      assert(members[memberId].ideology == _currentParty.ideology, "Selected member is not from current turn party");
-      assert(members[memberId].isActive, "Selected member is not active");
+      assert(members[memberId].ideology == _currentParty.ideology, "selected member is not from current turn party");
+      assert(members[memberId].isActive, "selected member is not active");
       _actor = members[memberId];
     }
-    assert(_actor!.id == memberId, "Current actor is not the selected member");
-    assert(_actor!.manoeuvre != Manoeuvre.end, "Current actor should be in middle of a manoeuvre");
+    assert(_actor!.id == memberId, "current actor is not the selected member");
+    assert(_actor!.manoeuvre != Manoeuvre.end, "current actor should be in middle of a manoeuvre");
     // do an action
     _actor!.act(cell);
     // if current manoeuvre is finished, move to next turn/player
@@ -156,7 +156,7 @@ class Parliament {
         final party = getParty(ideology);
         if (party.chief.isActive) yield party;
       }
-      throw AssertionError("Shouldn't reach this point!");
+      throw AssertionError("shouldn't reach this point!");
     }
 
     Party nextParty() {
