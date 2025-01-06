@@ -175,6 +175,10 @@ class PlayPage extends BasePage {
   }
 
   Future<void> _onBackTapUp() async {
+    if (_contest.parliament.isGameFinished || _contest.noHumans()) {
+      game.router.pop();
+      return;
+    }
     const msg = "Are you sure?\nThe match state will not be saved!";
     final result = await game.router.pushAndWait(ConfirmDialog(msg));
     if (result == "Yes") {
