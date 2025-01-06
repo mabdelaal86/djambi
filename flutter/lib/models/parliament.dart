@@ -142,12 +142,20 @@ class Parliament {
   void _nextTurn() {
     _actor!.manoeuvre = Manoeuvre.none;
     _actor = null;
-    final (nextIdeology, nextParty) = getNextTurnState();
-    _currentIdeology = nextIdeology;
-    _currentParty = nextParty;
+    final parties = activeParties.toList();
+    assert(parties.isNotEmpty, "no active parties!");
+    if (parties.length == 1) {
+      _currentParty = parties[0];
+      _currentIdeology = _currentParty.ideology;
+    } else {
+      final (nextIdeology, nextParty) = getNextTurnState();
+      _currentIdeology = nextIdeology;
+      _currentParty = nextParty;
+    }
   }
 
   (Ideology, Party) getNextTurnState() {
+    assert(!isGameFinished, "the game should be still ongoing");
     var ideology = _currentIdeology;
 
     Iterable<Party> nextActiveParties() sync* {

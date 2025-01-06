@@ -13,6 +13,9 @@ class Party {
   Parliament get parliament => chief.parliament;
   Ideology get ideology => chief.ideology;
 
+  @override
+  String toString() => "${ideology.name} party";
+
   Iterable<Member> get activeMembers =>
       parliament.members.where((m) => m.ideology == ideology && m.isActive);
 
