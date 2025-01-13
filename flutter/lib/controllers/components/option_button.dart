@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flutter/widgets.dart';
 
 import '../configs.dart';
-import 'toggle.dart';
+import 'toggle_button.dart';
 
 class OptionButton extends ToggleButton {
   VoidCallback onSelect;

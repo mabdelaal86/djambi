@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 
 import '../../common/utils.dart';
 import '../configs.dart';
-import '../utils.dart';
 import 'rounded_rect.dart';
+import 'utils.dart';
 
 class ToggleButton extends ToggleButtonComponent {
   final String? text;

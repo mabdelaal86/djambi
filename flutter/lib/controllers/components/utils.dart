@@ -1,9 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 
-import 'configs.dart';
+import '../configs.dart';
 
 class ButtonColorSchema {
   final Color natural;
@@ -34,9 +33,3 @@ TextPaint getTextRenderer({
     fontStyle: fontStyle,
   ),
 );
-
-void updateSelections(int value, Iterable<ToggleButtonComponent> buttons) {
-  for (final (i, button) in buttons.indexed) {
-    button.isSelected = i == value;
-  }
-}

@@ -31,6 +31,13 @@ An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 - [ ] Improve AI algorithm.
 
 
+## Architecture
+
+The core code of the project lays inside [flutter/lib] directory and it is structured as follows:
+
+<img src="docs/assets/architecture.svg" alt="Architecture">
+
+
 ## License
 
 This project is license under a [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html) license.

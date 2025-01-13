@@ -13,3 +13,9 @@ abstract class BasePage extends PositionComponent with HasGameReference<DjambiGa
     size = game.size;
   }
 }
+
+void updateSelections(int value, Iterable<ToggleButtonComponent> buttons) {
+  for (final (i, button) in buttons.indexed) {
+    button.isSelected = i == value;
+  }
+}

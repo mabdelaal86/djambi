@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-import 'utils.dart';
+import 'components/utils.dart';
 
 // ignore: avoid_classes_with_only_static_members
 abstract class Configs {

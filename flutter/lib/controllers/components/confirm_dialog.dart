@@ -2,11 +2,11 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-import '../common/utils.dart';
-import 'buttons.dart';
-import 'buttons/rounded_rect.dart';
-import 'game.dart';
-import 'layouts.dart';
+import '../../common/utils.dart';
+import '../game.dart';
+import 'multi_align.dart';
+import 'rounded_button.dart';
+import 'rounded_rect.dart';
 import 'utils.dart';
 
 class ConfirmDialog extends ValueRoute<String> with HasGameReference<DjambiGame> {

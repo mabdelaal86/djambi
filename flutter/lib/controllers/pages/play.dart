@@ -6,12 +6,8 @@ import 'package:flutter/material.dart';
 import '../../common/serialization.dart';
 import '../../models.dart';
 import '../../views.dart';
-import '../buttons.dart';
+import '../components.dart';
 import '../configs.dart';
-import '../dialogs.dart';
-import '../header.dart';
-import '../layouts.dart';
-import '../utils.dart';
 import 'base.dart';
 
 class PlayPage extends BasePage {

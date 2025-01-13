@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-extension NullExtension<T> on T {
-  R? convert<R>(R Function(T e) fun) => fun(this);
+extension NotNullExtension<T> on T {
+  R convert<R>(R Function(T e) fun) => fun(this);
 }
 
 extension AnchorExtension on Anchor {

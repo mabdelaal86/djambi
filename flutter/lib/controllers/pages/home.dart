@@ -1,10 +1,8 @@
 import 'package:flame/components.dart';
 
 import '../../common/utils.dart';
-import '../buttons.dart';
+import '../components.dart';
 import '../configs.dart';
-import '../header.dart';
-import '../layouts.dart';
 import 'base.dart';
 
 class HomePage extends BasePage {

@@ -1,10 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../common/utils.dart';
-import 'buttons.dart';
-import 'configs.dart';
-import 'game.dart';
+import '../../common/utils.dart';
+import '../configs.dart';
+import '../game.dart';
+import 'rounded_button.dart';
 import 'utils.dart';
 
 class Header extends PositionComponent with HasGameReference<DjambiGame> {

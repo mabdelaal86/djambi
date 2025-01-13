@@ -3,11 +3,8 @@ import 'package:flutter/painting.dart';
 
 import '../../common/utils.dart';
 import '../../views.dart';
-import '../buttons.dart';
+import '../components.dart';
 import '../configs.dart';
-import '../header.dart';
-import '../layouts.dart';
-import '../utils.dart';
 import 'base.dart';
 
 final _sectionLabelSize = Vector2(200, Configs.smallBtnSize.y);
