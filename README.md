@@ -33,7 +33,7 @@ An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
 
 ## Architecture
 
-The core code of the project lays inside [flutter/lib] directory and it is structured as follows:
+The core code of the project lays inside [flutter/lib](flutter/lib) directory and it is structured as follows:
 
 <img src="docs/assets/architecture.svg" alt="Architecture">
 
