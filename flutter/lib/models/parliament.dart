@@ -156,28 +156,27 @@ class Parliament {
 
   (Ideology, Party) getNextTurnState() {
     assert(!isGameFinished, "the game should be still ongoing");
-    var ideology = _currentIdeology;
 
-    Iterable<Party> nextActiveParties() sync* {
+    Iterable<(Ideology, Party)> nextActiveParties() sync* {
+      var ideology = _currentIdeology;
       for (var i = 0; i < Ideology.values.length; i++) {
         ideology = turnDirection.next(ideology);
         final party = getParty(ideology);
-        if (party.chief.isActive) yield party;
+        if (party.chief.isActive) yield (ideology, party);
       }
       throw AssertionError("shouldn't reach this point!");
     }
 
-    Party nextParty() {
-      final partyInPower = getPartyInPower();
-      if (partyInPower == null) return nextActiveParties().first;
-      if (partyInPower != _currentParty) return partyInPower;
-      if (activeParties.length == 2) return nextActiveParties().first;
-      return nextActiveParties()
-          .firstWhere((p) => p.ideology != _currentParty.ideology);
-    }
+    final partyInPower = getPartyInPower();
+    if (partyInPower == null) return nextActiveParties().first;
+    if (partyInPower != _currentParty) return (_currentIdeology, partyInPower);
 
-    final party = nextParty();
-    return (ideology, party);
+    // currentParty is the partyInPower:
+    return switch (activeParties.length) {
+      1 => (partyInPower.ideology, partyInPower),
+      2 => nextActiveParties().first,
+      _ => nextActiveParties().firstWhere((e) => e.$2 != partyInPower),
+    };
   }
 
   void _checkSurroundings() {
