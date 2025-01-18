@@ -27,7 +27,7 @@ class HomePage extends BasePage {
           RoundedButton(
             text: "About & Rules",
             size: Configs.largeBtnSize,
-            onReleased: () {},
+            onReleased: () async => openUrl("https://en.wikipedia.org/wiki/Djambi"),
           ),
           RoundedButton(
             text: "Settings",

@@ -9,7 +9,6 @@ class Cell {
 
   const Cell(this.x, this.y);
   const Cell.zero() : this(0, 0);
-  const Cell.all(int xy) : this(xy, xy);
   const Cell.maze() : this(Constants.mazeIndex, Constants.mazeIndex);
 
   /// json deserialization
