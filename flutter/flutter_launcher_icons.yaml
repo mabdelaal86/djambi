@@ -1,0 +1,26 @@
+flutter_launcher_icons:
+  image_path: "assets/app_icon/white_trans.png"
+
+  android: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/app_icon/white_trans.png"
+  adaptive_icon_monochrome: "assets/app_icon/white_black.png"
+  adaptive_icon_foreground_inset: 21
+
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#000000"
+
+  web:
+    generate: true
+    image_path: "assets/app_icon/white_black.png"
+    background_color: "#000000"
+    theme_color: "#000000"
+
+  windows:
+    generate: false
+    icon_size: 256
+
+  macos:
+    generate: false
