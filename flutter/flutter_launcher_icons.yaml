@@ -6,7 +6,6 @@ flutter_launcher_icons:
   adaptive_icon_background: "#000000"
   adaptive_icon_foreground: "assets/app_icon/white_trans.png"
   adaptive_icon_monochrome: "assets/app_icon/white_black.png"
-  adaptive_icon_foreground_inset: 21
 
   ios: true
   remove_alpha_ios: true
