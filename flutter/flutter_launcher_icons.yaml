@@ -1,3 +1,6 @@
+# For more details on `flutter_launcher_icons` attributes, please check:
+# https://github.com/fluttercommunity/flutter_launcher_icons
+
 flutter_launcher_icons:
   image_path: "assets/app_icon/white_trans.png"
 
@@ -6,6 +9,7 @@ flutter_launcher_icons:
   adaptive_icon_background: "#000000"
   adaptive_icon_foreground: "assets/app_icon/white_trans.png"
   adaptive_icon_monochrome: "assets/app_icon/white_black.png"
+  adaptive_icon_foreground_inset: 12
 
   ios: true
   remove_alpha_ios: true
