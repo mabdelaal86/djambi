@@ -147,7 +147,7 @@ class PlayPage extends BasePage {
       return;
     }
     _allowUndoRedo = false;
-    Timer(Configs.actionDuration, () => _contest.aiAct(Configs.aiMaxDepth));
+    Timer(game.prefs.getGameSpeed().duration, () => _contest.aiAct(Configs.aiMaxDepth));
   }
 
   Future<void> _displayNextPlayer() async {

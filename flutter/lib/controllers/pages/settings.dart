@@ -5,15 +5,17 @@ import '../../common/utils.dart';
 import '../../views.dart';
 import '../components.dart';
 import '../configs.dart';
+import '../preferences.dart';
 import 'base.dart';
 
-final _sectionLabelSize = Vector2(200, Configs.smallBtnSize.y);
+final _sectionLabelSize = Vector2(400, Configs.smallBtnSize.y);
 
 class SettingsPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
   late final List<OptionButton> _marginsButtons;
+  late final List<OptionButton> _gameSpeedButtons;
 
   @override
   Future<void> onLoad() async {
@@ -26,10 +28,12 @@ class SettingsPage extends BasePage {
         spacing: Configs.largeMargin,
         children: [
           _createMarginsPanel(),
+          _createGameSpeedPanel(),
         ],
       ),
     ]);
     _getMarginsVisibility();
+    _getGameSpeed();
   }
 
   PositionComponent _createMarginsPanel() =>
@@ -61,6 +65,35 @@ class SettingsPage extends BasePage {
         ],
       );
 
+  PositionComponent _createGameSpeedPanel() =>
+      FlexComponent(
+        spacing: Configs.smallMargin,
+        children: [
+          _createSectionLabel("Game Speed:"),
+          FlexComponent(
+            axis: Axis.horizontal,
+            spacing: Configs.smallMargin,
+            children: _gameSpeedButtons = [
+              OptionButton(
+                text: "Fast",
+                size: Configs.mediumBtnSize,
+                onSelect: () async => _setGameSpeed(GameSpeed.fast),
+              ),
+              OptionButton(
+                text: "Medium",
+                size: Configs.mediumBtnSize,
+                onSelect: () async => _setGameSpeed(GameSpeed.medium),
+              ),
+              OptionButton(
+                text: "Slow",
+                size: Configs.mediumBtnSize,
+                onSelect: () async => _setGameSpeed(GameSpeed.slow),
+              ),
+            ],
+          ),
+        ],
+      );
+
   PositionComponent _createSectionLabel(String text) =>
       TextBoxComponent(
         size: _sectionLabelSize,
@@ -76,5 +109,14 @@ class SettingsPage extends BasePage {
 
   void _getMarginsVisibility() {
     updateSelections(game.prefs.getMarginsVisibility().index, _marginsButtons);
+  }
+
+  Future<void> _setGameSpeed(GameSpeed gameSpeed) async {
+    await game.prefs.setGameSpeed(gameSpeed);
+    updateSelections(gameSpeed.index, _gameSpeedButtons);
+  }
+
+  void _getGameSpeed() {
+    updateSelections(game.prefs.getGameSpeed().index, _gameSpeedButtons);
   }
 }

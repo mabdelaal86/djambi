@@ -4,14 +4,30 @@ import '../common/utils.dart';
 import '../models.dart';
 import '../views.dart';
 
+enum GameSpeed {
+  fast,
+  medium,
+  slow;
+
+  Duration get duration => Duration(seconds: switch (this) {
+    GameSpeed.fast => 1,
+    GameSpeed.medium => 2,
+    GameSpeed.slow => 3,
+  });
+}
+
 // keys
 const _marginsVisibility = "margins-visibility";
+const _gameSpeed = "game-speed";
+
 const _turnDirection = "turn-direction";
 const _startIdeology = "start-ideology";
 const _playerTypes = "player-types";
 
 // default values
 const _defaultMarginsVisibility = MarginsVisibility.half;
+const _defaultGameSpeed = GameSpeed.fast;
+
 const _defaultTurnDirection = TurnDirection.anticlockwise;
 const _defaultStartIdeology = Ideology.red;
 const _defaultPlayerTypes = [
@@ -38,6 +54,14 @@ class PreferencesController {
   MarginsVisibility getMarginsVisibility() => _prefs.getInt(_marginsVisibility)
       ?.convert((e) => MarginsVisibility.values[e])
       ?? _defaultMarginsVisibility;
+
+  Future<void> setGameSpeed(GameSpeed gameSpeed) async {
+    await _prefs.setInt(_gameSpeed, gameSpeed.index);
+  }
+
+  GameSpeed getGameSpeed() => _prefs.getInt(_gameSpeed)
+      ?.convert((e) => GameSpeed.values[e])
+      ?? _defaultGameSpeed;
 
   PieceTheme getPieceTheme() => PieceTheme.classic;
   BoardTheme getBoardTheme() => BoardTheme.classic;

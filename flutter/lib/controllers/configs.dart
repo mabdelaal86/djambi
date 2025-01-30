@@ -6,7 +6,6 @@ import 'components/utils.dart';
 
 // ignore: avoid_classes_with_only_static_members
 abstract class Configs {
-  static const actionDuration = Duration(seconds: 1);
   static const aiMaxDepth = 2;
 
   /// used for developing and testing
