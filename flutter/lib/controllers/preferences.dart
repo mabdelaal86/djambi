@@ -26,7 +26,7 @@ const _playerTypes = "player-types";
 
 // default values
 const _defaultMarginsVisibility = MarginsVisibility.half;
-const _defaultGameSpeed = GameSpeed.fast;
+const _defaultGameSpeed = GameSpeed.medium;
 
 const _defaultTurnDirection = TurnDirection.anticlockwise;
 const _defaultStartIdeology = Ideology.red;
