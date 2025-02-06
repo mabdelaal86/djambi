@@ -79,7 +79,7 @@ class Parliament {
 
   /// json serialization
   Map<String, dynamic> toJson() {
-    assert(_actor == null, "serialization is not allowed during a manoeuvre");
+    assert(isManoeuvreCompleted, "serialization is not allowed during a manoeuvre");
     return {
       "current_ideology": _currentIdeology.index,
       "turn_direction": turnDirection.index,
@@ -132,16 +132,19 @@ class Parliament {
     _actor!.act(cell);
     // if current manoeuvre is finished, move to next turn/player
     if (_actor!.manoeuvre == Manoeuvre.end) {
+      _actor!.manoeuvre = Manoeuvre.none;
+      _actor = null;
       _checkSurroundings();
       _takeOverParalysed();
-      _nextTurn();
-      // TODO: Handle the case if the new player can't make a move.
+      do {
+        _nextTurn();
+        // checking isGameFinished may be unnecessary, but it might handle a corner case
+      } while (!isGameFinished && _currentParty.movableMembers.isEmpty);
     }
   }
 
   void _nextTurn() {
-    _actor!.manoeuvre = Manoeuvre.none;
-    _actor = null;
+    assert(isManoeuvreCompleted, "can't turn to next before ending the manoeuvre");
     final parties = activeParties.toList();
     assert(parties.isNotEmpty, "no active parties!");
     if (parties.length == 1) {
