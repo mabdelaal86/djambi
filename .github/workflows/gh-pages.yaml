@@ -14,7 +14,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
       - name: Create web app on Github gh pages
-        uses: bluefireteam/flutter-gh-pages@v8
+        uses: bluefireteam/flutter-gh-pages@v9
         with:
           workingDir: flutter
           baseHref: /djambi/
