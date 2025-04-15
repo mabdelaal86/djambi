@@ -38,7 +38,7 @@ dependencies:
 
   # Project dependencies
   collection: ^1.19.0
-  flame: ^1.25.0
+  flame: ^1.27.0
   flame_svg: ^1.11.0
   meta: ^1.16.0
   shared_preferences: ^2.5.0
