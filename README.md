@@ -4,7 +4,11 @@
 ![Language](https://img.shields.io/github/languages/top/mabdelaal86/djambi)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 
-An implementation of [Djambi](https://en.wikipedia.org/wiki/Djambi) board game.
+**Djambi** is a chess variant for four players designed by *Jean Anesto* in 1975.
+As in chess, pieces represent real-life political roles, but in contrast,
+they are inspired by modern societies instead of medieval ones.
+The game pieces symbolize common sins in modern politics.
+For more details, check the [game page](https://en.wikipedia.org/wiki/Djambi) on Wikipedia.
 
 <img src="docs/assets/screenshot.png" alt="A screenshot of Djambi game">
 
