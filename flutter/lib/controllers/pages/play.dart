@@ -28,12 +28,11 @@ class PlayPage extends BasePage {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
     _contest = await _createContest();
 
     await addAll([
-      Header(onBackTapUp: _onBackTapUp),
       MultiAlignComponent(
         size: size,
         padding: const EdgeInsets.all(Configs.largeMargin),
@@ -170,7 +169,8 @@ class PlayPage extends BasePage {
     _statusLabel.text = "GAME OVER!";
   }
 
-  Future<void> _onBackTapUp() async {
+  @override
+  Future<void> onBackTapUp() async {
     if (_contest.parliament.isGameFinished || _contest.noHumans()) {
       game.router.pop();
       return;

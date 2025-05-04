@@ -11,9 +11,8 @@ class HomePage extends BasePage {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     await addAll([
-      Header(),
       FlexComponent(
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
@@ -25,9 +24,9 @@ class HomePage extends BasePage {
             onReleased: () => game.router.pushNamed("options"),
           ),
           RoundedButton(
-            text: "About & Rules",
+            text: "About", // & Rules
             size: Configs.largeBtnSize,
-            onReleased: () async => openUrl("https://en.wikipedia.org/wiki/Djambi"),
+            onReleased: () => game.router.pushNamed("about"),
           ),
           RoundedButton(
             text: "Settings",

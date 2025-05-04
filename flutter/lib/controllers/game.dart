@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
 import 'configs.dart';
+import 'pages/about.dart';
 import 'pages/home.dart';
 import 'pages/options.dart';
 import 'pages/play.dart';
@@ -31,6 +32,7 @@ class DjambiGame extends FlameGame {
 
     await world.add(router = RouterComponent(
       routes: {
+        "about": Route(AboutPage.new, maintainState: false),
         "home": Route(HomePage.new),
         "options": Route(OptionsPage.new, maintainState: false),
         "play": Route(PlayPage.new, maintainState: false),

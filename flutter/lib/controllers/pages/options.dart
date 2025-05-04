@@ -27,9 +27,8 @@ class OptionsPage extends BasePage {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     await addAll([
-      Header(),
       MultiAlignComponent(
         size: size,
         padding: const EdgeInsets.all(Configs.largeMargin),

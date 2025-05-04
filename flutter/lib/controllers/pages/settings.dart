@@ -14,14 +14,15 @@ class SettingsPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
+  SettingsPage(): super(title: "Settings");
+
   late final List<OptionButton> _marginsButtons;
   late final List<OptionButton> _gameSpeedButtons;
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     await addAll([
-      Header(title: "Settings"),
       FlexComponent(
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),

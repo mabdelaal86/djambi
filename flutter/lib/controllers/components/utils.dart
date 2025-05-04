@@ -23,7 +23,10 @@ class ButtonColorSchema {
 TextPaint getTextRenderer({
   double fontSize = Configs.defaultFontSize,
   Color color = Configs.textColor,
-  String? fontFamily, FontWeight? fontWeight, FontStyle? fontStyle
+  String? fontFamily,
+  FontWeight? fontWeight,
+  FontStyle? fontStyle,
+  TextDecoration? decoration,
 }) => TextPaint(
   style: TextStyle(
     color: color,
@@ -31,5 +34,6 @@ TextPaint getTextRenderer({
     fontSize: fontSize,
     fontWeight: fontWeight,
     fontStyle: fontStyle,
+    decoration: decoration,
   ),
 );
