@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
 
 import '../../common/utils.dart';
@@ -38,6 +39,10 @@ class AboutPage extends BasePage {
                 "they are inspired by modern societies instead of medieval ones. "
                 "The game pieces symbolize common sins in modern politics.",
           ),
+          Anchor.center: _englishButton(),
+          //Anchor.center: _arabhButton(),
+          
+          
           Anchor.bottomCenter: PositionComponent(
             size: panelSize,
             children: [
@@ -57,6 +62,17 @@ class AboutPage extends BasePage {
       ),
     ]);
   }
+
+  PositionComponent _englishButton() =>  RoundedButton(
+            text: "English",
+            size: Configs.largeBtnSize,
+            onReleased: () => game.router.pushNamed("language_player_explanation/english"),
+          );
+  // PositionComponent _arabhButton() =>  RoundedButton(
+  //           text: "العربية",
+  //           size: Configs.largeBtnSize,
+  //           onReleased: () => game.router.pushNamed("language_player_explanation/arab"),
+  //         );
 
   PositionComponent _wikipediaLink() => FlexComponent(
     axis: Axis.horizontal,
