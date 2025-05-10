@@ -29,7 +29,7 @@ class GameSummaryArabic extends StatelessWidget {
     },
     {
       'title': 'المقاتل (M) – الجندي (رمز: القبضة) ×4 لكل لاعب.',
-      'image': 'assets/classic/Militant.svg',
+      'image': 'assets/classic/militant.svg',
       'description':
           'قطعة هجومية تتحرك مربعًا أو مربعين في أي اتجاه (عمودي أو قطري)، تأسر بالاستبدال، وتضع الجثة في أي مربع فارغ يختاره اللاعب—باستثناء اللَّبْهَة (E5). لا يمكنه أسره رئيس في اللَّبْهَة.'
     },
