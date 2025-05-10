@@ -28,7 +28,7 @@ class GameSummarySwedish extends StatelessWidget {
     },
     {
       'title': 'Militant (M) – Soldat (symbol: knytnäve) ×4 per spelare.',
-      'image': 'assets/classic/Militant.svg',
+      'image': 'assets/classic/militant.svg',
       'description':
         'Militanten är en offensiv pjäs som rör sig en eller två rutor i valfri riktning (ortogonalt eller diagonalt), fångar genom ersättning, och placerar kroppen på en valfri tom ruta—utom den centrala labyrinten (E5); den kan inte fånga en Hövding som har makten (befinner sig i labyrinten).'
     },
