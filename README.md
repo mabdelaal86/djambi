@@ -53,7 +53,6 @@ Images of [pieces](./flutter/assets/classic) are based on Djambi classic theme c
 ## **Play Djambi Online** 
   
 Experience Djambi directly in your web browser without any downloads:
-
 🔗 [Play Djambi](https://)
 
 ## Download the Game
