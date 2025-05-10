@@ -29,7 +29,7 @@ class GameSummaryFrench extends StatelessWidget {
     },
     {
       'title': 'Militant (M) – Soldat (symbole : poing) ×4 par joueur.',
-      'image': 'assets/classic/Militant.svg',
+      'image': 'assets/classic/militant.svg',
       'description':
         'Le Militant est une pièce offensive qui se déplace d’une ou deux cases dans n’importe quelle direction (orthogonalement ou en diagonale), capture par remplacement, et place le cadavre sur n’importe quelle case vide de son choix — sauf le Labyrinthe central (E5) ; il ne peut pas capturer un Chef en position de pouvoir (occupant le Labyrinthe).'
     },
