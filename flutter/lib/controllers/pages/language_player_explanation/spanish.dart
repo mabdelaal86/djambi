@@ -28,7 +28,7 @@ class GameSummarySpanish extends StatelessWidget {
     },
     {
       'title': 'Militante (M) – Soldado (símbolo: puño) ×4 por jugador.',
-      'image': 'assets/classic/Militant.svg',
+      'image': 'assets/classic/militant.svg',
       'description':
         'El Militante es una pieza ofensiva que se mueve una o dos casillas en cualquier dirección (ortogonal o diagonal), captura por reemplazo y coloca el cadáver en cualquier casilla vacía a elección del jugador—excepto el Laberinto central (E5); no puede capturar a un Jefe que esté en el Laberinto.'
     },
