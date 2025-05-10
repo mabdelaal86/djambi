@@ -30,7 +30,7 @@ class GameSummaryEnglish extends StatelessWidget {
     },
       {
       'title': 'Militant (M) – Soldier (symbol: fist) ×4 per player.',
-      'image': 'assets/classic/Militant.svg',
+      'image': 'assets/classic/militant.svg',
       'description':
         'Militant is an offensive piece that moves one or two squares in any direction (orthogonally or diagonally), captures by replacement, and places the corpse on any empty square of the players choice—except the central maze (E5), however, it cannot capture a Chief who is in power (occupying the maze).'
     },
