@@ -1,129 +1,150 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flame/components.dart';
+import 'package:flutter/widgets.dart';
 
+import '../../components.dart';
+import '../../configs.dart';
+import '../base.dart';
 
-class GameSummaryEnglish extends StatelessWidget {
-  final List<Map<String, String>> pieces = [
-        {
-      'title': 'Djambi is a 4‑player political‑strategy board game on a 9×9 grid. The objective is to be the last Chief alive. The center square (the Maze) grants special power to any Chief who stops there: extra turns and immunity from normal militant attacks.',
-      'image': '',
-      'description':
-        ''
-    },
-    {
-      'title': 'Chief (C) – Leader (symbol: laurel wreath).',
-      'image': 'assets/classic/chief.svg',
-      'description':
-        'Militants and Chiefs both capture by moving onto an enemy’s square and then placing the corpse on any empty non‑maze square; when a Chief dies, the killer immediately gains control of all that Chief’s living and dead pieces—and any Chief on E5 is immune to capture and inherits all eliminated players’ pieces'
-    },
-        {
-      'title': 'Assassin (A) – Stealth killer (symbol: target).',
-      'image': 'assets/classic/assassin.svg',
-      'description':
-        'Assassin: Captures exactly like a Militant—by moving onto an enemy piece’s square—but always returns the victim’s corpse to the square the Assassin just vacated (i.e. “leaving a body at home”), preventing that corpse from being used again until moved.'
-    },
-      {
-      'title': 'Reporter (R) – Investigative killer (symbol: eye).',
-      'image': 'assets/classic/reporter.svg',
-      'description':
-        'Reporter: May kill by moving onto one of the four orthogonally adjacent squares to a target (cannot kill diagonally); if it was just relocated by a Diplomat, it must move again before killing; the corpse remains on the Reporter’s landing square'
-    },
-      {
-      'title': 'Militant (M) – Soldier (symbol: fist) ×4 per player.',
-      'image': 'assets/classic/militant.svg',
-      'description':
-        'Militant is an offensive piece that moves one or two squares in any direction (orthogonally or diagonally), captures by replacement, and places the corpse on any empty square of the players choice—except the central maze (E5), however, it cannot capture a Chief who is in power (occupying the maze).'
-    },
-          {
-      'title': 'Diplomat (Di) – Political mover (symbol: two-faced head).',
-      'image': 'assets/classic/diplomat.svg',
-      'description':
-        'he Diplomat (also known as the Troublemaker or Provocateur) is a non-lethal piece that manipulates the positions of living enemy pieces without capturing them.'
-    },
-    {
-      'title': 'Necromobile (N) – Corpse mover (symbol: skull).',
-      'image': 'assets/classic/necromobile.svg',
-      'description':
-        'Leads the team. Can kill like a militant and—if he stops on the Maze (center)—gains extra turns and immunity from ordinary militant attacks.'
-    },
-    {
-      'title': 'Note: In 3-player games, the 4th corners pieces act as "hostages" that any player may move or kill; their Chief yields no Maze-power.',
-      'image': '',
-      'description':
-        ''
-    },
-   
-  ];
-
+class GameSummaryEnglishGame extends BasePage {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Game Summary')),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: pieces.length,
-        itemBuilder: (context, index) {
-          final piece = pieces[index];
-          
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  piece['image']!,
-                  width: 48,
-                  height: 48,
-                  semanticsLabel: piece['title'],
-                ),
-                SizedBox(width: 12),  // مسافة بين الصورة والنص
-                // عمود للنص: عنوان ووصف
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        piece['title']!,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        piece['description']!,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      
-                    ],
-                    
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    // Define the size of the scrollable area
+    final frameSize = Vector2(
+      bodySize.x - Configs.smallMargin * 2,
+      bodySize.y - Configs.smallMargin * 2,
+    );
+
+    // Define the sections of the instructions
+    final sections = <Section>[
+      Section(
+        title: '🎯 Objective',
+        content:
+            "Be the last player with your Chief alive. Eliminating other players' Chiefs allows you to gain control over their remaining pieces.",
+      ),
+      Section(
+        title: '🧩 Game Components',
+        content:
+            "Players: 4 (Red, Blue, Yellow, Green).\n"
+            "Board: 9×9 grid with the central square (E5) designated as the Maze, symbolizing the seat of power.\n"
+            "Pieces per player:\n"
+            "- 1 Chief\n"
+            "- 1 Assassin\n"
+            "- 1 Reporter\n"
+            "- 1 Diplomat\n"
+            "- 1 Necromobile\n"
+            "- 4 Militants",
+      ),
+      Section(
+        title: '🕹️ Gameplay Mechanics',
+        content:
+            "Turn Order: Players take turns in a fixed sequence.",
+      ),
+      Section(
+        title: 'Movement:',
+        content:
+            "- Chief, Assassin, Reporter, Diplomat, Necromobile: Move any number of squares in straight lines (like a queen in chess), without jumping over other pieces.\n"
+            "- Militants: Move 1 or 2 squares in any direction.",
+      ),
+      Section(
+        title: '⚔️ Actions and Abilities',
+        content: "",
+      ),
+      Section(
+        title: "Chief:",
+        content:
+            "- Can kill by moving onto an opponent's piece.\n"
+            "- Places the corpse on any unoccupied square, including the Maze.\n"
+            "- When occupying the Maze, gains an extra turn after each opponent's move.\n"
+            "- Cannot be killed by Militants while in the Maze.",
+      ),
+      Section(
+        title: "Assassin:",
+        content:
+            "- Kills by moving onto an opponent's piece.\n"
+            "- Places the corpse on the Assassin's original square.",
+      ),
+      Section(
+        title: "Reporter:",
+        content:
+            "- Kills an adjacent piece (orthogonally) without moving onto it.\n"
+            "- The corpse remains in its original position.\n"
+            "- Can choose not to kill.",
+      ),
+      Section(
+        title: "Diplomat:",
+        content:
+            "- Moves an opponent's living piece by swapping places.\n"
+            "- The moved piece is placed on any unoccupied square, except the Maze (unless it's a Chief).",
+      ),
+      Section(
+        title: "Necromobile:",
+        content:
+            "- Moves a corpse by swapping places.\n"
+            "- The corpse is placed on any unoccupied square, except the Maze.",
+      ),
+      Section(
+        title: "Militants:",
+        content:
+            "- Kill by moving onto an opponent's piece.\n"
+            "- Place the corpse on any unoccupied square, except the Maze.\n"
+            "- Cannot kill a Chief occupying the Maze.",
+      ),
+      Section(
+        title: '🏛️ The Maze (E5)',
+        content:
+            "Only the Chief can occupy this central square. A Chief in the Maze is considered 'in power' and gains an extra turn after each opponent's move. While in the Maze, the Chief is immune to attacks from Militants. Other pieces can pass through the Maze but cannot stop there.",
+      ),
+      Section(
+        title: '🧟 Corpses',
+        content:
+            "When a piece is killed, it becomes a corpse and remains on the board, acting as an obstacle. Corpses can be moved by the Necromobile to strategic positions.",
+      ),
+      Section(
+        title: '🤝 Alliances and Betrayals',
+        content:
+            "Players may form informal alliances, but betrayal is allowed and often strategic. There are no official rules governing alliances; they are based on player negotiation.",
+      ),
+      Section(
+        title: '🏁 Endgame',
+        content:
+            "The game ends when only one Chief remains alive. When a Chief is killed, the player who eliminated them gains control over the deceased player's remaining pieces. If a Chief is surrounded by corpses and has no Necromobile, they are considered eliminated.",
+      ),
+    ];
+
+    // Combine all sections into a single string
+    final fullText = sections
+        .map((section) => '${section.title}\n${section.content}')
+        .join('\n\n');
+
+    // Define text style
+    final textPaint = TextPaint(
+      style: TextStyle(
+        fontSize: 18.0,
+        color: const Color(0xFFFFFFFF),
       ),
     );
+
+    // Create a scrollable text box component
+    final scrollBox = ScrollTextBoxComponent(
+      text: fullText,
+      textRenderer: textPaint,
+      size: frameSize,
+      position: Vector2(Configs.smallMargin, Configs.smallMargin),
+      boxConfig: TextBoxConfig(
+        margins: const EdgeInsets.all(10),
+      ),
+    );
+
+    // Add the scrollable text box to the game
+    await add(scrollBox);
   }
 }
 
-
-class PieceCard extends StatelessWidget {
-  final Map<String, String> piece;
-  const PieceCard(this.piece);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      elevation: 4,
-      child: ListTile(
-        leading: Image.network(piece['image']!, width: 50, height: 50),
-        title: Text(piece['title']!, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(piece['description']!),
-      ),
-    );
-  }
+// Section model
+class Section {
+  final String title;
+  final String content;
+  Section({required this.title, required this.content});
 }

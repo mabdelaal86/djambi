@@ -1,128 +1,150 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flame/components.dart';
+import 'package:flutter/widgets.dart';
 
+import '../../components.dart';
+import '../../configs.dart';
+import '../base.dart';
 
-class GameSummaryFrench extends StatelessWidget {
-  final List<Map<String, String>> pieces = [
-    {
-      'title': 'Djambi est un jeu de société stratégique politique pour 4 joueurs sur une grille de 9×9. L’objectif est d’être le dernier Chef en vie. La case centrale (le Labyrinthe) confère un pouvoir spécial à tout Chef qui s’y arrête : tours supplémentaires et immunité contre les attaques militaires normales.',
-      'image': '',
-      'description': ''
-    },
-    {
-      'title': 'Chef (C) – Leader (symbole : couronne de laurier).',
-      'image': 'assets/classic/chief.svg',
-      'description':
-        'Les Militants et les Chefs capturent en se déplaçant sur la case ennemie puis en plaçant le cadavre sur n’importe quelle case vide non-Labyrinthe ; quand un Chef meurt, le tueur prend immédiatement le contrôle de toutes les pièces vivantes et mortes de ce Chef — et tout Chef sur E5 est immunisé contre la capture et hérite de toutes les pièces éliminées.'
-    },
-    {
-      'title': 'Assassin (A) – Tueur furtif (symbole : cible).',
-      'image': 'assets/classic/assassin.svg',
-      'description':
-        'L’Assassin capture comme un Militant — en se déplaçant sur la case d’une pièce ennemie — mais replace toujours le cadavre sur la case qu’il vient de quitter (c.-à-d. “laisser un corps à la maison”), empêchant ainsi l’utilisation de ce cadavre tant qu’il n’a pas été déplacé.'
-    },
-    {
-      'title': 'Reporter (R) – Tueur d’investigation (symbole : œil).',
-      'image': 'assets/classic/reporter.svg',
-      'description':
-        'Le Reporter peut tuer en se déplaçant sur l’une des quatre cases orthogonalement adjacentes à la cible (ne peut pas tuer en diagonale) ; s’il vient d’être déplacé par un Diplomate, il doit se déplacer de nouveau avant de tuer ; le cadavre reste sur la case d’atterrissage du Reporter.'
-    },
-    {
-      'title': 'Militant (M) – Soldat (symbole : poing) ×4 par joueur.',
-      'image': 'assets/classic/militant.svg',
-      'description':
-        'Le Militant est une pièce offensive qui se déplace d’une ou deux cases dans n’importe quelle direction (orthogonalement ou en diagonale), capture par remplacement, et place le cadavre sur n’importe quelle case vide de son choix — sauf le Labyrinthe central (E5) ; il ne peut pas capturer un Chef en position de pouvoir (occupant le Labyrinthe).'
-    },
-    {
-      'title': 'Diplomate (Di) – Manipulateur politique (symbole : tête à deux faces).',
-      'image': 'assets/classic/diplomat.svg',
-      'description':
-        'Le Diplomate (aussi appelé Fauteur de troubles ou Provocateur) est une pièce non létale qui manipule la position des pièces ennemies vivantes sans les capturer.'
-    },
-    {
-      'title': 'Nécromobile (N) – Déplaceur de cadavres (symbole : crâne).',
-      'image': 'assets/classic/necromobile.svg',
-      'description':
-        'Dirige l’équipe. Peut tuer comme un Militant et — s’il s’arrête sur le Labyrinthe (centre) — gagne des tours supplémentaires et une immunité contre les attaques ordinaires.'
-    },
-    {
-      'title': 'Note : dans les parties à 3 joueurs, les pièces du 4ᵉ coin agissent comme “otages” que n’importe quel joueur peut déplacer ou tuer ; leur Chef n’accorde aucun pouvoir du Labyrinthe.',
-      'image': '',
-      'description': ''
-    },
-  ];
-
+class GameSummaryFrenchGame extends BasePage {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Résumé du jeu')),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: pieces.length,
-        itemBuilder: (context, index) {
-          final piece = pieces[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (piece['image']!.isNotEmpty)
-                  SvgPicture.asset(
-                    piece['image']!,
-                    width: 48,
-                    height: 48,
-                    semanticsLabel: piece['title'],
-                  ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        piece['title']!,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (piece['description']!.isNotEmpty) ...[
-                        SizedBox(height: 4),
-                        Text(
-                          piece['description']!,
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    // Définir la taille de la zone défilable
+    final frameSize = Vector2(
+      bodySize.x - Configs.smallMargin * 2,
+      bodySize.y - Configs.smallMargin * 2,
+    );
+
+    // Définir les sections des instructions
+    final sections = <Section>[
+      Section(
+        title: '🎯 Objectif',
+        content:
+            "Être le dernier joueur avec votre Chef en vie. Éliminer les Chefs des autres joueurs vous permet de prendre le contrôle de leurs pièces restantes.",
+      ),
+      Section(
+        title: '🧩 Composants du jeu',
+        content:
+            "Joueurs : 4 (Rouge, Bleu, Jaune, Vert).\n"
+            "Plateau : grille 9×9 avec la case centrale (E5) désignée comme le Labyrinthe, symbolisant le siège du pouvoir.\n"
+            "Pièces par joueur :\n"
+            "- 1 Chef\n"
+            "- 1 Assassin\n"
+            "- 1 Reporter\n"
+            "- 1 Diplomate\n"
+            "- 1 Nécromobile\n"
+            "- 4 Miliciens",
+      ),
+      Section(
+        title: '🕹️ Mécaniques de jeu',
+        content:
+            "Ordre de jeu : Les joueurs jouent à tour de rôle dans une séquence fixe.",
+      ),
+      Section(
+        title: 'Déplacement :',
+        content:
+            "- Chef, Assassin, Reporter, Diplomate, Nécromobile : Se déplacent d'un nombre quelconque de cases en lignes droites (comme la reine aux échecs), sans sauter par-dessus d'autres pièces.\n"
+            "- Miliciens : Se déplacent de 1 ou 2 cases dans n'importe quelle direction.",
+      ),
+      Section(
+        title: '⚔️ Actions et capacités',
+        content: "",
+      ),
+      Section(
+        title: "Chef :",
+        content:
+            "- Peut tuer en se déplaçant sur la pièce d'un adversaire.\n"
+            "- Place le cadavre sur n'importe quelle case inoccupée, y compris le Labyrinthe.\n"
+            "- Lorsqu'il occupe le Labyrinthe, il gagne un tour supplémentaire après chaque mouvement d'un adversaire.\n"
+            "- Ne peut pas être tué par les Miliciens lorsqu'il est dans le Labyrinthe.",
+      ),
+      Section(
+        title: "Assassin :",
+        content:
+            "- Tue en se déplaçant sur la pièce d'un adversaire.\n"
+            "- Place le cadavre sur la case d'origine de l'Assassin.",
+      ),
+      Section(
+        title: "Reporter :",
+        content:
+            "- Tue une pièce adjacente (orthogonalement) sans se déplacer dessus.\n"
+            "- Le cadavre reste à sa position d'origine.\n"
+            "- Peut choisir de ne pas tuer.",
+      ),
+      Section(
+        title: "Diplomate :",
+        content:
+            "- Déplace une pièce vivante d'un adversaire en échangeant les places.\n"
+            "- La pièce déplacée est placée sur n'importe quelle case inoccupée, sauf le Labyrinthe (sauf si c'est un Chef).",
+      ),
+      Section(
+        title: "Nécromobile :",
+        content:
+            "- Déplace un cadavre en échangeant les places.\n"
+            "- Le cadavre est placé sur n'importe quelle case inoccupée, sauf le Labyrinthe.",
+      ),
+      Section(
+        title: "Miliciens :",
+        content:
+            "- Tuent en se déplaçant sur la pièce d'un adversaire.\n"
+            "- Placent le cadavre sur n'importe quelle case inoccupée, sauf le Labyrinthe.\n"
+            "- Ne peuvent pas tuer un Chef occupant le Labyrinthe.",
+      ),
+      Section(
+        title: '🏛️ Le Labyrinthe (E5)',
+        content:
+            "Seul le Chef peut occuper cette case centrale. Un Chef dans le Labyrinthe est considéré comme 'au pouvoir' et gagne un tour supplémentaire après chaque mouvement d'un adversaire. Lorsqu'il est dans le Labyrinthe, le Chef est immunisé contre les attaques des Miliciens. Les autres pièces peuvent traverser le Labyrinthe mais ne peuvent pas s'y arrêter.",
+      ),
+      Section(
+        title: '🧟 Cadavres',
+        content:
+            "Lorsqu'une pièce est tuée, elle devient un cadavre et reste sur le plateau, agissant comme un obstacle. Les cadavres peuvent être déplacés par la Nécromobile vers des positions stratégiques.",
+      ),
+      Section(
+        title: '🤝 Alliances et trahisons',
+        content:
+            "Les joueurs peuvent former des alliances informelles, mais la trahison est autorisée et souvent stratégique. Il n'y a pas de règles officielles régissant les alliances ; elles sont basées sur la négociation entre les joueurs.",
+      ),
+      Section(
+        title: '🏁 Fin de partie',
+        content:
+            "La partie se termine lorsqu'un seul Chef reste en vie. Lorsqu'un Chef est tué, le joueur qui l'a éliminé prend le contrôle des pièces restantes du joueur décédé. Si un Chef est entouré de cadavres et n'a pas de Nécromobile, il est considéré comme éliminé.",
+      ),
+    ];
+
+    // Combiner toutes les sections en une seule chaîne
+    final fullText = sections
+        .map((section) => '${section.title}\n${section.content}')
+        .join('\n\n');
+
+    // Définir le style du texte
+    final textPaint = TextPaint(
+      style: TextStyle(
+        fontSize: 18.0,
+        color: const Color(0xFFFFFFFF),
       ),
     );
+
+    // Créer un composant de boîte de texte défilable
+    final scrollBox = ScrollTextBoxComponent(
+      text: fullText,
+      textRenderer: textPaint,
+      size: frameSize,
+      position: Vector2(Configs.smallMargin, Configs.smallMargin),
+      boxConfig: TextBoxConfig(
+        margins: const EdgeInsets.all(10),
+      ),
+    );
+
+    // Ajouter la boîte de texte défilable au jeu
+    await add(scrollBox);
   }
 }
 
-class PieceCardFrench extends StatelessWidget {
-  final Map<String, String> piece;
-  const PieceCardFrench(this.piece);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      elevation: 4,
-      child: ListTile(
-        leading: piece['image']!.isNotEmpty
-            ? Image.network(piece['image']!, width: 50, height: 50)
-            : null,
-        title: Text(piece['title']!, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: piece['description']!.isNotEmpty
-            ? Text(piece['description']!)
-            : null,
-      ),
-    );
-  }
+// Modèle de section
+class Section {
+  final String title;
+  final String content;
+  Section({required this.title, required this.content});
 }

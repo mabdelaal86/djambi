@@ -1,127 +1,150 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flame/components.dart';
+import 'package:flutter/widgets.dart';
 
-class GameSummarySpanish extends StatelessWidget {
-  final List<Map<String, String>> pieces = [
-    {
-      'title': 'Djambi es un juego de mesa de estrategia política para 4 jugadores en una cuadrícula de 9×9. El objetivo es ser el último Jefe con vida. La casilla central (el Laberinto) otorga un poder especial a cualquier Jefe que se detenga allí: turnos extra e inmunidad contra ataques militares normales.',
-      'image': '',
-      'description': ''
-    },
-    {
-      'title': 'Jefe (C) – Líder (símbolo: corona de laurel).',
-      'image': 'assets/classic/chief.svg',
-      'description':
-        'Los Militantes y los Jefes capturan moviéndose a la casilla enemiga y luego colocando el cadáver en cualquier casilla vacía que no sea el Laberinto; cuando un Jefe muere, el asesino inmediatamente toma el control de todas las piezas vivas y muertas de ese Jefe—y cualquier Jefe en E5 es inmune a la captura y hereda todas las piezas eliminadas.'
-    },
-    {
-      'title': 'Asesino (A) – Asesino sigiloso (símbolo: objetivo).',
-      'image': 'assets/classic/assassin.svg',
-      'description':
-        'El Asesino captura igual que un Militante—al moverse a la casilla de una pieza enemiga—pero siempre devuelve el cadáver a la casilla que acaba de abandonar (es decir, “dejar un cuerpo en casa”), impidiendo que ese cadáver se reutilice hasta que se mueva.'
-    },
-    {
-      'title': 'Reportero (R) – Asesino de investigación (símbolo: ojo).',
-      'image': 'assets/classic/reporter.svg',
-      'description':
-        'El Reportero puede matar moviéndose a una de las cuatro casillas ortogonalmente adyacentes al objetivo (no puede matar en diagonal); si acaba de ser reubicado por un Diplomático, debe moverse de nuevo antes de matar; el cadáver permanece en la casilla de aterrizaje del Reportero.'
-    },
-    {
-      'title': 'Militante (M) – Soldado (símbolo: puño) ×4 por jugador.',
-      'image': 'assets/classic/militant.svg',
-      'description':
-        'El Militante es una pieza ofensiva que se mueve una o dos casillas en cualquier dirección (ortogonal o diagonal), captura por reemplazo y coloca el cadáver en cualquier casilla vacía a elección del jugador—excepto el Laberinto central (E5); no puede capturar a un Jefe que esté en el Laberinto.'
-    },
-    {
-      'title': 'Diplomático (Di) – Manipulador político (símbolo: cabeza de dos caras).',
-      'image': 'assets/classic/diplomat.svg',
-      'description':
-        'El Diplomático (también llamado Alborotador o Provocador) es una pieza no letal que manipula la posición de piezas enemigas vivas sin capturarlas.'
-    },
-    {
-      'title': 'Necromóvil (N) – Transportador de cadáveres (símbolo: calavera).',
-      'image': 'assets/classic/necromobile.svg',
-      'description':
-        'Dirige el equipo. Puede matar como un Militante y—si se detiene en el Laberinto (centro)—gana turnos extra e inmunidad contra ataques ordinarios.'
-    },
-    {
-      'title': 'Nota: en partidas de 3 jugadores, las piezas de la cuarta esquina actúan como “rehénes” que cualquier jugador puede mover o matar; su Jefe no otorga poder del Laberinto.',
-      'image': '',
-      'description': ''
-    },
-  ];
+import '../../components.dart';
+import '../../configs.dart';
+import '../base.dart';
 
+class GameSummarySpanishGame extends BasePage {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Resumen del Juego')),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: pieces.length,
-        itemBuilder: (context, index) {
-          final piece = pieces[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (piece['image']!.isNotEmpty)
-                  SvgPicture.asset(
-                    piece['image']!,
-                    width: 48,
-                    height: 48,
-                    semanticsLabel: piece['title'],
-                  ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        piece['title']!,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (piece['description']!.isNotEmpty) ...[
-                        SizedBox(height: 4),
-                        Text(
-                          piece['description']!,
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    // Definir el tamaño del área desplazable
+    final frameSize = Vector2(
+      bodySize.x - Configs.smallMargin * 2,
+      bodySize.y - Configs.smallMargin * 2,
+    );
+
+    // Definir las secciones de las instrucciones
+    final sections = <Section>[
+      Section(
+        title: '🎯 Objetivo',
+        content:
+            "Ser el último jugador con tu Jefe vivo. Eliminar a los Jefes de otros jugadores te permite tomar el control de sus piezas restantes.",
+      ),
+      Section(
+        title: '🧩 Componentes del juego',
+        content:
+            "Jugadores: 4 (Rojo, Azul, Amarillo, Verde).\n"
+            "Tablero: cuadrícula de 9×9 con la casilla central (E5) designada como el Laberinto, simbolizando el asiento del poder.\n"
+            "Piezas por jugador:\n"
+            "- 1 Jefe\n"
+            "- 1 Asesino\n"
+            "- 1 Reportero\n"
+            "- 1 Diplomático\n"
+            "- 1 Necromóvil\n"
+            "- 4 Milicianos",
+      ),
+      Section(
+        title: '🕹️ Mecánicas de juego',
+        content:
+            "Orden de turnos: los jugadores toman turnos en una secuencia fija.",
+      ),
+      Section(
+        title: 'Movimiento:',
+        content:
+            "- Jefe, Asesino, Reportero, Diplomático, Necromóvil: se mueven cualquier número de casillas en líneas rectas (como la reina en el ajedrez), sin saltar sobre otras piezas.\n"
+            "- Milicianos: se mueven 1 o 2 casillas en cualquier dirección.",
+      ),
+      Section(
+        title: '⚔️ Acciones y habilidades',
+        content: "",
+      ),
+      Section(
+        title: "Jefe:",
+        content:
+            "- Puede matar moviéndose sobre la pieza de un oponente.\n"
+            "- Coloca el cadáver en cualquier casilla desocupada, incluyendo el Laberinto.\n"
+            "- Al ocupar el Laberinto, gana un turno extra después de cada movimiento del oponente.\n"
+            "- No puede ser asesinado por Milicianos mientras esté en el Laberinto.",
+      ),
+      Section(
+        title: "Asesino:",
+        content:
+            "- Mata moviéndose sobre la pieza de un oponente.\n"
+            "- Coloca el cadáver en la casilla original del Asesino.",
+      ),
+      Section(
+        title: "Reportero:",
+        content:
+            "- Mata una pieza adyacente (ortogonalmente) sin moverse sobre ella.\n"
+            "- El cadáver permanece en su posición original.\n"
+            "- Puede optar por no matar.",
+      ),
+      Section(
+        title: "Diplomático:",
+        content:
+            "- Mueve una pieza viva del oponente intercambiando lugares.\n"
+            "- La pieza movida se coloca en cualquier casilla desocupada, excepto el Laberinto (a menos que sea un Jefe).",
+      ),
+      Section(
+        title: "Necromóvil:",
+        content:
+            "- Mueve un cadáver intercambiando lugares.\n"
+            "- El cadáver se coloca en cualquier casilla desocupada, excepto el Laberinto.",
+      ),
+      Section(
+        title: "Milicianos:",
+        content:
+            "- Matan moviéndose sobre la pieza de un oponente.\n"
+            "- Colocan el cadáver en cualquier casilla desocupada, excepto el Laberinto.\n"
+            "- No pueden matar a un Jefe que ocupa el Laberinto.",
+      ),
+      Section(
+        title: '🏛️ El Laberinto (E5)',
+        content:
+            "Solo el Jefe puede ocupar esta casilla central. Un Jefe en el Laberinto se considera 'en el poder' y gana un turno extra después de cada movimiento del oponente. Mientras esté en el Laberinto, el Jefe es inmune a los ataques de los Milicianos. Otras piezas pueden pasar por el Laberinto pero no pueden detenerse allí.",
+      ),
+      Section(
+        title: '🧟 Cadáveres',
+        content:
+            "Cuando una pieza es asesinada, se convierte en un cadáver y permanece en el tablero, actuando como un obstáculo. Los cadáveres pueden ser movidos por el Necromóvil a posiciones estratégicas.",
+      ),
+      Section(
+        title: '🤝 Alianzas y traiciones',
+        content:
+            "Los jugadores pueden formar alianzas informales, pero la traición está permitida y a menudo es estratégica. No hay reglas oficiales que rijan las alianzas; se basan en la negociación entre jugadores.",
+      ),
+      Section(
+        title: '🏁 Fin del juego',
+        content:
+            "El juego termina cuando solo queda un Jefe vivo. Cuando un Jefe es asesinado, el jugador que lo eliminó toma el control de las piezas restantes del jugador fallecido. Si un Jefe está rodeado de cadáveres y no tiene un Necromóvil, se considera eliminado.",
+      ),
+    ];
+
+    // Combinar todas las secciones en una sola cadena
+    final fullText = sections
+        .map((section) => '${section.title}\n${section.content}')
+        .join('\n\n');
+
+    // Definir el estilo del texto
+    final textPaint = TextPaint(
+      style: TextStyle(
+        fontSize: 18.0,
+        color: const Color(0xFFFFFFFF),
       ),
     );
+
+    // Crear un componente de cuadro de texto desplazable
+    final scrollBox = ScrollTextBoxComponent(
+      text: fullText,
+      textRenderer: textPaint,
+      size: frameSize,
+      position: Vector2(Configs.smallMargin, Configs.smallMargin),
+      boxConfig: TextBoxConfig(
+        margins: const EdgeInsets.all(10),
+      ),
+    );
+
+    // Agregar el cuadro de texto desplazable al juego
+    await add(scrollBox);
   }
 }
 
-class PieceCardSpanish extends StatelessWidget {
-  final Map<String, String> piece;
-  const PieceCardSpanish(this.piece);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      elevation: 4,
-      child: ListTile(
-        leading: piece['image']!.isNotEmpty
-            ? Image.network(piece['image']!, width: 50, height: 50)
-            : null,
-        title: Text(piece['title']!, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: piece['description']!.isNotEmpty
-            ? Text(piece['description']!)
-            : null,
-      ),
-    );
-  }
+// Modelo de sección
+class Section {
+  final String title;
+  final String content;
+  Section({required this.title, required this.content});
 }

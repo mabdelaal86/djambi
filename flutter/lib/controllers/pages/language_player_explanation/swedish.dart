@@ -1,127 +1,150 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flame/components.dart';
+import 'package:flutter/widgets.dart';
 
-class GameSummarySwedish extends StatelessWidget {
-  final List<Map<String, String>> pieces = [
-    {
-      'title': 'Djambi är ett politiskt strategibrädspel för 4 spelare på ett 9×9 rutnät. Målet är att vara den sista levande Hövdingen. Den mittersta rutan (Labyrinten) ger speciell kraft till en Hövding som stannar där: extra turer och immunitet mot vanliga militära attacker.',
-      'image': '',
-      'description': ''
-    },
-    {
-      'title': 'Hövding (C) – Ledare (symbol: lagerkrans).',
-      'image': 'assets/classic/chief.svg',
-      'description':
-        'Militanter och Hövdingar fångar genom att flytta till en fienderuta och sedan placera kroppen på en tom ruta som inte är labyrinten; när en Hövding dör tar mördaren omedelbart kontroll över alla den Hövdingens levande och döda pjäser—och en Hövding på E5 är immun mot fångst och ärver alla eliminerade spelares pjäser.'
-    },
-    {
-      'title': 'Lönnmördare (A) – Smygande mördare (symbol: mål).',
-      'image': 'assets/classic/assassin.svg',
-      'description':
-        'Lönnmördaren fångar precis som en militant—genom att flytta till fiendens ruta—men återlämnar alltid kropp på rutan den just lämnade (dvs. “lämna ett lik hemma”), vilket förhindrar att kroppen används igen tills den flyttas.'
-    },
-    {
-      'title': 'Reporter (R) – Undersökande mördare (symbol: öga).',
-      'image': 'assets/classic/reporter.svg',
-      'description':
-        'Reportern kan döda genom att flytta till en av de fyra ortogonalt intilliggande rutorna till målet (kan inte döda diagonalt); om den just flyttats av en Diplomat måste den röra sig igen innan den dödar; kroppen förblir på Reporterns landningsruta.'
-    },
-    {
-      'title': 'Militant (M) – Soldat (symbol: knytnäve) ×4 per spelare.',
-      'image': 'assets/classic/militant.svg',
-      'description':
-        'Militanten är en offensiv pjäs som rör sig en eller två rutor i valfri riktning (ortogonalt eller diagonalt), fångar genom ersättning, och placerar kroppen på en valfri tom ruta—utom den centrala labyrinten (E5); den kan inte fånga en Hövding som har makten (befinner sig i labyrinten).'
-    },
-    {
-      'title': 'Diplomat (Di) – Politisk flyttare (symbol: tvåansikte).',
-      'image': 'assets/classic/diplomat.svg',
-      'description':
-        'Diplomaten (även kallad Bråkmakare eller Provokatör) är en icke-dödlig pjäs som manipulerar levande fiendepjäser utan att fånga dem.'
-    },
-    {
-      'title': 'Nekromobil (N) – Kroppstransportör (symbol: skalle).',
-      'image': 'assets/classic/necromobile.svg',
-      'description':
-        'Leder laget. Kan döda som en militant och—om den stannar i labyrinten (centrum)—får extra turer och immunitet mot vanliga attacker.'
-    },
-    {
-      'title': 'Notera: i 3-spelarsmatcher fungerar den fjärde hörnens pjäser som “gisslan” som vilken spelare som helst kan flytta eller döda; deras Hövding ger ingen labyrintkraft.',
-      'image': '',
-      'description': ''
-    },
-  ];
+import '../../components.dart';
+import '../../configs.dart';
+import '../base.dart';
 
+class GameSummarySwedishGame extends BasePage {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Spelöversikt')),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: pieces.length,
-        itemBuilder: (context, index) {
-          final piece = pieces[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (piece['image']!.isNotEmpty)
-                  SvgPicture.asset(
-                    piece['image']!,
-                    width: 48,
-                    height: 48,
-                    semanticsLabel: piece['title'],
-                  ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        piece['title']!,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (piece['description']!.isNotEmpty) ...[
-                        SizedBox(height: 4),
-                        Text(
-                          piece['description']!,
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    // Definiera storleken på det rullbara området
+    final frameSize = Vector2(
+      bodySize.x - Configs.smallMargin * 2,
+      bodySize.y - Configs.smallMargin * 2,
+    );
+
+    // Definiera sektionerna i instruktionerna
+    final sections = <Section>[
+      Section(
+        title: '🎯 Mål',
+        content:
+            "Var den sista spelaren med din Chef vid liv. Att eliminera andra spelares Chefer låter dig ta kontroll över deras återstående pjäser.",
+      ),
+      Section(
+        title: '🧩 Spelkomponenter',
+        content:
+            "Spelare: 4 (Röd, Blå, Gul, Grön).\n"
+            "Bräde: 9×9 rutnät med den centrala rutan (E5) som är utpekad som Labyrinten, som symboliserar maktens säte.\n"
+            "Pjäser per spelare:\n"
+            "- 1 Chef\n"
+            "- 1 Mördare\n"
+            "- 1 Reporter\n"
+            "- 1 Diplomat\n"
+            "- 1 Nekromobil\n"
+            "- 4 Militärer",
+      ),
+      Section(
+        title: '🕹️ Spelmekanik',
+        content:
+            "Turordning: Spelarna turas om i en fast sekvens.",
+      ),
+      Section(
+        title: 'Rörelse:',
+        content:
+            "- Chef, Mördare, Reporter, Diplomat, Nekromobil: Rör sig ett valfritt antal rutor i raka linjer (som en dam i schack), utan att hoppa över andra pjäser.\n"
+            "- Militärer: Rör sig 1 eller 2 rutor i valfri riktning.",
+      ),
+      Section(
+        title: '⚔️ Handlingar och förmågor',
+        content: "",
+      ),
+      Section(
+        title: "Chef:",
+        content:
+            "- Kan döda genom att flytta till en motståndares pjäs.\n"
+            "- Lägger kroppen på en ledig ruta, inklusive Labyrinten.\n"
+            "- När den befinner sig i Labyrinten får den en extra tur efter varje motståndares drag.\n"
+            "- Kan inte dödas av Militärer medan den är i Labyrinten.",
+      ),
+      Section(
+        title: "Mördare:",
+        content:
+            "- Dödar genom att flytta till en motståndares pjäs.\n"
+            "- Lägger kroppen på Mördarens ursprungliga ruta.",
+      ),
+      Section(
+        title: "Reporter:",
+        content:
+            "- Dödar en angränsande pjäs (ortogonalt) utan att flytta till den.\n"
+            "- Kroppen förblir på sin ursprungliga position.\n"
+            "- Kan välja att inte döda.",
+      ),
+      Section(
+        title: "Diplomat:",
+        content:
+            "- Flyttar en motståndares levande pjäs genom att byta plats.\n"
+            "- Den flyttade pjäsen placeras på en ledig ruta, utom Labyrinten (om det inte är en Chef).",
+      ),
+      Section(
+        title: "Nekromobil:",
+        content:
+            "- Flyttar en kropp genom att byta plats.\n"
+            "- Kroppen placeras på en ledig ruta, utom Labyrinten.",
+      ),
+      Section(
+        title: "Militärer:",
+        content:
+            "- Dödar genom att flytta till en motståndares pjäs.\n"
+            "- Lägger kroppen på en ledig ruta, utom Labyrinten.\n"
+            "- Kan inte döda en Chef som befinner sig i Labyrinten.",
+      ),
+      Section(
+        title: '🏛️ Labyrinten (E5)',
+        content:
+            "Endast Chefen kan befinna sig på denna centrala ruta. En Chef i Labyrinten anses vara 'vid makten' och får en extra tur efter varje motståndares drag. När den är i Labyrinten är Chefen immun mot attacker från Militärer. Andra pjäser kan passera genom Labyrinten men kan inte stanna där.",
+      ),
+      Section(
+        title: '🧟 Kroppar',
+        content:
+            "När en pjäs dödas blir den en kropp och förblir på brädet, vilket fungerar som ett hinder. Kroppar kan flyttas av Nekromobilen till strategiska positioner.",
+      ),
+      Section(
+        title: '🤝 Allianser och förräderi',
+        content:
+            "Spelare kan bilda informella allianser, men förräderi är tillåtet och ofta strategiskt. Det finns inga officiella regler som styr allianser; de baseras på spelarförhandlingar.",
+      ),
+      Section(
+        title: '🏁 Slutspel',
+        content:
+            "Spelet slutar när endast en Chef förblir vid liv. När en Chef dödas, tar den spelare som eliminerade den kontroll över den avlidne spelarens återstående pjäser. Om en Chef är omgiven av kroppar och inte har en Nekromobil, anses den vara eliminerad.",
+      ),
+    ];
+
+    // Kombinera alla sektioner till en enda sträng
+    final fullText = sections
+        .map((section) => '${section.title}\n${section.content}')
+        .join('\n\n');
+
+    // Definiera textstil
+    final textPaint = TextPaint(
+      style: TextStyle(
+        fontSize: 18.0,
+        color: const Color(0xFFFFFFFF),
       ),
     );
+
+    // Skapa en rullbar textruta-komponent
+    final scrollBox = ScrollTextBoxComponent(
+      text: fullText,
+      textRenderer: textPaint,
+      size: frameSize,
+      position: Vector2(Configs.smallMargin, Configs.smallMargin),
+      boxConfig: TextBoxConfig(
+        margins: const EdgeInsets.all(10),
+      ),
+    );
+
+    // Lägg till den rullbara textrutan i spelet
+    await add(scrollBox);
   }
 }
 
-class PieceCardSwedish extends StatelessWidget {
-  final Map<String, String> piece;
-  const PieceCardSwedish(this.piece);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      elevation: 4,
-      child: ListTile(
-        leading: piece['image']!.isNotEmpty
-            ? Image.network(piece['image']!, width: 50, height: 50)
-            : null,
-        title: Text(piece['title']!, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: piece['description']!.isNotEmpty
-            ? Text(piece['description']!)
-            : null,
-      ),
-    );
-  }
+// Sektionmodell
+class Section {
+  final String title;
+  final String content;
+  Section({required this.title, required this.content});
 }

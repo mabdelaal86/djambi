@@ -26,7 +26,8 @@ class AboutPage extends BasePage {
 
     await addAll([
       MultiAlignComponent(
-        position: bodyPosition,
+        anchor: Anchor.center,
+        position: Anchor.center.ofSize(size),
         size: bodySize,
         padding: _bodyPadding,
         alignedChildren: {
@@ -39,6 +40,8 @@ class AboutPage extends BasePage {
                 "they are inspired by modern societies instead of medieval ones. "
                 "The game pieces symbolize common sins in modern politics.",
           ),
+
+          
           Anchor.center: _englishButton(),
           //Anchor.center: _arabhButton(),
           
@@ -66,7 +69,7 @@ class AboutPage extends BasePage {
   PositionComponent _englishButton() =>  RoundedButton(
             text: "English",
             size: Configs.largeBtnSize,
-            onReleased: () => game.router.pushNamed("language_player_explanation/english"),
+            onReleased: () => game.router.pushNamed("english"),
           );
   // PositionComponent _arabhButton() =>  RoundedButton(
   //           text: "العربية",

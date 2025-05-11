@@ -1,139 +1,152 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flame/components.dart';
+import 'package:flutter/widgets.dart';
 
-class GameSummaryArabic extends StatelessWidget {
-  // قائمة قطع اللعبة مع العناوين والوصف باللغة العربية
-  final List<Map<String, String>> pieces = [
-    {
-      'title': 'جامبي هي لعبة لوحية سياسية استراتيجية لأربعة لاعبين على شبكة 9×9. الهدف أن تكون آخر رئيس على قيد الحياة. المربع المركزي (اللَّبْهَة) يمنح قوّة خاصة لأي رئيس يتوقف عليه: دورات إضافية ومناعة ضد الهجمات العادية.',
-      'image': '',
-      'description': ''
-    },
-    {
-      'title': 'الرئيس (C) – القائد (رمز: إكليل الغار).',
-      'image': 'assets/classic/chief.svg',
-      'description':
-          'كلاهما (المسؤولون والمُعَتِّمون) يأسر الخصم بالانتقال إلى مربعه ثم وضع جثة الخصم في أي مربع فارغ غير اللَّبْهَة. عندما يموت الرئيس، يكتسب القاتل فورًا جميع قطع ذلك الرئيس الحية والميتة. أي رئيس على E5 يكون محميًا ولا يمكن أسره.'
-    },
-    {
-      'title': 'القاتل الصامت (A) – قاتل متخفي (رمز: الهدف).',
-      'image': 'assets/classic/assassin.svg',
-      'description':
-          'يلتقط تمامًا مثل المقاتل بالانتقال إلى مربع قطعة العدو، لكنه يعيد دائمًا جثة الضحية إلى المربع الذي غادره (أي “يترك الجثة في الموطن”)، مما يمنع إعادة استخدامها حتى يُحرَّك.'
-    },
-    {
-      'title': 'المراسل (R) – القاتل الاستقصائي (رمز: العين).',
-      'image': 'assets/classic/reporter.svg',
-      'description':
-          'يقتل بالانتقال إلى أحد الأربعة مربعات المجاورة عموديًا للهدف (لا يمكن القتل قطريًا). إذا نُقل بواسطة الدبلوماسي، يجب أن يتحرك مرة أخرى قبل القتل. تبقى الجثة في مربع هبوطه.'
-    },
-    {
-      'title': 'المقاتل (M) – الجندي (رمز: القبضة) ×4 لكل لاعب.',
-      'image': 'assets/classic/militant.svg',
-      'description':
-          'قطعة هجومية تتحرك مربعًا أو مربعين في أي اتجاه (عمودي أو قطري)، تأسر بالاستبدال، وتضع الجثة في أي مربع فارغ يختاره اللاعب—باستثناء اللَّبْهَة (E5). لا يمكنه أسره رئيس في اللَّبْهَة.'
-    },
-    {
-      'title': 'الدبلوماسي (Di) – المحرك السياسي (رمز: رأس ذو وجهين).',
-      'image': 'assets/classic/diplomat.svg',
-      'description':
-          'قطعة غير قتالية (تسمى أيضًا مثير المتاعب) تُحرّك قطع العدو الحية دون أسره.'
-    },
-    {
-      'title': 'ناقلة الجثث (N) – ناقل الجثث (رمز: الجمجمة).',
-      'image': 'assets/classic/necromobile.svg',
-      'description':
-          'يقود الفريق. يمكنه القتل مثل المقاتل، وإذا توقف علىاللَّبْهَة (المركز) يحصل على دورات إضافية ومناعة من الهجمات العادية.'
-    },
-    {
-      'title': 'ملاحظة: في الألعاب الثلاثية، تُعتبر قطع الزاوية الرابعة “رهائن” يمكن لأي لاعب تحريكها أو قتلها؛ رئيسهم لا يمنح قوة اللَّبْهَة.',
-      'image': '',
-      'description': ''
-    },
-  ];
+import '../../components.dart';
+import '../../configs.dart';
+import '../base.dart';
 
+class GameSummaryArabicGame extends BasePage {
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    // تحديد حجم منطقة التمرير
+    final frameSize = Vector2(
+      bodySize.x - Configs.smallMargin * 2,
+      bodySize.y - Configs.smallMargin * 2,
+    );
+
+    // تعريف الأقسام باللغة العربية
+    final sections = <Section>[
+      Section(
+        title: '🎯 الهدف',
+        content:
+            "كن آخر لاعب يحتفظ برئيسه حيًا. القضاء على رؤساء اللاعبين الآخرين يتيح لك السيطرة على قطعهم المتبقية.",
+      ),
+      Section(
+        title: '🧩 مكونات اللعبة',
+        content:
+            "اللاعبون: 4 (أحمر، أزرق، أصفر، أخضر).\n"
+            "لوحة اللعب: شبكة 9×9 مع المربع المركزي (E5) المسمى بالمتاهة، والذي يرمز إلى مركز القوة.\n"
+            "القطع لكل لاعب:\n"
+            "- 1 رئيس\n"
+            "- 1 قاتل\n"
+            "- 1 مراسل\n"
+            "- 1 دبلوماسي\n"
+            "- 1 ناقل الجثث\n"
+            "- 4 مقاتلين",
+      ),
+      Section(
+        title: '🕹️ آليات اللعب',
+        content:
+            "ترتيب الأدوار: يتناوب اللاعبون في تسلسل ثابت.",
+      ),
+      Section(
+        title: 'الحركة:',
+        content:
+            "- الرئيس، القاتل، المراسل، الدبلوماسي، ناقل الجثث: يتحركون عددًا غير محدود من المربعات في خطوط مستقيمة (مثل الملكة في الشطرنج)، دون القفز فوق قطع أخرى.\n"
+            "- المقاتلون: يتحركون 1 أو 2 مربع في أي اتجاه.",
+      ),
+      Section(
+        title: '⚔️ الإجراءات والقدرات',
+        content: "",
+      ),
+      Section(
+        title: "الرئيس:",
+        content:
+            "- يمكنه القتل بالتحرك إلى قطعة الخصم.\n"
+            "- يضع الجثة في أي مربع غير مشغول، بما في ذلك المتاهة.\n"
+            "- عند التواجد في المتاهة، يحصل على دور إضافي بعد كل حركة للخصم.\n"
+            "- لا يمكن قتله بواسطة المقاتلين أثناء وجوده في المتاهة.",
+      ),
+      Section(
+        title: "القاتل:",
+        content:
+            "- يقتل بالتحرك إلى قطعة الخصم.\n"
+            "- يضع الجثة في المربع الأصلي للقاتل.",
+      ),
+      Section(
+        title: "المراسل:",
+        content:
+            "- يقتل قطعة مجاورة (أفقيًا أو عموديًا) دون التحرك إليها.\n"
+            "- تبقى الجثة في موقعها الأصلي.\n"
+            "- يمكنه اختيار عدم القتل.",
+      ),
+      Section(
+        title: "الدبلوماسي:",
+        content:
+            "- يحرك قطعة حية للخصم عن طريق تبديل الأماكن.\n"
+            "- توضع القطعة المنقولة في أي مربع غير مشغول، باستثناء المتاهة (إلا إذا كانت رئيسًا).",
+      ),
+      Section(
+        title: "ناقل الجثث:",
+        content:
+            "- ينقل جثة عن طريق تبديل الأماكن.\n"
+            "- توضع الجثة في أي مربع غير مشغول، باستثناء المتاهة.",
+      ),
+      Section(
+        title: "المقاتلون:",
+        content:
+            "- يقتلون بالتحرك إلى قطعة الخصم.\n"
+            "- توضع الجثة في أي مربع غير مشغول، باستثناء المتاهة.\n"
+            "- لا يمكنهم قتل الرئيس أثناء وجوده في المتاهة.",
+      ),
+      Section(
+        title: '🏛️ المتاهة (E5)',
+        content:
+            "فقط الرئيس يمكنه احتلال هذا المربع المركزي. يعتبر الرئيس في المتاهة 'في السلطة' ويحصل على دور إضافي بعد كل حركة للخصم. أثناء وجوده في المتاهة، يكون الرئيس محصنًا من هجمات المقاتلين. يمكن للقطع الأخرى المرور عبر المتاهة ولكن لا يمكنها التوقف فيها.",
+      ),
+      Section(
+        title: '🧟 الجثث',
+        content:
+            "عند قتل قطعة، تتحول إلى جثة وتبقى على اللوحة، مما يشكل عقبة. يمكن لناقل الجثث تحريك الجثث إلى مواقع استراتيجية.",
+      ),
+      Section(
+        title: '🤝 التحالفات والخيانة',
+        content:
+            "يمكن للاعبين تشكيل تحالفات غير رسمية، لكن الخيانة مسموحة وغالبًا ما تكون استراتيجية. لا توجد قواعد رسمية تحكم التحالفات؛ فهي تعتمد على تفاوض اللاعبين.",
+      ),
+      Section(
+        title: '🏁 نهاية اللعبة',
+        content:
+            "تنتهي اللعبة عندما يبقى رئيس واحد حيًا فقط. عند قتل رئيس، يحصل اللاعب الذي قتله على السيطرة على قطع اللاعب المتوفى المتبقية. إذا كان الرئيس محاطًا بالجثث ولا يملك ناقل جثث، يعتبر مُقضى عليه.",
+      ),
+    ];
+
+    // دمج جميع الأقسام في نص واحد
+    final fullText = sections
+        .map((section) => '${section.title}\n${section.content}')
+        .join('\n\n');
+
+    // تحديد نمط النص
+    final textPaint = TextPaint(
+      style: TextStyle(
+        fontSize: 18.0,
+        color: const Color(0xFFFFFFFF),
+        fontFamily: 'Amiri', // تأكد من إضافة الخط إلى المشروع
+      ),
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('ملخص اللعبة'),
-          centerTitle: true,
-        ),
-        body: ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-          itemCount: pieces.length,
-          itemBuilder: (context, index) {
-            final piece = pieces[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (piece['image']!.isNotEmpty)
-                    SvgPicture.asset(
-                      piece['image']!,
-                      width: 48,
-                      height: 48,
-                      semanticsLabel: piece['title'],
-                    ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          piece['title']!,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        if (piece['description']!.isNotEmpty) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            piece['description']!,
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+    );
+
+    // إنشاء مكون صندوق النص القابل للتمرير
+    final scrollBox = ScrollTextBoxComponent(
+      text: fullText,
+      textRenderer: textPaint,
+      size: frameSize,
+      position: Vector2(Configs.smallMargin, Configs.smallMargin),
+      boxConfig: TextBoxConfig(
+        margins: const EdgeInsets.all(10),
       ),
     );
+
+    // إضافة صندوق النص إلى اللعبة
+    await add(scrollBox);
   }
 }
 
-class PieceCardArabic extends StatelessWidget {
-  final Map<String, String> piece;
-  const PieceCardArabic(this.piece);
-
-  @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Card(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        elevation: 4,
-        child: ListTile(
-          leading: piece['image']!.isNotEmpty
-              ? Image.network(piece['image']!, width: 50, height: 50)
-              : null,
-          title: Text(
-            piece['title']!,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: piece['description']!.isNotEmpty
-              ? Text(piece['description']!)
-              : null,
-        ),
-      ),
-    );
-  }
+// نموذج القسم
+class Section {
+  final String title;
+  final String content;
+  Section({required this.title, required this.content});
 }
