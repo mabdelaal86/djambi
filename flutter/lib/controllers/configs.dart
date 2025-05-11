@@ -45,4 +45,6 @@ abstract class Configs {
     Color(0xFF646464),
     Color(0xFFFFFFFF),
   );
+
+  static var fontSize;
 }

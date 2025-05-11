@@ -33,6 +33,9 @@ class HomePage extends BasePage {
             size: Configs.largeBtnSize,
             onReleased: () => game.router.pushNamed("settings"),
           ),
+          TextComponent(
+          text: 'From Minds and Hands \n Made in Egypt',
+          ),
         ],
       ),
     ]);
