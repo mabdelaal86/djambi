@@ -28,10 +28,10 @@ For more details, check the [game page](https://en.wikipedia.org/wiki/Djambi) on
 - [x] Complete GUI with Home page and Settings page.
 - [x] Detailed description about the game and its rules.
 - [x] Application icon.
-- [x] Improve UI graphics.
-- [x] Save game state.
-- [x] Add two players variation.
-- [x] Improve AI algorithm.
+- [ ] Improve UI graphics.
+- [ ] Save game state.
+- [ ] Add two players variation.
+- [ ] Improve AI algorithm.
 
 
 ## Architecture
@@ -53,7 +53,7 @@ Images of [pieces](./flutter/assets/classic) are based on Djambi classic theme c
 ## **Play Djambi Online** 
   
 Experience Djambi directly in your web browser without any downloads:
-🔗 [Play Djambi](https://)
+🔗 [Play Djambi](https://mabdelaal86.github.io/djambi/)
 
 ## Download the Game
 

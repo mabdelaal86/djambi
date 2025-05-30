@@ -118,7 +118,6 @@ class GameSummaryArabicGame extends BasePage {
         .map((section) => '${section.title}\n${section.content}')
         .join('\n\n');
 
-    // تحديد نمط النص
     final textPaint = TextPaint(
       style: TextStyle(
         fontSize: 18.0,
