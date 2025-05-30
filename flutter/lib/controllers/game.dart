@@ -10,7 +10,6 @@ import 'pages/options.dart';
 import 'pages/play.dart';
 import 'pages/settings.dart';
 import 'preferences.dart';
-import 'pages/settings.dart';
 import 'pages/language_player_explanation/english.dart';
 import 'pages/language_player_explanation/arab.dart';
 import 'pages/language_player_explanation/french.dart';

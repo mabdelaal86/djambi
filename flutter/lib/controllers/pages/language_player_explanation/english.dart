@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import 'package:flame_svg/flame_svg.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../components.dart';
 import '../../configs.dart';
 import '../base.dart';
 
