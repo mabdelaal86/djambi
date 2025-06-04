@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 
 import 'configs.dart';
 import 'pages/about.dart';
+import 'pages/base.dart';
 import 'pages/home.dart';
 import 'pages/options.dart';
 import 'pages/play.dart';
@@ -40,5 +41,10 @@ class DjambiGame extends FlameGame {
       },
       initialRoute: "home",
     ));
+  }
+
+  void popPage() {
+    final curPage = router.currentRoute.children.first as BasePage;
+    curPage.onBackTapUp();
   }
 }

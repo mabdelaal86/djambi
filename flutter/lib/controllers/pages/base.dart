@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../common/utils.dart';
 import '../components.dart';
@@ -21,7 +22,9 @@ abstract class BasePage extends PositionComponent with HasGameReference<DjambiGa
     await add(_header());
   }
 
-  void onBackTapUp() => game.router.pop();
+  bool get isTopPage => game.router.previousRoute == null;
+
+  void onBackTapUp() => isTopPage ? SystemNavigator.pop() : game.router.pop();
 
   // Body area without header
   Vector2 get bodyPosition => Vector2(0, Configs.headerSize.y);
@@ -36,15 +39,14 @@ abstract class BasePage extends PositionComponent with HasGameReference<DjambiGa
         anchor: Anchor.center,
         position: Anchor.center.ofSize(Configs.headerSize),
       ),
-      if (game.router.previousRoute != null)
-        RoundedButton(
-          icon: Icons.arrow_back,
-          fontSize: Configs.iconFontSize,
-          position: Vector2.all(Configs.headerSize.y / 2),
-          anchor: Anchor.center,
-          size: Configs.smallBtnSize,
-          onReleased: onBackTapUp,
-        ),
+      RoundedButton(
+        icon: isTopPage ? Icons.close : Icons.arrow_back,
+        fontSize: Configs.iconFontSize,
+        position: Vector2.all(Configs.headerSize.y / 2),
+        anchor: Anchor.center,
+        size: Configs.smallBtnSize,
+        onReleased: onBackTapUp,
+      ),
     ]
   );
 }
