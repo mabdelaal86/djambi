@@ -45,6 +45,15 @@ The core code of the project lays inside [flutter/lib](flutter/lib) directory an
 This project is license under a [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html) license.
 
 
-## Credits
+## Disclaimer & Credits
 
-Images of [pieces](./flutter/assets/classic) are based on Djambi classic theme create by [Rsalen](https://commons.wikimedia.org/wiki/User:Rsalen).
+* This game is a **fan-made**, **non-commercial** recreation of Djambi,
+  a public-domain board game designed by *Jean Anesto* in 1975.
+* This project is **not officially affiliated** with *Jean Anesto*, his heirs,
+  or any company that may have published Djambi historically.
+* All **original game rules** are used under the principle that game mechanics are not copyrightable.
+  However, any **original artwork, branding, or terminology** from the 1975 version remains the property of its
+  respective rights holders.
+* This adaptation is open-source and free to use/distribute for non-commercial purposes.
+* Images of [pieces](./flutter/assets/classic) are based on Djambi classic theme create by [Rsalen](https://commons.wikimedia.org/wiki/User:Rsalen).
+* If you represent the rights to *Djambi* and have concerns, please contact [me](mailto:hello@datonomi.com) for respectful resolution.

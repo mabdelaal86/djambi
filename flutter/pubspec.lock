@@ -121,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.29.0"
+  flame_markdown:
+    dependency: "direct main"
+    description:
+      name: flame_markdown
+      sha256: d8718290f496214fc4a8750dccec0b06bd70b59188f87cef6026c123341e1abc
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.4+5"
   flame_svg:
     dependency: "direct main"
     description:
@@ -232,6 +240,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
+  markdown:
+    dependency: transitive
+    description:
+      name: markdown
+      sha256: "935e23e1ff3bc02d390bad4d4be001208ee92cc217cb5b5a6c19bc14aaa318c1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.3.0"
   matcher:
     dependency: transitive
     description:

@@ -35,6 +35,13 @@ class HomePage extends BasePage {
           ),
         ],
       ),
+      Hyperlink(
+        text: "Privacy Policy",
+        url: "https://datonomi.github.io/djambi/privacy-policy",
+        size: Vector2(260, 80),
+        anchor: Anchor.bottomRight,
+        position: Anchor.bottomRight.ofSize(size),
+      ),
     ]);
   }
 }

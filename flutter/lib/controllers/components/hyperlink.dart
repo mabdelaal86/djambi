@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/text.dart';
 
 import '../../common/utils.dart';
-import '../components.dart';
+import '../configs.dart';
 
 class Hyperlink extends TextBoxComponent with TapCallbacks {
   final String url;
@@ -18,11 +18,22 @@ class Hyperlink extends TextBoxComponent with TapCallbacks {
     super.position,
     super.scale,
     super.size,
-    TextRenderer? textRenderer,
+    double fontSize = Configs.defaultFontSize,
+    Color color = const Color(0xFF00FFE1),
+    String? fontFamily,
+    FontWeight? fontWeight,
+    FontStyle? fontStyle,
+    TextDecoration? decoration,
   }) {
-    super.textRenderer = textRenderer ?? getTextRenderer(
-      color: const Color(0xFF00FFE1),
-      decoration: TextDecoration.underline,
+    super.textRenderer = TextPaint(
+      style: TextStyle(
+        color: color,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        fontStyle: fontStyle,
+        decoration: decoration,
+      ),
     );
   }
 
