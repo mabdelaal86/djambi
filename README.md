@@ -68,3 +68,11 @@ You can download **Djambi** on your smartphone using the following links:
 <!-- - **iOS (App Store):**  
   [![Download on the App Store](https://img.shields.io/badge/App%20Store-Download-blue?logo=apple)](https://apps.apple.com/app/id1234567890)   -->
 
+## Contact Us
+
+**Questions? We're happy to help.**  
+**Want to contribute? We'd love to have you!**  
+
+**Email:** [hello@datonomi.com](mailto:hello@datonomi.com)  
+
+[**Privacy Policy**](https://datonomi.github.io/djambi/privacy-policy)
