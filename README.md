@@ -60,11 +60,11 @@ Experience Djambi directly in your web browser without any downloads:
 You can download **Djambi** on your smartphone using the following links:
 
 - **Android (Google Play Store):**  
-  [![Get it on Google Play](https://img.shields.io/badge/Google%20Play-Download-blue?logo=google-play)](https://play.google.com/store/apps/details?id=com.example.djambi)  
+  [![Get it on Google Play](https://img.shields.io/badge/Google%20Play-Download-blue?logo=google-play)](https://play.google.com/store/apps/details?id=com.datonomi.djambi)  
 
 <!-- - **Android (APKPure)**  
   [![APKPure](https://img.shields.io/badge/APKPure-Download-blue)](https://apps.apple.com/app/id1234567890)  -->
 
-- **iOS (App Store):**  
-  [![Download on the App Store](https://img.shields.io/badge/App%20Store-Download-blue?logo=apple)](https://apps.apple.com/app/id1234567890)  
+<!-- - **iOS (App Store):**  
+  [![Download on the App Store](https://img.shields.io/badge/App%20Store-Download-blue?logo=apple)](https://apps.apple.com/app/id1234567890)   -->
 
