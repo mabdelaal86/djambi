@@ -38,13 +38,13 @@ dependencies:
 
   # Project dependencies
   collection: ^1.19.0
-  flame: ^1.29.0
+  flame: ^1.30.0
+  flame_markdown: ^0.2.0
   flame_svg: ^1.11.0
   meta: ^1.16.0
   shared_preferences: ^2.5.0
   stack: ^0.2.0
   url_launcher: ^6.3.0
-  flame_markdown: ^0.2.0
 
 dev_dependencies:
   flutter_test:

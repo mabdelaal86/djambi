@@ -40,7 +40,7 @@ class AboutPage extends BasePage {
               "As in chess, pieces represent real-life political roles, but in contrast, "
               "they are inspired by modern societies instead of medieval ones. "
               "The game pieces symbolize common sins in modern politics.\n\n"
-              "#### Disclaimer:\n\n"
+              "#### Disclaimer & Credits:\n\n"
               "• This game is a **fan-made**, **non-commercial** recreation of Djambi, "
               "a public-domain board game designed by *Jean Anesto* in 1975.\n\n"
               "• This project is **not officially affiliated** with *Jean Anesto*, his heirs, "

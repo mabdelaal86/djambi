@@ -45,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: checked_yaml
-      sha256: feb6bed21949061731a7a75fc5d2aa727cf160b91af9a3e464c5e3a32e28b5ff
+      sha256: "959525d3162f249993882720d52b7e0c833978df229be20702b33d48d91de70f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.4"
   cli_util:
     dependency: transitive
     description:
@@ -117,26 +117,26 @@ packages:
     dependency: "direct main"
     description:
       name: flame
-      sha256: "58566686ad9b7e6a3984c50a740fd733e0a5022d48263916f50b3c78e7f14ec0"
+      sha256: c50e2f39e118f5f6a6f3339ce6825ee803c7e5fada95ec50fb02eb27944e0e76
       url: "https://pub.dev"
     source: hosted
-    version: "1.29.0"
+    version: "1.30.1"
   flame_markdown:
     dependency: "direct main"
     description:
       name: flame_markdown
-      sha256: d8718290f496214fc4a8750dccec0b06bd70b59188f87cef6026c123341e1abc
+      sha256: eb1658f9ce9977cf3584caf29f12104c9111d83a544f6430281c1fd634381d4f
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.4+5"
+    version: "0.2.4+7"
   flame_svg:
     dependency: "direct main"
     description:
       name: flame_svg
-      sha256: "507f79c80d7f816b42e087b15a87289abaa2a3ed30d085c38cec8bd0fdabf235"
+      sha256: "351e8562bc9387697370e9fefe56ac00b7779b071303df212ecaa83df5d19a4d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.12"
+    version: "1.11.14"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -146,10 +146,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_launcher_icons
-      sha256: bfa04787c85d80ecb3f8777bde5fc10c3de809240c48fa061a2c2bf15ea5211c
+      sha256: "10f13781741a2e3972126fae08393d3c4e01fa4cd7473326b94b72cf594195e7"
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.3"
+    version: "0.14.4"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -162,10 +162,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_svg
-      sha256: d44bf546b13025ec7353091516f6881f1d4c633993cb109c3916c3a0159dadf1
+      sha256: cd57f7969b4679317c17af6fd16ee233c1e60a82ed209d8a475c54fd6fd6f845
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -348,10 +348,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: f0d7856b6ca1887cfa6d1d394056a296ae33489db914e365e2044fdada449e62
+      sha256: "6323a5b0fa688b6a010df4905a56b00181479e6d10534cecfecede2aa55add61"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.2"
+    version: "6.0.3"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -481,10 +481,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603"
+      sha256: f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   url_launcher_android:
     dependency: transitive
     description:
@@ -545,10 +545,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
-      sha256: "44cc7104ff32563122a929e4620cf3efd584194eec6d1d913eb5ba593dbcf6de"
+      sha256: a4f059dc26fc8295b5921376600a194c4ec7d55e72f2fe4c7d2831e103d461e6
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.18"
+    version: "1.1.19"
   vector_graphics_codec:
     dependency: transitive
     description:
@@ -614,5 +614,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.7.0 <4.0.0"
+  dart: ">=3.8.0 <4.0.0"
   flutter: ">=3.27.1"
