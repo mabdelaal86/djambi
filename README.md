@@ -1,14 +1,23 @@
 # Djambi
 
 [![License](https://img.shields.io/github/license/mabdelaal86/djambi)](LICENSE)
-![Language](https://img.shields.io/github/languages/top/mabdelaal86/djambi)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
+[![Pubspec version](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmabdelaal86%2Fdjambi%2Fmain%2Fflutter%2Fpubspec.yaml&query=%24.version&label=version&color=yellow)](#)
+[![Language](https://img.shields.io/github/languages/top/mabdelaal86/djambi)](#)
+<sup>powered by</sup>
+[![Flame](https://img.shields.io/badge/%F0%9F%94%A5_Flame-272727.svg)](https://flame-engine.org)
+[![Flutter](https://img.shields.io/badge/Flutter-02569B?logo=flutter)](https://flutter.dev/)
+
 
 **Djambi** is a chess variant for four players designed by *Jean Anesto* in 1975.
 As in chess, pieces represent real-life political roles, but in contrast,
 they are inspired by modern societies instead of medieval ones.
 The game pieces symbolize common sins in modern politics.
 For more details, check the [game page](https://en.wikipedia.org/wiki/Djambi) on Wikipedia.
+
+<sup>AVAILABLE ON</sup>
+[![Google Play](https://img.shields.io/badge/Google_Play-414141?style=for-the-badge&logo=google-play)](https://play.google.com/store/apps/details?id=com.datonomi.djambi)
+[![Web Browser](https://img.shields.io/badge/%F0%9F%94%97_Web_Browser-yellow.svg?style=for-the-badge)](https://mabdelaal86.github.io/djambi/)
+
 
 <img src="docs/assets/screenshot.png" alt="A screenshot of Djambi game">
 
