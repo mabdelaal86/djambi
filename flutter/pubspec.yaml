@@ -38,7 +38,7 @@ dependencies:
 
   # Project dependencies
   collection: ^1.19.0
-  flame: ^1.30.0
+  flame: ^1.32.0
   flame_markdown: ^0.2.0
   flame_svg: ^1.11.0
   meta: ^1.16.0
@@ -55,7 +55,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
   # Project development dependencies
   flutter_launcher_icons: ^0.14.0

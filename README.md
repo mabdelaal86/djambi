@@ -40,6 +40,10 @@ For more details, check the [game page](https://en.wikipedia.org/wiki/Djambi) on
 - [ ] Save game state.
 - [ ] Add two players variation.
 - [ ] Improve AI algorithm.
+- [ ] Show current player.
+- [ ] Animate pieces' movements.
+- [ ] Add easy/quick way to show a piece description.
+- [ ] Add sound effects.
 
 
 ## Architecture
