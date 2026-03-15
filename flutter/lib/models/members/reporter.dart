@@ -15,8 +15,7 @@ class Reporter extends Member {
       .where((cell) => !cell.isMaze && parliament.isEmpty(cell));
 
   @override
-  bool canKillOn(Cell cell) =>
-      location.isAdjacentTo(cell) && occupiedByEnemy(cell);
+  bool canKillOn(Cell cell) => location.isAdjacentTo(cell) && occupiedByEnemy(cell);
 
   bool occupiedByEnemy(Cell cell) {
     final other = parliament.getMemberAt(cell);

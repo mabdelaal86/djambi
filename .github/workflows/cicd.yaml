@@ -20,3 +20,5 @@ jobs:
         run: flutter pub get --directory ./flutter
       - name: Analyze source code
         run: flutter analyze --no-pub ./flutter
+      - name: Check source code format
+        run: dart format -o none --set-exit-if-changed ./flutter

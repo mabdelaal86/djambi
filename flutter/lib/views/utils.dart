@@ -10,12 +10,12 @@ extension PaintExtension on Paint {
     ..strokeWidth = Dimensions.markStroke * 2;
 }
 
-Future<Svg> loadImage(String image, Color color,
-    {String style = "classic"}) async {
+Future<Svg> loadImage(String image, Color color, {String style = "classic"}) async {
   final fileContent = await Flame.assets.readFile("$style/$image.svg");
   final svgString = fileContent.replaceFirst(
-      "fill:#000000;fill-opacity:1",
-      "fill:#${_hex(color.r)}${_hex(color.g)}${_hex(color.b)};fill-opacity:${color.a}");
+    "fill:#000000;fill-opacity:1",
+    "fill:#${_hex(color.r)}${_hex(color.g)}${_hex(color.b)};fill-opacity:${color.a}",
+  );
   return Svg.loadFromString(svgString);
 }
 

@@ -21,9 +21,6 @@ class RoundedRectComponent extends PositionComponent with HasPaint {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(size.toRect(), radius),
-      paint,
-    );
+    canvas.drawRRect(RRect.fromRectAndRadius(size.toRect(), radius), paint);
   }
 }

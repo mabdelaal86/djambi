@@ -16,18 +16,14 @@ class PiecesRenderer extends PositionComponent {
   final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
 
-  PiecesRenderer(this.contest, this.boardStyle, this.pieceTheme,
-      {super.position, super.anchor, super.scale})
-      : super(size: Dimensions.gridSize);
+  PiecesRenderer(this.contest, this.boardStyle, this.pieceTheme, {super.position, super.anchor, super.scale})
+    : super(size: Dimensions.gridSize);
 
   late final Map<Role, Svg> _memberImages;
 
   @override
   Future<void> onLoad() async {
-    _memberImages = {
-      for (final r in Role.values)
-        r: await loadImage(r.name, boardStyle.pieceForeColor)
-    };
+    _memberImages = {for (final r in Role.values) r: await loadImage(r.name, boardStyle.pieceForeColor)};
   }
 
   @override
@@ -54,8 +50,10 @@ class PiecesRenderer extends PositionComponent {
     _paintMemberBackground(canvas, member, centerOffset);
     if (member.isAlive) {
       switch (pieceTheme) {
-        case PieceTheme.classic: _drawRoleClassicImage(canvas, member.role, centerOffset);
-        case PieceTheme.characters: _drawRoleSymbol(canvas, member.role, centerOffset);
+        case PieceTheme.classic:
+          _drawRoleClassicImage(canvas, member.role, centerOffset);
+        case PieceTheme.characters:
+          _drawRoleSymbol(canvas, member.role, centerOffset);
       }
     }
   }
@@ -77,9 +75,7 @@ class PiecesRenderer extends PositionComponent {
 
   void _drawRoleSymbol(Canvas canvas, Role role, Offset offset) {
     final textPainter = TextPainter(textDirection: TextDirection.ltr)
-      ..text = TextSpan(
-          style: boardStyle.pieceSymbolStyle,
-          text: role.name[0].toUpperCase());
+      ..text = TextSpan(style: boardStyle.pieceSymbolStyle, text: role.name[0].toUpperCase());
     textPainter.layout();
     textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
   }

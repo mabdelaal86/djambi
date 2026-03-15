@@ -44,20 +44,24 @@ class Parliament {
     assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
     _setInitialPositions();
     // create parties
-    parties = [ for (final m in members) if (m.isChief) Party(m as Chief) ];
+    parties = [
+      for (final m in members)
+        if (m.isChief) Party(m as Chief),
+    ];
     assert(parties.length == 4, "number of parties should be 4");
     // other properties
     _currentParty = getParty(_currentIdeology);
   }
 
-  Parliament.copy(Parliament other)
-      : _currentIdeology = other._currentIdeology,
-        turnDirection = other.turnDirection {
+  Parliament.copy(Parliament other) : _currentIdeology = other._currentIdeology, turnDirection = other.turnDirection {
     // copy members
-    members = [ for (final m in other.members) Member.copy(this, m) ];
+    members = [for (final m in other.members) Member.copy(this, m)];
     assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
     // copy parties
-    parties = [ for (final m in members) if (m.isChief) Party(m as Chief) ];
+    parties = [
+      for (final m in members)
+        if (m.isChief) Party(m as Chief),
+    ];
     assert(parties.length == 4, "number of parties should be 4");
     // other properties
     _currentParty = getParty(other._currentParty.ideology);
@@ -68,11 +72,14 @@ class Parliament {
 
   /// json deserialization
   Parliament.fromJson(Map<String, dynamic> json)
-      : _currentIdeology = Ideology.values[json["current_ideology"]],
-        turnDirection = TurnDirection.values[json["turn_direction"]] {
-    members = [ for (final m in json["members"]) Member.fromJson(this, m) ];
+    : _currentIdeology = Ideology.values[json["current_ideology"]],
+      turnDirection = TurnDirection.values[json["turn_direction"]] {
+    members = [for (final m in json["members"]) Member.fromJson(this, m)];
     assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
-    parties = [ for (final m in members) if (m.isChief) Party(m as Chief) ];
+    parties = [
+      for (final m in members)
+        if (m.isChief) Party(m as Chief),
+    ];
     assert(parties.length == 4, "number of parties should be 4");
     _currentParty = getParty(Ideology.values[json["current_party"]]);
   }
@@ -90,17 +97,16 @@ class Parliament {
 
   Iterable<Member> _recruitMembers(Ideology ideology) sync* {
     final roles = [
-      [ Role.chief,    Role.assassin, Role.militant    ],
-      [ Role.reporter, Role.diplomat, Role.militant    ],
-      [ Role.militant, Role.militant, Role.necromobile ],
+      [Role.chief, Role.assassin, Role.militant],
+      [Role.reporter, Role.diplomat, Role.militant],
+      [Role.militant, Role.militant, Role.necromobile],
     ];
 
     // create members and place them around (0,0) point, so it is easier to rotate or flip
     for (var r = 0; r < 3; r++) {
       for (var c = 0; c < 3; c++) {
         final id = (ideology.index * 9) + (r * 3) + c;
-        yield Member.create(this, roles[r][c], ideology, id)
-          ..location = Cell(c - 1, r - 1);
+        yield Member.create(this, roles[r][c], ideology, id)..location = Cell(c - 1, r - 1);
       }
     }
   }
@@ -113,10 +119,10 @@ class Parliament {
       }
     }
 
-    setInitPosition(Ideology.red,    const Cell( 1, -1), const Cell(1, 7));
-    setInitPosition(Ideology.blue,   const Cell(-1, -1), const Cell(7, 7));
-    setInitPosition(Ideology.yellow, const Cell(-1,  1), const Cell(7, 1));
-    setInitPosition(Ideology.green,  const Cell( 1,  1), const Cell(1, 1));
+    setInitPosition(Ideology.red, const Cell(1, -1), const Cell(1, 7));
+    setInitPosition(Ideology.blue, const Cell(-1, -1), const Cell(7, 7));
+    setInitPosition(Ideology.yellow, const Cell(-1, 1), const Cell(7, 1));
+    setInitPosition(Ideology.green, const Cell(1, 1), const Cell(1, 1));
   }
 
   void act(int memberId, Cell cell) {

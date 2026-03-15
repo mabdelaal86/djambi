@@ -50,10 +50,7 @@ class PlayPage extends BasePage {
               _statusLabel = TextBoxComponent(
                 size: Vector2(300, 100),
                 align: Anchor.center,
-                textRenderer: getTextRenderer(
-                  color: Configs.emphaticTextColor,
-                  fontWeight: FontWeight.bold,
-                ),
+                textRenderer: getTextRenderer(color: Configs.emphaticTextColor, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -68,49 +65,47 @@ class PlayPage extends BasePage {
     await _onStatueChanged();
   }
 
-  PositionComponent _createUndoRedoPanel() =>
-      FlexComponent(
-        spacing: Configs.smallMargin,
-        axis: Axis.horizontal,
-        children: [
-          _undoButton = RoundedButton(
-            icon: Icons.undo,
-            fontSize: Configs.iconFontSize,
-            size: Configs.smallBtnSize,
-            onReleased: _onUndoTapUp,
-          ),
-          _redoButton = RoundedButton(
-            icon: Icons.redo,
-            fontSize: Configs.iconFontSize,
-            size: Configs.smallBtnSize,
-            onReleased: _onRedoTapUp,
-          ),
-        ],
-      );
+  PositionComponent _createUndoRedoPanel() => FlexComponent(
+    spacing: Configs.smallMargin,
+    axis: Axis.horizontal,
+    children: [
+      _undoButton = RoundedButton(
+        icon: Icons.undo,
+        fontSize: Configs.iconFontSize,
+        size: Configs.smallBtnSize,
+        onReleased: _onUndoTapUp,
+      ),
+      _redoButton = RoundedButton(
+        icon: Icons.redo,
+        fontSize: Configs.iconFontSize,
+        size: Configs.smallBtnSize,
+        onReleased: _onRedoTapUp,
+      ),
+    ],
+  );
 
-  PositionComponent _createNextPlayerPanel() =>
-      FlexComponent(
-        spacing: Configs.smallMargin,
-        axis: Axis.horizontal,
+  PositionComponent _createNextPlayerPanel() => FlexComponent(
+    spacing: Configs.smallMargin,
+    axis: Axis.horizontal,
+    children: [
+      TextBoxComponent(
+        text: "Next Player:",
+        textRenderer: getTextRenderer(),
+        size: Vector2(200, Configs.smallBtnSize.y),
+        align: Anchor.centerRight,
+      ),
+      _nextPlayerIcon = CircleComponent(
+        radius: Configs.smallBtnSize.x / 2,
         children: [
-          TextBoxComponent(
-            text: "Next Player:",
+          _nextPlayerText = TextBoxComponent(
+            size: Configs.smallBtnSize,
             textRenderer: getTextRenderer(),
-            size: Vector2(200, Configs.smallBtnSize.y),
-            align: Anchor.centerRight,
-          ),
-          _nextPlayerIcon = CircleComponent(
-            radius: Configs.smallBtnSize.x / 2,
-            children: [
-              _nextPlayerText = TextBoxComponent(
-                size: Configs.smallBtnSize,
-                textRenderer: getTextRenderer(),
-                align: Anchor.center,
-              ),
-            ],
+            align: Anchor.center,
           ),
         ],
-      );
+      ),
+    ],
+  );
 
   void _onUndoTapUp() {
     if (_allowUndoRedo) {
@@ -191,9 +186,10 @@ class PlayPage extends BasePage {
     }
 
     return Contest(
-        game.prefs.getStartIdeology(),
-        game.prefs.getTurnDirection(),
-        game.prefs.getPlayerTypes(),
-        onStateChanged: _onStatueChanged);
+      game.prefs.getStartIdeology(),
+      game.prefs.getTurnDirection(),
+      game.prefs.getPlayerTypes(),
+      onStateChanged: _onStatueChanged,
+    );
   }
 }

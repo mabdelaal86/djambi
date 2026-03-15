@@ -24,30 +24,33 @@ class Board extends PositionComponent {
   set enableTapUp(bool value) => _movements.enableTapUp = value;
 
   Board(
-      this.contest,
-      BoardTheme boardTheme,
-      this.pieceTheme,
-      this.marginsVisibility,
-      {super.position, super.anchor, super.scale})
-      : boardStyle = getBoardStyle(boardTheme),
-        super(size: _calcBoardSize(marginsVisibility));
+    this.contest,
+    BoardTheme boardTheme,
+    this.pieceTheme,
+    this.marginsVisibility, {
+    super.position,
+    super.anchor,
+    super.scale,
+  }) : boardStyle = getBoardStyle(boardTheme),
+       super(size: _calcBoardSize(marginsVisibility));
 
   @override
   Future<void> onLoad() async {
-    final margins = marginsVisibility == MarginsVisibility.none ?
-        Vector2.zero() :
-        Vector2.all(Dimensions.margin);
+    final margins = marginsVisibility == MarginsVisibility.none ? Vector2.zero() : Vector2.all(Dimensions.margin);
     await addAll([
       MarginsRenderer(boardStyle, marginsVisibility, size: size),
-      BackgroundRenderer(boardStyle, pieceTheme, position: margins),
-      _movements = MovementsRenderer(contest, boardStyle, position: margins),
-      PiecesRenderer(contest, boardStyle, pieceTheme, position: margins),
+      // grid
+      PositionComponent(
+        position: margins,
+        children: [
+          BackgroundRenderer(boardStyle, pieceTheme),
+          _movements = MovementsRenderer(contest, boardStyle),
+          PiecesRenderer(contest, boardStyle, pieceTheme),
+        ],
+      ),
     ]);
   }
 }
 
-Vector2 _calcBoardSize(MarginsVisibility visibility) => switch (visibility) {
-  MarginsVisibility.none => Dimensions.gridSize,
-  MarginsVisibility.half => Dimensions.gridSize + Dimensions.marginSize,
-  MarginsVisibility.full => Dimensions.gridSize + Dimensions.marginSize * 2,
-};
+Vector2 _calcBoardSize(MarginsVisibility visibility) =>
+    Dimensions.gridSize + Dimensions.marginSize * visibility.index.toDouble();

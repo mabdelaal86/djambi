@@ -10,6 +10,14 @@ help:
 clean:
     flutter clean
 
+# Analyze source code
+analyze:
+    flutter analyze --no-pub .
+
+# Format source code
+format:
+    dart format .
+
 # Build a release for android
 build-android-release:
     flutter build appbundle --release

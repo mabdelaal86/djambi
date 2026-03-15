@@ -9,14 +9,17 @@ class Militant extends Member {
   Role get role => Role.militant;
 
   @override
-  Iterable<Cell> cellsToMove({required bool canKill}) =>
-      super.cellsToMove(canKill: canKill).where((cell) =>
-          // can't target maze even if a chief is there
-          !cell.isMaze &&
-          // move only 2 steps
-          _stepsTo(cell) <= 2 &&
-          // empty cell or active enemy member
-          (parliament.getMemberAt(cell)?.isActive ?? true));
+  Iterable<Cell> cellsToMove({required bool canKill}) => super
+      .cellsToMove(canKill: canKill)
+      .where(
+        (cell) =>
+            // can't target maze even if a chief is there
+            !cell.isMaze &&
+            // move only 2 steps
+            _stepsTo(cell) <= 2 &&
+            // empty cell or active enemy member
+            (parliament.getMemberAt(cell)?.isActive ?? true),
+      );
 
   int _stepsTo(Cell cell) => (location - cell).abs().max;
 

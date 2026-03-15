@@ -12,10 +12,7 @@ import 'utils.dart';
 class ConfirmDialog extends ValueRoute<String> with HasGameReference<DjambiGame> {
   final String message, leftText, rightText;
 
-  ConfirmDialog(
-      this.message,
-      [this.leftText = "Yes", this.rightText = "No"])
-      : super(value: "");
+  ConfirmDialog(this.message, [this.leftText = "Yes", this.rightText = "No"]) : super(value: "");
 
   static final _dialogSize = Vector2(600, 300);
   static const _margin = 20.0;

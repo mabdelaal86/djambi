@@ -46,11 +46,7 @@ class FlexComponent extends PositionComponent {
   }
 }
 
-Vector2 _calcSize(
-    double spacing,
-    Axis axis,
-    List<PositionComponent> elements,
-) {
+Vector2 _calcSize(double spacing, Axis axis, List<PositionComponent> elements) {
   final spaces = spacing * (elements.length - 1);
   var res = axis == Axis.vertical ? Vector2(0, spaces) : Vector2(spaces, 0);
   for (final elem in elements) {

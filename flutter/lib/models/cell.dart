@@ -18,22 +18,17 @@ class Cell {
   Map<String, dynamic> toJson() => {"x": x, "y": y};
 
   @override
-  String toString() => isValid
-      ? Constants.colSymbols[x] + Constants.rowSymbols[y]
-      : "$x,$y";
+  String toString() => isValid ? Constants.colSymbols[x] + Constants.rowSymbols[y] : "$x,$y";
 
   @override
-  bool operator ==(Object other) =>
-      other is Cell && x == other.x && y == other.y;
+  bool operator ==(Object other) => other is Cell && x == other.x && y == other.y;
 
   @override
   int get hashCode => Object.hash(x, y);
 
   bool get isMaze => x == Constants.mazeIndex && y == Constants.mazeIndex;
   bool get isDark => x.isEven == y.isEven;
-  bool get isValid =>
-      (0 <= x && x < Constants.sideCellsCount) &&
-      (0 <= y && y < Constants.sideCellsCount);
+  bool get isValid => (0 <= x && x < Constants.sideCellsCount) && (0 <= y && y < Constants.sideCellsCount);
   int get max => x > y ? x : y;
   int get min => x < y ? x : y;
 
@@ -45,26 +40,29 @@ class Cell {
   Cell abs() => Cell(x.abs(), y.abs());
 
   static const List<Cell> allDirections = [
-    Cell(-1, -1), Cell(0, -1), Cell(1, -1),
-    Cell(-1,  0), /*location*/ Cell(1,  0),
-    Cell(-1,  1), Cell(0,  1), Cell(1,  1),
+    Cell(-1, -1), // top-left
+    Cell(0, -1), // top
+    Cell(1, -1), // top-right
+    Cell(-1, 0), // left
+    Cell(1, 0), // right
+    Cell(-1, 1), // bottom-left
+    Cell(0, 1), // bottom
+    Cell(1, 1), // bottom-right
   ];
 
-  Iterable<Cell> surroundingCells() =>
-      allDirections.map((d) => this + d).where((c) => c.isValid);
+  Iterable<Cell> surroundingCells() => allDirections.map((d) => this + d).where((c) => c.isValid);
 
   static const List<Cell> orthogonalDirections = [
-                 Cell(0, -1),
-    Cell(-1, 0), /*location*/ Cell(1, 0),
-                 Cell(0,  1),
+    Cell(0, -1), // top
+    Cell(-1, 0), // left
+    Cell(1, 0), // right
+    Cell(0, 1), // bottom
   ];
 
   bool isAdjacentTo(Cell other) =>
-      (x == other.x && (y - other.y).abs() == 1) ||
-      (y == other.y && (x - other.x).abs() == 1);
+      (x == other.x && (y - other.y).abs() == 1) || (y == other.y && (x - other.x).abs() == 1);
 
-  Iterable<Cell> adjacentCells() =>
-      orthogonalDirections.map((d) => this + d).where((c) => c.isValid);
+  Iterable<Cell> adjacentCells() => orthogonalDirections.map((d) => this + d).where((c) => c.isValid);
 
   static Iterable<Cell> allCells() sync* {
     for (var y = 0; y < Constants.sideCellsCount; y++) {

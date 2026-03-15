@@ -14,7 +14,7 @@ class SettingsPage extends BasePage {
   // @override
   // bool get debugMode => true;
 
-  SettingsPage(): super(title: "Settings");
+  SettingsPage() : super(title: "Settings");
 
   late final List<OptionButton> _marginsButtons;
   late final List<OptionButton> _gameSpeedButtons;
@@ -27,81 +27,67 @@ class SettingsPage extends BasePage {
         anchor: Anchor.center,
         position: Anchor.center.ofSize(size),
         spacing: Configs.largeMargin,
-        children: [
-          _createMarginsPanel(),
-          _createGameSpeedPanel(),
-        ],
+        children: [_createMarginsPanel(), _createGameSpeedPanel()],
       ),
     ]);
     _getMarginsVisibility();
     _getGameSpeed();
   }
 
-  PositionComponent _createMarginsPanel() =>
+  PositionComponent _createMarginsPanel() => FlexComponent(
+    spacing: Configs.smallMargin,
+    children: [
+      _createSectionLabel("Margins:"),
       FlexComponent(
+        axis: Axis.horizontal,
         spacing: Configs.smallMargin,
-        children: [
-          _createSectionLabel("Margins:"),
-          FlexComponent(
-            axis: Axis.horizontal,
-            spacing: Configs.smallMargin,
-            children: _marginsButtons = [
-              OptionButton(
-                text: "None",
-                size: Configs.mediumBtnSize,
-                onSelect: () async => _setMarginsVisibility(MarginsVisibility.none),
-              ),
-              OptionButton(
-                text: "Top-Left",
-                size: Configs.mediumBtnSize,
-                onSelect: () async => _setMarginsVisibility(MarginsVisibility.half),
-              ),
-              OptionButton(
-                text: "Full",
-                size: Configs.mediumBtnSize,
-                onSelect: () async => _setMarginsVisibility(MarginsVisibility.full),
-              ),
-            ],
+        children: _marginsButtons = [
+          OptionButton(
+            text: "None",
+            size: Configs.mediumBtnSize,
+            onSelect: () async => _setMarginsVisibility(MarginsVisibility.none),
+          ),
+          OptionButton(
+            text: "Top-Left",
+            size: Configs.mediumBtnSize,
+            onSelect: () async => _setMarginsVisibility(MarginsVisibility.half),
+          ),
+          OptionButton(
+            text: "Full",
+            size: Configs.mediumBtnSize,
+            onSelect: () async => _setMarginsVisibility(MarginsVisibility.full),
           ),
         ],
-      );
+      ),
+    ],
+  );
 
-  PositionComponent _createGameSpeedPanel() =>
+  PositionComponent _createGameSpeedPanel() => FlexComponent(
+    spacing: Configs.smallMargin,
+    children: [
+      _createSectionLabel("Game Speed:"),
       FlexComponent(
+        axis: Axis.horizontal,
         spacing: Configs.smallMargin,
-        children: [
-          _createSectionLabel("Game Speed:"),
-          FlexComponent(
-            axis: Axis.horizontal,
-            spacing: Configs.smallMargin,
-            children: _gameSpeedButtons = [
-              OptionButton(
-                text: "Fast",
-                size: Configs.mediumBtnSize,
-                onSelect: () async => _setGameSpeed(GameSpeed.fast),
-              ),
-              OptionButton(
-                text: "Medium",
-                size: Configs.mediumBtnSize,
-                onSelect: () async => _setGameSpeed(GameSpeed.medium),
-              ),
-              OptionButton(
-                text: "Slow",
-                size: Configs.mediumBtnSize,
-                onSelect: () async => _setGameSpeed(GameSpeed.slow),
-              ),
-            ],
+        children: _gameSpeedButtons = [
+          OptionButton(text: "Fast", size: Configs.mediumBtnSize, onSelect: () async => _setGameSpeed(GameSpeed.fast)),
+          OptionButton(
+            text: "Medium",
+            size: Configs.mediumBtnSize,
+            onSelect: () async => _setGameSpeed(GameSpeed.medium),
           ),
+          OptionButton(text: "Slow", size: Configs.mediumBtnSize, onSelect: () async => _setGameSpeed(GameSpeed.slow)),
         ],
-      );
+      ),
+    ],
+  );
 
-  PositionComponent _createSectionLabel(String text) =>
-      TextBoxComponent(
-        size: _sectionLabelSize,
-        text: text,
-        align: Anchor.centerLeft,
-        textRenderer: getTextRenderer(fontWeight: FontWeight.bold),
-      );
+  PositionComponent _createSectionLabel(String text) => TextBoxComponent(
+    size: _sectionLabelSize,
+    text: text,
+    align: Anchor.centerLeft,
+    textRenderer: getTextRenderer(fontWeight: FontWeight.bold),
+  );
 
   Future<void> _setMarginsVisibility(MarginsVisibility visibility) async {
     await game.prefs.setMarginsVisibility(visibility);

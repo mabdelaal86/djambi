@@ -30,11 +30,7 @@ class ToggleButton extends ToggleButtonComponent {
     await super.onLoad();
     defaultLabel = defaultSelectedLabel = TextComponent(
       text: icon?.codePoint.convert(String.fromCharCode) ?? text,
-      textRenderer: getTextRenderer(
-        fontSize: fontSize,
-        color: colorSchema.text,
-        fontFamily: icon?.fontFamily,
-      ),
+      textRenderer: getTextRenderer(fontSize: fontSize, color: colorSchema.text, fontFamily: icon?.fontFamily),
     );
     defaultSkin = RoundedRectComponent(paint: colorSchema.natural.toPaint());
     hoverSkin = RoundedRectComponent(paint: colorSchema.hover.toPaint());

@@ -4,12 +4,8 @@ class IndexedStackComponent extends PositionComponent {
   int _index = 0;
   final List<PositionComponent> _elements;
 
-  IndexedStackComponent({
-    super.position,
-    super.anchor,
-    super.scale,
-    required List<PositionComponent> children,
-  }) : _elements = children {
+  IndexedStackComponent({super.position, super.anchor, super.scale, required List<PositionComponent> children})
+    : _elements = children {
     assert(_elements.isNotEmpty, "children components are empty!");
   }
 

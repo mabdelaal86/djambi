@@ -16,12 +16,10 @@ class DjambiGame extends FlameGame {
   late final RouterComponent router;
   late final PreferencesController prefs;
 
-  DjambiGame() : super(
-    camera: CameraComponent.withFixedResolution(
-      width: Configs.gameWidth,
-      height: Configs.gameHeight,
-    ),
-  );
+  DjambiGame()
+    : super(
+        camera: CameraComponent.withFixedResolution(width: Configs.gameWidth, height: Configs.gameHeight),
+      );
 
   @override
   Color backgroundColor() => Configs.pageBackground;
@@ -31,16 +29,18 @@ class DjambiGame extends FlameGame {
     camera.viewfinder.anchor = Anchor.topLeft;
     prefs = await PreferencesController.create();
 
-    await world.add(router = RouterComponent(
-      routes: {
-        "about": Route(AboutPage.new, maintainState: false),
-        "home": Route(HomePage.new),
-        "options": Route(OptionsPage.new, maintainState: false),
-        "play": Route(PlayPage.new, maintainState: false),
-        "settings": Route(SettingsPage.new, maintainState: false),
-      },
-      initialRoute: "home",
-    ));
+    await world.add(
+      router = RouterComponent(
+        routes: {
+          "about": Route(AboutPage.new, maintainState: false),
+          "home": Route(HomePage.new),
+          "options": Route(OptionsPage.new, maintainState: false),
+          "play": Route(PlayPage.new, maintainState: false),
+          "settings": Route(SettingsPage.new, maintainState: false),
+        },
+        initialRoute: "home",
+      ),
+    );
   }
 
   void popPage() {

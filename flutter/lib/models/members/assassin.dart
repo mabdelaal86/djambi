@@ -13,12 +13,14 @@ class Assassin extends Member {
   @override
   Iterable<Cell> cellsToMove({required bool canKill}) => super
       .cellsToMove(canKill: canKill)
-      .where((cell) => switch (parliament.getMemberAt(cell)) {
-            // not empty cell: it should be occupied by an active enemy
-            final enemy? => enemy.isActive,
-            // empty cell: not the maze and not the cell coming from if exiting maze
-            null => !cell.isMaze && (canKill || cell != _cellFrom),
-          });
+      .where(
+        (cell) => switch (parliament.getMemberAt(cell)) {
+          // not empty cell: it should be occupied by an active enemy
+          final enemy? => enemy.isActive,
+          // empty cell: not the maze and not the cell coming from if exiting maze
+          null => !cell.isMaze && (canKill || cell != _cellFrom),
+        },
+      );
 
   @override
   void copyFrom(Member other) {

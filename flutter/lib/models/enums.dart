@@ -3,8 +3,7 @@ enum Ideology {
   red,
   blue,
   yellow,
-  green,
-  ;
+  green;
 
   Ideology get next => Ideology.values[(index + 1) % 4];
   Ideology get previous => Ideology.values[(index + 3) % 4];
@@ -12,21 +11,12 @@ enum Ideology {
 
 enum TurnDirection {
   clockwise,
-  anticlockwise,
-  ;
+  anticlockwise;
 
-  Ideology next(Ideology ideology) =>
-      this == anticlockwise ? ideology.next : ideology.previous;
+  Ideology next(Ideology ideology) => this == anticlockwise ? ideology.next : ideology.previous;
 }
 
-enum Role {
-  chief,
-  assassin,
-  reporter,
-  diplomat,
-  necromobile,
-  militant,
-}
+enum Role { chief, assassin, reporter, diplomat, necromobile, militant }
 
 enum MemberState {
   active,
@@ -35,18 +25,11 @@ enum MemberState {
 }
 
 // represent which stage of the manoeuvre is finished
-enum Manoeuvre {
-  none,
-  move,
-  kill,
-  exit,
-  end,
-}
+enum Manoeuvre { none, move, kill, exit, end }
 
 enum PlayerType {
   human,
-  aiMaxN,
-  ;
+  aiMaxN;
 
   bool get isHuman => this == PlayerType.human;
 }

@@ -34,7 +34,7 @@ abstract class BasePage extends PositionComponent with HasGameReference<DjambiGa
     size: Configs.headerSize,
     children: [
       TextComponent(
-        text:  title,
+        text: title,
         textRenderer: getTextRenderer(fontSize: Configs.headerFontSize),
         anchor: Anchor.center,
         position: Anchor.center.ofSize(Configs.headerSize),
@@ -47,7 +47,7 @@ abstract class BasePage extends PositionComponent with HasGameReference<DjambiGa
         size: Configs.smallBtnSize,
         onReleased: onBackTapUp,
       ),
-    ]
+    ],
   );
 }
 

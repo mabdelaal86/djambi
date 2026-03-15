@@ -13,8 +13,8 @@ class Node {
     parent?.subNodes.add(this);
   }
 
-  static int _newDepth(Node? parent, Parliament parliament) => parent?.depth
-      .convert((d) => parliament.isManoeuvreCompleted ? d + 1 : d) ?? 0;
+  static int _newDepth(Node? parent, Parliament parliament) =>
+      parent?.depth.convert((d) => parliament.isManoeuvreCompleted ? d + 1 : d) ?? 0;
 
   final Parliament parliament;
 
@@ -29,12 +29,11 @@ class Node {
   void evaluate(PartyEvaluation evaluateParty) {
     assert(subNodes.isEmpty, "evaluate should run on leaf nodes only");
     assert(parliament.isManoeuvreCompleted, "the maneuver should be completed");
-    _evaluations = { for (final p in parliament.parties) p.ideology: evaluateParty(p) };
+    _evaluations = {for (final p in parliament.parties) p.ideology: evaluateParty(p)};
   }
 
-  Iterable<Member> _whoCanAct() => parliament.isManoeuvreCompleted
-      ? parliament.currentParty.activeMembers
-      : [parliament.actor!];
+  Iterable<Member> _whoCanAct() =>
+      parliament.isManoeuvreCompleted ? parliament.currentParty.activeMembers : [parliament.actor!];
 
   Iterable<(Member, Cell)> availableActions() sync* {
     for (final member in _whoCanAct()) {
@@ -59,8 +58,7 @@ class Node {
       if (subMax > max) {
         max = subMax;
         evaluations = subNode._evaluations;
-        bestSub = subNode.parliament.isManoeuvreCompleted
-            ? subNode : subNode.bestSubNode;
+        bestSub = subNode.parliament.isManoeuvreCompleted ? subNode : subNode.bestSubNode;
       }
     }
     _evaluations = evaluations!;

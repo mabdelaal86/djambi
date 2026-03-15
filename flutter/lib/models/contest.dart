@@ -22,22 +22,18 @@ class Contest {
 
   final List<PlayerType> playerTypes;
 
-  Contest(
-      Ideology startIdeology,
-      TurnDirection turnDirection,
-      this.playerTypes,
-      {this.onStateChanged})
-      : _curState = State(Parliament(startIdeology, turnDirection));
+  Contest(Ideology startIdeology, TurnDirection turnDirection, this.playerTypes, {this.onStateChanged})
+    : _curState = State(Parliament(startIdeology, turnDirection));
 
   /// json deserialization
   Contest.fromJson(Map<String, dynamic> json, {this.onStateChanged})
-      : _curState = State(Parliament.fromJson(json["parliament"])),
-        playerTypes = [ for (final p in json["player-types"]) PlayerType.values[p] ];
+    : _curState = State(Parliament.fromJson(json["parliament"])),
+      playerTypes = [for (final p in json["player-types"]) PlayerType.values[p]];
 
   /// json serialization
   Map<String, dynamic> toJson() => {
-      "parliament": parliament.toJson(),
-      "player-types": playerTypes.map((e) => e.index).toList(),
+    "parliament": parliament.toJson(),
+    "player-types": playerTypes.map((e) => e.index).toList(),
   };
 
   void undo() {
@@ -56,8 +52,7 @@ class Contest {
     }
   }
 
-  bool noHumans() => parliament.activeParties
-      .every((p) => playerTypes[p.ideology.index] != PlayerType.human);
+  bool noHumans() => parliament.activeParties.every((p) => playerTypes[p.ideology.index] != PlayerType.human);
 
   bool isCurHuman() => playerTypes[parliament.currentParty.ideology.index].isHuman;
 

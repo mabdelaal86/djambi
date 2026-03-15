@@ -8,6 +8,8 @@ import '../dimensions.dart';
 import '../theme.dart';
 import '../utils.dart';
 
+/// Draw last movements, selectable pieces, available movements for the selected piece
+/// and pass tap up events into the underline models.
 class MovementsRenderer extends PositionComponent with TapCallbacks {
   // @override
   // bool get debugMode => true;
@@ -18,9 +20,8 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
 
   bool enableTapUp = true;
 
-  MovementsRenderer(this.contest, this.boardStyle,
-      {super.position, super.anchor, super.scale})
-      : super(size: Dimensions.gridSize);
+  MovementsRenderer(this.contest, this.boardStyle, {super.position, super.anchor, super.scale})
+    : super(size: Dimensions.gridSize);
 
   bool get _gameIsNotFinished => !contest.parliament.isGameFinished;
   Party get _curParty => contest.parliament.currentParty;

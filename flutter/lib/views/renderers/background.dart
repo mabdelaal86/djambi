@@ -16,9 +16,8 @@ class BackgroundRenderer extends PositionComponent {
   final PieceTheme pieceTheme;
   late final Svg _mazeImage;
 
-  BackgroundRenderer(this.boardStyle, this.pieceTheme,
-      {super.position, super.anchor, super.scale})
-      : super(size: Dimensions.gridSize);
+  BackgroundRenderer(this.boardStyle, this.pieceTheme, {super.position, super.anchor, super.scale})
+    : super(size: Dimensions.gridSize);
 
   @override
   Future<void> onLoad() async {
@@ -37,16 +36,19 @@ class BackgroundRenderer extends PositionComponent {
   void _paintBackground(Canvas canvas) {
     for (final cell in Cell.allCells()) {
       canvas.drawRect(
-          cellOffset(cell) & Dimensions.cellSize,
-          cell.isDark ? boardStyle.darkCellPaint : boardStyle.lightCellPaint);
+        cellOffset(cell) & Dimensions.cellSize,
+        cell.isDark ? boardStyle.darkCellPaint : boardStyle.lightCellPaint,
+      );
     }
   }
 
   void _drawMaze(Canvas canvas) {
     canvas.drawRect(Dimensions.mazeOffset & Dimensions.cellSize, boardStyle.mazePaint);
     switch (pieceTheme) {
-      case PieceTheme.classic: _drawChiefClassicImage(canvas);
-      case PieceTheme.characters: _drawChiefSymbol(canvas);
+      case PieceTheme.classic:
+        _drawChiefClassicImage(canvas);
+      case PieceTheme.characters:
+        _drawChiefSymbol(canvas);
     }
   }
 

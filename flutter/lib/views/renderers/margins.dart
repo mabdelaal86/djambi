@@ -15,18 +15,15 @@ class MarginsRenderer extends PositionComponent {
 
   final _textPainter = TextPainter(textDirection: TextDirection.ltr);
 
-  MarginsRenderer(this.boardStyle, this.marginsVisibility,
-      {super.position, super.anchor, super.size, super.scale});
+  MarginsRenderer(this.boardStyle, this.marginsVisibility, {super.position, super.anchor, super.size, super.scale});
 
   @override
   void render(Canvas canvas) {
     canvas.drawRect(size.toRect(), boardStyle.marginPaint);
-    if (marginsVisibility != MarginsVisibility.none) {
-      _writeIndexes(canvas, 0);
-      if (marginsVisibility == MarginsVisibility.full) {
-        _writeIndexes(canvas, Dimensions.margin + Dimensions.gridSide);
-      }
-    }
+    if (marginsVisibility == MarginsVisibility.none) return;
+    _writeIndexes(canvas, 0);
+    if (marginsVisibility == MarginsVisibility.half) return;
+    _writeIndexes(canvas, Dimensions.margin + Dimensions.gridSide);
   }
 
   void _writeText(Canvas canvas, String text, Offset cellOffset, Vector2 cellSize) {

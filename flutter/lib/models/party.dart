@@ -16,24 +16,20 @@ class Party {
   @override
   String toString() => "${ideology.name} party";
 
-  Iterable<Member> get activeMembers =>
-      parliament.members.where((m) => m.ideology == ideology && m.isActive);
+  Iterable<Member> get activeMembers => parliament.members.where((m) => m.ideology == ideology && m.isActive);
 
-  Iterable<Member> get movableMembers =>
-      activeMembers.where((m) => m.cellsToAct().isNotEmpty);
+  Iterable<Member> get movableMembers => activeMembers.where((m) => m.cellsToAct().isNotEmpty);
 
-  Iterable<Member> getMembersOfRole(Role role) =>
-      activeMembers.where((m) => m.role == role);
+  Iterable<Member> getMembersOfRole(Role role) => activeMembers.where((m) => m.role == role);
 
-  Member? getMemberAt(Cell cell) =>
-      activeMembers.firstWhereOrNull((m) => m.location == cell);
+  Member? getMemberAt(Cell cell) => activeMembers.firstWhereOrNull((m) => m.location == cell);
 
   bool isChiefSurrounded() {
     if (chief.location.isMaze) return false;
     if (getMembersOfRole(Role.necromobile).isNotEmpty) return false;
 
     final inQueue = chief.location.surroundingCells().toList();
-    final registered = { chief.location, ...inQueue };
+    final registered = {chief.location, ...inQueue};
 
     while (inQueue.isNotEmpty) {
       final cell = inQueue.removeLast();
@@ -43,9 +39,7 @@ class Party {
       if (member.isDead) continue;
       if (member.ideology != ideology) return false;
 
-      final surroundings = cell.surroundingCells()
-          .where((c) => !registered.contains(c))
-          .toList();
+      final surroundings = cell.surroundingCells().where((c) => !registered.contains(c)).toList();
       registered.addAll(surroundings);
       inQueue.addAll(surroundings);
     }

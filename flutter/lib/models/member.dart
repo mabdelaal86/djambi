@@ -39,19 +39,17 @@ abstract class Member {
   @override
   String toString() => "${ideology.name}:${role.name}($location)";
 
-  factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) =>
-      switch (role) {
-        Role.chief =>         Chief(parliament, ideology, id),
-        Role.assassin =>      Assassin(parliament, ideology, id),
-        Role.reporter =>      Reporter(parliament, ideology, id),
-        Role.diplomat =>      Diplomat(parliament, ideology, id),
-        Role.necromobile =>   Necromobile(parliament, ideology, id),
-        Role.militant =>      Militant(parliament, ideology, id),
-      };
+  factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) => switch (role) {
+    Role.chief => Chief(parliament, ideology, id),
+    Role.assassin => Assassin(parliament, ideology, id),
+    Role.reporter => Reporter(parliament, ideology, id),
+    Role.diplomat => Diplomat(parliament, ideology, id),
+    Role.necromobile => Necromobile(parliament, ideology, id),
+    Role.militant => Militant(parliament, ideology, id),
+  };
 
   factory Member.copy(Parliament parliament, Member other) =>
-      Member.create(parliament, other.role, other.ideology, other.id)
-        ..copyFrom(other);
+      Member.create(parliament, other.role, other.ideology, other.id)..copyFrom(other);
 
   @protected
   void copyFrom(Member other) {
@@ -65,12 +63,7 @@ abstract class Member {
 
   /// json deserialization
   factory Member.fromJson(Parliament parliament, Map<String, dynamic> json) {
-    final member = Member.create(
-      parliament,
-      Role.values[json["role"]],
-      Ideology.values[json["ideology"]],
-      json["id"],
-    );
+    final member = Member.create(parliament, Role.values[json["role"]], Ideology.values[json["ideology"]], json["id"]);
     member.location = Cell.fromJson(json["location"]);
     member.state = MemberState.values[json["state"]];
     return member;
@@ -125,23 +118,29 @@ abstract class Member {
   }
 
   Iterable<Cell> cellsToAct() => switch (manoeuvre) {
-      Manoeuvre.none => cellsToMove(canKill: true),
-      Manoeuvre.move => Cell.allCells().where(canKillOn),
-      Manoeuvre.kill => cellsToMove(canKill: false),
-      Manoeuvre.exit => Cell.allCells().where(canBuryOn),
-      Manoeuvre.end =>  const Iterable.empty(),
-    };
+    Manoeuvre.none => cellsToMove(canKill: true),
+    Manoeuvre.move => Cell.allCells().where(canKillOn),
+    Manoeuvre.kill => cellsToMove(canKill: false),
+    Manoeuvre.exit => Cell.allCells().where(canBuryOn),
+    Manoeuvre.end => const Iterable.empty(),
+  };
 
   bool canKillOn(Cell cell) => false;
   bool canBuryOn(Cell cell) => !cell.isMaze && parliament.isEmpty(cell);
 
   void act(Cell cell) {
     switch (manoeuvre) {
-      case Manoeuvre.none:  onMove(cell); postMove();
-      case Manoeuvre.move:  onKill(cell);
-      case Manoeuvre.kill:  onExit(cell);
-      case Manoeuvre.exit:  onBury(cell);
-      case Manoeuvre.end:   throw AssertionError("can't act on the `end` state!");
+      case Manoeuvre.none:
+        onMove(cell);
+        postMove();
+      case Manoeuvre.move:
+        onKill(cell);
+      case Manoeuvre.kill:
+        onExit(cell);
+      case Manoeuvre.exit:
+        onBury(cell);
+      case Manoeuvre.end:
+        throw AssertionError("can't act on the `end` state!");
     }
   }
 

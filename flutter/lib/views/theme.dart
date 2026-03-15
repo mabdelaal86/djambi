@@ -1,19 +1,10 @@
 import 'package:flutter/painting.dart';
 
-enum PieceTheme {
-  classic,
-  characters,
-}
+enum PieceTheme { classic, characters }
 
-enum BoardTheme {
-  classic,
-}
+enum BoardTheme { classic }
 
-enum MarginsVisibility {
-  none,
-  half,
-  full,
-}
+enum MarginsVisibility { none, half, full }
 
 class BoardStyle {
   // margins

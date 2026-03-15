@@ -5,8 +5,7 @@ import '../party.dart';
 
 typedef PartyEvaluation = int Function(Party party);
 
-int defaultPartyEvaluation(Party party) =>
-    party.activeMembers.map((m) => _roleValues[m.role]!).sum;
+int defaultPartyEvaluation(Party party) => party.activeMembers.map((m) => _roleValues[m.role]!).sum;
 
 const _roleValues = {
   Role.militant: 5,

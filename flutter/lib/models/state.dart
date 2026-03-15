@@ -6,11 +6,10 @@ class State {
   final List<Cell> lastMovedCells;
 
   State(this.parliament, [Parliament? lastParliament])
-      : lastMovedCells = _getDifferentCells(parliament, lastParliament).toList();
+    : lastMovedCells = _getDifferentCells(parliament, lastParliament).toList();
 }
 
-Iterable<Cell> _getDifferentCells(
-    Parliament newParliament, Parliament? lastParliament) sync* {
+Iterable<Cell> _getDifferentCells(Parliament newParliament, Parliament? lastParliament) sync* {
   if (lastParliament == null) return;
   for (final member in newParliament.members) {
     final lastMember = lastParliament.members[member.id];

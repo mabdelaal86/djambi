@@ -11,13 +11,7 @@ class ButtonColorSchema {
   final Color disabled;
   final Color text;
 
-  const ButtonColorSchema(
-      this.natural,
-      this.hover,
-      this.down,
-      this.disabled,
-      this.text,
-  );
+  const ButtonColorSchema(this.natural, this.hover, this.down, this.disabled, this.text);
 }
 
 TextPaint getTextRenderer({
