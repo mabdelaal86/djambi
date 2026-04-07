@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flutter/painting.dart';
 
 import '../../models.dart';
 import '../dimensions.dart';
@@ -18,10 +17,7 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
   final BoardStyle boardStyle;
   Member? _selectedMember;
 
-  bool enableTapUp = true;
-
-  MovementsRenderer(this.contest, this.boardStyle, {super.position, super.anchor, super.scale})
-    : super(size: Dimensions.gridSize);
+  MovementsRenderer(this.contest, this.boardStyle, {super.position, super.anchor, super.size, super.scale});
 
   bool get _gameIsNotFinished => !contest.parliament.isGameFinished;
   Party get _curParty => contest.parliament.currentParty;
@@ -37,8 +33,8 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
 
   @override
   void onTapUp(TapUpEvent event) {
-    if (_gameIsNotFinished && enableTapUp) {
-      final cell = vector2cell(event.localPosition);
+    if (_gameIsNotFinished) {
+      final cell = Cell(event.localPosition.x ~/ Dimensions.cellSide, event.localPosition.y ~/ Dimensions.cellSide);
       _handleCellTapUp(cell);
     }
   }
@@ -117,45 +113,23 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
 
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCircle(canvas, cell, boardStyle.selectableMarkPaint);
+      canvas.paintCellCircle(cell, boardStyle.selectableMarkColor, Dimensions.markStroke, Dimensions.pieceStroke);
     }
   }
 
   void _markSelected(Canvas canvas, Cell cell) {
-    _paintRect(canvas, cell, boardStyle.selectedMarkPaint);
+    canvas.paintCellRect(cell, boardStyle.selectedMarkColor);
   }
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      _markCircle(canvas, cell, boardStyle.actionMarkPaint);
+      canvas.paintCellCircle(cell, boardStyle.actionMarkColor, Dimensions.markStroke, Dimensions.pieceStroke);
     }
   }
 
   void _markLastMovement(Canvas canvas) {
     for (final cell in contest.lastMovedCells) {
-      _markRect(canvas, cell, boardStyle.movedMarkPaint);
+      canvas.paintCellRect(cell, boardStyle.movedMarkColor, Dimensions.markStroke);
     }
-  }
-
-  void _markCircle(Canvas canvas, Cell cell, Paint paint) {
-    final offset = cellCenterOffset(cell).toOffset();
-
-    // draw circle
-    const radius = Dimensions.pieceRadius + Dimensions.markStroke;
-    canvas.drawCircle(offset, radius, paint..stroke());
-  }
-
-  void _markRect(Canvas canvas, Cell cell, Paint paint) {
-    final offset = cellCenterOffset(cell).toOffset();
-
-    // draw rect
-    const radius = Dimensions.cellSide / 2 - Dimensions.markStroke;
-    final rect = Rect.fromCircle(center: offset, radius: radius);
-    canvas.drawRect(rect, paint..stroke());
-  }
-
-  void _paintRect(Canvas canvas, Cell cell, Paint paint) {
-    final offset = cellOffset(cell);
-    canvas.drawRect(offset & Dimensions.cellSize, paint);
   }
 }

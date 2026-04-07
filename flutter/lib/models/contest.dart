@@ -28,7 +28,7 @@ class Contest {
   /// json deserialization
   Contest.fromJson(Map<String, dynamic> json, {this.onStateChanged})
     : _curState = State(Parliament.fromJson(json["parliament"])),
-      playerTypes = [for (final p in json["player-types"]) PlayerType.values[p]];
+      playerTypes = [for (final p in json["player-types"]) .values[p]];
 
   /// json serialization
   Map<String, dynamic> toJson() => {
@@ -52,9 +52,9 @@ class Contest {
     }
   }
 
-  bool noHumans() => parliament.activeParties.every((p) => playerTypes[p.ideology.index] != PlayerType.human);
+  bool get noHumans => parliament.activeParties.every((p) => playerTypes[p.ideology.index] != .human);
 
-  bool isCurHuman() => playerTypes[parliament.currentParty.ideology.index].isHuman;
+  bool get isCurHuman => playerTypes[parliament.currentParty.ideology.index].isHuman;
 
   void doAction(Member member, Cell cell) {
     final newParliament = _curState.parliament.makeCopy();

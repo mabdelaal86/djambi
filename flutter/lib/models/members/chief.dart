@@ -6,7 +6,7 @@ class Chief extends Member {
   Chief(super.parliament, super.ideology, super.id);
 
   @override
-  Role get role => Role.chief;
+  Role get role => .chief;
 
   @override
   Iterable<Cell> cellsToMove({required bool canKill}) => super
@@ -17,10 +17,10 @@ class Chief extends Member {
   @override
   void postMove() {
     if (body == null) {
-      manoeuvre = Manoeuvre.end;
+      manoeuvre = .end;
     } else {
       kill(body!);
-      manoeuvre = Manoeuvre.exit;
+      manoeuvre = .exit;
     }
   }
 

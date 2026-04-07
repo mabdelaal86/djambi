@@ -6,7 +6,7 @@ class Reporter extends Member {
   Reporter(super.parliament, super.ideology, super.id);
 
   @override
-  Role get role => Role.reporter;
+  Role get role => .reporter;
 
   @override
   Iterable<Cell> cellsToMove({required bool canKill}) => super
@@ -25,7 +25,7 @@ class Reporter extends Member {
   @override
   void postMove() {
     if (!location.adjacentCells().any(occupiedByEnemy)) {
-      manoeuvre = Manoeuvre.end;
+      manoeuvre = .end;
     }
   }
 
@@ -33,7 +33,7 @@ class Reporter extends Member {
   void onKill(Cell cell) {
     assert(canKillOn(cell), "can't do an action on the selected cell");
     kill(parliament.getMemberAt(cell)!);
-    manoeuvre = Manoeuvre.end;
+    manoeuvre = .end;
   }
 
   @override

@@ -2,11 +2,10 @@ import 'package:flame/components.dart';
 
 import '../models.dart';
 import 'dimensions.dart';
-import 'renderers/background.dart';
+import 'renderers/grid.dart';
 import 'renderers/margins.dart';
 import 'renderers/movements.dart';
 import 'renderers/pieces.dart';
-import 'styles.dart';
 import 'theme.dart';
 
 class Board extends PositionComponent {
@@ -16,41 +15,33 @@ class Board extends PositionComponent {
   final Contest contest;
   final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
-  final MarginsVisibility marginsVisibility;
-
-  late final MovementsRenderer _movements;
-
-  bool get enableTapUp => _movements.enableTapUp;
-  set enableTapUp(bool value) => _movements.enableTapUp = value;
+  final NotationVisibility notationVisibility;
 
   Board(
     this.contest,
-    BoardTheme boardTheme,
+    this.boardStyle,
     this.pieceTheme,
-    this.marginsVisibility, {
+    this.notationVisibility, {
     super.position,
     super.anchor,
     super.scale,
-  }) : boardStyle = getBoardStyle(boardTheme),
-       super(size: _calcBoardSize(marginsVisibility));
+    super.size,
+  });
 
   @override
   Future<void> onLoad() async {
-    final margins = marginsVisibility == MarginsVisibility.none ? Vector2.zero() : Vector2.all(Dimensions.margin);
+    final gridSize = Vector2.all(Dimensions.gridSide);
     await addAll([
-      MarginsRenderer(boardStyle, marginsVisibility, size: size),
+      MarginsRenderer(boardStyle, notationVisibility, size: size),
       // grid
       PositionComponent(
-        position: margins,
+        position: Vector2.all(notationVisibility == .none ? Dimensions.border : Dimensions.margin),
         children: [
-          BackgroundRenderer(boardStyle, pieceTheme),
-          _movements = MovementsRenderer(contest, boardStyle),
-          PiecesRenderer(contest, boardStyle, pieceTheme),
+          GridRenderer(boardStyle, pieceTheme, size: gridSize),
+          MovementsRenderer(contest, boardStyle, size: gridSize),
+          PiecesRenderer(contest, boardStyle, pieceTheme, size: gridSize),
         ],
       ),
     ]);
   }
 }
-
-Vector2 _calcBoardSize(MarginsVisibility visibility) =>
-    Dimensions.gridSize + Dimensions.marginSize * visibility.index.toDouble();

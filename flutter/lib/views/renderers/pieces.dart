@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_svg/svg.dart';
-import 'package:flutter/painting.dart';
 
 import '../../models.dart';
 import '../dimensions.dart';
@@ -16,14 +15,21 @@ class PiecesRenderer extends PositionComponent {
   final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
 
-  PiecesRenderer(this.contest, this.boardStyle, this.pieceTheme, {super.position, super.anchor, super.scale})
-    : super(size: Dimensions.gridSize);
+  PiecesRenderer(
+    this.contest,
+    this.boardStyle,
+    this.pieceTheme, {
+    super.position,
+    super.anchor,
+    super.size,
+    super.scale,
+  });
 
   late final Map<Role, Svg> _memberImages;
 
   @override
   Future<void> onLoad() async {
-    _memberImages = {for (final r in Role.values) r: await loadImage(r.name, boardStyle.pieceForeColor)};
+    _memberImages = {for (final r in Role.values) r: await loadPieceImage(r, pieceTheme, boardStyle.pieceForeColor)};
   }
 
   @override
@@ -46,37 +52,14 @@ class PiecesRenderer extends PositionComponent {
   }
 
   void _drawMember(Canvas canvas, Member member) {
-    final centerOffset = cellCenterOffset(member.location).toOffset();
-    _paintMemberBackground(canvas, member, centerOffset);
+    canvas.paintCellCircle(member.location, boardStyle.pieceEdgeColor, Dimensions.pieceStroke);
+    canvas.paintCellCircle(member.location, switch (member.state) {
+      .dead => boardStyle.deadColor,
+      .paralysed => boardStyle.paralysedColor,
+      .active => boardStyle.partyColor[member.ideology.index],
+    });
     if (member.isAlive) {
-      switch (pieceTheme) {
-        case PieceTheme.classic:
-          _drawRoleClassicImage(canvas, member.role, centerOffset);
-        case PieceTheme.characters:
-          _drawRoleSymbol(canvas, member.role, centerOffset);
-      }
+      canvas.paintCellSvg(member.location, _memberImages[member.role]!);
     }
-  }
-
-  void _paintMemberBackground(Canvas canvas, Member member, Offset offset) {
-    final bgPaint = switch (member.state) {
-      MemberState.dead => boardStyle.deadPaint,
-      MemberState.paralysed => boardStyle.paralysedPaint,
-      MemberState.active => boardStyle.partyPaint[member.ideology.index],
-    };
-    canvas.drawCircle(offset, Dimensions.pieceRadius, bgPaint);
-    canvas.drawCircle(offset, Dimensions.pieceRadius, boardStyle.pieceEdgePaint);
-  }
-
-  void _drawRoleClassicImage(Canvas canvas, Role role, Offset offset) {
-    final vector = offset.toVector2() - Vector2.all(Dimensions.pieceRadius);
-    _memberImages[role]!.renderPosition(canvas, vector, Dimensions.pieceSize);
-  }
-
-  void _drawRoleSymbol(Canvas canvas, Role role, Offset offset) {
-    final textPainter = TextPainter(textDirection: TextDirection.ltr)
-      ..text = TextSpan(style: boardStyle.pieceSymbolStyle, text: role.name[0].toUpperCase());
-    textPainter.layout();
-    textPainter.paint(canvas, offset + textPainter.size.toOffset() / -2);
   }
 }

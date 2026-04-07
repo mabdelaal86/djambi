@@ -5,8 +5,8 @@ enum Ideology {
   yellow,
   green;
 
-  Ideology get next => Ideology.values[(index + 1) % 4];
-  Ideology get previous => Ideology.values[(index + 3) % 4];
+  Ideology get next => .values[(index + 1) % 4];
+  Ideology get previous => .values[(index + 3) % 4];
 }
 
 enum TurnDirection {
@@ -31,5 +31,5 @@ enum PlayerType {
   human,
   aiMaxN;
 
-  bool get isHuman => this == PlayerType.human;
+  bool get isHuman => this == .human;
 }

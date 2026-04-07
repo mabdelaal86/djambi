@@ -1,5 +1,4 @@
-import 'package:flame/extensions.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 import 'constants.dart';
 
@@ -9,7 +8,7 @@ class Cell {
 
   const Cell(this.x, this.y);
   const Cell.zero() : this(0, 0);
-  const Cell.maze() : this(Constants.mazeIndex, Constants.mazeIndex);
+  static const maze = Cell(Constants.mazeIndex, Constants.mazeIndex);
 
   /// json deserialization
   Cell.fromJson(Map<String, dynamic> json) : this(json["x"], json["y"]);
@@ -36,7 +35,6 @@ class Cell {
   Cell operator -(Cell other) => Cell(x - other.x, y - other.y);
   Cell operator *(Cell other) => Cell(x * other.x, y * other.y);
 
-  Vector2 toVector2() => Vector2(x.toDouble(), y.toDouble());
   Cell abs() => Cell(x.abs(), y.abs());
 
   static const List<Cell> allDirections = [

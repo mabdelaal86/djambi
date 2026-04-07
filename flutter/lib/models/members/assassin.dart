@@ -6,7 +6,7 @@ class Assassin extends Member {
   Assassin(super.parliament, super.ideology, super.id);
 
   @override
-  Role get role => Role.assassin;
+  Role get role => .assassin;
 
   Cell? _cellFrom;
 
@@ -41,14 +41,14 @@ class Assassin extends Member {
   void postMove() {
     switch (body?.location.isMaze) {
       case null:
-        manoeuvre = Manoeuvre.end;
+        manoeuvre = .end;
       case true:
         kill(body!);
-        manoeuvre = Manoeuvre.kill;
+        manoeuvre = .kill;
       case false:
         kill(body!);
         body!.location = _cellFrom!;
-        manoeuvre = Manoeuvre.end;
+        manoeuvre = .end;
     }
   }
 
@@ -56,7 +56,7 @@ class Assassin extends Member {
   void onExit(Cell cell) {
     super.onExit(cell);
     body!.location = _cellFrom!;
-    manoeuvre = Manoeuvre.end;
+    manoeuvre = .end;
   }
 
   @override

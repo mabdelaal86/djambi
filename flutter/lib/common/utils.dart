@@ -1,23 +1,15 @@
-import 'dart:ui';
-
-import 'package:flame/components.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension NotNullExtension<T> on T {
   R convert<R>(R Function(T e) fun) => fun(this);
 }
 
-extension AnchorExtension on Anchor {
-  Vector2 ofSize(Vector2 size) => Vector2(x * size.x, y * size.y);
+extension EnumExtension on Enum {
+  // capitalize first letter and add space before each capital latter
+  String get title => name[0].toUpperCase() + name.substring(1).replaceAllMapped(RegExp("[A-Z]"), (m) => " ${m[0]}");
 }
 
-extension ColorExtension on Color {
-  Paint toPaint() => Paint()..color = this;
-}
-
-Future<void> openUrl(String url) async {
+Future<bool> openUrl(String url) {
   final uri = Uri.parse(url);
-  if (!await launchUrl(uri)) {
-    throw Exception("Couldn't launch '$url'");
-  }
+  return launchUrl(uri);
 }

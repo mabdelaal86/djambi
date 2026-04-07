@@ -19,17 +19,17 @@ abstract class Member {
   final int id;
 
   Role get role;
-  bool get isChief => role == Role.chief;
+  bool get isChief => role == .chief;
 
-  Cell location = const Cell.zero();
+  Cell location = const .zero();
 
-  MemberState state = MemberState.active;
-  bool get isDead => state == MemberState.dead;
-  bool get isAlive => state != MemberState.dead;
-  bool get isActive => state == MemberState.active;
-  bool get isParalysed => state == MemberState.paralysed;
+  MemberState state = .active;
+  bool get isDead => state == .dead;
+  bool get isAlive => state != .dead;
+  bool get isActive => state == .active;
+  bool get isParalysed => state == .paralysed;
 
-  Manoeuvre manoeuvre = Manoeuvre.none;
+  Manoeuvre manoeuvre = .none;
 
   int? _bodyId;
   Member? get body => _bodyId?.convert((id) => parliament.members[id]);
@@ -40,16 +40,16 @@ abstract class Member {
   String toString() => "${ideology.name}:${role.name}($location)";
 
   factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) => switch (role) {
-    Role.chief => Chief(parliament, ideology, id),
-    Role.assassin => Assassin(parliament, ideology, id),
-    Role.reporter => Reporter(parliament, ideology, id),
-    Role.diplomat => Diplomat(parliament, ideology, id),
-    Role.necromobile => Necromobile(parliament, ideology, id),
-    Role.militant => Militant(parliament, ideology, id),
+    .chief => Chief(parliament, ideology, id),
+    .assassin => Assassin(parliament, ideology, id),
+    .reporter => Reporter(parliament, ideology, id),
+    .diplomat => Diplomat(parliament, ideology, id),
+    .necromobile => Necromobile(parliament, ideology, id),
+    .militant => Militant(parliament, ideology, id),
   };
 
   factory Member.copy(Parliament parliament, Member other) =>
-      Member.create(parliament, other.role, other.ideology, other.id)..copyFrom(other);
+      .create(parliament, other.role, other.ideology, other.id)..copyFrom(other);
 
   @protected
   void copyFrom(Member other) {
@@ -63,15 +63,15 @@ abstract class Member {
 
   /// json deserialization
   factory Member.fromJson(Parliament parliament, Map<String, dynamic> json) {
-    final member = Member.create(parliament, Role.values[json["role"]], Ideology.values[json["ideology"]], json["id"]);
-    member.location = Cell.fromJson(json["location"]);
-    member.state = MemberState.values[json["state"]];
+    final member = Member.create(parliament, .values[json["role"]], .values[json["ideology"]], json["id"]);
+    member.location = .fromJson(json["location"]);
+    member.state = .values[json["state"]];
     return member;
   }
 
   /// json serialization
   Map<String, dynamic> toJson() {
-    assert(manoeuvre == Manoeuvre.none, "serialization is not allowed during a manoeuvre");
+    assert(manoeuvre == .none, "serialization is not allowed during a manoeuvre");
     return {
       "role": role.index,
       "ideology": ideology.index,
@@ -83,7 +83,7 @@ abstract class Member {
 
   @protected
   void kill(Member member) {
-    member.state = MemberState.dead;
+    member.state = .dead;
     // take over other members if the killed member is a chief
     if (member.isChief) {
       final activeMembers = parliament.getParty(member.ideology).activeMembers;
@@ -118,11 +118,11 @@ abstract class Member {
   }
 
   Iterable<Cell> cellsToAct() => switch (manoeuvre) {
-    Manoeuvre.none => cellsToMove(canKill: true),
-    Manoeuvre.move => Cell.allCells().where(canKillOn),
-    Manoeuvre.kill => cellsToMove(canKill: false),
-    Manoeuvre.exit => Cell.allCells().where(canBuryOn),
-    Manoeuvre.end => const Iterable.empty(),
+    .none => cellsToMove(canKill: true),
+    .move => Cell.allCells().where(canKillOn),
+    .kill => cellsToMove(canKill: false),
+    .exit => Cell.allCells().where(canBuryOn),
+    .end => const Iterable.empty(),
   };
 
   bool canKillOn(Cell cell) => false;
@@ -130,16 +130,16 @@ abstract class Member {
 
   void act(Cell cell) {
     switch (manoeuvre) {
-      case Manoeuvre.none:
+      case .none:
         onMove(cell);
         postMove();
-      case Manoeuvre.move:
+      case .move:
         onKill(cell);
-      case Manoeuvre.kill:
+      case .kill:
         onExit(cell);
-      case Manoeuvre.exit:
+      case .exit:
         onBury(cell);
-      case Manoeuvre.end:
+      case .end:
         throw AssertionError("can't act on the `end` state!");
     }
   }
@@ -149,7 +149,7 @@ abstract class Member {
     assert(cellsToMove(canKill: true).contains(cell), "can't do an action on the selected cell");
     _bodyId = parliament.getMemberAt(cell)?.id;
     location = cell;
-    manoeuvre = Manoeuvre.move;
+    manoeuvre = .move;
   }
 
   @protected
@@ -162,13 +162,13 @@ abstract class Member {
   void onExit(Cell cell) {
     assert(cellsToMove(canKill: false).contains(cell), "can't do an action on the selected cell");
     location = cell;
-    manoeuvre = Manoeuvre.exit;
+    manoeuvre = .exit;
   }
 
   @protected
   void onBury(Cell cell) {
     assert(canBuryOn(cell), "can't do an action on the selected cell");
     body!.location = cell;
-    manoeuvre = Manoeuvre.end;
+    manoeuvre = .end;
   }
 }

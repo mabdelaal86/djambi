@@ -6,7 +6,7 @@ class Militant extends Member {
   Militant(super.parliament, super.ideology, super.id);
 
   @override
-  Role get role => Role.militant;
+  Role get role => .militant;
 
   @override
   Iterable<Cell> cellsToMove({required bool canKill}) => super
@@ -26,10 +26,10 @@ class Militant extends Member {
   @override
   void postMove() {
     if (body == null) {
-      manoeuvre = Manoeuvre.end;
+      manoeuvre = .end;
     } else {
       kill(body!);
-      manoeuvre = Manoeuvre.exit;
+      manoeuvre = .exit;
     }
   }
 

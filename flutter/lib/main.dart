@@ -1,32 +1,27 @@
-import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-import 'controllers/game.dart';
+import 'controllers/preferences.dart';
+import 'screens/home.dart';
 
 Future<void> main() async {
-  await configureDeviceScreen();
-  final djambiGame = DjambiGame();
-  runApp(
-    MaterialApp(
-      home: Scaffold(
-        body: PopScope(
-          canPop: false,
-          onPopInvokedWithResult: (didPop, result) => djambiGame.popPage(),
-          child: GameWidget(game: djambiGame),
-        ),
-      ),
-    ),
-  );
+  // debugPaintSizeEnabled = true;
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp(preferences: await .create()));
 }
 
-Future<void> configureDeviceScreen() async {
-  const transparentColor = Color(0x00000000);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(statusBarColor: transparentColor, systemNavigationBarColor: transparentColor),
+class MyApp extends StatelessWidget {
+  const MyApp({super.key, required this.preferences});
+
+  final Preferences preferences;
+
+  @override
+  Widget build(BuildContext context) => ChangeNotifierProvider.value(
+    value: preferences,
+    child: MaterialApp(
+      title: "Djambi",
+      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.blueGrey)),
+      home: const HomePage(),
+    ),
   );
-  WidgetsFlutterBinding.ensureInitialized();
-  await Flame.device.restoreFullscreen();
-  await Flame.device.setPortrait();
 }

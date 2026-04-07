@@ -7,11 +7,11 @@ typedef PartyEvaluation = int Function(Party party);
 
 int defaultPartyEvaluation(Party party) => party.activeMembers.map((m) => _roleValues[m.role]!).sum;
 
-const _roleValues = {
-  Role.militant: 5,
-  Role.necromobile: 10,
-  Role.diplomat: 10,
-  Role.assassin: 15,
-  Role.reporter: 18,
-  Role.chief: 300,
+const _roleValues = <Role, int>{
+  .militant: 5,
+  .necromobile: 10,
+  .diplomat: 10,
+  .assassin: 15,
+  .reporter: 18,
+  .chief: 300,
 };

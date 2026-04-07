@@ -26,7 +26,7 @@ class Party {
 
   bool isChiefSurrounded() {
     if (chief.location.isMaze) return false;
-    if (getMembersOfRole(Role.necromobile).isNotEmpty) return false;
+    if (getMembersOfRole(.necromobile).isNotEmpty) return false;
 
     final inQueue = chief.location.surroundingCells().toList();
     final registered = {chief.location, ...inQueue};

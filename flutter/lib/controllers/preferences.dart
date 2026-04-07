@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../common/utils.dart';
 import '../models.dart';
 import '../views.dart';
 
@@ -11,74 +11,87 @@ enum GameSpeed {
 
   Duration get duration => Duration(
     seconds: switch (this) {
-      GameSpeed.fast => 1,
-      GameSpeed.medium => 2,
-      GameSpeed.slow => 3,
+      .fast => 1,
+      .medium => 2,
+      .slow => 3,
     },
   );
 }
 
-// keys
-const _marginsVisibility = "margins-visibility";
-const _gameSpeed = "game-speed";
+// ------------------------------------
+// preferences (key, default value)
+// ------------------------------------
 
-const _turnDirection = "turn-direction";
-const _startIdeology = "start-ideology";
-const _playerTypes = "player-types";
+// game settings
+const _notationVisibility = (key: "notation-visibility", val: NotationVisibility.topLeft);
+const _gameSpeed = (key: "game-speed", val: GameSpeed.medium);
 
-// default values
-const _defaultMarginsVisibility = MarginsVisibility.half;
-const _defaultGameSpeed = GameSpeed.medium;
+// play options
+const _turnDirection = (key: "turn-direction", val: TurnDirection.anticlockwise);
+const _startIdeology = (key: "start-ideology", val: Ideology.red);
+const _playerTypes = (
+  key: "player-types",
+  val: [PlayerType.human, PlayerType.aiMaxN, PlayerType.aiMaxN, PlayerType.aiMaxN],
+);
 
-const _defaultTurnDirection = TurnDirection.anticlockwise;
-const _defaultStartIdeology = Ideology.red;
-const _defaultPlayerTypes = [PlayerType.human, PlayerType.aiMaxN, PlayerType.aiMaxN, PlayerType.aiMaxN];
+// ------------------------------------
+// preferences controller
+// ------------------------------------
 
-class PreferencesController {
+class Preferences with ChangeNotifier {
   late final SharedPreferences _prefs;
-  PreferencesController._();
 
-  static Future<PreferencesController> create() async {
-    final res = PreferencesController._();
+  Preferences._();
+
+  static Future<Preferences> create() async {
+    final res = Preferences._();
     res._prefs = await SharedPreferences.getInstance();
     return res;
   }
 
-  Future<void> setMarginsVisibility(MarginsVisibility visibility) async {
-    await _prefs.setInt(_marginsVisibility, visibility.index);
+  // --------------
+  // game settings
+  // --------------
+
+  // notation visibility
+  Future<void> setNotationVisibility(int visibility) =>
+      _prefs.setInt(_notationVisibility.key, visibility).then((_) => notifyListeners());
+  int get notationVisibilityIndex => _prefs.getInt(_notationVisibility.key) ?? _notationVisibility.val.index;
+  NotationVisibility get notationVisibility => .values[notationVisibilityIndex];
+
+  // game speed
+  Future<void> setGameSpeed(int gameSpeed) => _prefs.setInt(_gameSpeed.key, gameSpeed).then((_) => notifyListeners());
+  int get gameSpeedIndex => _prefs.getInt(_gameSpeed.key) ?? _gameSpeed.val.index;
+  GameSpeed get gameSpeed => .values[gameSpeedIndex];
+
+  // theme
+  PieceTheme get pieceTheme => .classic;
+  BoardTheme get boardTheme => .grayish;
+
+  // --------------
+  // play options
+  // --------------
+
+  // turn direction
+  Future<void> setTurnDirection(int direction) =>
+      _prefs.setInt(_turnDirection.key, direction).then((_) => notifyListeners());
+  int get turnDirectionIndex => _prefs.getInt(_turnDirection.key) ?? _turnDirection.val.index;
+  TurnDirection get turnDirection => .values[turnDirectionIndex];
+
+  // start ideology
+  Future<void> setStartIdeology(int ideology) =>
+      _prefs.setInt(_startIdeology.key, ideology).then((_) => notifyListeners());
+  int get startIdeologyIndex => _prefs.getInt(_startIdeology.key) ?? _startIdeology.val.index;
+  Ideology get startIdeology => .values[startIdeologyIndex];
+
+  // player types
+  Future<void> togglePlayerType(int index) {
+    final players = playerTypes.toList();
+    players[index] = players[index].isHuman ? .aiMaxN : .human;
+    return _prefs.setString(_playerTypes.key, players.map((e) => e.index).join(",")).then((_) => notifyListeners());
   }
 
-  MarginsVisibility getMarginsVisibility() =>
-      _prefs.getInt(_marginsVisibility)?.convert((e) => MarginsVisibility.values[e]) ?? _defaultMarginsVisibility;
-
-  Future<void> setGameSpeed(GameSpeed gameSpeed) async {
-    await _prefs.setInt(_gameSpeed, gameSpeed.index);
-  }
-
-  GameSpeed getGameSpeed() => _prefs.getInt(_gameSpeed)?.convert((e) => GameSpeed.values[e]) ?? _defaultGameSpeed;
-
-  PieceTheme getPieceTheme() => PieceTheme.classic;
-  BoardTheme getBoardTheme() => BoardTheme.classic;
-
-  Future<void> setTurnDirection(TurnDirection direction) async {
-    await _prefs.setInt(_turnDirection, direction.index);
-  }
-
-  TurnDirection getTurnDirection() =>
-      _prefs.getInt(_turnDirection)?.convert((e) => TurnDirection.values[e]) ?? _defaultTurnDirection;
-
-  Future<void> setStartIdeology(Ideology ideology) async {
-    await _prefs.setInt(_startIdeology, ideology.index);
-  }
-
-  Ideology getStartIdeology() =>
-      _prefs.getInt(_startIdeology)?.convert((e) => Ideology.values[e]) ?? _defaultStartIdeology;
-
-  Future<void> setPlayerTypes(Iterable<PlayerType> playerTypes) async {
-    await _prefs.setString(_playerTypes, playerTypes.map((e) => e.index).join(","));
-  }
-
-  List<PlayerType> getPlayerTypes() =>
-      _prefs.getString(_playerTypes)?.split(",").map(int.parse).map((e) => PlayerType.values[e]).toList() ??
-      _defaultPlayerTypes;
+  Iterable<int> get playerTypeIndexes =>
+      _prefs.getString(_playerTypes.key)?.split(",").map(int.parse) ?? _playerTypes.val.map((e) => e.index);
+  Iterable<PlayerType> get playerTypes => playerTypeIndexes.map((e) => .values[e]);
 }

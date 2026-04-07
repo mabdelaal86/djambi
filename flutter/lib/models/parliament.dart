@@ -72,8 +72,8 @@ class Parliament {
 
   /// json deserialization
   Parliament.fromJson(Map<String, dynamic> json)
-    : _currentIdeology = Ideology.values[json["current_ideology"]],
-      turnDirection = TurnDirection.values[json["turn_direction"]] {
+    : _currentIdeology = .values[json["current_ideology"]],
+      turnDirection = .values[json["turn_direction"]] {
     members = [for (final m in json["members"]) Member.fromJson(this, m)];
     assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
     parties = [
@@ -81,7 +81,7 @@ class Parliament {
         if (m.isChief) Party(m as Chief),
     ];
     assert(parties.length == 4, "number of parties should be 4");
-    _currentParty = getParty(Ideology.values[json["current_party"]]);
+    _currentParty = getParty(.values[json["current_party"]]);
   }
 
   /// json serialization
@@ -96,17 +96,17 @@ class Parliament {
   }
 
   Iterable<Member> _recruitMembers(Ideology ideology) sync* {
-    final roles = [
-      [Role.chief, Role.assassin, Role.militant],
-      [Role.reporter, Role.diplomat, Role.militant],
-      [Role.militant, Role.militant, Role.necromobile],
+    final roles = <List<Role>>[
+      [.chief, .assassin, .militant],
+      [.reporter, .diplomat, .militant],
+      [.militant, .militant, .necromobile],
     ];
 
     // create members and place them around (0,0) point, so it is easier to rotate or flip
     for (var r = 0; r < 3; r++) {
       for (var c = 0; c < 3; c++) {
         final id = (ideology.index * 9) + (r * 3) + c;
-        yield Member.create(this, roles[r][c], ideology, id)..location = Cell(c - 1, r - 1);
+        yield .create(this, roles[r][c], ideology, id)..location = Cell(c - 1, r - 1);
       }
     }
   }
@@ -119,10 +119,10 @@ class Parliament {
       }
     }
 
-    setInitPosition(Ideology.red, const Cell(1, -1), const Cell(1, 7));
-    setInitPosition(Ideology.blue, const Cell(-1, -1), const Cell(7, 7));
-    setInitPosition(Ideology.yellow, const Cell(-1, 1), const Cell(7, 1));
-    setInitPosition(Ideology.green, const Cell(1, 1), const Cell(1, 1));
+    setInitPosition(.red, const Cell(1, -1), const Cell(1, 7));
+    setInitPosition(.blue, const Cell(-1, -1), const Cell(7, 7));
+    setInitPosition(.yellow, const Cell(-1, 1), const Cell(7, 1));
+    setInitPosition(.green, const Cell(1, 1), const Cell(1, 1));
   }
 
   void act(int memberId, Cell cell) {

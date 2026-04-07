@@ -2,53 +2,57 @@ import 'package:flutter/painting.dart';
 
 enum PieceTheme { classic, characters }
 
-enum BoardTheme { classic }
+enum BoardTheme { grayish }
 
-enum MarginsVisibility { none, half, full }
+enum NotationVisibility {
+  none,
+  topLeft,
+  full;
+
+  int get reversedIndex => full.index - index;
+}
 
 class BoardStyle {
   // margins
-  final Paint marginPaint;
-  final TextStyle marginTextStyle;
+  final Color marginBackColor;
+  final Color marginForeColor;
   // background
-  final Paint lightCellPaint;
-  final Paint darkCellPaint;
+  final Color lightCellColor;
+  final Color darkCellColor;
   final bool drawLines;
-  final Paint linePaint;
+  final Color lineColor;
   // maze
-  final Paint mazePaint;
+  final Color mazeBackColor;
   final Color mazeForeColor;
   // pieces
   final Color pieceForeColor;
-  final Paint pieceEdgePaint;
-  final TextStyle pieceSymbolStyle;
-  final Paint deadPaint;
-  final Paint paralysedPaint;
-  final Paint selectableMarkPaint;
-  final Paint selectedMarkPaint;
-  final Paint actionMarkPaint;
-  final Paint movedMarkPaint;
+  final Color pieceEdgeColor;
+  final Color deadColor;
+  final Color paralysedColor;
+  final Color selectableMarkColor;
+  final Color selectedMarkColor;
+  final Color actionMarkColor;
+  final Color movedMarkColor;
   // parties
-  final List<Paint> partyPaint;
+  final List<Color> partyColor;
 
-  BoardStyle({
-    required this.marginPaint,
-    required this.marginTextStyle,
-    required this.lightCellPaint,
-    required this.darkCellPaint,
+  const BoardStyle({
+    required this.marginBackColor,
+    required this.marginForeColor,
+    required this.lightCellColor,
+    required this.darkCellColor,
     required this.drawLines,
-    required this.linePaint,
-    required this.mazePaint,
+    required this.lineColor,
+    required this.mazeBackColor,
     required this.mazeForeColor,
     required this.pieceForeColor,
-    required this.pieceEdgePaint,
-    required this.pieceSymbolStyle,
-    required this.deadPaint,
-    required this.paralysedPaint,
-    required this.selectableMarkPaint,
-    required this.selectedMarkPaint,
-    required this.actionMarkPaint,
-    required this.movedMarkPaint,
-    required this.partyPaint,
+    required this.pieceEdgeColor,
+    required this.deadColor,
+    required this.paralysedColor,
+    required this.selectableMarkColor,
+    required this.selectedMarkColor,
+    required this.actionMarkColor,
+    required this.movedMarkColor,
+    required this.partyColor,
   });
 }
