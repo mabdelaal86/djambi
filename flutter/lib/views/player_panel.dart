@@ -70,12 +70,12 @@ class PlayerPanel extends PositionComponent {
   }
 
   void _drawPlayerName(Canvas canvas, Party party) {
-    final nameOffset = Offset(size.y, size.y * 0.25);
+    final nameOffset = Offset(size.y, size.y * 0.2);
     _playerNameStroke.paint(canvas, nameOffset);
     (party.chief.isDead ? _playerNameDead : _playerNameAlive).paint(canvas, nameOffset);
     if (contest.parliament.isGameFinished) return;
     if (party == contest.parliament.getNextTurnState().$2) {
-      _nextSign.paint(canvas, Offset(size.y, size.y * 0.5));
+      _nextSign.paint(canvas, Offset(size.y, size.y * 0.55));
     }
   }
 

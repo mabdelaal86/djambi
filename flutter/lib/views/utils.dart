@@ -17,8 +17,9 @@ extension ColorExtension on Color {
 }
 
 extension PaintExtension on Paint {
-  void stroke([double width = 0]) {
+  void stroke(double width) {
     style = .stroke;
+    strokeJoin = .round;
     strokeWidth = width;
   }
 }

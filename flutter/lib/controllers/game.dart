@@ -13,7 +13,7 @@ import 'serialization.dart';
 const noTapUpOverlayId = "noTapUpOverlay";
 
 const _gameWidth = 1000.0;
-const _gameHeight = 1400.0;
+const _gameHeight = 1380.0;
 
 const _aiMaxDepth = 2;
 
