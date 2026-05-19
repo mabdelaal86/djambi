@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../controllers/game.dart';
 import '../controllers/preferences.dart';
+import 'utils.dart';
 
 class PlayPage extends StatefulWidget {
   const PlayPage({super.key});
@@ -38,34 +39,13 @@ class _PlayPageState extends State<PlayPage> {
       if (didPop) {
         return;
       }
-      final shouldPop = _game.finished || _game.noHumans || (await _showBackDialog(context) ?? false);
+      final shouldPop =
+          _game.finished ||
+          _game.noHumans ||
+          (await confirm(context, "Are you sure?", "The match state will not be saved") ?? false);
       if (context.mounted && shouldPop) {
         Navigator.pop(context, result);
       }
     },
-  );
-
-  Future<bool?> _showBackDialog(BuildContext context) => showDialog<bool>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text("Are you sure?"),
-      content: const Text("The match state will not be saved!"),
-      actions: <Widget>[
-        TextButton(
-          style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
-          child: const Text("Yes"),
-          onPressed: () {
-            Navigator.pop(context, true);
-          },
-        ),
-        TextButton(
-          style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
-          child: const Text("No"),
-          onPressed: () {
-            Navigator.pop(context, false);
-          },
-        ),
-      ],
-    ),
   );
 }

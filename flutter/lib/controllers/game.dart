@@ -94,7 +94,7 @@ class DjambiGame extends FlameGame {
       return _showGameOverDialog("GAME OVER!");
     }
     if (_contest.parliament.isGameFinished) {
-      return _showGameOverDialog("CONGRATULATION!", "${_contest.parliament.currentParty.ideology.title} win!");
+      return _showGameOverDialog("${_contest.parliament.currentParty.ideology.name} win!".toUpperCase());
     }
     if (_saveLoadState && _contest.parliament.isManoeuvreCompleted) {
       await save(_contest.toJson(), _statePath);

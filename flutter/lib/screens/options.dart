@@ -1,9 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../common/utils.dart';
+import '../controllers/preferences.dart';
 import '../models.dart';
 import 'components/option_panel.dart';
 import 'play.dart';
+import 'utils.dart';
 
 class OptionsPage extends StatefulWidget {
   const OptionsPage({super.key});
@@ -105,7 +109,12 @@ class _OptionsPageState extends State<OptionsPage> {
                       icon: const Icon(Icons.play_arrow_rounded),
                       label: const Text('Play'),
                       onPressed: () {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PlayPage()));
+                        final pref = context.read<Preferences>();
+                        if (pref.playerTypes.none((e) => e.isHuman)) {
+                          alert(context, "No players!", "At least on player should be human");
+                        } else {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PlayPage()));
+                        }
                       },
                     ),
                   ),
