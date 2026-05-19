@@ -6,7 +6,6 @@ import '../common/utils.dart';
 import '../controllers/preferences.dart';
 import '../models.dart';
 import 'components/option_panel.dart';
-import 'play.dart';
 import 'utils.dart';
 
 class OptionsPage extends StatefulWidget {
@@ -113,7 +112,7 @@ class _OptionsPageState extends State<OptionsPage> {
                         if (pref.playerTypes.none((e) => e.isHuman)) {
                           alert(context, "No players!", "At least on player should be human");
                         } else {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PlayPage()));
+                          Navigator.pushReplacementNamed(context, "/play");
                         }
                       },
                     ),

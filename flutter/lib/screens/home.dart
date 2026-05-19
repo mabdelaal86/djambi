@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'about.dart';
-import 'options.dart';
-import 'settings.dart';
 import 'utils.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,19 +22,19 @@ class HomePage extends StatelessWidget {
                 children: [
                   FilledButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const OptionsPage()));
+                      Navigator.pushNamed(context, "/options");
                     },
                     child: const Text("Play"),
                   ),
                   FilledButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AboutPage()));
+                      Navigator.pushNamed(context, "/about");
                     },
                     child: const Text("About"),
                   ),
                   FilledButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
+                      Navigator.pushNamed(context, "/settings");
                     },
                     child: const Text("Settings"),
                   ),

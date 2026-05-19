@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'controllers/preferences.dart';
-import 'screens/home.dart';
+import 'screens.dart';
 
 Future<void> main() async {
   // debugPaintSizeEnabled = true;
@@ -23,7 +23,13 @@ class MyApp extends StatelessWidget {
     child: MaterialApp(
       title: "Djambi",
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.blueGrey)),
-      home: const HomePage(),
+      routes: {
+        "/": (_) => const HomePage(),
+        "/about": (_) => const AboutPage(),
+        "/settings": (_) => const SettingsPage(),
+        "/options": (_) => const OptionsPage(),
+        "/play": (_) => const PlayPage(),
+      },
     ),
   );
 }
