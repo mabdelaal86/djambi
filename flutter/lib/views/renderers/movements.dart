@@ -7,76 +7,97 @@ import '../dimensions.dart';
 import '../theme.dart';
 import '../utils.dart';
 
-/// Draw last movements, selectable pieces, available movements for the selected piece
-/// and pass tap up events into the underline models.
+/// Draw last movements, selectable pieces, available movements for the
+/// selected piece and pass tap-up events into the underlying models.
 class MovementsRenderer extends PositionComponent with TapCallbacks {
-  // @override
-  // bool get debugMode => true;
-
   final Contest contest;
   final BoardStyle boardStyle;
   Member? _selectedMember;
 
-  MovementsRenderer(this.contest, this.boardStyle, {super.position, super.anchor, super.size, super.scale});
+  // ── Animation state ───────────────────────────────────────────────────────
+  /// Cells that are currently animating a "flash" after a move.
+  final Map<Cell, double> _flashCells = {}; // cell → remaining alpha (0-1)
+  static const _flashDuration = 0.6; // seconds
 
-  bool get _gameIsNotFinished => !contest.parliament.isGameFinished;
+  MovementsRenderer(this.contest, this.boardStyle,
+      {super.position, super.anchor, super.size, super.scale});
+
+  bool get _gameRunning => !contest.parliament.isGameFinished;
   Party get _curParty => contest.parliament.currentParty;
   Member? get _curActor => contest.parliament.actor;
 
+  // ── Flame update loop ─────────────────────────────────────────────────────
   @override
-  void render(Canvas canvas) {
-    _markLastMovement(canvas);
-    if (_gameIsNotFinished) {
-      _markAvailableMoves(canvas);
+  void update(double dt) {
+    super.update(dt);
+    if (_flashCells.isEmpty) return;
+    final toRemove = <Cell>[];
+    for (final entry in _flashCells.entries) {
+      final next = entry.value - dt / _flashDuration;
+      if (next <= 0) {
+        toRemove.add(entry.key);
+      } else {
+        _flashCells[entry.key] = next;
+      }
+    }
+    for (final c in toRemove) {
+      _flashCells.remove(c);
     }
   }
 
+  // ── Rendering ─────────────────────────────────────────────────────────────
   @override
-  void onTapUp(TapUpEvent event) {
-    if (_gameIsNotFinished) {
-      final cell = Cell(event.localPosition.x ~/ Dimensions.cellSide, event.localPosition.y ~/ Dimensions.cellSide);
-      _handleCellTapUp(cell);
+  void render(Canvas canvas) {
+    _markLastMovement(canvas);
+    _drawFlashCells(canvas);
+    if (_gameRunning) _markAvailableMoves(canvas);
+  }
+
+  void _drawFlashCells(Canvas canvas) {
+    for (final entry in _flashCells.entries) {
+      final alpha = entry.value; // 1 → 0
+      final color = boardStyle.actionMarkColor.withValues(alpha: alpha);
+      canvas.paintCellRect(entry.key, color);
     }
   }
 
   void _markAvailableMoves(Canvas canvas) {
-    // check if there is an actor (or ongoing manoeuvre)
     if (_curActor != null) {
       _markSelected(canvas, _curActor!.location);
       _markActions(canvas, _curActor!.cellsToAct());
       return;
     }
-    // ---------------
-    // no actor, so selection logic apply
-    // mark selectable members
     _markSelectable(canvas, _curParty.movableMembers.map((m) => m.location));
-    // check if there is a selected member
     if (_selectedMember == null) return;
-    // ---------------
-    // make sure selected member is from current party
-    // might not, is AI clicked after selecting a member
     if (_selectedMember!.ideology != _curParty.ideology) {
       _selectedMember = null;
       return;
     }
-    // ---------------
-    // mark selected member
     _markSelected(canvas, _selectedMember!.location);
     _markActions(canvas, _selectedMember!.cellsToAct());
   }
 
-  void _handleCellTapUp(Cell cell) {
-    // check if there is an actor (or ongoing manoeuvre)
+  // ── Tap handling ──────────────────────────────────────────────────────────
+  @override
+  void onTapUp(TapUpEvent event) {
+    if (_gameRunning) {
+      final cell = Cell(
+        event.localPosition.x ~/ Dimensions.cellSide,
+        event.localPosition.y ~/ Dimensions.cellSide,
+      );
+      _handleCellTap(cell);
+    }
+  }
+
+  void _handleCellTap(Cell cell) {
     if (_curActor != null) {
-      _selectedMember = null; // just to make sure
-      // check if actor can act on the selected cell
+      _selectedMember = null;
       if (_curActor!.cellsToAct().contains(cell)) {
+        _flashCells[cell] = 1.0; // start flash animation
         contest.doAction(_curActor!, cell);
       }
       return;
     }
-    // ---------------
-    // no actor, so selection logic apply
     if (_selectedMember == null) {
       final member = _curParty.getMemberAt(cell);
       if (member != null && member.cellsToAct().isNotEmpty) {
@@ -84,36 +105,28 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
       }
       return;
     }
-    // ---------------
-    // a member is selected
-    // check if it is clicked again
     if (_selectedMember!.location == cell) {
       _selectedMember = null;
       return;
     }
-    // ---------------
-    // another cell is clicked
-    // check if user try to select another member from current party
     final member = _curParty.getMemberAt(cell);
     if (member != null) {
       _selectedMember = null;
-      if (member.cellsToAct().isNotEmpty) {
-        _selectedMember = member;
-      }
+      if (member.cellsToAct().isNotEmpty) _selectedMember = member;
       return;
     }
-    // ---------------
-    // empty cell or an enemy is clicked
-    // check if selected member can act on the selected cell
     if (_selectedMember!.cellsToAct().contains(cell)) {
+      _flashCells[cell] = 1.0;
       contest.doAction(_selectedMember!, cell);
     }
     _selectedMember = null;
   }
 
+  // ── Mark helpers ──────────────────────────────────────────────────────────
   void _markSelectable(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      canvas.paintCellCircle(cell, boardStyle.selectableMarkColor, Dimensions.markStroke, Dimensions.pieceStroke);
+      canvas.paintCellCircle(
+          cell, boardStyle.selectableMarkColor, Dimensions.markStroke, Dimensions.pieceStroke);
     }
   }
 
@@ -123,7 +136,8 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
 
   void _markActions(Canvas canvas, Iterable<Cell> cells) {
     for (final cell in cells) {
-      canvas.paintCellCircle(cell, boardStyle.actionMarkColor, Dimensions.markStroke, Dimensions.pieceStroke);
+      canvas.paintCellCircle(
+          cell, boardStyle.actionMarkColor, Dimensions.markStroke, Dimensions.pieceStroke);
     }
   }
 

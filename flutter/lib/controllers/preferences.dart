@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models.dart';
+import '../models/ai/tree.dart';
 import '../views.dart';
 
 enum GameSpeed {
@@ -10,34 +11,41 @@ enum GameSpeed {
   slow;
 
   Duration get duration => Duration(
-    seconds: switch (this) {
-      .fast => 1,
-      .medium => 2,
-      .slow => 3,
-    },
-  );
+        seconds: switch (this) {
+          GameSpeed.fast => 1,
+          GameSpeed.medium => 2,
+          GameSpeed.slow => 3,
+        },
+      );
+
+  String get title => switch (this) {
+        GameSpeed.fast => 'Fast',
+        GameSpeed.medium => 'Medium',
+        GameSpeed.slow => 'Slow',
+      };
 }
 
-// ------------------------------------
-// preferences (key, default value)
-// ------------------------------------
-
-// game settings
-const _notationVisibility = (key: "notation-visibility", val: NotationVisibility.topLeft);
-const _gameSpeed = (key: "game-speed", val: GameSpeed.medium);
-
-// play options
-const _turnDirection = (key: "turn-direction", val: TurnDirection.anticlockwise);
-const _startIdeology = (key: "start-ideology", val: Ideology.red);
+// ── preference keys & defaults ─────────────────────────────────────────────
+const _notationVisibility = (
+  key: 'notation-visibility',
+  val: NotationVisibility.topLeft
+);
+const _gameSpeed = (key: 'game-speed', val: GameSpeed.medium);
+const _aiDifficulty = (key: 'ai-difficulty', val: AiDifficulty.medium);
+const _soundEnabled = (key: 'sound-enabled', val: true);
+const _turnDirection = (key: 'turn-direction', val: TurnDirection.anticlockwise);
+const _startIdeology = (key: 'start-ideology', val: Ideology.red);
 const _playerTypes = (
-  key: "player-types",
-  val: [PlayerType.human, PlayerType.aiMaxN, PlayerType.aiMaxN, PlayerType.aiMaxN],
+  key: 'player-types',
+  val: [
+    PlayerType.human,
+    PlayerType.aiMaxN,
+    PlayerType.aiMaxN,
+    PlayerType.aiMaxN,
+  ]
 );
 
-// ------------------------------------
-// preferences controller
-// ------------------------------------
-
+// ── preferences controller ─────────────────────────────────────────────────
 class Preferences with ChangeNotifier {
   late final SharedPreferences _prefs;
 
@@ -49,49 +57,62 @@ class Preferences with ChangeNotifier {
     return res;
   }
 
-  // --------------
-  // game settings
-  // --------------
+  // ── Game settings ─────────────────────────────────────────────────────────
 
-  // notation visibility
-  Future<void> setNotationVisibility(int visibility) =>
-      _prefs.setInt(_notationVisibility.key, visibility).then((_) => notifyListeners());
-  int get notationVisibilityIndex => _prefs.getInt(_notationVisibility.key) ?? _notationVisibility.val.index;
-  NotationVisibility get notationVisibility => .values[notationVisibilityIndex];
+  Future<void> setNotationVisibility(int v) =>
+      _prefs.setInt(_notationVisibility.key, v).then((_) => notifyListeners());
+  int get notationVisibilityIndex =>
+      _prefs.getInt(_notationVisibility.key) ?? _notationVisibility.val.index;
+  NotationVisibility get notationVisibility =>
+      NotationVisibility.values[notationVisibilityIndex];
 
-  // game speed
-  Future<void> setGameSpeed(int gameSpeed) => _prefs.setInt(_gameSpeed.key, gameSpeed).then((_) => notifyListeners());
-  int get gameSpeedIndex => _prefs.getInt(_gameSpeed.key) ?? _gameSpeed.val.index;
-  GameSpeed get gameSpeed => .values[gameSpeedIndex];
+  Future<void> setGameSpeed(int v) =>
+      _prefs.setInt(_gameSpeed.key, v).then((_) => notifyListeners());
+  int get gameSpeedIndex =>
+      _prefs.getInt(_gameSpeed.key) ?? _gameSpeed.val.index;
+  GameSpeed get gameSpeed => GameSpeed.values[gameSpeedIndex];
 
-  // theme
-  PieceTheme get pieceTheme => .classic;
-  BoardTheme get boardTheme => .grayish;
+  Future<void> setAiDifficulty(int v) =>
+      _prefs.setInt(_aiDifficulty.key, v).then((_) => notifyListeners());
+  int get aiDifficultyIndex =>
+      _prefs.getInt(_aiDifficulty.key) ?? _aiDifficulty.val.index;
+  AiDifficulty get aiDifficulty => AiDifficulty.values[aiDifficultyIndex];
 
-  // --------------
-  // play options
-  // --------------
+  Future<void> setSoundEnabled(bool v) =>
+      _prefs.setBool(_soundEnabled.key, v).then((_) => notifyListeners());
+  bool get soundEnabled =>
+      _prefs.getBool(_soundEnabled.key) ?? _soundEnabled.val;
 
-  // turn direction
-  Future<void> setTurnDirection(int direction) =>
-      _prefs.setInt(_turnDirection.key, direction).then((_) => notifyListeners());
-  int get turnDirectionIndex => _prefs.getInt(_turnDirection.key) ?? _turnDirection.val.index;
-  TurnDirection get turnDirection => .values[turnDirectionIndex];
+  // ── Theme (currently not user-configurable) ───────────────────────────────
+  PieceTheme get pieceTheme => PieceTheme.classic;
+  BoardTheme get boardTheme => BoardTheme.grayish;
 
-  // start ideology
-  Future<void> setStartIdeology(int ideology) =>
-      _prefs.setInt(_startIdeology.key, ideology).then((_) => notifyListeners());
-  int get startIdeologyIndex => _prefs.getInt(_startIdeology.key) ?? _startIdeology.val.index;
-  Ideology get startIdeology => .values[startIdeologyIndex];
+  // ── Play options ──────────────────────────────────────────────────────────
 
-  // player types
+  Future<void> setTurnDirection(int v) =>
+      _prefs.setInt(_turnDirection.key, v).then((_) => notifyListeners());
+  int get turnDirectionIndex =>
+      _prefs.getInt(_turnDirection.key) ?? _turnDirection.val.index;
+  TurnDirection get turnDirection => TurnDirection.values[turnDirectionIndex];
+
+  Future<void> setStartIdeology(int v) =>
+      _prefs.setInt(_startIdeology.key, v).then((_) => notifyListeners());
+  int get startIdeologyIndex =>
+      _prefs.getInt(_startIdeology.key) ?? _startIdeology.val.index;
+  Ideology get startIdeology => Ideology.values[startIdeologyIndex];
+
   Future<void> togglePlayerType(int index) {
     final players = playerTypes.toList();
-    players[index] = players[index].isHuman ? .aiMaxN : .human;
-    return _prefs.setString(_playerTypes.key, players.map((e) => e.index).join(",")).then((_) => notifyListeners());
+    players[index] =
+        players[index].isHuman ? PlayerType.aiMaxN : PlayerType.human;
+    return _prefs
+        .setString(_playerTypes.key, players.map((e) => e.index).join(','))
+        .then((_) => notifyListeners());
   }
 
   Iterable<int> get playerTypeIndexes =>
-      _prefs.getString(_playerTypes.key)?.split(",").map(int.parse) ?? _playerTypes.val.map((e) => e.index);
-  Iterable<PlayerType> get playerTypes => playerTypeIndexes.map((e) => .values[e]);
+      _prefs.getString(_playerTypes.key)?.split(',').map(int.parse) ??
+      _playerTypes.val.map((e) => e.index);
+  Iterable<PlayerType> get playerTypes =>
+      playerTypeIndexes.map((e) => PlayerType.values[e]);
 }

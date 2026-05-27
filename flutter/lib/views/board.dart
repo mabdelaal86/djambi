@@ -9,13 +9,13 @@ import 'renderers/pieces.dart';
 import 'theme.dart';
 
 class Board extends PositionComponent {
-  // @override
-  // bool get debugMode => true;
-
   final Contest contest;
   final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
   final NotationVisibility notationVisibility;
+
+  /// Exposed so DjambiGame can call onStateChanged() for animations.
+  PiecesRenderer? piecesRenderer;
 
   Board(
     this.contest,
@@ -31,15 +31,22 @@ class Board extends PositionComponent {
   @override
   Future<void> onLoad() async {
     final gridSize = Vector2.all(Dimensions.gridSide);
+    final marginOffset = notationVisibility == NotationVisibility.none
+        ? Dimensions.border
+        : Dimensions.margin;
+
+    piecesRenderer = PiecesRenderer(
+      contest, boardStyle, pieceTheme, size: gridSize,
+    );
+
     await addAll([
       MarginsRenderer(boardStyle, notationVisibility, size: size),
-      // grid
       PositionComponent(
-        position: Vector2.all(notationVisibility == .none ? Dimensions.border : Dimensions.margin),
+        position: Vector2.all(marginOffset),
         children: [
           GridRenderer(boardStyle, pieceTheme, size: gridSize),
           MovementsRenderer(contest, boardStyle, size: gridSize),
-          PiecesRenderer(contest, boardStyle, pieceTheme, size: gridSize),
+          piecesRenderer!,
         ],
       ),
     ]);
