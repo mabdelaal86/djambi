@@ -1,0 +1,12 @@
+{
+  "assets": {},
+  "config": {
+    "build_asset_types": [],
+    "linking_enabled": false
+  },
+  "out_dir_shared": "/Users/el-daly/Development/git/djambi/flutter/.dart_tool/hooks_runner/shared/objective_c/build/",
+  "out_file": "/Users/el-daly/Development/git/djambi/flutter/.dart_tool/hooks_runner/objective_c/337ce265dc/output.json",
+  "package_name": "objective_c",
+  "package_root": "/Users/el-daly/.pub-cache/hosted/pub.dev/objective_c-9.4.1/",
+  "user_defines": {}
+}
