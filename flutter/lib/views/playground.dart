@@ -8,21 +8,14 @@ import 'styles.dart';
 import 'theme.dart';
 import 'utils.dart';
 
-const _ideologyAnchor = <Ideology, Anchor>{
-  .red: .bottomLeft,
-  .blue: .bottomRight,
-  .yellow: .topRight,
-  .green: .topLeft,
-};
-
 class Playground extends PositionComponent {
-  // @override
-  // bool get debugMode => true;
-
   final Contest contest;
   final BoardTheme boardTheme;
   final PieceTheme pieceTheme;
   final NotationVisibility notationVisibility;
+
+  /// Exposed so game can access piecesRenderer for animation callbacks.
+  Board? board;
 
   Playground(
     this.contest, {
@@ -35,39 +28,122 @@ class Playground extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    final padding = Vector2.all(20);
-    final innerSize = size - padding * 2;
-    final playerPanelSize = Vector2((innerSize.x - padding.x) / 2, (innerSize.y - size.x) / 2 - padding.y);
+    await _buildLayout();
+  }
+
+  Future<void> rebuildLayout() async {
+    removeAll(children.toList());
+    board = null;
+    await _buildLayout();
+  }
+
+  Future<void> _buildLayout() async {
     final boardStyle = getBoardStyle(boardTheme);
-    final margins = Dimensions.margin * notationVisibility.index + Dimensions.border * notationVisibility.reversedIndex;
-    final boardSize = Vector2.all(Dimensions.gridSide + margins);
+    final margins = Dimensions.margin * notationVisibility.index +
+        Dimensions.border * notationVisibility.reversedIndex;
+    final rawBoardSide = Dimensions.gridSide + margins;
+
+    final isLandscape = size.x > size.y;
+    const pad = 12.0;
+
+    if (isLandscape) {
+      await _buildLandscape(boardStyle, rawBoardSide, pad);
+    } else {
+      await _buildPortrait(boardStyle, rawBoardSide, pad);
+    }
+  }
+
+  Future<void> _buildPortrait(
+      BoardStyle boardStyle, double rawBoardSide, double pad) async {
+    final availW = size.x - pad * 2;
+    final boardScale = availW / rawBoardSide;
+    final scaledBoard = rawBoardSide * boardScale;
+
+    final remainH = size.y - scaledBoard - pad * 2;
+    final panelH = ((remainH / 2) - pad).clamp(36.0, 100.0);
+    final panelW = (availW / 2 - pad / 2).clamp(80.0, 280.0);
+
+    board = Board(
+      contest, boardStyle, pieceTheme, notationVisibility,
+      anchor: Anchor.center,
+      position: Vector2(size.x / 2, size.y / 2),
+      size: Vector2.all(rawBoardSide),
+      scale: Vector2.all(boardScale),
+    );
+
     await addAll([
-      Board(
-        contest,
-        boardStyle,
-        pieceTheme,
-        notationVisibility,
-        anchor: .center,
-        position: Anchor.center.ofSize(size),
-        size: boardSize,
-        scale: Vector2.all(size.x / boardSize.x),
-      ),
-      PositionComponent(
-        position: padding,
-        size: innerSize,
-        children: [
-          for (final MapEntry(:key, :value) in _ideologyAnchor.entries)
-            PlayerPanel(
-              contest,
-              key,
-              boardStyle,
-              pieceTheme,
-              anchor: value,
-              position: value.ofSize(innerSize),
-              size: playerPanelSize,
-            ),
-        ],
-      ),
+      board!,
+      _panel(boardStyle, Ideology.green,
+          anchor: Anchor.topLeft,
+          pos: Vector2(pad, pad),
+          sz: Vector2(panelW, panelH)),
+      _panel(boardStyle, Ideology.yellow,
+          anchor: Anchor.topRight,
+          pos: Vector2(size.x - pad, pad),
+          sz: Vector2(panelW, panelH)),
+      _panel(boardStyle, Ideology.red,
+          anchor: Anchor.bottomLeft,
+          pos: Vector2(pad, size.y - pad),
+          sz: Vector2(panelW, panelH)),
+      _panel(boardStyle, Ideology.blue,
+          anchor: Anchor.bottomRight,
+          pos: Vector2(size.x - pad, size.y - pad),
+          sz: Vector2(panelW, panelH)),
     ]);
   }
+
+  Future<void> _buildLandscape(
+      BoardStyle boardStyle, double rawBoardSide, double pad) async {
+    final availH = size.y - pad * 2;
+    final boardScale = availH / rawBoardSide;
+    final scaledBoard = rawBoardSide * boardScale;
+
+    final sideW =
+        ((size.x - scaledBoard - pad * 4) / 2).clamp(60.0, 240.0);
+    final panelH = (availH / 2 - pad / 2).clamp(36.0, 120.0);
+
+    final boardX = pad + sideW + pad;
+
+    board = Board(
+      contest, boardStyle, pieceTheme, notationVisibility,
+      anchor: Anchor.center,
+      position: Vector2(boardX + scaledBoard / 2, size.y / 2),
+      size: Vector2.all(rawBoardSide),
+      scale: Vector2.all(boardScale),
+    );
+
+    await addAll([
+      board!,
+      _panel(boardStyle, Ideology.green,
+          anchor: Anchor.topLeft,
+          pos: Vector2(pad, pad),
+          sz: Vector2(sideW, panelH)),
+      _panel(boardStyle, Ideology.red,
+          anchor: Anchor.bottomLeft,
+          pos: Vector2(pad, size.y - pad),
+          sz: Vector2(sideW, panelH)),
+      _panel(boardStyle, Ideology.yellow,
+          anchor: Anchor.topRight,
+          pos: Vector2(size.x - pad, pad),
+          sz: Vector2(sideW, panelH)),
+      _panel(boardStyle, Ideology.blue,
+          anchor: Anchor.bottomRight,
+          pos: Vector2(size.x - pad, size.y - pad),
+          sz: Vector2(sideW, panelH)),
+    ]);
+  }
+
+  PlayerPanel _panel(
+    BoardStyle boardStyle,
+    Ideology ideology, {
+    required Anchor anchor,
+    required Vector2 pos,
+    required Vector2 sz,
+  }) =>
+      PlayerPanel(
+        contest, ideology, boardStyle, pieceTheme,
+        anchor: anchor,
+        position: pos,
+        size: sz,
+      );
 }

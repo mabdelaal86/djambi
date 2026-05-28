@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'controllers/preferences.dart';
 import 'screens.dart';
 
 Future<void> main() async {
-  // debugPaintSizeEnabled = true;
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(MyApp(preferences: await .create()));
+  // No orientation lock — the game handles both portrait and landscape
+  runApp(MyApp(preferences: await Preferences.create()));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,13 +20,14 @@ class MyApp extends StatelessWidget {
     value: preferences,
     child: MaterialApp(
       title: "Djambi",
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.blueGrey)),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey)),
       routes: {
         "/": (_) => const HomePage(),
         "/about": (_) => const AboutPage(),
         "/settings": (_) => const SettingsPage(),
         "/options": (_) => const OptionsPage(),
         "/play": (_) => const PlayPage(),
+        "/rules": (_) => const RulesPage(),
       },
     ),
   );
