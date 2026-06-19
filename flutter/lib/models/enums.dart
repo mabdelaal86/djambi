@@ -29,7 +29,10 @@ enum Manoeuvre { none, move, kill, exit, end }
 
 enum PlayerType {
   human,
-  aiMaxN;
+  aiEasy,
+  aiMedium,
+  aiHard;
 
   bool get isHuman => this == .human;
+  bool get isAi => !isHuman;
 }

@@ -17,6 +17,9 @@ class OptionsPage extends StatefulWidget {
 
 const _icons = {TurnDirection.anticlockwise: Icons.rotate_left, TurnDirection.clockwise: Icons.rotate_right};
 
+const _difficulties = [PlayerType.aiEasy, PlayerType.aiMedium, PlayerType.aiHard];
+const _difficultyLabels = {PlayerType.aiEasy: "Easy", PlayerType.aiMedium: "Medium", PlayerType.aiHard: "Hard"};
+
 class _OptionsPageState extends State<OptionsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -90,6 +93,44 @@ class _OptionsPageState extends State<OptionsPage> {
                           ],
                         ),
                       ),
+                    ),
+                  ),
+                  OptionPanel(
+                    title: "AI Difficulty",
+                    subtitle: "Only applies to AI-controlled players",
+                    builder: (context, pref) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (final ideology in Ideology.values)
+                          if (!pref.playerTypes.elementAt(ideology.index).isHuman)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12, right: 12, bottom: 8),
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 70, child: Text(ideology.title)),
+                                  Expanded(
+                                    child: ToggleButtons(
+                                      direction: Axis.horizontal,
+                                      onPressed: (i) =>
+                                          pref.setPlayerDifficulty(ideology.index, _difficulties[i]),
+                                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                      isSelected: [
+                                        for (final d in _difficulties)
+                                          d == pref.playerTypes.elementAt(ideology.index),
+                                      ],
+                                      children: [
+                                        for (final d in _difficulties)
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                                            child: Text(_difficultyLabels[d]!),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                      ],
                     ),
                   ),
                 ],

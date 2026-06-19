@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 
 import '../models.dart';
@@ -23,12 +25,14 @@ class Playground extends PositionComponent {
   final BoardTheme boardTheme;
   final PieceTheme pieceTheme;
   final NotationVisibility notationVisibility;
+  final VoidCallback? onTapSound;
 
   Playground(
     this.contest, {
     required this.boardTheme,
     required this.pieceTheme,
     required this.notationVisibility,
+    this.onTapSound,
     super.position,
     super.size,
   });
@@ -47,6 +51,7 @@ class Playground extends PositionComponent {
         boardStyle,
         pieceTheme,
         notationVisibility,
+        onTapSound: onTapSound,
         anchor: .center,
         position: Anchor.center.ofSize(size),
         size: boardSize,

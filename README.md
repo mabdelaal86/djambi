@@ -26,6 +26,10 @@ For more details, check the [game page](https://en.wikipedia.org/wiki/Djambi) on
 
 * When a Chief leave the Maze, its team still get extra turn.
 * When no player can win, nothing is happen.
+* Building the Linux desktop target requires GStreamer development packages
+  to be installed (used by `audioplayers` for sound effects), e.g. on
+  Ubuntu/Debian: `sudo apt install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-good gstreamer1.0-plugins-bad`.
+  Android, iOS, macOS, Windows and web builds are unaffected.
 
 
 ## Roadmap
@@ -43,7 +47,7 @@ For more details, check the [game page](https://en.wikipedia.org/wiki/Djambi) on
 - [x] Show current player.
 - [ ] Animate pieces' movements.
 - [ ] Add easy/quick way to show a piece description.
-- [ ] Add sound effects.
+- [x] Add sound effects.
 
 
 ## Architecture

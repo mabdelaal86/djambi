@@ -9,13 +9,12 @@ import '../../views.dart';
 import '../common/utils.dart';
 import 'preferences.dart';
 import 'serialization.dart';
+import 'sound.dart';
 
 const noTapUpOverlayId = "noTapUpOverlay";
 
 const _gameWidth = 1000.0;
 const _gameHeight = 1380.0;
-
-const _aiMaxDepth = 2;
 
 /// used for developing and testing
 const _saveLoadState = false;
@@ -26,6 +25,7 @@ class DjambiGame extends FlameGame {
   final Color surface;
 
   late final Contest _contest;
+  late final SoundController _sound;
   var _allowUndoRedo = false;
 
   DjambiGame({required this.preferences, required this.surface})
@@ -39,6 +39,7 @@ class DjambiGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     camera.viewfinder.anchor = .topLeft;
+    _sound = SoundController(enabled: preferences.soundEnabled);
 
     await world.addAll([
       Playground(
@@ -46,11 +47,18 @@ class DjambiGame extends FlameGame {
         boardTheme: preferences.boardTheme,
         pieceTheme: preferences.pieceTheme,
         notationVisibility: preferences.notationVisibility,
+        onTapSound: playTapSound,
         size: Vector2(_gameWidth, _gameHeight),
       ),
     ]);
 
     overlays.addEntry(noTapUpOverlayId, (context, game) => GestureDetector(behavior: .opaque));
+  }
+
+  @override
+  void onRemove() {
+    _sound.dispose();
+    super.onRemove();
   }
 
   @override
@@ -71,6 +79,14 @@ class DjambiGame extends FlameGame {
   bool get finished => _contest.parliament.isGameFinished;
   bool get noHumans => _contest.noHumans;
 
+  /// Lets the board renderer play a tap/select sound directly, since
+  /// selecting a piece or a destination cell is a pure UI interaction and
+  /// not a [GameEvent] produced by the models layer.
+  void playTapSound() {
+    _sound.enabled = preferences.soundEnabled;
+    _sound.play(SoundEffect.tapSelect);
+  }
+
   Future<Contest> _createContest() async {
     if (_saveLoadState) {
       final json = await load(_statePath);
@@ -90,6 +106,8 @@ class DjambiGame extends FlameGame {
   Future<void> _onStatueChanged() async {
     overlays.add(noTapUpOverlayId);
     _allowUndoRedo = true;
+    _sound.enabled = preferences.soundEnabled;
+    unawaited(_sound.playForEvents(_contest.lastEvents));
     if (_contest.noHumans) {
       return _showGameOverDialog("GAME OVER!");
     }
@@ -104,7 +122,7 @@ class DjambiGame extends FlameGame {
       return;
     }
     _allowUndoRedo = false;
-    Timer(preferences.gameSpeed.duration, () => _contest.aiAct(_aiMaxDepth));
+    Timer(preferences.gameSpeed.duration, () => _contest.aiAct());
   }
 
   Future<void> _showGameOverDialog(String title, [String? message]) => showDialog(

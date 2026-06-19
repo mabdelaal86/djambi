@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 
 import '../../common/utils.dart';
@@ -7,6 +9,18 @@ import '../enums.dart';
 import '../member.dart';
 import '../parliament.dart';
 import 'evaluation.dart';
+
+/// Caps how many candidate actions a node explores at the root member-level.
+/// Used by the "Easy" difficulty to keep it fast and intentionally short
+/// sighted: instead of considering every legal move for every piece, it only
+/// samples a handful, so it regularly misses good plays a stronger AI would
+/// find.
+typedef ActionSampler = List<(Member, Cell)> Function(List<(Member, Cell)> actions, Random random);
+
+List<(Member, Cell)> _allActions(List<(Member, Cell)> actions, Random random) {
+  actions.shuffle(random);
+  return actions;
+}
 
 class Node {
   Node(this.parliament, this.parent) : depth = _newDepth(parent, parliament) {
@@ -35,15 +49,24 @@ class Node {
   Iterable<Member> _whoCanAct() =>
       parliament.isManoeuvreCompleted ? parliament.currentParty.activeMembers : [parliament.actor!];
 
-  Iterable<(Member, Cell)> availableActions() sync* {
-    for (final member in _whoCanAct()) {
-      // as the algorithm doesn't go deep in the tree,
-      // it is better to shuffle available cell to make it looks smarter.
-      // if it can go deeper, then use the next line instead to improve performance
-      // yield* member.cellsToAct().map((cell) => (member, cell));
-      final cells = member.cellsToAct().toList()..shuffle();
-      yield* cells.map((cell) => (member, cell));
-    }
+  /// True if [cell] is currently occupied by another member, meaning acting
+  /// on it is a capture/contact move rather than a quiet relocation.
+  bool _isImpactfulTarget(Cell cell) => parliament.getMemberAt(cell) != null;
+
+  Iterable<(Member, Cell)> availableActions(Random random, ActionSampler sample) {
+    final actions = [
+      for (final member in _whoCanAct()) for (final cell in member.cellsToAct()) (member, cell),
+    ];
+    // Move ordering: explore moves that interact with another piece (capture,
+    // bury, exit-with-a-body, ...) before quiet ones. This makes the search
+    // discover strong lines earlier, which matters once pruning/short
+    // samplers are involved and keeps deeper searches more efficient.
+    actions.sort((a, b) {
+      final aImpact = _isImpactfulTarget(a.$2) ? 0 : 1;
+      final bImpact = _isImpactfulTarget(b.$2) ? 0 : 1;
+      return aImpact.compareTo(bImpact);
+    });
+    return sample(actions, random);
   }
 
   void calcMaxN() {
@@ -67,11 +90,22 @@ class Node {
 }
 
 class Tree {
-  Tree(Parliament parliament, this.maxDepth) : _root = Node(parliament, null);
+  Tree(
+    Parliament parliament,
+    this.maxDepth, {
+    PartyEvaluation? evaluateParty,
+    ActionSampler? sampleActions,
+    Random? random,
+  }) : _root = Node(parliament, null),
+       evaluateParty = evaluateParty ?? defaultPartyEvaluation,
+       _sampleActions = sampleActions ?? _allActions,
+       _random = random ?? Random();
 
   final Node _root;
   final int maxDepth;
-  final PartyEvaluation evaluateParty = defaultPartyEvaluation;
+  final PartyEvaluation evaluateParty;
+  final ActionSampler _sampleActions;
+  final Random _random;
   final Set<String> _visitedNodes = {};
   // int _level = 0; // just used for debugging
 
@@ -89,7 +123,7 @@ class Tree {
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
       node.evaluate(evaluateParty);
     } else {
-      for (final (member, cell) in node.availableActions()) {
+      for (final (member, cell) in node.availableActions(_random, _sampleActions)) {
         _doAction(node, member, cell);
       }
       if (node.subNodes.isEmpty) {

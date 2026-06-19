@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 
 import '../models.dart';
@@ -16,12 +18,14 @@ class Board extends PositionComponent {
   final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
   final NotationVisibility notationVisibility;
+  final VoidCallback? onTapSound;
 
   Board(
     this.contest,
     this.boardStyle,
     this.pieceTheme,
     this.notationVisibility, {
+    this.onTapSound,
     super.position,
     super.anchor,
     super.scale,
@@ -38,7 +42,7 @@ class Board extends PositionComponent {
         position: Vector2.all(notationVisibility == .none ? Dimensions.border : Dimensions.margin),
         children: [
           GridRenderer(boardStyle, pieceTheme, size: gridSize),
-          MovementsRenderer(contest, boardStyle, size: gridSize),
+          MovementsRenderer(contest, boardStyle, onTapSound: onTapSound, size: gridSize),
           PiecesRenderer(contest, boardStyle, pieceTheme, size: gridSize),
         ],
       ),

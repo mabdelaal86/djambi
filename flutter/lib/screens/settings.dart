@@ -59,6 +59,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
+            OptionPanel(
+              title: "Sound Effects",
+              builder: (context, pref) => Padding(
+                padding: const EdgeInsets.only(bottom: 12, right: 12, top: 6),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Switch(value: pref.soundEnabled, onChanged: pref.setSoundEnabled),
+                ),
+              ),
+            ),
           ],
         ),
       ),

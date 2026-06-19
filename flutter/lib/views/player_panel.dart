@@ -33,12 +33,19 @@ class PlayerPanel extends PositionComponent {
     super.position,
     super.scale,
     super.size,
-  }) : playerName = "${ideology.name} - ${contest.playerTypes[ideology.index].isHuman ? 'human' : 'ai'}".toUpperCase(),
+  }) : playerName = "${ideology.name} - ${_playerTypeLabel(contest.playerTypes[ideology.index])}".toUpperCase(),
        _nextSign = _textPainter("[NEXT]", boardStyle.selectableMarkColor.toPaint()) {
     _playerNameStroke = _textPainter(playerName, boardStyle.pieceEdgeColor.toPaint()..stroke(_fontStroke));
     _playerNameDead = _textPainter(playerName, boardStyle.deadColor.toPaint());
     _playerNameAlive = _textPainter(playerName, boardStyle.partyColor[ideology.index].toPaint());
   }
+
+  static String _playerTypeLabel(PlayerType type) => switch (type) {
+    .human => "human",
+    .aiEasy => "ai - easy",
+    .aiMedium => "ai - medium",
+    .aiHard => "ai - hard",
+  };
 
   @override
   Future<void> onLoad() async {

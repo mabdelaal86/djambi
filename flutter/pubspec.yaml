@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.0
 
   # Project dependencies
+  audioplayers: ^7.0.0
   collection: ^1.19.0
   flame: ^1.37.0
   flame_markdown: ^0.2.0

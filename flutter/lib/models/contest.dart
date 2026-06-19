@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:stack/stack.dart';
 
+import 'ai/difficulty.dart';
 import 'ai/tree.dart';
 import 'cell.dart';
 import 'enums.dart';
+import 'events.dart';
 import 'member.dart';
 import 'parliament.dart';
 import 'state.dart';
@@ -17,6 +19,7 @@ class Contest {
 
   Parliament get parliament => _curState.parliament;
   List<Cell> get lastMovedCells => _curState.lastMovedCells;
+  List<GameEvent> get lastEvents => _curState.events;
   bool get canUndo => _undoStack.isNotEmpty;
   bool get canRedo => _redoStack.isNotEmpty;
 
@@ -64,10 +67,18 @@ class Contest {
     _handleNewState(newParliament);
   }
 
-  void aiAct(int maxDepth) {
+  void aiAct() {
     assert(!_curState.parliament.isGameFinished, "game is already finished!");
     assert(_curState.parliament.isManoeuvreCompleted, "can't call AI in middle of a manoeuvre");
-    final tree = Tree(_curState.parliament, maxDepth);
+    final playerType = playerTypes[parliament.currentParty.ideology.index];
+    final settings = AiSettings.forPlayerType(playerType);
+    assert(settings != null, "aiAct should only be called for an AI-controlled party");
+    final tree = Tree(
+      _curState.parliament,
+      settings!.maxDepth,
+      evaluateParty: settings.evaluateParty,
+      sampleActions: settings.sampleActions,
+    );
     tree.build();
     _handleNewState(tree.decision.parliament);
   }

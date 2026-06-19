@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
@@ -15,9 +17,24 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
 
   final Contest contest;
   final BoardStyle boardStyle;
+
+  /// Called whenever a tap results in selecting a piece, picking a
+  /// destination cell for it, or deselecting it - a pure UI interaction
+  /// that isn't itself a [GameEvent], so it's reported directly rather than
+  /// through the model layer.
+  final VoidCallback? onTapSound;
+
   Member? _selectedMember;
 
-  MovementsRenderer(this.contest, this.boardStyle, {super.position, super.anchor, super.size, super.scale});
+  MovementsRenderer(
+    this.contest,
+    this.boardStyle, {
+    this.onTapSound,
+    super.position,
+    super.anchor,
+    super.size,
+    super.scale,
+  });
 
   bool get _gameIsNotFinished => !contest.parliament.isGameFinished;
   Party get _curParty => contest.parliament.currentParty;
@@ -81,6 +98,7 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
       final member = _curParty.getMemberAt(cell);
       if (member != null && member.cellsToAct().isNotEmpty) {
         _selectedMember = member;
+        onTapSound?.call();
       }
       return;
     }
@@ -99,6 +117,7 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
       _selectedMember = null;
       if (member.cellsToAct().isNotEmpty) {
         _selectedMember = member;
+        onTapSound?.call();
       }
       return;
     }
