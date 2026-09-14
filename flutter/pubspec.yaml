@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.1.0+7
 
 environment:
-  sdk: ^3.12.0
+  sdk: ^3.13.3
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -38,7 +38,7 @@ dependencies:
 
   # Project dependencies
   collection: ^1.19.0
-  flame: ^1.37.0
+  flame: ^1.38.0
   flame_markdown: ^0.2.0
   flame_svg: ^1.12.0
   flutter_html: ^3.0.0

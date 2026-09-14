@@ -12,6 +12,16 @@ include: package:flutter_lints/flutter.yaml
 formatter:
   page_width: 120
 
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
@@ -31,13 +41,11 @@ linter:
     - avoid_classes_with_only_static_members
     - avoid_equals_and_hash_code_on_mutable_classes
     - avoid_positional_boolean_parameters
-    - avoid_private_typedef_functions
     - avoid_returning_this
     - avoid_setters_without_getters
     - avoid_types_on_closure_parameters
     - directives_ordering
     - omit_local_variable_types
-    - one_member_abstracts
     - prefer_final_in_for_each
     - prefer_final_locals
     - use_setters_to_change_properties
@@ -75,7 +83,6 @@ linter:
     - test_types_in_equals
     - throw_in_finally
     - unawaited_futures
-    - unnecessary_await_in_return
     - unnecessary_breaks
     - unnecessary_lambdas
     - unnecessary_parenthesis
