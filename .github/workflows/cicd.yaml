@@ -9,16 +9,37 @@ on:
 jobs:
   # linting stages
   analyze:
+    name: Analyze Source Code
     runs-on: ubuntu-latest
-
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
+      - name: Report Flutter version
+        run: flutter --version
       - name: Install dependencies
         run: flutter pub get --directory ./flutter
       - name: Analyze source code
         run: flutter analyze --no-pub ./flutter
       - name: Check source code format
         run: dart format -o none --set-exit-if-changed ./flutter
+
+  # building stages
+  build_linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    needs: [analyze]
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+      - name: Report Flutter version
+        run: flutter --version
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: ./flutter
+      - name: Build Linux
+        run: flutter build linux
+        working-directory: ./flutter
