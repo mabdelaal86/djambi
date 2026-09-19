@@ -77,9 +77,15 @@ jobs:
         run: flutter pub get
       - name: Create Keys properties
         run: |
-          echo "storePassword=test" >> android/key.properties
-          echo "keyPassword=test" >> android/key.properties
-          echo "keyAlias=upload" >> android/key.properties
+          # create a key properties file for testing
+          echo "keyAlias=testAlias" >> android/key.properties
+          echo "keyPassword=testPass" >> android/key.properties
+          echo "storePassword=testPass" >> android/key.properties
+          echo "storeFile=test.keystore" >> android/key.properties
+          # create a test keystore file
+          keytool -genkeypair -v -keyalg RSA -keysize 2048 -validity 10000 \
+            -alias testAlias -keypass testPass -storepass testPass -keystore test.keystore \
+            -dname "CN=Test, OU=Dev, O=TestCorp, L=City, S=State, C=US"
       - name: Build Android
         run: flutter build apk --no-pub
       - name: Build App Bundle
