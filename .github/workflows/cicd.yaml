@@ -75,6 +75,11 @@ jobs:
         run: flutter --version
       - name: Install dependencies
         run: flutter pub get
+      - name: Create Keys properties
+        run: |
+          echo "storePassword=test" >> android/key.properties
+          echo "keyPassword=test" >> android/key.properties
+          echo "keyAlias=upload" >> android/key.properties
       - name: Build Android
         run: flutter build apk --no-pub
       - name: Build App Bundle
