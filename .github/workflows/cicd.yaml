@@ -8,8 +8,7 @@ on:
 
 defaults:
   run:
-    shell: bash
-    working-directory: ./flutter
+    working-directory: flutter
 
 jobs:
   # linting stages
@@ -37,6 +36,7 @@ jobs:
     needs: [analyze]
     steps:
       - name: Install system dependencies
+        working-directory: ${{ github.workspace }}
         run: |
           sudo apt-get update
           sudo apt-get install -yq --no-install-recommends \
