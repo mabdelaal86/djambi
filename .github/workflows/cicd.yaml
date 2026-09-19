@@ -82,12 +82,10 @@ jobs:
           echo "keyPassword=testPass" >> android/key.properties
           echo "storePassword=testPass" >> android/key.properties
           echo "storeFile=${{github.workspace}}/flutter/test.keystore" >> android/key.properties
-          cat android/key.properties
           # create a test keystore file
           keytool -genkeypair -v -keyalg RSA -keysize 2048 -validity 10000 \
             -alias testAlias -keypass testPass -storepass testPass -keystore test.keystore \
             -dname "CN=Test, OU=Dev, O=TestCorp, L=City, S=State, C=US"
-          pwd && ls -la
       - name: Build Android
         run: flutter build apk --no-pub
       - name: Build App Bundle
