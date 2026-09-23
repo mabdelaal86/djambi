@@ -90,3 +90,21 @@ jobs:
         run: flutter build apk --no-pub
       - name: Build App Bundle
         run: flutter build appbundle --no-pub
+
+  build_ios:
+    name: Build iOS
+    runs-on: macos-latest
+    needs: [analyze]
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v7
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+      - name: Report Flutter version
+        run: flutter --version
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build iOS
+        run: flutter build ios --no-pub --no-codesign
