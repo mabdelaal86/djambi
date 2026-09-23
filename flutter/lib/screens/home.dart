@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'utils.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text("Djambi")),
+    appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text('Djambi')),
     body: Padding(
       padding: const .all(15),
       child: Column(
@@ -22,21 +22,21 @@ class HomePage extends StatelessWidget {
                 children: [
                   FilledButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/options");
+                      Navigator.pushNamed(context, '/options');
                     },
-                    child: const Text("Play"),
+                    child: const Text('Play'),
                   ),
                   FilledButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/about");
+                      Navigator.pushNamed(context, '/about');
                     },
-                    child: const Text("About"),
+                    child: const Text('About'),
                   ),
                   FilledButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/settings");
+                      Navigator.pushNamed(context, '/settings');
                     },
-                    child: const Text("Settings"),
+                    child: const Text('Settings'),
                   ),
                 ],
               ),
@@ -46,8 +46,8 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: .end,
             children: [
               TextButton(
-                onPressed: () => openUrl("https://datonomi.github.io/djambi/privacy-policy"),
-                child: const Text("Privacy Policy"),
+                onPressed: () => openUrl('https://datonomi.github.io/djambi/privacy-policy'),
+                child: const Text('Privacy Policy'),
               ),
             ],
           ),

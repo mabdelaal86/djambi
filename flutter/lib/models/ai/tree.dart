@@ -9,7 +9,7 @@ import '../parliament.dart';
 import 'evaluation.dart';
 
 class Node {
-  Node(this.parliament, this.parent) : depth = _newDepth(parent, parliament) {
+  new(this.parliament, this.parent) : depth = _newDepth(parent, parliament) {
     parent?.subNodes.add(this);
   }
 
@@ -27,8 +27,8 @@ class Node {
   Node get bestSubNode => _bestSubNode ?? this;
 
   void evaluate(PartyEvaluation evaluateParty) {
-    assert(subNodes.isEmpty, "evaluate should run on leaf nodes only");
-    assert(parliament.isManoeuvreCompleted, "the maneuver should be completed");
+    assert(subNodes.isEmpty, 'evaluate should run on leaf nodes only');
+    assert(parliament.isManoeuvreCompleted, 'the maneuver should be completed');
     _evaluations = {for (final p in parliament.parties) p.ideology: evaluateParty(p)};
   }
 
@@ -47,8 +47,8 @@ class Node {
   }
 
   void calcMaxN() {
-    assert(_evaluations.isEmpty, "evaluations is expected to be empty");
-    assert(subNodes.isNotEmpty, "should run on NONE leaf nodes");
+    assert(_evaluations.isEmpty, 'evaluations is expected to be empty');
+    assert(subNodes.isNotEmpty, 'should run on NONE leaf nodes');
     var max = Constants.minInt;
     Map<Ideology, int>? evaluations;
     Node? bestSub;
@@ -67,7 +67,7 @@ class Node {
 }
 
 class Tree {
-  Tree(Parliament parliament, this.maxDepth) : _root = Node(parliament, null);
+  new(Parliament parliament, this.maxDepth) : _root = Node(parliament, null);
 
   final Node _root;
   final int maxDepth;
@@ -78,14 +78,14 @@ class Tree {
   Node get decision => _root.bestSubNode;
 
   void build() {
-    assert(_root.parliament.isManoeuvreCompleted, "the maneuver should be completed");
-    assert(!_root.parliament.isGameFinished, "the game should be still ongoing");
+    assert(_root.parliament.isManoeuvreCompleted, 'the maneuver should be completed');
+    assert(!_root.parliament.isGameFinished, 'the game should be still ongoing');
     _visitedNodes.add(_root.parliament.getSign());
     _createSubNodes(_root);
   }
 
   void _createSubNodes(Node node) {
-    assert(node.depth <= maxDepth, "exceed the maximum depth!");
+    assert(node.depth <= maxDepth, 'exceed the maximum depth!');
     if (node.parliament.isGameFinished || node.depth == maxDepth) {
       node.evaluate(evaluateParty);
     } else {

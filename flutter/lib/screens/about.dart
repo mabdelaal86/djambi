@@ -4,11 +4,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'utils.dart';
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text("About")),
+    appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text('About')),
     body: Padding(
       padding: const .all(15),
       child: SingleChildScrollView(

@@ -8,13 +8,13 @@ import 'parliament.dart';
 
 class Party {
   final Chief chief;
-  Party(this.chief);
+  new(this.chief);
 
   Parliament get parliament => chief.parliament;
   Ideology get ideology => chief.ideology;
 
   @override
-  String toString() => "${ideology.name} party";
+  String toString() => '${ideology.name} party';
 
   Iterable<Member> get activeMembers => parliament.members.where((m) => m.ideology == ideology && m.isActive);
 

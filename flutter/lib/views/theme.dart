@@ -36,7 +36,7 @@ class BoardStyle {
   // parties
   final List<Color> partyColor;
 
-  const BoardStyle({
+  const new({
     required this.marginBackColor,
     required this.marginForeColor,
     required this.lightCellColor,

@@ -17,12 +17,12 @@ Future<bool?> confirm(BuildContext context, String title, String message, {bool 
           TextButton(
             style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Yes"),
+            child: const Text('Yes'),
           ),
           TextButton(
             style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("No"),
+            child: const Text('No'),
           ),
         ],
       ),
@@ -39,7 +39,7 @@ Future<void> alert(BuildContext context, String title, String message, {bool bar
           TextButton(
             style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
             onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
+            child: const Text('OK'),
           ),
         ],
       ),

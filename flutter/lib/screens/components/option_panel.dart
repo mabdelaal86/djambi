@@ -10,7 +10,7 @@ class OptionPanel extends StatelessWidget {
   final String? label;
   final Widget Function(BuildContext context, Preferences pref) builder;
 
-  const OptionPanel({super.key, required this.title, this.subtitle, this.label, required this.builder});
+  const new({super.key, required this.title, this.subtitle, this.label, required this.builder});
 
   @override
   Widget build(BuildContext context) {

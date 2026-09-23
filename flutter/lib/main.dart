@@ -13,7 +13,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp(this.preferences, {super.key});
+  const new(this.preferences, {super.key});
 
   final Preferences preferences;
 
@@ -21,14 +21,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => ChangeNotifierProvider.value(
     value: preferences,
     child: MaterialApp(
-      title: "Djambi",
+      title: 'Djambi',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.blueGrey)),
       routes: {
-        "/": (_) => const HomePage(),
-        "/about": (_) => const AboutPage(),
-        "/settings": (_) => const SettingsPage(),
-        "/options": (_) => const OptionsPage(),
-        "/play": (_) => const PlayPage(),
+        '/': (_) => const HomePage(),
+        '/about': (_) => const AboutPage(),
+        '/settings': (_) => const SettingsPage(),
+        '/options': (_) => const OptionsPage(),
+        '/play': (_) => const PlayPage(),
       },
     ),
   );

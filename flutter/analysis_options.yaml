@@ -30,28 +30,37 @@ linter:
   #
   # Instead of disabling a lint rule for the entire project in the
   # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
+  # or a specific Dart file by using the `// ignore: name_of_lint` and
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # Rules for effective dart design
-    # https://dart.dev/effective-dart/design
-    - always_declare_return_types
+    # Rules for effective dart: https://dart.dev/effective-dart
+    # .../style
+    - directives_ordering
+    # .../usage
     - avoid_catches_without_on_clauses
+    - avoid_catching_errors
+    - prefer_expression_function_bodies
+    - prefer_relative_imports
+    - unnecessary_lambdas
+    - unnecessary_type_name_in_constructor
+    # .../documentation
+    - comment_references
+    # .../design
     - avoid_classes_with_only_static_members
     - avoid_equals_and_hash_code_on_mutable_classes
     - avoid_positional_boolean_parameters
     - avoid_returning_this
     - avoid_setters_without_getters
     - avoid_types_on_closure_parameters
-    - directives_ordering
     - omit_local_variable_types
-    - prefer_final_in_for_each
-    - prefer_final_locals
+    - prefer_mixin
+    - type_annotate_public_apis
     - use_setters_to_change_properties
+    - use_to_and_as_if_applicable
     # Other custom rules
+    - always_declare_return_types
     - avoid_bool_literals_in_conditional_expressions
-    - avoid_catching_errors
     - avoid_js_rounded_ints
     - avoid_type_to_string
     - avoid_void_async
@@ -59,10 +68,10 @@ linter:
     - combinators_ordering
     - deprecated_consistency
     - eol_at_end_of_file
-    - matching_super_parameters
-    - missing_whitespace_between_adjacent_strings
     - leading_newlines_in_multiline_strings
     - literal_only_boolean_expressions
+    - matching_super_parameters
+    - missing_whitespace_between_adjacent_strings
     - no_adjacent_strings_in_list
     - no_literal_bool_comparisons
     - no_runtimeType_toString
@@ -75,23 +84,23 @@ linter:
     - prefer_const_declarations
     - prefer_const_literals_to_create_immutables
     - prefer_constructors_over_static_methods
-    - prefer_expression_function_bodies
+    - prefer_final_in_for_each
+    - prefer_final_locals
     - prefer_if_elements_to_conditional_expressions
     - prefer_int_literals
     - prefer_null_aware_method_calls
-    - prefer_relative_imports
+    - prefer_single_quotes
     - test_types_in_equals
     - throw_in_finally
     - unawaited_futures
     - unnecessary_breaks
-    - unnecessary_lambdas
     - unnecessary_parenthesis
     - unnecessary_raw_strings
     - unnecessary_statements
     - use_enums
     - use_named_constants
-    - use_string_buffers
     - use_raw_strings
+    - use_string_buffers
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

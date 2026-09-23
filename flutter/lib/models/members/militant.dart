@@ -3,7 +3,7 @@ import '../enums.dart';
 import '../member.dart';
 
 class Militant extends Member {
-  Militant(super.parliament, super.ideology, super.id);
+  new(super.parliament, super.ideology, super.id);
 
   @override
   Role get role => .militant;
@@ -34,5 +34,5 @@ class Militant extends Member {
   }
 
   @override
-  void onExit(Cell cell) => throw UnsupportedError("Unhandled state!");
+  void onExit(Cell cell) => throw UnsupportedError('Unhandled state!');
 }

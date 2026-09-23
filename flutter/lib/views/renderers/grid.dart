@@ -15,7 +15,7 @@ class GridRenderer extends PositionComponent {
   final PieceTheme pieceTheme;
   late final Svg _mazeImage;
 
-  GridRenderer(this.boardStyle, this.pieceTheme, {super.position, super.anchor, super.size, super.scale});
+  new(this.boardStyle, this.pieceTheme, {super.position, super.anchor, super.size, super.scale});
 
   @override
   Future<void> onLoad() async {

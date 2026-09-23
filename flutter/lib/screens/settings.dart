@@ -6,7 +6,7 @@ import '../views.dart';
 import 'components/option_panel.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  const new({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -15,14 +15,14 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text("Settings")),
+    appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text('Settings')),
     body: Padding(
       padding: const .all(15),
       child: SingleChildScrollView(
         child: Column(
           children: [
             OptionPanel(
-              title: "Notation Borders",
+              title: 'Notation Borders',
               builder: (context, pref) => SingleChildScrollView(
                 scrollDirection: .horizontal,
                 child: Padding(
@@ -41,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             OptionPanel(
-              title: "Game Speed",
+              title: 'Game Speed',
               builder: (context, pref) => SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Padding(

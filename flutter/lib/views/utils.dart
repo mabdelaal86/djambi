@@ -62,15 +62,15 @@ extension AnchorExtension on Anchor {
 }
 
 Future<Svg> loadPieceImage(Role role, PieceTheme theme, Color color) async {
-  final fileContent = await Flame.assets.readFile("images/${theme.name}/${role.name}.svg");
+  final fileContent = await Flame.assets.readFile('images/${theme.name}/${role.name}.svg');
   final svgString = fileContent.replaceFirst(
-    "fill:#000000;fill-opacity:1",
-    "fill:#${_hex(color.r)}${_hex(color.g)}${_hex(color.b)};fill-opacity:${color.a}",
+    'fill:#000000;fill-opacity:1',
+    'fill:#${_hex(color.r)}${_hex(color.g)}${_hex(color.b)};fill-opacity:${color.a}',
   );
   return Svg.loadFromString(svgString);
 }
 
-String _hex(double v) => (v * 255).round().toRadixString(16).padLeft(2, "0");
+String _hex(double v) => (v * 255).round().toRadixString(16).padLeft(2, '0');
 
 Vector2 _cellOffset(Cell cell) => Vector2(cell.x * Dimensions.cellSide, cell.y * Dimensions.cellSide);
 Vector2 _cellCenterOffset(Cell cell) => _cellOffset(cell) + _cellSize / 2;

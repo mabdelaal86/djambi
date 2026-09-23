@@ -22,18 +22,18 @@ class Contest {
 
   final List<PlayerType> playerTypes;
 
-  Contest(Ideology startIdeology, TurnDirection turnDirection, this.playerTypes, {this.onStateChanged})
+  new(Ideology startIdeology, TurnDirection turnDirection, this.playerTypes, {this.onStateChanged})
     : _curState = State(Parliament(startIdeology, turnDirection));
 
   /// json deserialization
-  Contest.fromJson(Map<String, dynamic> json, {this.onStateChanged})
-    : _curState = State(Parliament.fromJson(json["parliament"])),
-      playerTypes = [for (final p in json["player-types"]) .values[p]];
+  new fromJson(Map<String, dynamic> json, {this.onStateChanged})
+    : _curState = State(Parliament.fromJson(json['parliament'])),
+      playerTypes = [for (final p in json['player-types']) .values[p]];
 
   /// json serialization
   Map<String, dynamic> toJson() => {
-    "parliament": parliament.toJson(),
-    "player-types": playerTypes.map((e) => e.index).toList(),
+    'parliament': parliament.toJson(),
+    'player-types': playerTypes.map((e) => e.index).toList(),
   };
 
   void undo() {
@@ -65,7 +65,7 @@ class Contest {
   }
 
   void aiAct(int maxDepth) {
-    assert(!_curState.parliament.isGameFinished, "game is already finished!");
+    assert(!_curState.parliament.isGameFinished, 'game is already finished!');
     assert(_curState.parliament.isManoeuvreCompleted, "can't call AI in middle of a manoeuvre");
     final tree = Tree(_curState.parliament, maxDepth);
     tree.build();

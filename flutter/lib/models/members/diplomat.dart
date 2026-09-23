@@ -3,7 +3,7 @@ import '../enums.dart';
 import '../member.dart';
 
 class Diplomat extends Member {
-  Diplomat(super.parliament, super.ideology, super.id);
+  new(super.parliament, super.ideology, super.id);
 
   @override
   Role get role => .diplomat;

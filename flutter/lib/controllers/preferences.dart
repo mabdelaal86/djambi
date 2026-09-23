@@ -23,14 +23,14 @@ enum GameSpeed {
 // ------------------------------------
 
 // game settings
-const _notationVisibility = (key: "notation-visibility", val: NotationVisibility.topLeft);
-const _gameSpeed = (key: "game-speed", val: GameSpeed.medium);
+const _notationVisibility = (key: 'notation-visibility', val: NotationVisibility.topLeft);
+const _gameSpeed = (key: 'game-speed', val: GameSpeed.medium);
 
 // play options
-const _turnDirection = (key: "turn-direction", val: TurnDirection.anticlockwise);
-const _startIdeology = (key: "start-ideology", val: Ideology.red);
+const _turnDirection = (key: 'turn-direction', val: TurnDirection.anticlockwise);
+const _startIdeology = (key: 'start-ideology', val: Ideology.red);
 const _playerTypes = (
-  key: "player-types",
+  key: 'player-types',
   val: [PlayerType.human, PlayerType.aiMaxN, PlayerType.aiMaxN, PlayerType.aiMaxN],
 );
 
@@ -41,7 +41,7 @@ const _playerTypes = (
 class Preferences with ChangeNotifier {
   late final SharedPreferences _prefs;
 
-  Preferences._();
+  new _();
 
   static Future<Preferences> create() async {
     final res = Preferences._();
@@ -87,10 +87,10 @@ class Preferences with ChangeNotifier {
   Future<void> togglePlayerType(int index) {
     final players = playerTypes.toList();
     players[index] = players[index].isHuman ? .aiMaxN : .human;
-    return _prefs.setString(_playerTypes.key, players.map((e) => e.index).join(",")).then(_notifyListeners);
+    return _prefs.setString(_playerTypes.key, players.map((e) => e.index).join(',')).then(_notifyListeners);
   }
 
   Iterable<int> get playerTypeIndexes =>
-      _prefs.getString(_playerTypes.key)?.split(",").map(int.parse) ?? _playerTypes.val.map((e) => e.index);
+      _prefs.getString(_playerTypes.key)?.split(',').map(int.parse) ?? _playerTypes.val.map((e) => e.index);
   Iterable<PlayerType> get playerTypes => playerTypeIndexes.map((e) => .values[e]);
 }

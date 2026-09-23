@@ -7,7 +7,7 @@ import '../controllers/preferences.dart';
 import 'utils.dart';
 
 class PlayPage extends StatefulWidget {
-  const PlayPage({super.key});
+  const new({super.key});
 
   @override
   State<PlayPage> createState() => _PlayPageState();
@@ -21,7 +21,7 @@ class _PlayPageState extends State<PlayPage> {
     canPop: false,
     child: Scaffold(
       appBar: AppBar(
-        title: const Text("Djambi"),
+        title: const Text('Djambi'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(onPressed: () => _game.undo(), icon: const Icon(Icons.undo)),
@@ -42,7 +42,7 @@ class _PlayPageState extends State<PlayPage> {
       final shouldPop =
           _game.finished ||
           _game.noHumans ||
-          (await confirm(context, "Are you sure?", "The match state will not be saved") ?? false);
+          (await confirm(context, 'Are you sure?', 'The match state will not be saved') ?? false);
       if (context.mounted && shouldPop) {
         Navigator.pop(context, result);
       }

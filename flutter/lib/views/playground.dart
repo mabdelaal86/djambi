@@ -24,7 +24,7 @@ class Playground extends PositionComponent {
   final PieceTheme pieceTheme;
   final NotationVisibility notationVisibility;
 
-  Playground(
+  new(
     this.contest, {
     required this.boardTheme,
     required this.pieceTheme,

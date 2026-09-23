@@ -17,7 +17,7 @@ class Board extends PositionComponent {
   final PieceTheme pieceTheme;
   final NotationVisibility notationVisibility;
 
-  Board(
+  new(
     this.contest,
     this.boardStyle,
     this.pieceTheme,

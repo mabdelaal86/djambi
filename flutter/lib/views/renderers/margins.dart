@@ -18,7 +18,7 @@ class MarginsRenderer extends PositionComponent {
 
   final List<TextPainter> _colTextPainters, _rowTextPainters;
 
-  MarginsRenderer(this.boardStyle, this.notationVisibility, {super.position, super.anchor, super.size, super.scale})
+  new(this.boardStyle, this.notationVisibility, {super.position, super.anchor, super.size, super.scale})
     : _colTextPainters = [
         for (var i = 0; i < Constants.sideCellsCount; i++)
           _getTextPainter(Constants.colSymbols[i], boardStyle.marginForeColor, Dimensions.cellSide, Dimensions.margin),

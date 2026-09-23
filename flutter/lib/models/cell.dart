@@ -6,18 +6,18 @@ import 'constants.dart';
 class Cell {
   final int x, y;
 
-  const Cell(this.x, this.y);
-  const Cell.zero() : this(0, 0);
+  const new(this.x, this.y);
+  const new zero() : this(0, 0);
   static const maze = Cell(Constants.mazeIndex, Constants.mazeIndex);
 
   /// json deserialization
-  Cell.fromJson(Map<String, dynamic> json) : this(json["x"], json["y"]);
+  new fromJson(Map<String, dynamic> json) : this(json['x'], json['y']);
 
   /// json serialization
-  Map<String, dynamic> toJson() => {"x": x, "y": y};
+  Map<String, dynamic> toJson() => {'x': x, 'y': y};
 
   @override
-  String toString() => isValid ? Constants.colSymbols[x] + Constants.rowSymbols[y] : "$x,$y";
+  String toString() => isValid ? Constants.colSymbols[x] + Constants.rowSymbols[y] : '$x,$y';
 
   @override
   bool operator ==(Object other) => other is Cell && x == other.x && y == other.y;

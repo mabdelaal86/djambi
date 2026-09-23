@@ -34,12 +34,12 @@ abstract class Member {
   int? _bodyId;
   Member? get body => _bodyId?.convert((id) => parliament.members[id]);
 
-  Member(this.parliament, this.ideology, this.id);
+  new(this.parliament, this.ideology, this.id);
 
   @override
-  String toString() => "${ideology.name}:${role.name}($location)";
+  String toString() => '${ideology.name}:${role.name}($location)';
 
-  factory Member.create(Parliament parliament, Role role, Ideology ideology, int id) => switch (role) {
+  factory create(Parliament parliament, Role role, Ideology ideology, int id) => switch (role) {
     .chief => Chief(parliament, ideology, id),
     .assassin => Assassin(parliament, ideology, id),
     .reporter => Reporter(parliament, ideology, id),
@@ -48,7 +48,7 @@ abstract class Member {
     .militant => Militant(parliament, ideology, id),
   };
 
-  factory Member.copy(Parliament parliament, Member other) =>
+  factory copy(Parliament parliament, Member other) =>
       .create(parliament, other.role, other.ideology, other.id)..copyFrom(other);
 
   @protected
@@ -62,22 +62,22 @@ abstract class Member {
   }
 
   /// json deserialization
-  factory Member.fromJson(Parliament parliament, Map<String, dynamic> json) {
-    final member = Member.create(parliament, .values[json["role"]], .values[json["ideology"]], json["id"]);
-    member.location = .fromJson(json["location"]);
-    member.state = .values[json["state"]];
+  factory fromJson(Parliament parliament, Map<String, dynamic> json) {
+    final member = Member.create(parliament, .values[json['role']], .values[json['ideology']], json['id']);
+    member.location = .fromJson(json['location']);
+    member.state = .values[json['state']];
     return member;
   }
 
   /// json serialization
   Map<String, dynamic> toJson() {
-    assert(manoeuvre == .none, "serialization is not allowed during a manoeuvre");
+    assert(manoeuvre == .none, 'serialization is not allowed during a manoeuvre');
     return {
-      "role": role.index,
-      "ideology": ideology.index,
-      "id": id,
-      "location": location.toJson(),
-      "state": state.index,
+      'role': role.index,
+      'ideology': ideology.index,
+      'id': id,
+      'location': location.toJson(),
+      'state': state.index,
     };
   }
 
@@ -153,10 +153,10 @@ abstract class Member {
   }
 
   @protected
-  void postMove() => throw UnsupportedError("Unhandled state!");
+  void postMove() => throw UnsupportedError('Unhandled state!');
 
   @protected
-  void onKill(Cell cell) => throw UnsupportedError("Unhandled state!");
+  void onKill(Cell cell) => throw UnsupportedError('Unhandled state!');
 
   @protected
   void onExit(Cell cell) {

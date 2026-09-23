@@ -30,68 +30,69 @@ class Parliament {
   bool get isManoeuvreCompleted => _actor == null;
   bool get isGameFinished => activeParties.length == 1 && isManoeuvreCompleted;
   String getSign() {
-    assert(isManoeuvreCompleted, "the maneuver should be completed");
-    String key(Member m) => "${m.location.y}${m.location.x}";
-    String value(Member m) => m.isDead ? "d**" : "${m.state.name[0]}${m.ideology.name[0]}${m.role.name[0]}";
+    assert(isManoeuvreCompleted, 'the maneuver should be completed');
+    String key(Member m) => '${m.location.y}${m.location.x}';
+    String value(Member m) => m.isDead ? 'd**' : '${m.state.name[0]}${m.ideology.name[0]}${m.role.name[0]}';
     final stm = SplayTreeMap<String, String>.fromIterable(members, key: (m) => key(m), value: (m) => value(m));
-    final memberSigns = stm.entries.map((e) => "${e.key}${e.value}").join();
-    return "${_currentIdeology.name[0]}${_currentParty.ideology.name[0]}$memberSigns#";
+    final memberSigns = stm.entries.map((e) => '${e.key}${e.value}').join();
+    return '${_currentIdeology.name[0]}${_currentParty.ideology.name[0]}$memberSigns#';
   }
 
-  Parliament(this._currentIdeology, this.turnDirection) {
+  new(this._currentIdeology, this.turnDirection) {
     // create members
     members = Ideology.values.map(_recruitMembers).flattened.toList();
-    assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
+    assert(members.length == 9 * 4, 'number of members should be 36 (9 * 4 parties)');
     _setInitialPositions();
     // create parties
     parties = [
       for (final m in members)
         if (m.isChief) Party(m as Chief),
     ];
-    assert(parties.length == 4, "number of parties should be 4");
+    assert(parties.length == 4, 'number of parties should be 4');
     // other properties
     _currentParty = getParty(_currentIdeology);
   }
 
-  Parliament.copy(Parliament other) : _currentIdeology = other._currentIdeology, turnDirection = other.turnDirection {
+  new copy(Parliament other) : _currentIdeology = other._currentIdeology, turnDirection = other.turnDirection {
     // copy members
     members = [for (final m in other.members) Member.copy(this, m)];
-    assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
+    assert(members.length == 9 * 4, 'number of members should be 36 (9 * 4 parties)');
     // copy parties
     parties = [
       for (final m in members)
         if (m.isChief) Party(m as Chief),
     ];
-    assert(parties.length == 4, "number of parties should be 4");
+    assert(parties.length == 4, 'number of parties should be 4');
     // other properties
     _currentParty = getParty(other._currentParty.ideology);
     _actor = other._actor?.id.convert((id) => members[id]);
   }
 
+  // ignore: use_to_and_as_if_applicable
   Parliament makeCopy() => Parliament.copy(this);
 
   /// json deserialization
-  Parliament.fromJson(Map<String, dynamic> json)
-    : _currentIdeology = .values[json["current_ideology"]],
-      turnDirection = .values[json["turn_direction"]] {
-    members = [for (final m in json["members"]) Member.fromJson(this, m)];
-    assert(members.length == 9 * 4, "number of members should be 36 (9 * 4 parties)");
+  new fromJson(Map<String, dynamic> json)
+    : _currentIdeology = .values[json['current_ideology']],
+      turnDirection = .values[json['turn_direction']] {
+    members = [for (final m in json['members']) Member.fromJson(this, m)];
+    assert(members.length == 9 * 4, 'number of members should be 36 (9 * 4 parties)');
     parties = [
       for (final m in members)
         if (m.isChief) Party(m as Chief),
     ];
-    assert(parties.length == 4, "number of parties should be 4");
-    _currentParty = getParty(.values[json["current_party"]]);
+    assert(parties.length == 4, 'number of parties should be 4');
+    _currentParty = getParty(.values[json['current_party']]);
   }
 
   /// json serialization
   Map<String, dynamic> toJson() {
-    assert(isManoeuvreCompleted, "serialization is not allowed during a manoeuvre");
+    assert(isManoeuvreCompleted, 'serialization is not allowed during a manoeuvre');
     return {
-      "current_ideology": _currentIdeology.index,
-      "turn_direction": turnDirection.index,
-      "current_party": _currentParty.ideology.index,
-      "members": members.map((m) => m.toJson()).toList(),
+      'current_ideology': _currentIdeology.index,
+      'turn_direction': turnDirection.index,
+      'current_party': _currentParty.ideology.index,
+      'members': members.map((m) => m.toJson()).toList(),
     };
   }
 
@@ -126,14 +127,14 @@ class Parliament {
   }
 
   void act(int memberId, Cell cell) {
-    assert(!isGameFinished, "the game should be still ongoing");
+    assert(!isGameFinished, 'the game should be still ongoing');
     if (_actor == null) {
-      assert(members[memberId].ideology == _currentParty.ideology, "selected member is not from current turn party");
-      assert(members[memberId].isActive, "selected member is not active");
+      assert(members[memberId].ideology == _currentParty.ideology, 'selected member is not from current turn party');
+      assert(members[memberId].isActive, 'selected member is not active');
       _actor = members[memberId];
     }
-    assert(_actor!.id == memberId, "current actor is not the selected member");
-    assert(_actor!.manoeuvre != Manoeuvre.end, "current actor should be in middle of a manoeuvre");
+    assert(_actor!.id == memberId, 'current actor is not the selected member');
+    assert(_actor!.manoeuvre != Manoeuvre.end, 'current actor should be in middle of a manoeuvre');
     // do an action
     _actor!.act(cell);
     // if current manoeuvre is finished, move to next turn/player
@@ -152,7 +153,7 @@ class Parliament {
   void _nextTurn() {
     assert(isManoeuvreCompleted, "can't turn to next before ending the manoeuvre");
     final parties = activeParties.toList();
-    assert(parties.isNotEmpty, "no active parties!");
+    assert(parties.isNotEmpty, 'no active parties!');
     if (parties.length == 1) {
       _currentParty = parties[0];
       _currentIdeology = _currentParty.ideology;
@@ -164,7 +165,7 @@ class Parliament {
   }
 
   (Ideology, Party) getNextTurnState() {
-    assert(!isGameFinished, "the game should be still ongoing");
+    assert(!isGameFinished, 'the game should be still ongoing');
 
     Iterable<(Ideology, Party)> nextActiveParties() sync* {
       var ideology = _currentIdeology;

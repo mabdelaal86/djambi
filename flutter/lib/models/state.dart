@@ -5,7 +5,7 @@ class State {
   final Parliament parliament;
   final List<Cell> lastMovedCells;
 
-  State(this.parliament, [Parliament? lastParliament])
+  new(this.parliament, [Parliament? lastParliament])
     : lastMovedCells = _getDifferentCells(parliament, lastParliament).toList();
 }
 

@@ -17,7 +17,7 @@ class MovementsRenderer extends PositionComponent with TapCallbacks {
   final BoardStyle boardStyle;
   Member? _selectedMember;
 
-  MovementsRenderer(this.contest, this.boardStyle, {super.position, super.anchor, super.size, super.scale});
+  new(this.contest, this.boardStyle, {super.position, super.anchor, super.size, super.scale});
 
   bool get _gameIsNotFinished => !contest.parliament.isGameFinished;
   Party get _curParty => contest.parliament.currentParty;

@@ -9,7 +9,7 @@ import 'components/option_panel.dart';
 import 'utils.dart';
 
 class OptionsPage extends StatefulWidget {
-  const OptionsPage({super.key});
+  const new({super.key});
 
   @override
   State<OptionsPage> createState() => _OptionsPageState();
@@ -20,7 +20,7 @@ const _icons = {TurnDirection.anticlockwise: Icons.rotate_left, TurnDirection.cl
 class _OptionsPageState extends State<OptionsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text("Play Options")),
+    appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text('Play Options')),
     body: Padding(
       padding: const EdgeInsetsGeometry.all(15),
       child: Column(
@@ -30,7 +30,7 @@ class _OptionsPageState extends State<OptionsPage> {
               child: Column(
                 children: [
                   OptionPanel(
-                    title: "Turn Direction",
+                    title: 'Turn Direction',
                     builder: (context, pref) => SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Padding(
@@ -55,7 +55,7 @@ class _OptionsPageState extends State<OptionsPage> {
                     ),
                   ),
                   OptionPanel(
-                    title: "Start Player",
+                    title: 'Start Player',
                     builder: (context, pref) => SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Padding(
@@ -74,7 +74,7 @@ class _OptionsPageState extends State<OptionsPage> {
                     ),
                   ),
                   OptionPanel(
-                    title: "Human Players",
+                    title: 'Human Players',
                     builder: (context, pref) => SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Padding(
@@ -110,9 +110,9 @@ class _OptionsPageState extends State<OptionsPage> {
                       onPressed: () {
                         final pref = context.read<Preferences>();
                         if (pref.playerTypes.none((e) => e.isHuman)) {
-                          alert(context, "No players!", "At least on player should be human");
+                          alert(context, 'No players!', 'At least on player should be human');
                         } else {
-                          Navigator.pushReplacementNamed(context, "/play");
+                          Navigator.pushReplacementNamed(context, '/play');
                         }
                       },
                     ),

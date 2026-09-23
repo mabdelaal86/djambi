@@ -4,13 +4,13 @@ import 'package:flame/components.dart' hide Timer;
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-import '../../models.dart';
-import '../../views.dart';
 import '../common/utils.dart';
+import '../models.dart';
+import '../views.dart';
 import 'preferences.dart';
 import 'serialization.dart';
 
-const noTapUpOverlayId = "noTapUpOverlay";
+const noTapUpOverlayId = 'noTapUpOverlay';
 
 const _gameWidth = 1000.0;
 const _gameHeight = 1380.0;
@@ -19,7 +19,7 @@ const _aiMaxDepth = 2;
 
 /// used for developing and testing
 const _saveLoadState = false;
-const _statePath = "game.json";
+const _statePath = 'game.json';
 
 class DjambiGame extends FlameGame {
   final Preferences preferences;
@@ -28,7 +28,7 @@ class DjambiGame extends FlameGame {
   late final Contest _contest;
   var _allowUndoRedo = false;
 
-  DjambiGame({required this.preferences, required this.surface})
+  new({required this.preferences, required this.surface})
     : super(
         camera: CameraComponent.withFixedResolution(width: _gameWidth, height: _gameHeight),
       );
@@ -91,10 +91,10 @@ class DjambiGame extends FlameGame {
     overlays.add(noTapUpOverlayId);
     _allowUndoRedo = true;
     if (_contest.noHumans) {
-      return _showGameOverDialog("GAME OVER!");
+      return _showGameOverDialog('GAME OVER!');
     }
     if (_contest.parliament.isGameFinished) {
-      return _showGameOverDialog("${_contest.parliament.currentParty.ideology.name} win!".toUpperCase());
+      return _showGameOverDialog('${_contest.parliament.currentParty.ideology.name} win!'.toUpperCase());
     }
     if (_saveLoadState && _contest.parliament.isManoeuvreCompleted) {
       await save(_contest.toJson(), _statePath);
@@ -116,7 +116,7 @@ class DjambiGame extends FlameGame {
       actions: <Widget>[
         TextButton(
           style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
-          child: const Text("Undo"),
+          child: const Text('Undo'),
           onPressed: () {
             Navigator.pop(context);
             undo();
@@ -124,7 +124,7 @@ class DjambiGame extends FlameGame {
         ),
         TextButton(
           style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
-          child: const Text("Close"),
+          child: const Text('Close'),
           onPressed: () {
             Navigator.pop(context); // pop the dialog
             Navigator.pop(context); // pop the game page

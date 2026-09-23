@@ -15,15 +15,7 @@ class PiecesRenderer extends PositionComponent {
   final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
 
-  PiecesRenderer(
-    this.contest,
-    this.boardStyle,
-    this.pieceTheme, {
-    super.position,
-    super.anchor,
-    super.size,
-    super.scale,
-  });
+  new(this.contest, this.boardStyle, this.pieceTheme, {super.position, super.anchor, super.size, super.scale});
 
   late final Map<Role, Svg> _memberImages;
 

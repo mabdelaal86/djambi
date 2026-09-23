@@ -4,5 +4,5 @@ extension NotNullExtension<T> on T {
 
 extension EnumExtension on Enum {
   // capitalize first letter and add space between words
-  String get title => name[0].toUpperCase() + name.substring(1).replaceAllMapped(RegExp("[A-Z]"), (m) => " ${m[0]}");
+  String get title => name[0].toUpperCase() + name.substring(1).replaceAllMapped(RegExp('[A-Z]'), (m) => ' ${m[0]}');
 }
