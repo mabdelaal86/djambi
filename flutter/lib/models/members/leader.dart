@@ -2,11 +2,11 @@ import '../cell.dart';
 import '../enums.dart';
 import '../member.dart';
 
-class Chief extends Member {
+class Leader extends Member {
   new(super.parliament, super.ideology, super.id);
 
   @override
-  Role get role => .chief;
+  Role get role => .leader;
 
   @override
   Iterable<Cell> cellsToMove({required bool canKill}) => super

@@ -19,7 +19,7 @@ class GridRenderer extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    _mazeImage = await loadPieceImage(Role.chief, pieceTheme, boardStyle.mazeForeColor);
+    _mazeImage = await loadPieceImage(Role.leader, pieceTheme, boardStyle.mazeForeColor);
   }
 
   @override

@@ -4,8 +4,8 @@ import '../common/utils.dart';
 import 'cell.dart';
 import 'enums.dart';
 import 'members/assassin.dart';
-import 'members/chief.dart';
 import 'members/diplomat.dart';
+import 'members/leader.dart';
 import 'members/militant.dart';
 import 'members/necromobile.dart';
 import 'members/reporter.dart';
@@ -19,7 +19,7 @@ abstract class Member {
   final int id;
 
   Role get role;
-  bool get isChief => role == .chief;
+  bool get isLeader => role == .leader;
 
   Cell location = const .zero();
 
@@ -40,7 +40,7 @@ abstract class Member {
   String toString() => '${ideology.name}:${role.name}($location)';
 
   factory create(Parliament parliament, Role role, Ideology ideology, int id) => switch (role) {
-    .chief => Chief(parliament, ideology, id),
+    .leader => Leader(parliament, ideology, id),
     .assassin => Assassin(parliament, ideology, id),
     .reporter => Reporter(parliament, ideology, id),
     .diplomat => Diplomat(parliament, ideology, id),
@@ -84,8 +84,8 @@ abstract class Member {
   @protected
   void kill(Member member) {
     member.state = .dead;
-    // take over other members if the killed member is a chief
-    if (member.isChief) {
+    // take over other members if the killed member is a leader
+    if (member.isLeader) {
       final activeMembers = parliament.getParty(member.ideology).activeMembers;
       for (final activeMember in activeMembers) {
         activeMember.ideology = ideology;

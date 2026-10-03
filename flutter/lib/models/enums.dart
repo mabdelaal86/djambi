@@ -16,7 +16,7 @@ enum TurnDirection {
   Ideology next(Ideology ideology) => this == anticlockwise ? ideology.next : ideology.previous;
 }
 
-enum Role { chief, assassin, reporter, diplomat, necromobile, militant }
+enum Role { leader, assassin, reporter, diplomat, necromobile, militant }
 
 enum MemberState {
   active,

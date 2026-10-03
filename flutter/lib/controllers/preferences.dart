@@ -22,6 +22,9 @@ enum GameSpeed {
 // preferences (key, default value)
 // ------------------------------------
 
+// keep in mind when changing type/format of a setting/option,
+// you should change its key by adding the suffix '-v#' to it, where # is an incrementing number.
+
 // game settings
 const _notationVisibility = (key: 'notation-visibility', val: NotationVisibility.topLeft);
 const _gameSpeed = (key: 'game-speed', val: GameSpeed.medium);

@@ -3,15 +3,15 @@ import 'package:collection/collection.dart';
 import 'cell.dart';
 import 'enums.dart';
 import 'member.dart';
-import 'members/chief.dart';
+import 'members/leader.dart';
 import 'parliament.dart';
 
 class Party {
-  final Chief chief;
-  new(this.chief);
+  final Leader leader;
+  new(this.leader);
 
-  Parliament get parliament => chief.parliament;
-  Ideology get ideology => chief.ideology;
+  Parliament get parliament => leader.parliament;
+  Ideology get ideology => leader.ideology;
 
   @override
   String toString() => '${ideology.name} party';
@@ -24,12 +24,12 @@ class Party {
 
   Member? getMemberAt(Cell cell) => activeMembers.firstWhereOrNull((m) => m.location == cell);
 
-  bool isChiefSurrounded() {
-    if (chief.location.isMaze) return false;
+  bool isLeaderSurrounded() {
+    if (leader.location.isMaze) return false;
     if (getMembersOfRole(.necromobile).isNotEmpty) return false;
 
-    final inQueue = chief.location.surroundingCells().toList();
-    final registered = {chief.location, ...inQueue};
+    final inQueue = leader.location.surroundingCells().toList();
+    final registered = {leader.location, ...inQueue};
 
     while (inQueue.isNotEmpty) {
       final cell = inQueue.removeLast();

@@ -20,7 +20,7 @@ class PlayerPanel extends PositionComponent {
   final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
 
-  late final Svg _chiefImage;
+  late final Svg _leaderImage;
   final String playerName;
   late final TextPainter _playerNameStroke, _playerNameAlive, _playerNameDead, _nextSign;
 
@@ -42,7 +42,7 @@ class PlayerPanel extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    _chiefImage = await loadPieceImage(Role.chief, pieceTheme, boardStyle.pieceForeColor);
+    _leaderImage = await loadPieceImage(Role.leader, pieceTheme, boardStyle.pieceForeColor);
   }
 
   @override
@@ -64,15 +64,15 @@ class PlayerPanel extends PositionComponent {
         canvas.paintCellCircle(null, boardStyle.selectableMarkColor, Dimensions.markStroke, Dimensions.pieceStroke);
       }
       canvas.paintCellCircle(null, boardStyle.pieceEdgeColor, Dimensions.pieceStroke);
-      canvas.paintCellCircle(null, party.chief.isDead ? boardStyle.deadColor : boardStyle.partyColor[ideology.index]);
-      canvas.paintCellSvg(null, _chiefImage);
+      canvas.paintCellCircle(null, party.leader.isDead ? boardStyle.deadColor : boardStyle.partyColor[ideology.index]);
+      canvas.paintCellSvg(null, _leaderImage);
     });
   }
 
   void _drawPlayerName(Canvas canvas, Party party) {
     final nameOffset = Offset(size.y, size.y * 0.2);
     _playerNameStroke.paint(canvas, nameOffset);
-    (party.chief.isDead ? _playerNameDead : _playerNameAlive).paint(canvas, nameOffset);
+    (party.leader.isDead ? _playerNameDead : _playerNameAlive).paint(canvas, nameOffset);
     if (contest.parliament.isGameFinished) return;
     if (party == contest.parliament.getNextTurnState().$2) {
       _nextSign.paint(canvas, Offset(size.y, size.y * 0.55));
