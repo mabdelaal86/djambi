@@ -6,7 +6,7 @@ import '../common/utils.dart';
 import 'cell.dart';
 import 'enums.dart';
 import 'member.dart';
-import 'members/chief.dart';
+import 'members/leader.dart';
 import 'party.dart';
 
 class Parliament {
@@ -16,8 +16,8 @@ class Parliament {
 
   late final List<Party> parties;
   Party getParty(Ideology ideology) => parties.firstWhere((p) => p.ideology == ideology);
-  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.chief.location.isMaze && p.chief.isActive);
-  Iterable<Party> get activeParties => parties.where((p) => p.chief.isActive);
+  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.leader.location.isMaze && p.leader.isActive);
+  Iterable<Party> get activeParties => parties.where((p) => p.leader.isActive);
 
   Ideology _currentIdeology;
   late Party _currentParty;
@@ -46,7 +46,7 @@ class Parliament {
     // create parties
     parties = [
       for (final m in members)
-        if (m.isChief) Party(m as Chief),
+        if (m.isLeader) Party(m as Leader),
     ];
     assert(parties.length == 4, 'number of parties should be 4');
     // other properties
@@ -60,7 +60,7 @@ class Parliament {
     // copy parties
     parties = [
       for (final m in members)
-        if (m.isChief) Party(m as Chief),
+        if (m.isLeader) Party(m as Leader),
     ];
     assert(parties.length == 4, 'number of parties should be 4');
     // other properties
@@ -79,7 +79,7 @@ class Parliament {
     assert(members.length == 9 * 4, 'number of members should be 36 (9 * 4 parties)');
     parties = [
       for (final m in members)
-        if (m.isChief) Party(m as Chief),
+        if (m.isLeader) Party(m as Leader),
     ];
     assert(parties.length == 4, 'number of parties should be 4');
     _currentParty = getParty(.values[json['current_party']]);
@@ -98,7 +98,7 @@ class Parliament {
 
   Iterable<Member> _recruitMembers(Ideology ideology) sync* {
     final roles = <List<Role>>[
-      [.chief, .assassin, .militant],
+      [.leader, .assassin, .militant],
       [.reporter, .diplomat, .militant],
       [.militant, .militant, .necromobile],
     ];
@@ -172,7 +172,7 @@ class Parliament {
       for (var i = 0; i < Ideology.values.length; i++) {
         ideology = turnDirection.next(ideology);
         final party = getParty(ideology);
-        if (party.chief.isActive) yield (ideology, party);
+        if (party.leader.isActive) yield (ideology, party);
       }
       throw AssertionError("shouldn't reach this point!");
     }
@@ -191,8 +191,8 @@ class Parliament {
 
   void _checkSurroundings() {
     for (final party in activeParties) {
-      if (party.isChiefSurrounded()) {
-        party.chief.state = MemberState.dead;
+      if (party.isLeaderSurrounded()) {
+        party.leader.state = MemberState.dead;
         for (final member in party.activeMembers) {
           member.state = MemberState.paralysed;
         }

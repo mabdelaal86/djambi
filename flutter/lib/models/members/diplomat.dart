@@ -16,8 +16,8 @@ class Diplomat extends Member {
 
   @override
   bool canBuryOn(Cell cell) =>
-      // only chief can be moved into maze
-      (!cell.isMaze || body!.isChief) && parliament.isEmpty(cell);
+      // only leader can be moved into maze
+      (!cell.isMaze || body!.isLeader) && parliament.isEmpty(cell);
 
   @override
   void postMove() {
