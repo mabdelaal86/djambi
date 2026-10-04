@@ -11,12 +11,12 @@ class Necromobile extends Member {
   @override
   Iterable<Cell> cellsToMove({required bool canKill}) => super
       .cellsToMove(canKill: canKill)
-      // empty non maze cell or dead member
-      .where((cell) => parliament.getMemberAt(cell)?.isDead ?? !cell.isMaze);
+      // empty non labyrinth cell or dead member
+      .where((cell) => parliament.getMemberAt(cell)?.isDead ?? !cell.isLabyrinth);
 
   @override
   void postMove() {
-    manoeuvre = switch (body?.location.isMaze) {
+    manoeuvre = switch (body?.location.isLabyrinth) {
       null => .end,
       true => .kill,
       false => .exit,

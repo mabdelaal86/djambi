@@ -11,8 +11,8 @@ class Reporter extends Member {
   @override
   Iterable<Cell> cellsToMove({required bool canKill}) => super
       .cellsToMove(canKill: canKill)
-      // empty non maze cell
-      .where((cell) => !cell.isMaze && parliament.isEmpty(cell));
+      // empty non labyrinth cell
+      .where((cell) => !cell.isLabyrinth && parliament.isEmpty(cell));
 
   @override
   bool canKillOn(Cell cell) => location.isAdjacentTo(cell) && occupiedByEnemy(cell);

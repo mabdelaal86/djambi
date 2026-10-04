@@ -25,7 +25,7 @@ class Party {
   Member? getMemberAt(Cell cell) => activeMembers.firstWhereOrNull((m) => m.location == cell);
 
   bool isLeaderSurrounded() {
-    if (leader.location.isMaze) return false;
+    if (leader.location.isLabyrinth) return false;
     if (getMembersOfRole(.necromobile).isNotEmpty) return false;
 
     final inQueue = leader.location.surroundingCells().toList();

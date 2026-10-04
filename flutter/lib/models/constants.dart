@@ -1,6 +1,6 @@
 abstract class Constants {
   static const int sideCellsCount = 9;
-  static const int mazeIndex = sideCellsCount ~/ 2;
+  static const int labyrinthIndex = sideCellsCount ~/ 2;
 
   static const colSymbols = 'ABCDEFGHI';
   static const rowSymbols = '123456789';

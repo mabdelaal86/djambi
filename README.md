@@ -24,7 +24,7 @@ For more details, check the [game page](https://en.wikipedia.org/wiki/Djambi) on
 
 ## Known Issues
 
-* When a Chief leave the Maze, its team still get extra turn.
+* When a Leader leave the Labyrinth, its team still get extra turn.
 * When no player can win, nothing is happen.
 
 

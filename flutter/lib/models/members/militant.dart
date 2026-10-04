@@ -13,8 +13,8 @@ class Militant extends Member {
       .cellsToMove(canKill: canKill)
       .where(
         (cell) =>
-            // can't target maze even if a leader is there
-            !cell.isMaze &&
+            // can't target labyrinth even if a leader is there
+            !cell.isLabyrinth &&
             // move only 2 steps
             _stepsTo(cell) <= 2 &&
             // empty cell or active enemy member

@@ -126,7 +126,7 @@ abstract class Member {
   };
 
   bool canKillOn(Cell cell) => false;
-  bool canBuryOn(Cell cell) => !cell.isMaze && parliament.isEmpty(cell);
+  bool canBuryOn(Cell cell) => !cell.isLabyrinth && parliament.isEmpty(cell);
 
   void act(Cell cell) {
     switch (manoeuvre) {

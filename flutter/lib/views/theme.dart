@@ -21,9 +21,9 @@ class BoardStyle {
   final Color darkCellColor;
   final bool drawLines;
   final Color lineColor;
-  // maze
-  final Color mazeBackColor;
-  final Color mazeForeColor;
+  // labyrinth
+  final Color labyrinthBackColor;
+  final Color labyrinthForeColor;
   // pieces
   final Color pieceForeColor;
   final Color pieceEdgeColor;
@@ -43,8 +43,8 @@ class BoardStyle {
     required this.darkCellColor,
     required this.drawLines,
     required this.lineColor,
-    required this.mazeBackColor,
-    required this.mazeForeColor,
+    required this.labyrinthBackColor,
+    required this.labyrinthForeColor,
     required this.pieceForeColor,
     required this.pieceEdgeColor,
     required this.deadColor,

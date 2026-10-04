@@ -17,8 +17,8 @@ class Assassin extends Member {
         (cell) => switch (parliament.getMemberAt(cell)) {
           // not empty cell: it should be occupied by an active enemy
           final enemy? => enemy.isActive,
-          // empty cell: not the maze and not the cell coming from if exiting maze
-          null => !cell.isMaze && (canKill || cell != _cellFrom),
+          // empty cell: not the labyrinth and not the cell coming from if exiting labyrinth
+          null => !cell.isLabyrinth && (canKill || cell != _cellFrom),
         },
       );
 
@@ -39,7 +39,7 @@ class Assassin extends Member {
 
   @override
   void postMove() {
-    switch (body?.location.isMaze) {
+    switch (body?.location.isLabyrinth) {
       case null:
         manoeuvre = .end;
       case true:

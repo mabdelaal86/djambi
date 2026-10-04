@@ -16,7 +16,7 @@ class Parliament {
 
   late final List<Party> parties;
   Party getParty(Ideology ideology) => parties.firstWhere((p) => p.ideology == ideology);
-  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.leader.location.isMaze && p.leader.isActive);
+  Party? getPartyInPower() => parties.firstWhereOrNull((p) => p.leader.location.isLabyrinth && p.leader.isActive);
   Iterable<Party> get activeParties => parties.where((p) => p.leader.isActive);
 
   Ideology _currentIdeology;

@@ -13,5 +13,5 @@ int _memberEvaluation(Member member) => switch (member.role) {
   .diplomat => 10,
   .assassin => 15,
   .reporter => 18,
-  .leader => member.location.isMaze ? 500 : 300,
+  .leader => member.location.isLabyrinth ? 500 : 300,
 };

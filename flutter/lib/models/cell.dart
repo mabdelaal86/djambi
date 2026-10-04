@@ -8,7 +8,7 @@ class Cell {
 
   const new(this.x, this.y);
   const new zero() : this(0, 0);
-  static const maze = Cell(Constants.mazeIndex, Constants.mazeIndex);
+  static const labyrinth = Cell(Constants.labyrinthIndex, Constants.labyrinthIndex);
 
   /// json deserialization
   new fromJson(Map<String, dynamic> json) : this(json['x'], json['y']);
@@ -25,7 +25,7 @@ class Cell {
   @override
   int get hashCode => Object.hash(x, y);
 
-  bool get isMaze => x == Constants.mazeIndex && y == Constants.mazeIndex;
+  bool get isLabyrinth => x == Constants.labyrinthIndex && y == Constants.labyrinthIndex;
   bool get isDark => x.isEven == y.isEven;
   bool get isValid => (0 <= x && x < Constants.sideCellsCount) && (0 <= y && y < Constants.sideCellsCount);
   int get max => x > y ? x : y;
@@ -70,5 +70,5 @@ class Cell {
     }
   }
 
-  static Iterable<Cell> normalCells() => allCells().where((c) => !c.isMaze);
+  static Iterable<Cell> normalCells() => allCells().where((c) => !c.isLabyrinth);
 }

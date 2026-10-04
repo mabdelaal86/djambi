@@ -13,19 +13,19 @@ class GridRenderer extends PositionComponent {
 
   final BoardStyle boardStyle;
   final PieceTheme pieceTheme;
-  late final Svg _mazeImage;
+  late final Svg _labyrinthImage;
 
   new(this.boardStyle, this.pieceTheme, {super.position, super.anchor, super.size, super.scale});
 
   @override
   Future<void> onLoad() async {
-    _mazeImage = await loadPieceImage(Role.leader, pieceTheme, boardStyle.mazeForeColor);
+    _labyrinthImage = await loadPieceImage(Role.leader, pieceTheme, boardStyle.labyrinthForeColor);
   }
 
   @override
   void render(Canvas canvas) {
     _paintBackground(canvas);
-    _drawMaze(canvas);
+    _drawLabyrinth(canvas);
     if (boardStyle.drawLines) {
       _drawLines(canvas);
     }
@@ -37,9 +37,9 @@ class GridRenderer extends PositionComponent {
     }
   }
 
-  void _drawMaze(Canvas canvas) {
-    canvas.paintCellRect(Cell.maze, boardStyle.mazeBackColor);
-    canvas.paintCellSvg(Cell.maze, _mazeImage);
+  void _drawLabyrinth(Canvas canvas) {
+    canvas.paintCellRect(Cell.labyrinth, boardStyle.labyrinthBackColor);
+    canvas.paintCellSvg(Cell.labyrinth, _labyrinthImage);
   }
 
   void _drawLines(Canvas canvas) {

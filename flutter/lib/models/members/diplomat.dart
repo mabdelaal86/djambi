@@ -11,17 +11,17 @@ class Diplomat extends Member {
   @override
   Iterable<Cell> cellsToMove({required bool canKill}) => super
       .cellsToMove(canKill: canKill)
-      // empty non maze cell or active enemy member
-      .where((cell) => parliament.getMemberAt(cell)?.isActive ?? !cell.isMaze);
+      // empty non labyrinth cell or active enemy member
+      .where((cell) => parliament.getMemberAt(cell)?.isActive ?? !cell.isLabyrinth);
 
   @override
   bool canBuryOn(Cell cell) =>
-      // only leader can be moved into maze
-      (!cell.isMaze || body!.isLeader) && parliament.isEmpty(cell);
+      // only leader can be moved into labyrinth
+      (!cell.isLabyrinth || body!.isLeader) && parliament.isEmpty(cell);
 
   @override
   void postMove() {
-    manoeuvre = switch (body?.location.isMaze) {
+    manoeuvre = switch (body?.location.isLabyrinth) {
       null => .end,
       true => .kill,
       false => .exit,
