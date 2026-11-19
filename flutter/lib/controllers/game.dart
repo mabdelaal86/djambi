@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame/components.dart' hide Timer;
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../common/utils.dart';
 import '../models.dart';
