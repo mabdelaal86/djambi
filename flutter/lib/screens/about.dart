@@ -12,8 +12,7 @@ class AboutPage extends StatelessWidget {
     body: const Padding(
       padding: .all(15),
       child: SingleChildScrollView(
-        child: HtmlWidget(
-          """
+        child: HtmlWidget("""
             <b>Djambi</b> is a chess variant for four players designed by <i>Jean Anesto</i> in 1975.
             As in chess, pieces represent real-life political roles, but in contrast,
             they are inspired by modern societies instead of medieval ones.
@@ -35,9 +34,7 @@ class AboutPage extends StatelessWidget {
               <li>If you represent the rights to Djambi and have concerns, please
                 <a href='mailto:hello@datonomi.com'>contact me</a> for respectful resolution.</li>
             </ul>
-          """,
-          onTapUrl: openUrl,
-        ),
+          """, onTapUrl: openUrl),
       ),
     ),
   );
