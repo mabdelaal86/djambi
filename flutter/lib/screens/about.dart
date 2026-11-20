@@ -1,4 +1,4 @@
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'utils.dart';
@@ -9,11 +9,11 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: const Text('About')),
-    body: Padding(
-      padding: const .all(15),
+    body: const Padding(
+      padding: .all(15),
       child: SingleChildScrollView(
-        child: Html(
-          data: """
+        child: HtmlWidget(
+          """
             <b>Djambi</b> is a chess variant for four players designed by <i>Jean Anesto</i> in 1975.
             As in chess, pieces represent real-life political roles, but in contrast,
             they are inspired by modern societies instead of medieval ones.
@@ -36,7 +36,7 @@ class AboutPage extends StatelessWidget {
                 <a href='mailto:hello@datonomi.com'>contact me</a> for respectful resolution.</li>
             </ul>
           """,
-          onLinkTap: (url, attributes, element) => openUrl(url!),
+          onTapUrl: openUrl,
         ),
       ),
     ),
